@@ -1,3 +1,23 @@
+import {FormFieldObject} from "../PublicTemplateForm";
+
+export interface FilterButtonsProps extends FormFieldObject {
+    /**
+     * Predefined variants
+     */
+    variant: 'contained' | 'outlined' | 'text';
+
+    /**
+     * Size of buttons
+     */
+    size: 'small' | 'medium' | 'large';
+
+    /**
+     * If defined, buttons will be positioned in columns
+     */
+    columns?: number;
+}
+
+
 export class FilterButtonsClasses {
 
     /**

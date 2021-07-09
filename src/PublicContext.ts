@@ -140,6 +140,6 @@ export interface IWidgetEditorPublicContext {
     /**
      * The variants available in the theme for the edited widget.
      */
-    getWidgetVariantIds(): string[];
+    getWidgetVariantIds(componentName?: string): string[];
 
 }

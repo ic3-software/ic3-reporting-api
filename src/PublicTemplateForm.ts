@@ -88,6 +88,8 @@ export interface IFormFieldDef<DEFAULT_VALUE_TYPE> {
 
 /**
  * The options (possibly edited and/or from the theme) of a widget.
+ *
+ * Aka Props
  */
 export interface FormFieldObject {
 
@@ -106,27 +108,27 @@ export type FormFields<T extends FormFieldObject> = {
     &
     (
         // matching T type with FormField type
-      Required<T>[key] extends FormFieldObject ? Omit<IFormEmbeddedFieldDef<Required<T>[key]>, 'fieldPath'> :
-        Required<T>[key] extends IPaletteDef ? Omit<IFormPaletteEditorFieldDef, 'fieldPath'> :
-          Required<T>[key] extends IColorDef ? Omit<IFormColorEditorFieldDef, 'fieldPath'> :
-              Required<T>[key] extends TidyTableMappingCoordinate[] ? Omit<IFormColumnCoordinateFieldDef, 'fieldPath'> :
-                Required<T>[key] extends TidyTableMappingCoordinate ? Omit<IFormColumnCoordinateFieldDef, 'fieldPath'> :
-                    Required<T>[key] extends boolean ? Omit<IFormBooleanFieldDef, 'fieldPath'> :
-                        Required<T>[key] extends number ? Omit<IFormNumberFieldDef, 'fieldPath'> :
-                            Required<T>[key] extends string ? Omit<IFormOptionFieldSingleDef, 'fieldPath'>
-                                | Omit<IFormStringFieldDef, 'fieldPath'>
-                                | Omit<IFormMuiVariantFieldDef, 'fieldPath'>
-                                | Omit<IFormTidyTableTextRowExprFieldDef, 'fieldPath'>
-                                | Omit<IFormTidyTableNumericRowExprFieldDef, 'fieldPath'>
-                                | Omit<IFormTidyTableHtmlRowExprFieldDef, 'fieldPath'>
-                                | Omit<IFormColorEditorFieldDef, 'fieldPath'>
-                                | Omit<IFormJsFieldDef, 'fieldPath'>
-                                | Omit<IFormMarkdownFieldDef, 'fieldPath'> :
+        Required<T>[key] extends FormFieldObject ? Omit<IFormEmbeddedFieldDef<Required<T>[key]>, 'fieldPath'> :
+            Required<T>[key] extends IPaletteDef ? Omit<IFormPaletteEditorFieldDef, 'fieldPath'> :
+                Required<T>[key] extends IColorDef ? Omit<IFormColorEditorFieldDef, 'fieldPath'> :
+                    Required<T>[key] extends TidyTableMappingCoordinate[] ? Omit<IFormColumnCoordinateFieldDef, 'fieldPath'> :
+                        Required<T>[key] extends TidyTableMappingCoordinate ? Omit<IFormColumnCoordinateFieldDef, 'fieldPath'> :
+                            Required<T>[key] extends boolean ? Omit<IFormBooleanFieldDef, 'fieldPath'> :
+                                Required<T>[key] extends number ? Omit<IFormNumberFieldDef, 'fieldPath'> :
+                                    Required<T>[key] extends string ? Omit<IFormOptionFieldSingleDef, 'fieldPath'>
+                                        | Omit<IFormStringFieldDef, 'fieldPath'>
+                                        | Omit<IFormWidgetVariantFieldDef, 'fieldPath'>
+                                        | Omit<IFormTidyTableTextRowExprFieldDef, 'fieldPath'>
+                                        | Omit<IFormTidyTableNumericRowExprFieldDef, 'fieldPath'>
+                                        | Omit<IFormTidyTableHtmlRowExprFieldDef, 'fieldPath'>
+                                        | Omit<IFormColorEditorFieldDef, 'fieldPath'>
+                                        | Omit<IFormJsFieldDef, 'fieldPath'>
+                                        | Omit<IFormMarkdownFieldDef, 'fieldPath'> :
 
-                                Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
-                                    | Omit<IFormPaletteEditorFieldDef, 'fieldPath'> :
+                                        Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
+                                            | Omit<IFormPaletteEditorFieldDef, 'fieldPath'> :
 
-                                    never /* type not supported */
+                                            never /* type not supported */
         )
 };
 
@@ -196,10 +198,6 @@ export type FormFieldType =
     "mdxExpression" |
     /**
      * @see IFormMuiVariantFieldDef
-     */
-    "muiVariant" |
-    /**
-     * @see IFormNumberFieldDef
      */
     "number" |
     /**
@@ -542,24 +540,6 @@ export interface IFormMdxFieldDef extends IFormFieldDef<string> {
 }
 
 /**
- * Material-UI variants (defined in the theme's components).
- *
- * @see FormFieldDef
- */
-export interface IFormMuiVariantFieldDef extends IFormFieldDef<string> {
-
-    fieldType: "muiVariant",
-
-    editorConf: {
-
-        componentName: string;
-        predefinedVariants?: string[];
-
-    }
-
-}
-
-/**
  * @see FormFieldDef
  */
 export interface IFormNumberFieldDef extends IFormFieldDef<number> {
@@ -649,8 +629,8 @@ export interface IFormPaletteEditorFieldDef extends IFormFieldDef<IPaletteDef> {
     fieldType: "palette",
 
     editorConfig?: {
-      path: string,
-      reversed: boolean
+        path: string,
+        reversed: boolean
     }
 
 }
@@ -815,7 +795,12 @@ export interface IFormWidgetVariantFieldDef extends IFormFieldDef<string> {
 
     fieldType: "widgetVariant",
 
+    editorConf?: {
+        componentName: string,
+        predefinedVariants?: string[];
+    }
 }
+
 
 // ---------------------------------------------------------------------------------------------------------------------
 //      Allows for typing the field meta definitions.
@@ -833,7 +818,6 @@ export type FormFieldDef =
     IFormJsFieldDef |
     IFormMarkdownFieldDef |
     IFormMdxFieldDef |
-    IFormMuiVariantFieldDef |
     IFormNumberFieldDef |
     IFormOptionFieldDef |
     IFormOptionFieldSingleDef |

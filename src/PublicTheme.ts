@@ -1,7 +1,7 @@
 import {ComponentsOverrides, ComponentsVariants} from "@material-ui/core";
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {IWidgetLayoutDefinition} from "./PublicLayout";
-import {IThemeWidgetDefaults, IThemeWidgetVariant} from "./IThemeManager";
+import {IThemeWidgetDefaults} from "./IThemeManager";
 import {AlertDialogClassKey} from "./theme/ThemeAlertDialog";
 import {AppClassKey} from "./theme/ThemeApp";
 import {DrilldownUserSelectMenuClassKey} from "./theme/ThemeDrilldownUserSelectMenu";
@@ -16,8 +16,8 @@ import {WidgetBoxContentMessageClassKey} from "./theme/ThemeWidgetBoxContentMess
 import {ReactElement} from "react";
 import {TypographyStyleOptions} from "@material-ui/core/styles/createTypography";
 import {Property} from "csstype";
-import {FilterButtonsClassKey} from "./theme/ThemeFilterButtons";
-import {FilterSliderClassKey} from "./theme/ThemeFilterSlider";
+import {FilterButtonsClassKey, FilterButtonsProps} from "./theme/ThemeFilterButtons";
+import {FilterSliderClassKey, FilterSliderProps} from "./theme/ThemeFilterSlider";
 
 export type ThemeTextFormatter = {
     formatReport: ((value: any, locale: string) => string) | string;
@@ -347,15 +347,6 @@ export interface ic3Theme {
      */
     widgetDefaults?: IThemeWidgetDefaults;
 
-    /**
-     * Sort of named set of predefined options.
-     *
-     * <pre>
-     *     [plugin-id.template-id] -> [variant-id]
-     * </pre>
-     */
-    widgetVariants?: Record<string, Record<string, IThemeWidgetVariant>>;
-
 }
 
 export interface ic3ThemeOptions {
@@ -400,48 +391,10 @@ export interface ic3ThemeOptions {
     };
 
     /**
-     * Default values.
+     * Default values (e.g., box options, chart options, etc..).
      */
-    widgetDefaults?: {
+    widgetDefaults?: IThemeWidgetDefaults;
 
-        /**
-         * Default values for widget boxes.
-         *
-         * <pre>
-         *      IWidgetBoxDefinition
-         * </pre>
-         */
-        box?: Record<string, any>;
-
-        /**
-         * Default values for widget chart options.
-         *
-         * <pre>
-         *      IWidgetDefinition
-         *          dataRenderOptions: IWidgetDataRenderDefinition
-         *              chartOptions: IChartTemplateDataRenderDefinition
-         * </pre>
-         *
-         * Lookup order:
-         *
-         * <pre>
-         *      plugin-id.template-id.option
-         *      plugin-id.option
-         *      option
-         * </pre>
-         */
-        options?: Record<string, any>;
-
-    };
-
-    /**
-     * Sort of named set of options.
-     *
-     * <pre>
-     *     [plugin-id.template-id] -> [variant-id]
-     * </pre>
-     */
-    widgetVariants?: Record<string, Record<string, IThemeWidgetVariant>>;
 
     /**
      * The first defined layout is used as the default one.
@@ -469,6 +422,9 @@ declare module '@material-ui/core/styles/createTheme' {
 
 }
 
+/**
+ * All Components using Material-UI like variants (using styled)
+ */
 declare module '@material-ui/core/styles/components' {
 
     interface Components {
@@ -495,6 +451,10 @@ declare module '@material-ui/core/styles/components' {
         FilterButtons: {
             styleOverrides?: ComponentsOverrides["FilterButtons"];
             variants?: ComponentsVariants["FilterButtons"];
+        }
+        FilterSlider: {
+            styleOverrides?: ComponentsOverrides["FilterSlider"];
+            variants?: ComponentsVariants["FilterSlider"];
         }
         Layout: {
             styleOverrides?: ComponentsOverrides["Layout"];
@@ -557,9 +517,9 @@ declare module '@material-ui/core/styles/props' {
 
         WidgetBox: Record<never, any>;
 
-        FilterButtons: Record<never, any>;
+        FilterButtons: FilterButtonsProps;
 
-        FilterSlider: Record<never, any>;
+        FilterSlider: FilterSliderProps;
 
     }
 

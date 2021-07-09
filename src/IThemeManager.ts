@@ -1,3 +1,5 @@
+import {CSSInterpolation} from "@material-ui/system";
+
 export enum EmbeddedThemeNames {
 
     Statos = "ic3-statos",
@@ -41,28 +43,15 @@ export interface IThemeWidgetDefaults {
 /**
  * Sort of named set of predefined options.
  */
-export interface IThemeWidgetVariant {
 
-    id: string;
-
-    /**
-     * Default values.
-     */
-    widgetDefaults: {
-
-        /**
-         * Default values for widget chart options.
-         *
-         * <pre>
-         *      IWidgetDefinition
-         *          dataRenderOptions: IWidgetDataRenderDefinition
-         *              chartOptions: IChartTemplateDataRenderDefinition
-         * </pre>
-         */
-        options: Record<string, any>;
-    }
+export type IThemeWidgetVariant = {
+    props: { variant: string } & Record<string, string>;
+    style: CSSInterpolation;
+    defaultProps?: Record<string, any>;
+} | {
+    props: { variant: string } & Record<string, string>;
+    defaultProps: Record<string, any>;
 }
-
 
 export interface IThemeManager {
 

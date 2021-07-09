@@ -1,3 +1,40 @@
+import {FormFieldObject} from "../PublicTemplateForm";
+
+export enum FilterSliderRenderingType {
+
+    MARKS = "MARKS",
+    TOOLTIPS = "TOOLTIPS",
+    MARKS_WITH_TOOLTIPS = "MARKS_WITH_TOOLTIPS",
+
+}
+
+export interface FilterSliderProps extends FormFieldObject {
+    /**
+     * Predefined variants
+     */
+    variant?: string;
+
+    /**
+     * Size of slider
+     */
+    size: 'small' | 'medium';
+
+    /**
+     * slider Orientation Vertical / Horizontal
+     */
+    orientation: "horizontal" | "vertical";
+
+    /**
+     * Styling the slider (marks/tooltips)
+     */
+    style: FilterSliderRenderingType;
+
+    /**
+     * The margin for starting/ending the slider (left/right or top/bottom)
+     */
+    margin: number;
+}
+
 export class FilterSliderClasses {
 
     /**
