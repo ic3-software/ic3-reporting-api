@@ -1,5 +1,6 @@
 import {EntityItem, MdxInfo} from "./PublicTidyTableTypes";
 import {ReactElement} from "react";
+import {SelectionMode} from "./PublicTidyTableInteractions";
 
 /**
  * A copy of MUI TreeItemClasses
@@ -43,7 +44,23 @@ export interface LazyTreeClasses {
 
     /** Styles applied to the TreeRoot element */
     treeRoot: string;
+
+
 }
+
+/**
+ * Global classes
+ */
+export interface Ic3GlobalClasses {
+    singleSelection: string,
+    multipleSelection: string,
+}
+
+export const ic3GlobalClasses: Ic3GlobalClasses = {
+    singleSelection: 'Ic3-SingleSelection',
+    multipleSelection: 'Ic3-MultipleSelection',
+}
+
 
 export const lazyTreeClasses: LazyTreeClasses = {
     toolbar: 'Ic3-LazyTreeView-toolbar',
@@ -54,6 +71,7 @@ export const lazyTreeClasses: LazyTreeClasses = {
     treeRoot: 'Ic3-LazyTreeView-treeRoot',
 }
 
+
 export interface ILazyTreeViewLoader {
 
     /**
@@ -62,6 +80,8 @@ export interface ILazyTreeViewLoader {
     mapTree<T extends ReactElement>(expanded: (index: number) => boolean, factory: (index: number) => T, filter?: (info: MdxInfo) => boolean): T[];
 
     hasLazyChildren(index: number): boolean;
+
+    getColumnLevelDepth(index: number): number;
 
     lazyLoadChildren(index: number): void | number;
 
@@ -72,6 +92,8 @@ export interface ILazyTreeViewLoader {
     toEntityItems(nodeIds: string[]): EntityItem[];
 
     mapNodeIds<T>(nodeIds: string[], callbackfn: (columnIdx: number) => T | null | undefined): T[];
+
+    map<T>(callback: (index: number) => T | undefined): T[];
 }
 
 /**
@@ -83,21 +105,56 @@ export interface LazyTreeViewProps {
 
     allowEmptySelection?: boolean;
 
+    /**
+     *
+     */
     addFilterSelected?: boolean;
 
+    /**
+     * Adds a search input to the tree filter
+     */
     addSearch?: boolean;
 
-    searchText?: string;
+    /**
+     * Search/Filter text when controlled (addSearch needs to be false)
+     */
+    search?: string;
+
+    /**
+     * Message for the search/filter when empty
+     */
+    searchPlaceholder?: string;
+
+    /**
+     * Message for the search/filter component (might be 'compacted' selection)
+     */
+    searchMessage?: string;
 
     toggleFilterSelected?: string;
 
     disableSelection?: boolean;
 
+    /**
+     * if undefined, the selection state is managed by the lazy tree as well
+     */
     selected?: string[];
 
+    /**
+     * Controlled mode for selection
+     */
     setSelected?: (nodeIdx: string[]) => void;
 
+    /**
+     * Controlled mode for expanded
+     */
     expanded?: string[];
+
+    /**
+     * The level depth of initially open nodes ( 0 first level )
+     */
+    openDepthLevel?: number,
+
+    selectionMode: SelectionMode
 
     /**
      * Material-UI tree item classes Partial<TreeItemClasses>

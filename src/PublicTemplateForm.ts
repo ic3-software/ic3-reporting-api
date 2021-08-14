@@ -31,6 +31,9 @@ export interface IFormFieldDef<DEFAULT_VALUE_TYPE> {
 
     /**
      * The optional group a field belongs too
+     *
+     * @see IFormGroupsFieldDef
+     * @see IFormBooleanFieldDef
      */
     group?: string;
 
@@ -67,7 +70,7 @@ export interface IFormFieldDef<DEFAULT_VALUE_TYPE> {
     /**
      * An optional field path value. The value of this field depends on the value of the dependsOn field.
      */
-    dependsOn?: string;
+    dependsOn?: string | string[];
 
     /**
      * When defined a function that returns the visibility of the field according to the dependsOn value.
@@ -107,6 +110,12 @@ export type FormFields<T extends FormFieldObject> = {
         )
     &
     (
+        // A field cannot both be mandatory and have a default value
+        // Only use mandatory when there is an action required by the user
+        Required<T>[key] extends FormFieldObject ? unknown : { defaultValue?: undefined, mandatory: true } | { defaultValue?: any, mandatory?: false }
+        )
+    &
+    (
         // matching T type with FormField type
         Required<T>[key] extends FormFieldObject ? Omit<IFormEmbeddedFieldDef<Required<T>[key]>, 'fieldPath'> :
             Required<T>[key] extends IPaletteDef ? Omit<IFormPaletteEditorFieldDef, 'fieldPath'> :
@@ -114,19 +123,28 @@ export type FormFields<T extends FormFieldObject> = {
                     Required<T>[key] extends TidyTableMappingCoordinate[] ? Omit<IFormColumnCoordinateFieldDef, 'fieldPath'> :
                         Required<T>[key] extends TidyTableMappingCoordinate ? Omit<IFormColumnCoordinateFieldDef, 'fieldPath'> :
                             Required<T>[key] extends boolean ? Omit<IFormBooleanFieldDef, 'fieldPath'> :
-                                Required<T>[key] extends number ? Omit<IFormNumberFieldDef, 'fieldPath'> :
+                                Required<T>[key] extends number ? Omit<IFormNumberFieldDef, 'fieldPath'>:
                                     Required<T>[key] extends string ? Omit<IFormOptionFieldSingleDef, 'fieldPath'>
                                         | Omit<IFormStringFieldDef, 'fieldPath'>
                                         | Omit<IFormWidgetVariantFieldDef, 'fieldPath'>
                                         | Omit<IFormTidyTableTextRowExprFieldDef, 'fieldPath'>
-                                        | Omit<IFormTidyTableNumericRowExprFieldDef, 'fieldPath'>
                                         | Omit<IFormTidyTableHtmlRowExprFieldDef, 'fieldPath'>
+                                        | Omit<IFormTidyTableHtmlExprFieldDef, 'fieldPath'>
+                                        | Omit<IFormTidyTableNumericExprFieldDef, 'fieldPath'>
+                                        | Omit<IFormTidyTableNumericRowExprFieldDef, 'fieldPath'>
+                                        | Omit<IFormTidyTableColorRowExprFieldDef, 'fieldPath'>
+                                        | Omit<IFormTidyTableStringRowExprFieldDef, 'fieldPath'>
+                                        | Omit<IFormTidyTableScaleRowExprFieldDef, 'fieldPath'>
                                         | Omit<IFormColorEditorFieldDef, 'fieldPath'>
                                         | Omit<IFormJsFieldDef, 'fieldPath'>
-                                        | Omit<IFormMarkdownFieldDef, 'fieldPath'> :
+                                        | Omit<IFormJsonFieldDef, 'fieldPath'>
+                                        | Omit<IFormMarkdownFieldDef, 'fieldPath'>
+                                        | Omit<IFormColumnChooserFieldDef, 'fieldPath'> :
 
                                         Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
-                                            | Omit<IFormPaletteEditorFieldDef, 'fieldPath'> :
+                                            | Omit<IFormPaletteEditorFieldDef, 'fieldPath'>
+                                            | Omit<IFormColumnsChooserFieldDef, 'fieldPath'>
+                                            | Omit<IFormGroupsFieldDef, 'fieldPath'> :
 
                                             never /* type not supported */
         )
@@ -161,6 +179,10 @@ export type FormFieldType =
      */
     "columnCoordinate" |
     /**
+     * @see IFormColumnChooserFieldDef
+     */
+    "columnsChooser" |
+    /**
      * @see IFormColumnSelectionFieldDef
      */
     "columnSelection" |
@@ -188,6 +210,10 @@ export type FormFieldType =
      * @see IFormJsFieldDef
      */
     "js" |
+    /**
+     * @see IFormJsonFieldDef
+     */
+    "json" |
     /**
      * @see IFormMarkdownFieldDef
      */
@@ -241,6 +267,14 @@ export type FormFieldType =
      */
     "tidyTableNumericRowExpr" |
     /**
+     * @see IFormTidyTableStringRowExprFieldDef
+     */
+    "tidyTableStringRowExpr" |
+    /**
+     * @see IFormTidyTableColorRowExprFieldDef
+     */
+    "tidyTableColorRowExpr" |
+    /**
      * @see IFormTidyTableScaleRowExprFieldDef
      */
     "tidyTableScaleRowExpr" |
@@ -265,7 +299,9 @@ export type FormFieldTidyTableExprType =
     "tidyTableNumericRowExpr" |
     "tidyTableScaleRowExpr" |
     "tidyTableTextExpr" |
-    "tidyTableTextRowExpr"
+    "tidyTableTextRowExpr" |
+    "tidyTableStringRowExpr" |
+    "tidyTableColorRowExpr"
     ;
 
 export function isTidyTableExpr(type: FormFieldType): type is FormFieldTidyTableExprType {
@@ -275,6 +311,8 @@ export function isTidyTableExpr(type: FormFieldType): type is FormFieldTidyTable
         || type === "tidyTableTextRowExpr"
         || type === "tidyTableNumericExpr"
         || type === "tidyTableNumericRowExpr"
+        || type === "tidyTableStringRowExpr"
+        || type === "tidyTableColorRowExpr"
         || type === "tidyTableScaleRowExpr"
         ;
 }
@@ -290,6 +328,8 @@ export function isTidyTableExprRow(type: FormFieldType) {
     return type === "tidyTableHtmlRowExpr"
         || type === "tidyTableTextRowExpr"
         || type === "tidyTableNumericRowExpr"
+        || type === "tidyTableStringRowExpr"
+        || type === "tidyTableColorRowExpr"
         || type === "tidyTableScaleRowExpr"
         ;
 }
@@ -333,6 +373,7 @@ export type CodeMirrorMode =
     "mdx" |
     "sql" |
     "js" |
+    "json" |
     "csv" |
     "md" |
     FormFieldTidyTableExprType
@@ -346,6 +387,8 @@ export function isCodeMirrorModeExpr(mode: CodeMirrorMode) {
         || mode === "tidyTableNumericExpr"
         || mode === "tidyTableNumericRowExpr"
         || mode === "tidyTableScaleRowExpr"
+        || mode === "tidyTableStringRowExpr"
+        || mode === "tidyTableColorRowExpr"
         ;
 }
 
@@ -424,7 +467,11 @@ export interface IFormAutocompleteFieldDef<OPTION> extends IFormFieldDef<OPTION>
 }
 
 /**
+ * The "groupBoolean" allows for using that field as a group header and as a way
+ * to enable/disable the options in the group.
+ *
  * @see FormFieldDef
+ * @see IFormGroupsFieldDef
  */
 export interface IFormBooleanFieldDef extends IFormFieldDef<boolean> {
 
@@ -454,6 +501,34 @@ export interface IFormColumnCoordinateFieldDef extends IFormFieldDef<never> {
         allowDuplicate?: boolean;
         allowedTypes?: (column: ITidyColumn) => boolean;
         includeProperties?: boolean;
+        fallback?: boolean;
+
+    }
+
+}
+
+/**
+ * @see FormFieldDef
+ */
+export interface IFormColumnChooserFieldDef extends IFormFieldDef<never> {
+
+    fieldType: "columnsChooser",
+
+    editorConf?: {
+
+        multiple?: false;
+
+    }
+
+}
+
+export interface IFormColumnsChooserFieldDef extends IFormFieldDef<never> {
+
+    fieldType: "columnsChooser",
+
+    editorConf: {
+
+        multiple: true;
 
     }
 
@@ -487,7 +562,11 @@ export interface IFormEventMappingArrayFieldDef extends IFormFieldDef<any> {
 /**
  * Contains the ordering of the groups.
  *
+ * An optional (and invisible) field that is defining how the groups are ordered (does not need to contain all
+ * the groups). When none defined, the groups order depends on the field order themselves.
+ *
  * @see FormFieldDef
+ * @see IFormBooleanFieldDef
  */
 export interface IFormGroupsFieldDef extends IFormFieldDef<string[]> {
 
@@ -502,6 +581,15 @@ export interface IFormGroupsFieldDef extends IFormFieldDef<string[]> {
 export interface IFormJsFieldDef extends IFormFieldDef<string> {
 
     fieldType: "js",
+
+}
+
+/**
+ * @see FormFieldDef
+ */
+export interface IFormJsonFieldDef extends IFormFieldDef<string> {
+
+    fieldType: "json",
 
 }
 
@@ -723,6 +811,38 @@ export interface IFormTidyTableNumericExprFieldDef extends IFormFieldDef<string>
 }
 
 /**
+ * A string expression containing tidy table value accessor (e.g., chart's value axis minimum).
+ * The evaluation context is the table.
+ *
+ * @see FormFieldDef
+ */
+export interface IFormTidyTableStringRowExprFieldDef extends IFormFieldDef<string> {
+
+    fieldType: "tidyTableStringRowExpr",
+
+    editorConf?: {
+        defaultColumn?: boolean,
+    },
+
+}
+
+/**
+ * A color (i.e., string) expression containing tidy table value accessor (e.g., chart's value axis minimum).
+ * The evaluation context is the table.
+ *
+ * @see FormFieldDef
+ */
+export interface IFormTidyTableColorRowExprFieldDef extends IFormFieldDef<string> {
+
+    fieldType: "tidyTableColorRowExpr",
+
+    editorConf?: {
+        defaultColumn?: boolean,
+    },
+
+}
+
+/**
  * A numeric expression containing tidy table value accessor (e.g., chart's value axis minimum).
  * The evaluation context is a row.
  *
@@ -830,6 +950,8 @@ export type FormFieldDef =
     IFormTidyTableHtmlRowExprFieldDef |
     IFormTidyTableNumericExprFieldDef |
     IFormTidyTableNumericRowExprFieldDef |
+    IFormTidyTableStringRowExprFieldDef |
+    IFormTidyTableColorRowExprFieldDef |
     IFormTidyTableScaleRowExprFieldDef |
     IFormTidyTableTextExprFieldDef |
     IFormTidyTableTextRowExprFieldDef |

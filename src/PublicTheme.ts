@@ -141,6 +141,12 @@ export interface ic3Palette {
      */
     reportAppMenu: string;
 
+    /**
+     * Darkens a color for an onhover effect
+     *
+     * If null or undefined, returns onHover color
+     */
+    onHover: (color?: Property.Color | undefined | null) => Property.Color;
 }
 
 interface MandatorySingleColors {
@@ -222,6 +228,8 @@ export interface ic3PaletteOptions {
      * Report Application Menu
      */
     reportAppMenu?: Property.Color;
+
+    onHover?: (color: Property.Color) => Property.Color;
 
 }
 

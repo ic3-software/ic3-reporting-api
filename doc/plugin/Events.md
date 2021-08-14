@@ -4,7 +4,7 @@ icCube widgets (e.g., charts, filters, tables, ...) are communicating to each ot
 
 Events work in a **publish-subscribe** architecture. In this architecture subscribers receive messages that are sent by
 publishers. Those publishers are unknown to the subscribers (please refer to this page for more information:
-[wikipedia](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern)).
+[Wikipedia](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern)).
 
 The icCube publish-subscribe architecture is **topic-based**. That is events are published to "topics" or named logical
 channels (named channel for short). Subscribers will receive all messages published to the topics to which they
@@ -79,7 +79,7 @@ is becoming when the event `2020` is sent (aka. fired) into the `year` channel:
 Sales: 2020
 ```
 
-At the programing level, an event content might be more than a simple string. You can check the public API source
+At the programing level, an event content might be more than a simple string. You can check the API source
 code [code](https://github.com/iccube-software/ic3-reporting-api/blob/master/src/IcEvent.ts) that provides for an
 up-to-date documentation
 
@@ -93,20 +93,34 @@ to publish an event (or subscribe) to a channel. E.g.,  `ClickDonutSlice`, `Sele
 | Publish&#8209;ClickDonutSlice  | year          | When a user click on a Donut slice, fire an event on the year channel containing the year represented by the slice. |
 | Subscribe&#8209;AddToSelection | year          | When a new event is prevent on the channel year, the widget is adding the event value to its selection. |
 
-    TODO: explain eventRoles have to be defined in each widget-template-definition 
+From a widget developer point of view, the [widget template](./WidgetTemplate.md) definition contains a `eventRoles`
+section that is describing the actions supported by the widget. As an example, the following code:
 
-###### Publish
+```javascript
+SimpleTableDefinition.eventRoles = {
+
+    publish: ["SimpleTableClickRow"],
+
+    selectionPublish: TemplateEventActionNames.SELECTION,
+    selectionSubscribe: TemplateEventActionNames.SELECTION,
+}
+```
+
+is saying that the widget (a table) is firing an event when the user is clicking on the row and is both publishing and
+listening to the selection.
+
+##### Publish
 
 The list of actions the widget can send events.
 
-###### Subscribe
+##### Subscribe
 
 The list of actions the widget can receive events. Note, only new events are sent to subscribers. The widget is being
 notified only on event content change.
 
-###### Selection (Publish/Subscribe)
+##### Selection (Publish/Subscribe)
 
 Those actions are internally managed by icCube to synchronize selection in `ITidyTableInteraction`. The actual state and
-the consistency of the selection is managed by icCube.
+the consistency of the selection is managed by icCube. Refer to this [page](./Interactions.md) for more information.
 
 __

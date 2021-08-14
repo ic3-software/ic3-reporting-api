@@ -3,7 +3,7 @@ import {
     EntityItem,
     IMdxAxisSeriesInfo,
     ITidyTableSelection,
-    MdxInfo,
+    MdxInfo, MdxMemberCoordinates,
     SortingType,
     TidyCellError,
     TidyColumnCoordinateUniqueName,
@@ -19,10 +19,30 @@ import {ThemeTextFormatter} from "./PublicTheme";
  */
 export enum ITidyColumnNamedProperties {
 
+    /**
+     * The formatted value of a cell. For example, 5003 in euros is formatted as €5,003
+     */
     mdxCellFormattedValue = "formattedValue",
+
+    /**
+     * Mdx related colorings
+     */
     mdxCellBackColor = "mdxCellBackColor",
+
+    /**
+     * Mdx related colorings
+     */
     mdxCellForeColor = "mdxCellForeColor",
+
+    /**
+     * The format string for the cell value. For example, euros are formatted using €#,###. and percentages using
+     * Percent.
+     */
     mdxCellFormatString = "mdxCellFormatString",
+
+    /**
+     * The main color of the cell
+     */
     mdxCellColor = "color",
 
     /**
@@ -53,8 +73,11 @@ export enum ITidyColumnNamedProperties {
     /**
      * Column defined as an MDX axis, the key of the column
      */
-    key = "key",
+    mdxCellKey = "key",
 
+    /**
+     * Show this when hovering over the cell (or the visualisation representing the cell)
+     */
     tooltip = "tooltip",
 }
 
@@ -208,13 +231,6 @@ export interface ITidyBaseColumn<T> {
     setValues<P>(values: P[]): void;
 
     /**
-     * Returns the column internal values object.
-     * @deprecated Use {getValues} or {unique} instead.
-     * @see {getValues} {unique}
-     */
-    getInternalValues(): Array<T>;
-
-    /**
      * Return a new column with transformed values.
      * @param fun function with one parameter. Describes the transformation.
      * @param columnName the name of the new column.
@@ -250,6 +266,15 @@ export interface ITidyBaseColumn<T> {
     mdxAxis(): T[] | undefined;
 
     /**
+     *
+     * if it's an mdx axis, for each row of the undelying mdx Axis
+     * if no, for each row
+     *
+     * @see mdxAxis
+     */
+    mapAxisOrRows<K>(callbackfn: (rowIdx: number, column: ITidyBaseColumn<T>) => K): K[];
+
+    /**
      * Returns true if and only if the column has zero rows.
      */
     isEmpty(): boolean;
@@ -279,16 +304,16 @@ export interface ITidyBaseColumn<T> {
 
     /**
      * Returns the mdx info at a row index.
-     * TODO (tom) this must not return undefined to ensure that we always have a unique name. Currently
-     * we use getSelectionRowIdentifier and getCoordinateUniqueName.
+     *
+     * If the column is an axis (e.g. measure one), it's the same for all rows
      */
-    getMdxInfo(idx: number): MdxInfo | undefined;
+    getMdxInfo(idx: number): MdxInfo;
 
     isWithEntityItem(): boolean;
 
-    getEntityItem(idx: number): EntityItem | undefined;
+    getEntityItem(idx: number): EntityItem;
 
-    getMdxCoordinates(rowIdx: number): [number, number, number] | [];
+    getMdxCoordinates(rowIdx: number): MdxMemberCoordinates | undefined;
 
     /**
      * Returns true if the column is a hierarchical structure
@@ -334,7 +359,11 @@ export interface ITidyBaseColumn<T> {
      */
     getSiblings(index: number): number[];
 
-    mapAllRows<P>(fun: (index: number) => P): P[];
+    /**
+     * @param callbackfn  , if the return value is undefined do not map the row
+     */
+    mapAllRows<P>(callbackfn: (index: number, column: ITidyBaseColumn<T>) => P | undefined, forceMapAllRows?: boolean): P[];
+
 
     /**
      * Map the rows that are visible given a hierarchical axis and an array of boolean values
@@ -349,7 +378,7 @@ export interface ITidyBaseColumn<T> {
     /**
      * For hierarchical structures de tree depth, starts at zero.
      */
-    getLevelDepth(idx: number): number | undefined;
+    getLevelDepth(idx: number): number;
 
     hasMdxChildren(rowIdx: number): boolean;
 
@@ -387,6 +416,14 @@ export interface ITidyBaseColumn<T> {
      *
      */
     hasColorProperty(): boolean;
+
+    /**
+     * Returns the color column (if defined).
+     *
+     * If the column has type 'color', then it returns itself. Else it returns the
+     * column of the first property with type 'color'.
+     */
+    getColorColumn(): ITidyBaseColumn<string> | undefined;
 
     /**
      * Returns the color of a cell (if defined).
@@ -427,12 +464,16 @@ export interface ITidyBaseColumn<T> {
      */
     forEachMatching(lookupValue: any, func: (rowIdx: number) => void | boolean): void;
 
-
     /**
      * Set a property on the column. If the property already exists, it is overwritten.
      * @param property the column to set as a property. Ensure that the lengths are the same.
      */
     setProperty(property: ITidyColumn): void;
+
+    /**
+     * Delete a property on the column
+     */
+    deleteProperty(propertyName: string): void;
 
     /**
      * Returns first value where callback does not return undefined.
@@ -598,9 +639,9 @@ export interface ITidyBaseColumn<T> {
     /**
      * Cell decoration
      */
-    setCellDecoration(decoration: Partial<PublicTidyColumnCellDecoration>): void;
+    setCellDecoration(decoration: PublicTidyColumnCellDecoration): void;
 
-    getCellDecoration(): Partial<PublicTidyColumnCellDecoration>;
+    getCellDecoration(): PublicTidyColumnCellDecoration;
 
     /**
      * Set a value in the cache of the column.
@@ -616,14 +657,23 @@ export interface ITidyBaseColumn<T> {
      * Clear the columns cache.
      */
     clearCache(): void;
+
+    /**
+     * Returns the type for Material-UI Table/Grid
+     */
+    getXGridType(): "string" | "number" | "date" | "dateTime" | "boolean" | undefined;
 }
 
-export interface PublicTidyColumnCellDecoration {
+export type PublicTidyColumnCellDecoration = Partial<{
+
+    handlesCellsOnError: boolean;
+
+    appliesToCell: (rowIdx: number) => boolean;
 
     rendered: (rowIdx: number) => React.ReactElement;
 
     cssStyles: (rowIdx: number) => Record<string, any> | undefined;
-}
+}>;
 
 export type ITidyColumn = ITidyBaseColumn<any>;
 export type ITidyUnknownColumn = ITidyBaseColumn<unknown>;

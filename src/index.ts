@@ -12,6 +12,7 @@ export * from "./IWidgetDefaultsManager";
 export * from "./IWidgetVariantManager";
 export * from "./IWidgetManager";
 export * from "./LazyTreeView";
+export * from "./Loader";
 export * from "./PublicCommon";
 export * from "./PublicContext";
 export * from "./PublicI18n";

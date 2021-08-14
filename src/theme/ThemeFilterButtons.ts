@@ -11,6 +11,12 @@ export interface FilterButtonsProps extends FormFieldObject {
      */
     size: 'small' | 'medium' | 'large';
 
+
+    /**
+     * If true, buttons will be grouped together (visual effect)
+     */
+    group?: boolean;
+
     /**
      * If defined, buttons will be positioned in columns
      */
@@ -29,6 +35,12 @@ export class FilterButtonsClasses {
      *  Style applied to the mui button elements.
      */
     static readonly button = "FilterSlider-button";
+
+    /**
+     *  Style applied to the mui group element (if present).
+     */
+    static readonly group = "FilterSlider-group";
+
     /**
      * Slot for MuiButton component(s)
      */

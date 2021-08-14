@@ -73,6 +73,27 @@ export function isTidyTableMappingCoordinate(coordinate: any): coordinate is Tid
     return coordinate != null && coordinate.name != null;
 }
 
+/**
+ * Returns true if the coordinate is a mapping coordinate. Returns false otherwise.
+ * @param coordinate
+ */
+export function isTidyTableMappingCoordinates(coordinate: any): coordinate is TidyTableMappingCoordinate {
+    return coordinate != null && (Array.isArray(coordinate) && coordinate.length > 0 && isTidyTableMappingCoordinate(coordinate[0]));
+}
+
+export enum TidyTableMappingColumnsSelectorOptions {
+
+    ALL = '@IC3_ALL',
+    ALL_NUMERIC = '@IC3_ALL_NUMERIC',
+    ALL_CHARACTER = '@IC3_ALL_CHARACTER',
+    ALL_MEASURES = '@IC3_ALL_MEASURES',
+    ALL_AXIS = '@IC3_ALL_AXIS',
+
+}
+
+export type TidyTableMappingColumnsSelector = string;
+
+
 export interface TidyTableMappingCoordinate {
     /**
      * Name of the column.
@@ -80,7 +101,7 @@ export interface TidyTableMappingCoordinate {
     name: string;
 
     /**
-     * If we want a property, the name of the property for the column with name name.
+     * If we want a property, the name of the property for the column.
      */
     property?: string;
 
@@ -91,23 +112,31 @@ export interface TidyTableMappingCoordinate {
 }
 
 /**
- * The coordinate of an mdx axis.
+ * Coordinate of an MDX member
  */
-export interface AxisCoordinate {
+export interface MdxMemberCoordinates {
     /**
-     * The index of the axis (on 0, on 1, on 2, etc..)
+     * index of the axis. ON 0, ON 1, etc..
      */
-    index: number;
+    axisIdx: number;
 
     /**
-     * If multiple hierarchies are on a single axis, the tuple indicates the index of the hierarchy. For example,
-     * [Time].[Calendar].[Month]* [Product].[Product].[Article] ON 1
-     * has index = 0, and Month on tuple = 0 and Article on tuple = 1.
-     *
-     * If an axis with multiple tuples is combined to a single column, then the tuple index equals 0.
+     * index of the tuple in the axis. E.g. (AF, 2009) in [AF, 2008, AF, 2009, AF, 2010] has index 1.
      */
-    tuple: number;
+    tupleIdx: number;
 
+    /**
+     * index of the member in the tuple. E.g. AF in (AF, 2009) has index 0 and 2009 has index 1.
+     */
+    hierIdx: number;
+}
+
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
+/**
+ * The coordinate of an MDX axis. If and only if the columns source is from ON 0, the hierIdx is defined.
+ */
+export interface AxisCoordinate extends Optional<MdxMemberCoordinates, "tupleIdx"> {
     /**
      * Object keeping track of the transformation from the original axis to the current column.
      * If this object is undefined, then the column can not be constructed using a coordinate transformation of the axis.
@@ -134,9 +163,10 @@ export type TidyColumnCoordinateUniqueName = string;
 
 export enum IAmcharts4DataKey {
     /**
-     * If the axis is a date axis, this is the date time value.
+     * The value of the axis. The value is a date if the user mapped a date column and the row number string if the
+     * user mapped a character column. Use an adapter on the category axis to get the actual value of the label.
      */
-    DATE = "date",
+    AXIS = "axis",
 
     /**
      * Tag for the rows in the result
@@ -154,25 +184,35 @@ export enum IAmcharts4DataKey {
  */
 export type IAmCharts4Data = Record<string, any>;
 
-export interface IAmCharts4DataTreeMap {
-    name: string;
+export interface IAmCharts4DataTreeMap extends IAmCharts4Data {
     children: IAmCharts4Data[];
 }
 
 export type ITidyRow = any[];
 
 export interface MdxInfo {
-    uniqueName: string; /* mdx unique name */
+    /**
+     *  mdx unique name
+     */
+    uniqueName: string;
     key: string;
     pun?: string;
     lcaption?: string;
     ld: number;
     cc?: number;
-    caption: string; /* localized version , same as name if no localization */
-    name: string; /* not localized version */
 
     /**
-     * Member index of the mdx-axis.
+     * localized version, same as name if no localization
+     */
+    caption: string;
+
+    /**
+     * Not localized version
+     */
+    name: string;
+
+    /**
+     * Index of the member on the mdx-axis.
      */
     index: number;
 }
@@ -199,7 +239,7 @@ export interface EntityItem {
     uniqueName: string; /* mdx unique name */
     name: string; /* not localized version */
     caption: string; /* localized version , same as name if no localization */
-    key: string;
+    key?: string;
 
     hierUN?: string;
     parentUN?: string;
@@ -297,7 +337,9 @@ export interface HistogramData {
 }
 
 export enum InterpolationType {
+    NONE = 'none',
     RGB = 'rgb',
+    HCL = 'hcl',
     HSL = 'hsl',
     LAB = 'lab'
 }

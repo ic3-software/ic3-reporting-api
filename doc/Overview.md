@@ -15,7 +15,8 @@ The dev. kit documentation is available [here](./plugin/Overview.md).
 
 ### Embedding icCube Dashboards
 
-The public API allows for embedding the icCube Dashboards into an existing Web application.
+The API allows for embedding the icCube Dashboards into an existing Web application. This API allows for a two ways
+communication between the host application and the icCube Dashboards.
 
 The API documentation is available [here](./embed/Overview.md).
 

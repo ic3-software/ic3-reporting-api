@@ -42,7 +42,7 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      */
-    createTableRowTextExprFormatter(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): ((rowIdx: number) => string) | undefined;
+    createTableRowTextExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): ((rowIdx: number) => string) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -51,7 +51,7 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      */
-    createTableTextExprFormatter(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): (() => string) | undefined;
+    createTableTextExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): (() => string) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -60,7 +60,7 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      */
-    createTableRowHtmlExprFormatter(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): ((rowIdx: number) => string) | undefined;
+    createTableRowMarkdownExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): ((rowIdx: number) => string) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -69,7 +69,7 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      */
-    createTableHtmlExprFormatter(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): (() => string) | undefined;
+    createTableMarkdownExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): (() => string) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -79,6 +79,13 @@ export interface IPublicContext {
      * undefined.
      */
     createTableRowNumericExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): ((rowIdx: number) => number | undefined) | undefined;
+
+    /**
+     * same as  createTableRowNumericExpr but returning a string
+     */
+    createTableRowNumericStringExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): ((rowIdx: number) => string | undefined) | undefined;
+
+    createTableScaleRowNumericExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): ((rowIdx: number) => number | undefined) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -94,8 +101,6 @@ export interface IPublicContext {
 
 export interface IWidgetPublicContext extends IPublicContext {
 
-    onWidgetRenderStatusChange(status: WidgetRenderLayoutStatus): void;
-
     getNsId(): string;
 
     getWidgetId(): string;
@@ -103,6 +108,12 @@ export interface IWidgetPublicContext extends IPublicContext {
     getTemplateId(): string;
 
     getWidgetPageId(): string;
+
+    isPrintingMode(): boolean;
+
+    getGoogleMapRenderedDelayMS(): number;
+
+    logInfoWidget(component: string, message: string): void;
 
     renderWidgetContentMessage(type: IContentMessageType, message: string): any;
 
@@ -122,7 +133,6 @@ export interface IWidgetPublicContext extends IPublicContext {
      */
     formatPercent(value: number | string | undefined | null, locale?: string): string;
 
-
     wrapWithTooltip(tooltip: string | undefined, wrappedElement: React.ReactElement): React.ReactElement;
 
     /**
@@ -133,6 +143,9 @@ export interface IWidgetPublicContext extends IPublicContext {
      * the edited options in the widget editor panel will be updated.
      */
     onUserMenuAction(userMenuAction: string, callback: (event: any) => Record<string, any> | undefined): void;
+
+    onWidgetRenderStatusChange(status: WidgetRenderLayoutStatus): void;
+
 }
 
 export interface IWidgetEditorPublicContext {

@@ -129,6 +129,19 @@ interface IPublicCommonWidgetTemplateDefinition {
     dependsOnTheme?: string;
 
     /**
+     * A sort of "preview" of the widget in the widget chooser. Providing an empty string will display a default image.
+     *
+     * <pre>
+     *     import donut from "./images/donut.svg";
+     *
+     *     {
+     *          image: "donut",
+     *     }
+     * </pre>
+     */
+    image: string;
+
+    /**
      * No widget box decoration.
      */
     noDecoration?: boolean;
@@ -151,6 +164,7 @@ interface IPublicCommonWidgetTemplateDefinition {
     withoutSelection?: boolean;
     withoutDrilldown?: boolean;
     withoutUserMenu?: boolean;
+
     renderIfNotInViewport?: boolean;
 
     /**
@@ -170,6 +184,11 @@ interface IPublicCommonWidgetTemplateDefinition {
      */
     withOptionAutoExpandKeepTableHeader?: boolean;
 
+    /**
+     * When defined, set the option as invisible and its value.
+     */
+    withDrilldownPivotTableLikeAs?: boolean;
+
     userMenuOptions?: string[];
     userMenuOptionsOnEditing?: string[];
 
@@ -188,6 +207,16 @@ interface IPublicCommonWidgetTemplateDefinition {
 
     eventRoles?: ITemplateEventActionDef;
 
+    selection?: {
+
+        /**
+         * The list of columns that can be part of the selection. The end-user can then select the actual
+         * columns from the Interaction/Selection configuration (see Selection Granularity).
+         */
+        allowedColumns: (column: ITidyColumn) => boolean;
+
+    }
+
     /**
      * The meta information that defined which data column to use in the widget.
      */
@@ -198,20 +227,16 @@ interface IPublicCommonWidgetTemplateDefinition {
      */
     chartOptionsMeta?: FormFieldDef[] | FormFields<FormFieldObject>;
 
-    registerVariants?: (theme: Theme, manager: IWidgetVariantManager) => void;
-
     /**
-     * A sort of "preview" of the widget in the widget chooser. Providing an empty string will display a default image.
-     *
+     * When registering a variant add the following field editor meta:
      * <pre>
-     *     import donut from "./images/donut.svg";
-     *
-     *     {
-     *          image: "donut",
-     *     }
+     * widgetVariant: {
+     *    fieldType: "widgetVariant",
+     *    localizationTag: "variant"   // icCube localization,
+     * },
      * </pre>
      */
-    image: string;
+    registerVariants?: (theme: Theme, manager: IWidgetVariantManager) => void;
 
     /**
      * e.g., amCharts4.
@@ -223,11 +248,6 @@ interface IPublicCommonWidgetTemplateDefinition {
      */
     reactComponent?: boolean;
 
-    selection?: {
-
-        allowedColumns: (column: ITidyColumn) => boolean;
-
-    }
 }
 
 /**

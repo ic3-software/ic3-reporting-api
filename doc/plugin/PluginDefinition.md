@@ -1,9 +1,37 @@
 ## Plugin Definition
 
-The plugin definition acts as the entry point of your plugin.
+The plugin definition (`IPluginDefinition`) acts as the entry point of your plugin.
 
 This is where the plugin ID is defined and where the widgets, the data transformations, etc... defined in the plugin are
-registered to the icCube Dashboards application.
+registered to the icCube Dashboards application. This is done using the `makePlugin` function:
+
+```typescript
+const PluginDefinition = ApiUtils.makePlugin({
+
+    id: "MyPlugin",
+
+    registerLocalization(manager: ILocalizationManager) {
+        // ...
+    },
+
+    registerThemes(manager: IThemeManager) {
+        // ...
+    },
+
+    registerWidgets(manager: IWidgetManager) {
+        // ...
+    },
+
+    registerWidgetDefaults(theme: Theme, manager: IWidgetDefaultsManager) {
+        // ...
+    },
+
+    registerTidyTableTransformations(manager: ITidyTableTransformationManager) {
+        // ...
+    },
+
+});
+```
 
 Please refer to the available [source](https://github.com/iccube-software/ic3-reporting-api) code of the API that
 provides for up-to-date and detailed information. You can refer as well to the source code of the various
@@ -15,7 +43,7 @@ This definition is usually in the `PluginDefinition.js` file located at the root
 exposed via the Webpack Module Federation mechanism in the `webpack.common.js` file as following:
 
 ```javascript
-        new ModuleFederationPlugin({
+new ModuleFederationPlugin({
     name: "MyPlugin",
     filename: "remoteEntry.js",
     exposes: {

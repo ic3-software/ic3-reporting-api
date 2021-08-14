@@ -6,14 +6,15 @@ import {ReactElement} from "react";
 import {Theme} from "@material-ui/core/styles";
 
 export enum SelectionMode {
+    /**
+     * User can only select one item.
+     */
     SINGLE = 'SINGLE',
-    MULTIPLE = 'MULTIPLE',
-    TREE = 'TREE',
 
     /**
-     * Deprecated, use options for selection optimization instead
+     * User can select multiple items.
      */
-    TREE_COLLAPSE = 'TREE_COLLAPSE'
+    MULTIPLE = 'MULTIPLE'
 }
 
 export enum TreeFireEventMode {
@@ -23,6 +24,7 @@ export enum TreeFireEventMode {
      */
     COMPACT_ON_PARENT = 'COMPACT_ON_PARENT'
 }
+
 
 export enum TidyPivotTableLikeNodeStatus {
     COLLAPSED,
@@ -56,6 +58,7 @@ export interface ITidyTableInteractionSelection {
 
     /**
      *
+     * @param column
      * @param rowIdx the index of the row
      */
     isColumnRowSelected(column: ITidyBaseColumn<any>, rowIdx: number): boolean | undefined;
@@ -81,15 +84,12 @@ export interface ITidyTableInteractionSelection {
      *
      * If the columns is not part of the selection columns of the widget nothing will happen
      *
+     * @param column column that is in the selection columns
      * @param rowIdx index of row clicked
      * @param event the mouse event of the click
      */
     handleColumnSelection(column: ITidyColumn, rowIdx: number, event?: TidyEvent): void;
 
-
-    /***
-     *
-     */
     getColorOnSelection(theme: Theme, color: string | undefined, rowIdx: number): string | undefined;
 
     /**
@@ -113,7 +113,7 @@ export interface ITidyTableInteractionSelection {
     /**
      * Get the selection mode (single or multiple) of the interaction object.
      */
-    getSelectionMode(): SelectionMode | undefined;
+    getSelectionMode(): SelectionMode;
 
     /**
      * Set the selection mode of the interaction.
@@ -140,6 +140,11 @@ export interface ITidyTableInteractionSelection {
     setTreeCascade(value: boolean): void;
 
     /**
+     * the selection will treat a click without ctr or shift as with a ctr key pressed  (e.g. check boxes)
+     */
+    setNoKeyModifierAsCtrl(value?: boolean): void;
+
+    /**
      * Set to true to enable selection on the interaction object.
      * @param enabled if true, the selection is enabled. If false, the interaction object does not respond to
      * methods setting the selection (e.g. click).
@@ -147,7 +152,7 @@ export interface ITidyTableInteractionSelection {
     setSelectionActive(enabled?: boolean): void;
 
     /**
-     * Returns true if the selection is activated, e.g. the interaction object responds to click and onther selection
+     * Returns true if the selection is activated, e.g. the interaction object responds to click and other selection
      * events.
      */
     isSelectionActive(): boolean;
@@ -214,7 +219,6 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      */
     handleRowHit(rowIdx: number, event: TidyEvent | undefined): void;
 
-
     /**
      * Collapsed / Expand
      */
@@ -250,5 +254,6 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
 
     asLazyTreeViewLoader(column: ITidyColumn): ILazyTreeViewLoader;
 
+    getCompactedSelectionNames(): string[] | undefined;
 }
 

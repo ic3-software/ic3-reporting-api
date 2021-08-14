@@ -15,12 +15,25 @@ export interface IReportDefinition {
     setDefaultCubeName(name: string): void;
 }
 
+export interface IEventContentItem {
+
+    /**
+     * Localized name or name.
+     */
+    caption: string;
+
+    name: string;
+    uniqueName: string;
+}
+
+export type IEventContent = IEventContentItem | IEventContentItem[]
+
 /**
  * Used to setup filter initial selection.
  */
 export interface IReportParam {
     channelName: string;
-    name: string | string[];
+    value: IEventContent;
 }
 
 export interface IOpenReportOptions {
@@ -69,6 +82,8 @@ export interface IReporting {
 
     openReport(options: IOpenReportOptions): void;
 
-    fireEvent(eventName: string, caption: string, mdx: string): void;
+    fireEvent(eventName: string, value: IEventContent | null): void;
+
+    onEvent(eventName: string, callback: (value: IEventContent | null) => void): void;
 
 }

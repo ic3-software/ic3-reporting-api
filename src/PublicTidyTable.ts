@@ -3,7 +3,7 @@ import {
     EntityItem,
     IAmCharts4Data,
     IAmCharts4DataTreeMap,
-    ITidyRow,
+    ITidyRow, MdxMemberCoordinates,
     SortingType,
     TidyColumnsType,
     TidyTableMappingCoordinate
@@ -67,12 +67,6 @@ export interface ITidyTable {
      */
     getColumnCount(): number;
 
-    /**
-     * Columns getters without mapping
-     * @deprecated
-     * @see {getOptionalColumnByType}
-     *
-     */
     getAxisN(axisPosition: number): ITidyCharacterColumn;
 
     /**
@@ -133,6 +127,8 @@ export interface ITidyTable {
      * @see {getColumnByAlias}
      */
     getOptionalColumnByAlias(alias: string): ITidyUnknownColumn | undefined;
+
+    getOptionalColumnCoordinateByAlias(alias: string): TidyTableMappingCoordinate | undefined;
 
     /**
      * Get a column using the coordinate from a 'columnCoordinate' option field.
@@ -238,7 +234,7 @@ export interface ITidyTable {
 
     getEntityItem(colIdx: number, rowIdx: number): EntityItem | undefined;
 
-    getMdxCoordinates(colIdx: number, rowIdx: number): [number, number, number] | [];
+    getMdxCoordinates(colIdx: number, rowIdx: number): MdxMemberCoordinates | undefined;
 
     /**
      * Take the sum of the column, but if it is a hierarchical column only the sum at the root level will be
@@ -352,12 +348,12 @@ export interface ITidyTable {
     toAmcharts4Data<F extends string>(category: ITidyColumn, value: Record<F, ITidyColumn | undefined>, group?: ITidyColumn, level?: ITidyColumn): IAmCharts4Data[];
 
     /**
-     * Creates a data object for the Amcharts treemap.
-     * @param value values to use in the node data.
-     * @param level0 names for the parent nodes.
-     * @param level1 names for the child nodes.
+     * Creates a data object for the Amcharts treemap
+     * @param level0 names for the parent nodes
+     * @param level1 names for the child nodes
+     * @param value values to use in the node data
      */
-    toAmcharts4DataTreeMap(value: Record<string, ITidyColumn | undefined>, level0: ITidyColumn, level1: ITidyColumn): IAmCharts4DataTreeMap[];
+    toAmcharts4DataTreeMap(level0: ITidyColumn, level1: ITidyColumn, value: Record<string, ITidyColumn | undefined>): IAmCharts4DataTreeMap[];
 
     /**
      * Convert the tidy table to json.

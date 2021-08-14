@@ -31,7 +31,7 @@ The `package.json` file is containing common scripts:
     zip     : zip the /dist directory to deploy into an icCube server
     clean   : delete /dist /kit directories.
 
-A JetBrains Intellij project is available for a quick start.
+A JetBrains IntelliJ project is available for a quick start.
 
 ### Plugin Name Renaming
 

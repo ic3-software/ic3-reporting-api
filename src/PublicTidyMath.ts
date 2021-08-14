@@ -26,6 +26,14 @@ interface ITidyMath {
     max<T>(column: ITidyBaseColumn<T>): T | undefined;
 
     /**
+     * Get the maximum of the absolute values of the column.
+     * @param column
+     * @returns If x_1, x_2, ..., x_n are the columns values, then it returns max(|x_1|, ..., |x_n|). Null values are
+     * skipped.
+     */
+    absoluteMax(column: ITidyNumericColumn): number | undefined;
+
+    /**
      * Sum all values matching the lowest depth level of axis column
      */
     sumOnRoot(column: ITidyNumericColumn, tree: ITidyColumn): number;
@@ -45,6 +53,14 @@ interface ITidyMath {
      * NaN-value.
      */
     variance(column: ITidyNumericColumn): number | undefined;
+
+    /**
+     * Estimate the population standard deviation of the column. Null values are skipped.
+     * @param column
+     * @returns the standard deviation of the column. Returns undefined if the column has no values or if the column
+     * contains a NaN-value.
+     */
+    standardDeviation(column: ITidyNumericColumn): number | undefined;
 
     /**
      * Return the number of non-null values in the column.
@@ -81,20 +97,20 @@ interface ITidyMath {
     valueCounts<T>(column: ITidyBaseColumn<T>): Map<T, number>;
 
     /**
-     * Scale a numeric column so that its values are on [-1, 1].
-     * For each value x, return x / max(|x_1|, ..., |x_n|).
-     *
-     * @returns undefined if one of the values in the scalar could not be calculated.
-     */
-    scaleMaxAbsolute(column: ITidyNumericColumn): RealValuedFunction | undefined;
-
-    /**
      * Normalize a numeric column so that its values are on [0, 1].
      * For each value x, return (x - x_min) / (x_max - x_min).
      *
      * @returns undefined if one of the values in the scalar could not be calculated.
      */
-    scaleNormalize(column: ITidyNumericColumn): RealValuedFunction | undefined;
+    scaleNormalize(column: ITidyNumericColumn, idx: number, min: number | undefined, max: number | undefined, val: number | undefined): number | undefined;
+
+    /**
+     * Scale a numeric column so that its values are on [-1, 1].
+     * For each value x, return x / max(|x_1|, ..., |x_n|).
+     *
+     * @returns undefined if one of the values in the scalar could not be calculated.
+     */
+    scaleMaxAbsolute(column: ITidyNumericColumn, idx: number): number | undefined;
 
     /**
      * Standardize the column.
@@ -102,7 +118,7 @@ interface ITidyMath {
      *
      * @returns undefined if one of the values in the scalar could not be calculated.
      */
-    scaleStandardize(column: ITidyNumericColumn): RealValuedFunction | undefined;
+    scaleStandardize(column: ITidyNumericColumn, idx: number): number | undefined;
 }
 
 class TidyMathImpl implements ITidyMath {
@@ -114,20 +130,16 @@ class TidyMathImpl implements ITidyMath {
         return undefined;
     }
 
-    scaleMaxAbsolute(column: ITidyNumericColumn): RealValuedFunction | undefined {
-        let max = 0;
-        for (let i = 0; i < column.length(); i++) {
-            const val = column.getValue(i);
-            if (val != null) {
-                if (isNaN(val)) return undefined;
-                const v = Math.abs(val);
-                if (v > max) max = v;
-            }
+    scaleMaxAbsolute(column: ITidyNumericColumn, idx: number): number | undefined {
+        const absMax = this.absoluteMax(column);
+        const x = column.getValue(idx);
+        if (x == null || absMax == null) {
+            return undefined;
         }
-        return (x: number) => x / max;
+        return x / absMax;
     }
 
-    scaleNormalize_(column: ITidyNumericColumn, idx: number, min: number | undefined, max: number | undefined, val: number | undefined): number | undefined {
+    scaleNormalize(column: ITidyNumericColumn, idx: number, min: number | undefined, max: number | undefined, val: number | undefined): number | undefined {
 
         if (min == null) {
             min = TidyMath.min(column) ?? undefined;
@@ -152,24 +164,23 @@ class TidyMathImpl implements ITidyMath {
         return (val - min) / (max - min);
     }
 
-    scaleNormalize(column: ITidyNumericColumn): RealValuedFunction | undefined {
-        const max = this.max(column);
-        const min = this.min(column);
-        if (min == null || max == null) {
+    scaleStandardize(column: ITidyNumericColumn, idx: number): number | undefined {
+        const mean = this.mean(column);
+        const stdDev = this.standardDeviation(column);
+        const x = column.getValue(idx);
+        if (mean == null || stdDev == null || x == null) {
             return undefined;
         }
-        const range = max - min;
-        return (x: number) => (x - min) / range;
+        return (x - mean) / stdDev;
     }
 
-    scaleStandardize(column: ITidyNumericColumn): RealValuedFunction | undefined {
-        const mean = this.mean(column);
+    @cached
+    standardDeviation(column: ITidyNumericColumn): number | undefined {
         const variance = this.variance(column);
-        if (variance == null || mean == null) {
+        if (variance == null) {
             return undefined;
         }
-        const stdev = Math.sqrt(variance);
-        return (x: number) => (x - mean) / stdev;
+        return Math.sqrt(variance);
     }
 
     @cached
@@ -242,12 +253,26 @@ class TidyMathImpl implements ITidyMath {
         return result;
     }
 
+    @cached
+    absoluteMax(column: ITidyNumericColumn): number | undefined {
+        let max = 0;
+        for (let i = 0; i < column.length(); i++) {
+            const val = column.getValue(i);
+            if (val != null) {
+                if (isNaN(val)) return undefined;
+                const v = Math.abs(val);
+                if (v > max) max = v;
+            }
+        }
+        return max;
+    }
+
     sumOnRoot(column: ITidyNumericColumn, tree: ITidyBaseColumn<any>): number {
         if (tree.isHierarchy() && tree.length()) {
             let sum = 0;
             const N = column.length();
             for (let i = 0; i < N; i++) {
-                const cLevel = tree.getLevelDepth(i) || 0;
+                const cLevel = tree.getLevelDepth(i);
                 if (cLevel <= 0) {
                     sum += column.getValue(i) ?? 0;
                 }
