@@ -1,27 +1,15 @@
 ## icCube Dashboards Install
 
-The icCube server does not support yet officially the new Dashboards application: installing it requires some manual
-setup of the `Docs` application. It requires an icCube server v7.11 onwards.
+The Dashboards application can be installed on an icCube server v7.12 onwards.
 
-### One Time Server Setup
+In the Dashboards use case of the Admin console, use the top right wrench icon or drag & drop the ZIP file directly into
+the table:
 
-In the `Web Docs` folder add the following folders:
+![](./images/dashboards.png)
 
-    /ic3-reporting
-        /app-local
-        /data
-            /entities
-                /applications
-            /shared
-            /users
-
-with the following permissions:
-
-    :/ic3-reporting/data/entities
-    + [<everybody>] READ
-    
-    :/ic3-reporting/data/shared
-    + [<everybody>] READ
+If your icCube server does not support yet officially the new Dashboards application (i.e., the Dashboards use case is
+missing in the Admin console - see image above) please refer to the [manual-installation](#manual-installation)
+section later in this document.
 
 ### Configuration
 
@@ -50,9 +38,33 @@ const ic3config = function (mode, options) {
 }
 ```
 
-### Deployment
+### Manual Installation
 
-In the `Web Docs:/ic3-reporting` rename or delete the folders:
+Installing manually the Dashboards application requires some manual setup of the `Docs` application.
+
+#### One Time Server Setup
+
+In the `Web Docs` folder ensure to have the following folders:
+
+    /ic3-reporting
+        /app-local
+        /data
+            /entities
+                /applications
+            /shared
+            /users
+
+with the following permissions:
+
+    :/ic3-reporting/data/entities
+    + [<everybody>] READ
+    
+    :/ic3-reporting/data/shared
+    + [<everybody>] READ
+
+#### ZIP Deployment
+
+In the `Web Docs:/ic3-reporting` rename (to keep a backup) or delete the folders:
 
     /app
     /doc

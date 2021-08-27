@@ -17,7 +17,7 @@ export enum TidyColumnsType {
     DATETIME = 'datetime',
 
     /**
-     * numeric data, e.g. double, float, integer, etc. Can be null.
+     * numeric data, e.g., double, float, integer, etc. Can be null.
      */
     NUMERIC = 'numeric',
 
@@ -27,31 +27,35 @@ export enum TidyColumnsType {
     CHARACTER = 'character',
 
     /**
-     * Boolean data type, true, false.
-     * Can be null.
+     * Boolean data type, true, false. Can be null.
      */
     LOGICAL = 'logical',
 
     /**
      * array of values. Can be null.
      */
-    VECTOR = 'vector',
+    LIST = 'list',
 
     /**
-     * Column has values of multiple types.
+     * Column has values of multiple types
      */
     MIXED = 'mixed',
 
     /**
-     * The column type is not known. Note, empty columns are inferred to have type UNKNOWN.
+     * The column type is not known because there is no data
      */
     UNKNOWN = 'unknown',
 
     /**
-     * The column has null values only.
+     * The column has null values only
      */
     NULL = 'null',
+}
 
+export enum ITidyColumnsSource {
+    QUERY='query',
+    TRANSFORMATION='transformation',
+    UNKNOWN='unknown'
 }
 
 /**
@@ -319,21 +323,28 @@ export enum SortingType {
     DESCENDING = 'DESCENDING'
 }
 
-export interface HistogramData {
+export interface HistogramBucket {
     /**
-     * Bucket start range.
+     * Bucket start range, this endpoint is included in the set. Undefined = -Infinity.
      */
-    from: number;
+    from?: number;
 
     /**
-     * Bucket end range.
+     * Bucket end range, this endpoint is excluded from the set. Undefined = Infinity.
      */
-    to: number;
+    to?: number;
+}
 
+export interface HistogramData extends HistogramBucket {
     /**
      * Number of values that fall in the range [from, to).
      */
     count: number;
+
+    /**
+     * Row indices where the value falls in the bucket
+     */
+    rows: number[];
 }
 
 export enum InterpolationType {

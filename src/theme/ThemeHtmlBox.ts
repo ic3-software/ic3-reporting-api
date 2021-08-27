@@ -23,7 +23,11 @@ export type HtmlBoxVariant =
     /**
      * Used for data tooltips in the charts
      */
-    "tooltip"
+    "tooltip" |
+    /**
+     * Based on dashboard theme definition (h1,h2...)
+     */
+    "dashboardTheme"
     ;
 
 export interface HtmlBoxProps {

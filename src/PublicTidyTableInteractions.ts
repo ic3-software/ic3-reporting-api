@@ -242,6 +242,7 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      */
     isLoading(column: ITidyColumn, rowIdx: number): boolean;
 
+    setSelectionColumns(columns: ITidyColumn[]): void;
 
     /**
      * Pivot Type behavior ( nodes can collapse/expand + drilldown might return some values)

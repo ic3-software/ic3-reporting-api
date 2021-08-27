@@ -1,5 +1,5 @@
 import {ITidyBaseColumn, ITidyColumn, ITidyNumericColumn} from "./PublicTidyColumn";
-import {HistogramData} from "./PublicTidyTableTypes";
+import {HistogramBucket, HistogramData} from "./PublicTidyTableTypes";
 
 export type RealValuedFunction = (x: number) => number;
 
@@ -78,9 +78,12 @@ interface ITidyMath {
     /**
      * Creates a histogram data object from the column.
      * @param column
-     * @param numberOfBins the maximum number of bins.
+     * @param bins number of buckets or a specification for the buckets. If it's the number of buckets,
+     * then it calculates the bin size so that the left and rightmost bin have at least 1 datapoint.
+     *
+     * @Returns an array of histogram buckets
      */
-    hist(column: ITidyNumericColumn, numberOfBins?: number): HistogramData[];
+    hist(column: ITidyNumericColumn, bins: number | HistogramBucket[]): HistogramData[];
 
     ols(column: ITidyNumericColumn): RealValuedFunction | undefined;
 
@@ -332,41 +335,49 @@ class TidyMathImpl implements ITidyMath {
         return (values[half - 1] + values[half]) / 2.0;
     }
 
-    hist(column: ITidyNumericColumn, numberOfBins = 10): HistogramData[] {
+    hist(column: ITidyNumericColumn, bins: number | HistogramBucket[] = 10): HistogramData[] {
 
-        const valueMin = this.min(column)
-        const valueMax = this.max(column)
-
-        if (numberOfBins <= 0 || column.length() === 0 || valueMin == null || valueMax == null) {
-            return [];
-        }
-
-        const valueRange = valueMax - valueMin;
-
-        if (valueRange === 0) {
-            return [{
-                from: valueMin,
-                to: valueMax,
-                count: column.length()
-            }];
-        }
-
-        const valueStep = valueRange / numberOfBins;
-        const binData = new Array<HistogramData>(numberOfBins);
-        for (let b = 0; b < numberOfBins; b++) {
-            binData[b] = {
-                from: valueMin + valueStep * b,
-                to: valueMin + valueStep * (b + 1),
-                count: 0
-            };
-        }
-        column.getValues().forEach(value => {
-            if (value != null) {
-                const b = Math.floor((value - valueMin) / valueRange * (numberOfBins - 1));
-                binData[b].count++;
+        if (typeof bins === "number") {
+            const valueMin = this.min(column)
+            const valueMax = this.max(column)
+            if (bins <= 0 || column.length() === 0 || valueMin == null || valueMax == null) {
+                return [];
             }
-        })
-        return binData;
+            const valueRange = valueMax - valueMin;
+            const valueStep = valueRange / bins;
+            const binData = new Array<HistogramData>(bins);
+            for (let b = 0; b < bins; b++) {
+                binData[b] = {
+                    from: valueMin + valueStep * b,
+                    to: valueMin + valueStep * (b + 1),
+                    count: 0,
+                    rows: []
+                };
+            }
+            column.getValues().forEach((value, i) => {
+                if (value != null) {
+                    const b = valueRange === 0 ? 0 : Math.floor((value - valueMin) / valueRange * (bins - 1));
+                    binData[b].count++;
+                    binData[b].rows.push(i)
+                }
+            })
+            return binData;
+        }
+
+        const columnValues = column.getValues();
+        return bins.map(bin => {
+            let count = 0;
+            const rows: number[] = [];
+            columnValues.forEach((value, i) => {
+                if (value != null) {
+                    if ((bin.from == null || value >= bin.from) && (bin.to == null || value < bin.to)) {
+                        count++;
+                        rows.push(i);
+                    }
+                }
+            });
+            return {from: bin.from, to: bin.to, count, rows};
+        });
     }
 
     ols(column: ITidyNumericColumn): RealValuedFunction | undefined {

@@ -18,6 +18,7 @@ import {TypographyStyleOptions} from "@material-ui/core/styles/createTypography"
 import {Property} from "csstype";
 import {FilterButtonsClassKey, FilterButtonsProps} from "./theme/ThemeFilterButtons";
 import {FilterSliderClassKey, FilterSliderProps} from "./theme/ThemeFilterSlider";
+import {GoogleMapMarkerProps} from "./theme/ThemeGoogleMapMarker";
 
 export type ThemeTextFormatter = {
     formatReport: ((value: any, locale: string) => string) | string;
@@ -308,7 +309,6 @@ export interface ic3Theme {
 
     googleMap: {
         options?: google.maps.MapOptions;
-        markerOptions?: google.maps.Symbol;
         markerClustererOptions?: MarkerClustererOptions;
     }
 
@@ -436,19 +436,19 @@ declare module '@material-ui/core/styles/createTheme' {
 declare module '@material-ui/core/styles/components' {
 
     interface Components {
-        AlertDialog: {
+        AlertDialog?: {
             styleOverrides?: ComponentsOverrides["AlertDialog"];
         }
-        App: {
+        App?: {
             styleOverrides?: ComponentsOverrides["App"];
         }
-        DrilldownUserSelectMenu: {
+        DrilldownUserSelectMenu?: {
             styleOverrides?: ComponentsOverrides["DrilldownUserSelectMenu"];
         }
-        ErrorRenderer: {
+        ErrorRenderer?: {
             styleOverrides?: ComponentsOverrides["ErrorRenderer"];
         }
-        HtmlBox: {
+        HtmlBox?: {
             styleOverrides?: ComponentsOverrides["HtmlBox"];
             variants?: ComponentsVariants["HtmlBox"];
         }
@@ -456,32 +456,35 @@ declare module '@material-ui/core/styles/components' {
         //     styleOverrides?: ComponentsOverrides["FilterCheckbox"];
         //     variants?: ComponentsVariants["FilterCheckbox"];
         // }
-        FilterButtons: {
+        FilterButtons?: {
             styleOverrides?: ComponentsOverrides["FilterButtons"];
             variants?: ComponentsVariants["FilterButtons"];
         }
-        FilterSlider: {
+        FilterSlider?: {
             styleOverrides?: ComponentsOverrides["FilterSlider"];
             variants?: ComponentsVariants["FilterSlider"];
         }
-        Layout: {
+        Layout?: {
             styleOverrides?: ComponentsOverrides["Layout"];
         }
-        LayoutPage: {
+        LayoutPage?: {
             styleOverrides?: ComponentsOverrides["LayoutPage"];
         }
-        ReportAppBar: {
+        ReportAppBar?: {
             styleOverrides?: ComponentsOverrides["ReportAppBar"];
         }
-        ReportAppMenu: {
+        ReportAppMenu?: {
             styleOverrides?: ComponentsOverrides["ReportAppMenu"];
         }
-        WidgetBox: {
+        WidgetBox?: {
             variants?: ComponentsVariants['WidgetBox'];
             styleOverrides?: ComponentsOverrides["WidgetBox"];
         }
-        WidgetBoxContentMessage: {
+        WidgetBoxContentMessage?: {
             styleOverrides?: ComponentsOverrides["WidgetBoxContentMessage"];
+        }
+        GoogleMapMarker?: {
+            variants?: ComponentsVariants['GoogleMapMarker'];
         }
     }
 
@@ -528,6 +531,8 @@ declare module '@material-ui/core/styles/props' {
         FilterButtons: FilterButtonsProps;
 
         FilterSlider: FilterSliderProps;
+
+        GoogleMapMarker: GoogleMapMarkerProps;
 
     }
 

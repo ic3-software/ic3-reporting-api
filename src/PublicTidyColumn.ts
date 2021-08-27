@@ -2,8 +2,10 @@ import {
     AxisCoordinate,
     EntityItem,
     IMdxAxisSeriesInfo,
+    ITidyColumnsSource,
     ITidyTableSelection,
-    MdxInfo, MdxMemberCoordinates,
+    MdxInfo,
+    MdxMemberCoordinates,
     SortingType,
     TidyCellError,
     TidyColumnCoordinateUniqueName,
@@ -13,6 +15,7 @@ import {TidyActionEvent} from "./IcEvent";
 import {ITidyTable} from "./PublicTidyTable";
 import {ReactElement} from "react";
 import {ThemeTextFormatter} from "./PublicTheme";
+import {Property} from "csstype";
 
 /**
  * Properties with a special meaning
@@ -125,13 +128,16 @@ export interface ITidyColumnXlsxCell {
     s?: any;
 }
 
-export type AllowedColumnType<T> = TidyColumnsType.UNKNOWN | (T extends string ?
-    TidyColumnsType.COLOR | TidyColumnsType.CHARACTER :
-    T extends number ? TidyColumnsType.NUMERIC | TidyColumnsType.LATITUDE | TidyColumnsType.LONGITUDE :
-        T extends boolean ? TidyColumnsType.LOGICAL :
-            T extends number[] ? TidyColumnsType.VECTOR :
-                T extends Date ? TidyColumnsType.DATETIME :
-                    T extends null ? TidyColumnsType.NULL : TidyColumnsType.MIXED);
+type NonNullable<T> = Exclude<T, null | undefined>;  // Remove null and undefined from T
+export type AllowedColumnType<T> = TidyColumnsType.UNKNOWN
+    | TidyColumnsType.MIXED
+    | (NonNullable<T> extends Property.Color ? TidyColumnsType.COLOR : TidyColumnsType.UNKNOWN)
+    | (NonNullable<T> extends string ? TidyColumnsType.CHARACTER : TidyColumnsType.UNKNOWN)
+    | (NonNullable<T> extends number ? TidyColumnsType.NUMERIC | TidyColumnsType.LATITUDE | TidyColumnsType.LONGITUDE : TidyColumnsType.UNKNOWN)
+    | (NonNullable<T> extends boolean ? TidyColumnsType.LOGICAL : TidyColumnsType.UNKNOWN)
+    | (NonNullable<T> extends any[] ? TidyColumnsType.LIST : TidyColumnsType.UNKNOWN)
+    | (NonNullable<T> extends Date ? TidyColumnsType.DATETIME : TidyColumnsType.UNKNOWN)
+    | (T extends null ? TidyColumnsType.NULL : TidyColumnsType.UNKNOWN);
 
 /**
  * Base interface for nullable column.
@@ -190,6 +196,12 @@ export interface ITidyBaseColumn<T> {
     setValue(idx: number, newValue: T): void;
 
     /**
+     * Add a value to the column making the length of the column 1 longer.
+     * @param value
+     */
+    pushValue(value: T): void;
+
+    /**
      * Get cell as expected by xlsx library (do not include the interface as it's lazy loaded !)
      *
      * @param idx the position to return the value of.
@@ -205,6 +217,16 @@ export interface ITidyBaseColumn<T> {
      * @param idx the position to return the value of.
      */
     getFormattedValue(idx: number): string | undefined;
+
+    /**
+     * Get the source of the column
+     */
+    getSource(): ITidyColumnsSource;
+
+    /**
+     * Get the source of the column
+     */
+    setSource(source: ITidyColumnsSource): void;
 
     getFormattedValueOrValue(idx: number): string | undefined;
 
@@ -388,9 +410,9 @@ export interface ITidyBaseColumn<T> {
     getCoordinateUniqueName(rowIdx: number): TidyColumnCoordinateUniqueName;
 
     /**
-     * Returns true if the column has a property of requested type.
+     * Returns true if the column has a property of requested name.
      */
-    hasProperty(type: TidyColumnsType): boolean;
+    hasProperty(name: ITidyColumnNamedProperties): boolean;
 
     /**
      * Returns the property at the specified property coordinate.
@@ -582,10 +604,15 @@ export interface ITidyBaseColumn<T> {
      * column.reIndex([0,5]) --> ['a',undefined]
      *
      * @param index list of integers.
+     * @param keepingAxisOrder
      */
     reIndex(index: number[], keepingAxisOrder?: boolean): void;
 
-    slice(index: number[]): ITidyBaseColumn<T>;
+    /**
+     * Subset the data in a column returning a new column
+     * @param index the row indices to include in the new column
+     */
+    subset(index: number[]): ITidyBaseColumn<T>;
 
     /**
      * Repeat the values in the column.
@@ -610,17 +637,39 @@ export interface ITidyBaseColumn<T> {
      */
     compare(a: T, b: T): number;
 
+    /**
+     * True <=> column has numeric values. E.g., 1, 2, null, 5, 3.
+     */
     isNumeric(): this is ITidyNumericColumn;
 
-    isVector(): this is ITidyVectorColumn;
+    /**
+     * True <=> column has list values. E.g., ['a', 'b'], null, [5, 3].
+     */
+    isList(): this is ITidyListColumn;
 
+    /**
+     * True <=> column has date-times. E.g., Date(2020, 1, 1), Date(2020, 2, 1, 4, 0, 1).
+     */
     isDatetime(): this is ITidyDateColumn;
 
+    /**
+     * True <=> column has text values. E.g., 'a', 'b', 'c'.
+     */
     isCharacter(): this is ITidyCharacterColumn;
 
+    /**
+     * True <=> column has booleans. E.g., true, false.
+     */
     isLogical(): this is ITidyLogicalColumn;
 
+    /**
+     * True <=> column has colors. E.g., 'red', '#000'.
+     */
     isColor(): this is ITidyColorColumn;
+
+    isUnknown(): this is ITidyUnknownColumn;
+
+    isNull(): this is ITidyNullColumn;
 
     /**
      * Convert the column to another type. This modifies the values to be of that type.
@@ -677,12 +726,14 @@ export type PublicTidyColumnCellDecoration = Partial<{
 
 export type ITidyColumn = ITidyBaseColumn<any>;
 export type ITidyUnknownColumn = ITidyBaseColumn<unknown>;
+export type ITidyNullColumn = ITidyBaseColumn<null>;
 export type ITidyNumericColumn = ITidyBaseColumn<number | null>;
 export type ITidyCharacterColumn = ITidyBaseColumn<string | null>;
-export type ITidyColorColumn = ITidyBaseColumn<string | null>;
+export type ITidyColorColumn = ITidyBaseColumn<Property.Color | null>;
 export type ITidyDateColumn = ITidyBaseColumn<Date | null>;
 export type ITidyLogicalColumn = ITidyBaseColumn<boolean | null>;
-export type ITidyVectorColumn = ITidyBaseColumn<any[] | null>;
+export type ITidyListColumn = ITidyBaseColumn<any[] | null>;
+export type ITidyVectorColumn = ITidyBaseColumn<(number | null)[] | null>;
 
 /**
  * Introduced for tidy table HTML expression (e.g., tooltip) completion.

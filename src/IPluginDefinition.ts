@@ -16,7 +16,7 @@ export interface IPluginDefinition {
     id: string;
 
     /**
-     * When defining new widgets using AmCharts 4, this method registers the icCube license.
+     * When defining new widgets using amCharts 4, this method registers the icCube license.
      */
     registerAmCharts4?: (callback: (am4core: any) => void) => void;
 

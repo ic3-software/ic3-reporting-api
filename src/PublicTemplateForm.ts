@@ -127,6 +127,7 @@ export type FormFields<T extends FormFieldObject> = {
                                     Required<T>[key] extends string ? Omit<IFormOptionFieldSingleDef, 'fieldPath'>
                                         | Omit<IFormStringFieldDef, 'fieldPath'>
                                         | Omit<IFormWidgetVariantFieldDef, 'fieldPath'>
+                                        | Omit<IFormTidyTableTextExprFieldDef, 'fieldPath'>
                                         | Omit<IFormTidyTableTextRowExprFieldDef, 'fieldPath'>
                                         | Omit<IFormTidyTableHtmlRowExprFieldDef, 'fieldPath'>
                                         | Omit<IFormTidyTableHtmlExprFieldDef, 'fieldPath'>
@@ -868,8 +869,8 @@ export interface IFormTidyTableScaleRowExprFieldDef extends IFormFieldDef<string
 
     fieldType: "tidyTableScaleRowExpr",
 
-    editorConf?: {
-        defaultColumn?: boolean,
+    editorConf: {
+        defaultColumn: true,
     },
 
 }

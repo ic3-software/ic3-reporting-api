@@ -98,6 +98,16 @@ interface IPublicCommonWidgetTemplateDefinition {
     id: string;
 
     /**
+     * Internal usage: pluginId.templateId (setup upon registration).
+     */
+    qualifiedId?: string;
+
+    /**
+     * Internal usage: pluginId (setup upon registration).
+     */
+    pluginId?: string;
+
+    /**
      * Used for localization right now.
      *
      * The widget chooser is using that id to localize its name.
@@ -116,11 +126,6 @@ interface IPublicCommonWidgetTemplateDefinition {
      * in the "Maps" group in the widget chooser.
      */
     groupId: string;
-
-    /**
-     * Internal usage: pluginID.id
-     */
-    qualifiedId?: string;
 
     /**
      * A way to ensure we do not display in the widget chooser templates that cannot
@@ -247,6 +252,13 @@ interface IPublicCommonWidgetTemplateDefinition {
      * Whether or not that component is using React for rendering.
      */
     reactComponent?: boolean;
+
+    resolveDefinition?: () => Promise<IPublicWidgetTemplateDefinition<any>>;
+
+    /**
+     * When defining new widgets using amCharts 4, this method registers the icCube license.
+     */
+    registerAmCharts4?: (callback: (am4core: any) => void) => void;
 
 }
 

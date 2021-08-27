@@ -9,7 +9,17 @@ export interface IScriptCallback {
 
 export class RemoteContainerUtils {
 
-    public static loadScript(url: string, callback: IScriptCallback): void {
+    public static loadScript(tenant: string | null, url: string, callback: IScriptCallback): void {
+
+        if (tenant) {
+            tenant = encodeURIComponent(tenant) + "_";
+        } else {
+            tenant = "";
+        }
+
+        url = url + (url.indexOf("?") === -1 ? "?" : "&") + "t=" + tenant + new Date().getTime() /* cache busting */;
+
+        console.log("[RemotePlugin] Setup Remote Plugin (load-script) [" + url + "]");
 
         const element = document.createElement("script");
 

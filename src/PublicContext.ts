@@ -69,7 +69,7 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      */
-    createTableMarkdownExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): (() => string) | undefined;
+    createTableMarkdownExpr(field: string, table: ITidyTable, expression: string | undefined): (() => string) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.

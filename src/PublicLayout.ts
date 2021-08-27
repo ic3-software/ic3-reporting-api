@@ -84,19 +84,19 @@ export interface IPageHeaderFooterLogoDefinition {
 export interface IPageHeaderFooterContentDefinition {
 
     /**
-     * Used for formatting @dateTime variable (https://momentjscom.readthedocs.io/en/latest/moment/04-displaying/01-format/)
+     * Used for formatting @dateTime variable
      */
-    dateTimeFormat?: string;
+    dateTimeFormat: string;
 
     /**
-     * Used for formatting @date variable (https://momentjscom.readthedocs.io/en/latest/moment/04-displaying/01-format/)
+     * Used for formatting @date variable
      */
-    dateFormat?: string;
+    dateFormat: string;
 
     /**
-     * Used for formatting @time variable (https://momentjscom.readthedocs.io/en/latest/moment/04-displaying/01-format/)
+     * Used for formatting @time variable
      */
-    timeFormat?: string;
+    timeFormat: string;
 
     text: string;
 

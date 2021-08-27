@@ -57,8 +57,7 @@ export interface ITidyTable {
     getRowCount(): number;
 
     /**
-     * Set the number of rows.
-     * @deprecated
+     * Set the number of rows
      */
     setRowCount(count: number): void;
 
@@ -278,11 +277,10 @@ export interface ITidyTable {
      *
      *
      * @param treeColumns  columns to build the levels
-     * @param measures     measures to be attached to nodes (leafs)
      * @param rootLabel    the label of the root
      * @param expandHierarchicalColumn  if true, hierarchical columns will be expanded as a tree (all nodes except the root one will have measures values)
      */
-    buildTidyTree(treeColumns: ITidyColumn[], measures: ITidyColumn[], rootLabel?: string, expandHierarchicalColumn?: boolean): TidyTree;
+    buildTidyTree(treeColumns: ITidyColumn[], rootLabel?: string, expandHierarchicalColumn?: boolean): TidyTree;
 
     /**
      * Construct list of tidy tables
@@ -470,7 +468,7 @@ export interface ITidyTable {
      * Create and return a new table by applying an index to this table, see {@link reIndex} for how the indexing works.
      * @param index list of integers.
      */
-    sliceRows(index: number[]): ITidyTable;
+    subsetRows(index: number[]): ITidyTable;
 
     /**
      * Repeat the rows of the table.
@@ -511,13 +509,13 @@ export interface ITidyTable {
 
     /**
      * Keep a subset of columns from the table.
-     * @param columns list of columns that are in the table.
+     * @param columns list of columns, note that the length of each column must be the same as the number of rows
+     * in the table. Duplicates will be ignored. Columns with the same name get an index added to the name.
      */
-    subsetColumns(columns: ITidyColumn[]): void;
+    setColumns(columns: ITidyColumn[]): void;
 
     /**
-     * Create a new column. The column is not added to the table. Ensure that the length of the values
-     * equals the number of rows in the table.
+     * Create a new column. The column is not added to the table.
      * @param name name of the column.
      * @param values cell values for the column.
      * @param type if undefined, the type is inferred. Note that the provided type is not checked against the values
@@ -531,6 +529,11 @@ export interface ITidyTable {
      * True if and only if the table is an MDX pivot table.
      */
     isPivotTable(): boolean;
+
+    /**
+     * Adds an empty row at the end of the table
+     */
+    addEmptyRow(): void;
 
 }
 

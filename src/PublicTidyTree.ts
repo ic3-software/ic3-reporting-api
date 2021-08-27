@@ -1,4 +1,4 @@
-import {ITidyColumn} from "./PublicTidyColumn";
+import {ITidyBaseColumn, ITidyColumn} from "./PublicTidyColumn";
 
 /**
  * a tree node that with origin in a TidyColumn
@@ -8,12 +8,12 @@ export interface TidyTreeNode {
     /**
      * the column the tree node was generated from
      */
-    originColumn?: ITidyColumn;
+    originalColumn?: ITidyColumn;
 
     /**
-     * the first index position that generated the column (some column are repetition of a same pattern)
+     * the rows that the node is created from
      */
-    firstIdx: number;
+    rowIds: number[];
 
     /**
      * the label/value of this node
@@ -24,56 +24,59 @@ export interface TidyTreeNode {
      * children of this tree
      */
     children: TidyTreeNode[];
-
-    /**
-     * the measures associated with a given node (by default just leaf nodes have values)
-     */
-    measures: any[];
 }
 
+type ArrayReducer<T> = (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T;
+
 /**
- * A tree structure that was generated from a TidyTable with measures associated on each
- * node. It makes 'sense'
+ * A tree structure that was generated from a TidyTable.
  *
- * Bear in mind not all measures can be aggregated with a SUM
+ * Table:
+ * budget type | cc
+ * Monthly Budget | Savings
+ * Monthly Budget | Mortgage/Rent
+ * Yearly Budget | Car Payment
  *
- * root
+ * converts to <nodeLabel> <rowIds>:
+ * root [0,1,2]
  *  |
- *  --- Europe  3
+ *  --- Monthly Budget [0,1]
  *  |     |
- *  |     --- Spain 1
+ *  |     --- Savings [0]
  *  |     |
- *  |     --- France 2
+ *  |     --- Mortgage/Rent [1]
  *  |
- *  --- America  4
+ *  --- Yearly Budget [3]
  *       |
- *       --- US 4
+ *       --- Car Payment [3]
  *
- * the values of the measures are added to the leafs
  */
 export class TidyTree {
 
-    measures: ITidyColumn[];
-
     root: TidyTreeNode;
 
-    constructor(measures: ITidyColumn[], root?: TidyTreeNode) {
-        this.measures = measures;
+    constructor(root?: TidyTreeNode) {
         this.root = root ?? {
-            firstIdx: -1,
+            rowIds: [],
             nodeLabel: 'root',
             children: [],
-            measures: []
         };
     }
 
     /**
+     * A unique id for each node of the tree
+     * returns levelDepth + "--" + node.nodeLabel
+     */
+    static getUniqueId(node: TidyTreeNode, levelDepth: number): string {
+        return levelDepth + "--" + node.nodeLabel + "--" + node.rowIds[0];
+    }
+
+    /**
      * Performs the specified action on each node of the tree
-     *
      * if callbackfn return false, it will not perform a foreach on it's children
      */
-    foreach(callbackfn: (node: TidyTreeNode, levelDepth: number, parentNode: TidyTreeNode | undefined, nodeChildrenIdx: number) => boolean | void): void {
-        function forEachNested(children: TidyTreeNode[], levelDepth: number, parent: TidyTreeNode, callbackfn: (node: TidyTreeNode, levelDepth: number, parentNode: TidyTreeNode | undefined, nodeChildrenIdx: number) => boolean | void) {
+    forEach(callbackfn: (node: TidyTreeNode, levelDepth: number, parentNode: TidyTreeNode, nodeChildrenIdx: number) => boolean | void): void {
+        function forEachNested(children: TidyTreeNode[], levelDepth: number, parent: TidyTreeNode, callbackfn: (node: TidyTreeNode, levelDepth: number, parentNode: TidyTreeNode, nodeChildrenIdx: number) => boolean | void) {
             children.forEach((node, idx) => {
                 if (callbackfn(node, levelDepth, parent, idx) !== false) {
                     forEachNested(node.children, levelDepth + 1, node, callbackfn);
@@ -81,66 +84,20 @@ export class TidyTree {
             })
         }
 
-        if (callbackfn(this.root, 0, undefined, 0) !== false) {
-            forEachNested(this.root.children, 1, this.root, callbackfn);
-        }
-    }
-
-    /**
-     * A unique id for each node of the tree
-     * returns levelDepth + "--" + node.nodeLabel
-     */
-    static uniqueId(node: TidyTreeNode, levelDepth: number): string {
-        return levelDepth + "--" + node.nodeLabel;
+        forEachNested(this.root.children, 1, this.root, callbackfn);
     }
 
     /**
      * aggregates all children measures values on parents using aggregation function recursively
-     *
      * aggrfn is sum by default
      */
-    aggregateOnParents(aggrfn?: (a: any | null, b: any | null) => any) {
-
-        const aggregateValues = aggrfn ?? sumAggregation;
-
-        function aggregateChildren(children: TidyTreeNode[]) {
-            const nodeMeasures: any[] = [];
-
-            children.forEach(node => {
-                const measValues = node.children.length !== 0 ? aggregateChildren(node.children) : node.measures;
-                node.measures = measValues;
-
-                for (let i = 0; i < measValues.length; i++) {
-                    const childMeasure = measValues[i];
-                    if (childMeasure != null) {
-                        nodeMeasures[i] = aggregateValues(nodeMeasures[i], childMeasure);
-                    }
-                }
-            });
-
-            return nodeMeasures;
+    getNodeValue<T>(node: TidyTreeNode, measure: ITidyBaseColumn<T>, aggrfn?: ArrayReducer<T>): T {
+        if (node.originalColumn?.isHierarchy()) {
+            return measure.getValue(node.rowIds[0]);
         }
-
-        this.root.measures = aggregateChildren(this.root.children);
-    }
-
-    /**
-     * Aggregates for all no root nodes on the uniqueId at measureIdx
-     *
-     * if the getter returns the leveldepth it will aggregate all nodes for the same level.
-     * if the getter returns the nodelabel it will aggregate all nodes with the same label (you can add the level depth to ensure uniqueness).
-     *
-     */
-    aggregateOnId<ID_TYPE>(idGetter: (node: TidyTreeNode, levelDepth: number) => ID_TYPE, measureIdx = 0, aggrfn?: (a: any | null, b: any | null) => any): Map<ID_TYPE, any> {
-        const nodeValues = new Map<ID_TYPE, any>();
+        const values = node.rowIds.map(i => measure.getValue(i));
         const aggregateValues = aggrfn ?? sumAggregation;
-
-        this.foreach((node, levelDepth) => {
-            const id = idGetter(node, levelDepth);
-            nodeValues.set(id, aggregateValues(nodeValues.get(id), node.measures[measureIdx]));
-        });
-
-        return nodeValues;
+        return values.reduce(aggregateValues);
     }
 }
 
