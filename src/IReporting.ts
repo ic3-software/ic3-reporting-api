@@ -1,4 +1,5 @@
 import ReportingVersion from "./ReportingVersion";
+import {AppNotification} from "./INotification";
 
 export interface IReportDefinition {
 
@@ -10,7 +11,7 @@ export interface IReportDefinition {
 
     setDefaultSchemaName(name: string): void;
 
-    getDefaultCubeName(): string;
+    getDefaultCubeName(): string | undefined;
 
     setDefaultCubeName(name: string): void;
 }
@@ -85,5 +86,10 @@ export interface IReporting {
     fireEvent(eventName: string, value: IEventContent | null): void;
 
     onEvent(eventName: string, callback: (value: IEventContent | null) => void): void;
+
+    /**
+     * e.g., print-report
+     */
+    fireAppNotification(notification: AppNotification): void;
 
 }

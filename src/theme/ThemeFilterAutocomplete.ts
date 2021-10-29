@@ -1,5 +1,5 @@
 import {FormFieldObject} from "../PublicTemplateForm";
-import autocompleteClasses from "@material-ui/core/Autocomplete/autocompleteClasses";
+import autocompleteClasses from "@mui/material/Autocomplete/autocompleteClasses";
 
 export interface FilterAutocompleteProps extends FormFieldObject {
 
@@ -9,12 +9,12 @@ export interface FilterAutocompleteProps extends FormFieldObject {
     variant: string;
 
     /**
-     * Size of buttons
+     * Size of the chips
      */
     size: 'small' | 'medium';
 
     /**
-     * The maximum number of tags that will be visible when not focused. Set -1 to disable the limit.
+     * The maximum number of chips that will be visible when not focused. Set -1 to disable the limit.
      */
     limitTags: number;
 

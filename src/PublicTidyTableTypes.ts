@@ -2,6 +2,8 @@
  * Tidy Column Types
  */
 
+import {TidyHistogramBucketType} from "./PublicTidyHistogram";
+
 export enum TidyColumnsType {
     /**
      * Values represent a color, e.g. 'red', 'rbg(10, 10, 10)' or '#fff'. Can be null.
@@ -10,6 +12,11 @@ export enum TidyColumnsType {
 
     LONGITUDE = 'longitude',
     LATITUDE = 'latitude',
+
+    /**
+     * ISO2 location (country, region, city...) codes
+     */
+    ISO2_LOCATION_CODE = 'iso2Location',
 
     /**
      * date, time or combination of the two. Can be null.
@@ -50,42 +57,34 @@ export enum TidyColumnsType {
      * The column has null values only
      */
     NULL = 'null',
+
+    /**
+     * Use any to opt-out of type checking
+     */
+    ANY = 'any'
 }
 
 export enum ITidyColumnsSource {
-    QUERY='query',
-    TRANSFORMATION='transformation',
-    UNKNOWN='unknown'
+    QUERY = 'query',
+    TRANSFORMATION = 'transformation',
+    UNKNOWN = 'unknown'
 }
 
 /**
  * Defines a mapping that maps columns to the coordinate system of the chart.
+ *
+ * The key represents the internal name for the mapping (is converted to lowercase).
+ * undefined --> the editor sets names to undefined upon removing of a mapping.
  */
-export type ChartTemplateDataMapping = {
-    /**
-     * The key represents the internal name for the mapping.
-     * undefined --> the editor sets names to undefined upon removing of a mapping.
-     */
-    [key: string]: TidyTableMappingCoordinate | undefined;
-};
+export type ChartTemplateDataMapping = Record<string, TidyTableColumnSelector | undefined>
 
 /**
- * Returns true if the coordinate is a mapping coordinate. Returns false otherwise.
- * @param coordinate
+ * Defines an index from column tag (name, mapping, role, etc..) to the name or index of the column in the table.
+ * The column tag is converted to lower case.
  */
-export function isTidyTableMappingCoordinate(coordinate: any): coordinate is TidyTableMappingCoordinate {
-    return coordinate != null && coordinate.name != null;
-}
+export type TidyColumnIndex = Record<string, string | number>;
 
-/**
- * Returns true if the coordinate is a mapping coordinate. Returns false otherwise.
- * @param coordinate
- */
-export function isTidyTableMappingCoordinates(coordinate: any): coordinate is TidyTableMappingCoordinate {
-    return coordinate != null && (Array.isArray(coordinate) && coordinate.length > 0 && isTidyTableMappingCoordinate(coordinate[0]));
-}
-
-export enum TidyTableMappingColumnsSelectorOptions {
+export enum TidyTableMappingColumnSelectorOptions {
 
     ALL = '@IC3_ALL',
     ALL_NUMERIC = '@IC3_ALL_NUMERIC',
@@ -95,25 +94,17 @@ export enum TidyTableMappingColumnsSelectorOptions {
 
 }
 
-export type TidyTableMappingColumnsSelector = string;
-
-
-export interface TidyTableMappingCoordinate {
+export type TidyTableColumnSelector = {
     /**
-     * Name of the column.
+     * Search column by name
      */
     name: string;
 
     /**
-     * If we want a property, the name of the property for the column.
+     * If we want a property, the name of the column's property.
      */
     property?: string;
-
-    /**
-     * If defined, search column using MDX axis information. Fallback on name.
-     */
-    axis?: AxisCoordinate;
-}
+} | TidyTableMappingColumnSelectorOptions;
 
 /**
  * Coordinate of an MDX member
@@ -219,6 +210,8 @@ export interface MdxInfo {
      * Index of the member on the mdx-axis.
      */
     index: number;
+
+    isAll?: boolean;
 }
 
 export interface IMdxAxisSeriesInfo {
@@ -236,6 +229,9 @@ export interface IMdxAxisSeriesInfo {
      * The unique name of the default member of the dimension.
      */
     defaultMemberUN?: string;
+    defaultMemberName?: string;
+    defaultMemberCaption?: string;
+    defaultMemberKey?: string;
 }
 
 export interface EntityItem {
@@ -325,14 +321,19 @@ export enum SortingType {
 
 export interface HistogramBucket {
     /**
-     * Bucket start range, this endpoint is included in the set. Undefined = -Infinity.
+     * Bucket start range. Undefined = -Infinity.
      */
     from?: number;
 
     /**
-     * Bucket end range, this endpoint is excluded from the set. Undefined = Infinity.
+     * Bucket end range. Undefined = Infinity.
      */
     to?: number;
+
+    /**
+     * The name of the bucket
+     */
+    name?: string;
 }
 
 export interface HistogramData extends HistogramBucket {
@@ -345,6 +346,29 @@ export interface HistogramData extends HistogramBucket {
      * Row indices where the value falls in the bucket
      */
     rows: number[];
+}
+
+export interface HistogramOptions {
+    /**
+     * The number of bins to use in the histogram or an object with custom bins. Default = 10.
+     *
+     * If bins is a number, then the algorithm generates the bins. The included endpoint of the bin is rounded with
+     * a precision of 1e10 in the direction that makes the bin larger.
+     */
+    bins: number | HistogramBucket[];
+
+    /**
+     * The type of interval. Default = RIGHT_CLOSED.
+     */
+    intervalType: TidyHistogramBucketType;
+
+    /**
+     * If true, put the minimum value in the first bucket if intervalType = (from, to] or put the maximum value
+     * in the last bucket if intervalType = [from, to).
+     * If false, exclude the minimum or maximum value in the above scenario.
+     * Default = true.
+     */
+    includeEndPoints: boolean;
 }
 
 export enum InterpolationType {

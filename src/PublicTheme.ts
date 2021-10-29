@@ -1,4 +1,4 @@
-import {ComponentsOverrides, ComponentsVariants} from "@material-ui/core";
+import {ComponentsOverrides, ComponentsVariants} from "@mui/material";
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {IWidgetLayoutDefinition} from "./PublicLayout";
 import {IThemeWidgetDefaults} from "./IThemeManager";
@@ -14,11 +14,18 @@ import {ReportAppMenuClassKey} from "./theme/ThemeReportAppMenu";
 import {WidgetBoxClassKey} from "./theme/ThemeWidgetBox";
 import {WidgetBoxContentMessageClassKey} from "./theme/ThemeWidgetBoxContentMessage";
 import {ReactElement} from "react";
-import {TypographyStyleOptions} from "@material-ui/core/styles/createTypography";
+import {TypographyStyleOptions} from "@mui/material/styles/createTypography";
 import {Property} from "csstype";
 import {FilterButtonsClassKey, FilterButtonsProps} from "./theme/ThemeFilterButtons";
 import {FilterSliderClassKey, FilterSliderProps} from "./theme/ThemeFilterSlider";
 import {GoogleMapMarkerProps} from "./theme/ThemeGoogleMapMarker";
+import {IPublicContext} from "./PublicContext";
+
+export interface INoSchemaRendererOptions {
+
+    missingSchema: string;
+
+}
 
 export type ThemeTextFormatter = {
     formatReport: ((value: any, locale: string) => string) | string;
@@ -234,7 +241,7 @@ export interface ic3PaletteOptions {
 
 }
 
-declare module "@material-ui/core/styles/createPalette" {
+declare module "@mui/material/styles/createPalette" {
 
     interface Palette {
 
@@ -261,7 +268,7 @@ export interface ic3TypographyOptions {
 
 }
 
-declare module "@material-ui/core/styles/createTypography" {
+declare module "@mui/material/styles/createTypography" {
 
     interface Typography {
 
@@ -288,6 +295,8 @@ export interface ic3Theme {
     caption: string;
 
     cssClass: string;
+
+    loadFonts?: (continuation: () => void) => void;
 
     formatter: ThemeFormatters;
 
@@ -355,6 +364,35 @@ export interface ic3Theme {
      */
     widgetDefaults?: IThemeWidgetDefaults;
 
+    /**
+     * Styling for the sparklines in the sparkline transformation and the KPI card
+     */
+    sparklineSettings: {
+        /**
+         * The width of the line in the sparkline
+         */
+        lineWidth: number;
+
+        /**
+         * The cursor when the user hovers over the sparkline
+         */
+        cursor: {
+            color: Property.Color;
+
+            /**
+             * The radius of the dot when hovering
+             */
+            radius: number;
+
+            /**
+             * The width of the stroke when hovering
+             */
+            width: number;
+        };
+    }
+
+    noSchemaRenderer?: (context: IPublicContext, options: INoSchemaRendererOptions) => ReactElement;
+
 }
 
 export interface ic3ThemeOptions {
@@ -363,6 +401,8 @@ export interface ic3ThemeOptions {
     caption: string;
 
     cssClass?: string;
+
+    loadFonts?: (continuation: () => void) => void;
 
     formatter?: ThemeFormattersOptions;
 
@@ -409,9 +449,37 @@ export interface ic3ThemeOptions {
      */
     layouts: IWidgetLayoutDefinition[];
 
+    /**
+     * Styling for the sparklines in the sparkline transformation and the KPI card
+     */
+    sparklineSettings?: {
+        /**
+         * The width of the line in the sparkline
+         */
+        lineWidth: number;
+
+        /**
+         * The cursor when the user hovers over the sparkline
+         */
+        cursor: {
+            color: Property.Color;
+
+            /**
+             * The radius of the dot when hovering
+             */
+            radius: number;
+
+            /**
+             * The width of the stroke when hovering
+             */
+            width: number;
+        };
+    }
+
+    noSchemaRenderer?: (context: IPublicContext, options: INoSchemaRendererOptions) => ReactElement;
 }
 
-declare module '@material-ui/core/styles/createTheme' {
+declare module '@mui/material/styles/createTheme' {
 
     interface Theme {
 
@@ -433,7 +501,7 @@ declare module '@material-ui/core/styles/createTheme' {
 /**
  * All Components using Material-UI like variants (using styled)
  */
-declare module '@material-ui/core/styles/components' {
+declare module '@mui/material/styles/components' {
 
     interface Components {
         AlertDialog?: {
@@ -490,7 +558,7 @@ declare module '@material-ui/core/styles/components' {
 
 }
 
-declare module '@material-ui/core/styles/overrides' {
+declare module '@mui/material/styles/overrides' {
 
     interface ComponentNameToClassKey {
 
@@ -520,7 +588,7 @@ declare module '@material-ui/core/styles/overrides' {
 
 }
 
-declare module '@material-ui/core/styles/props' {
+declare module '@mui/material/styles/props' {
 
     interface ComponentsPropsList {
 

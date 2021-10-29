@@ -15,8 +15,14 @@ export interface ILocalizationContext {
 
 export interface ITidyTableTransformation<OPTIONS extends FormFieldObject> {
 
+    /**
+     * The id of the transformation. Use this id to reference the transformation in the localization.
+     */
     id: string;
 
+    /**
+     * The id of the editor group that the transformation is in.
+     */
     groupId: string;
 
     /**
@@ -24,12 +30,24 @@ export interface ITidyTableTransformation<OPTIONS extends FormFieldObject> {
      */
     qualifiedId?: string;
 
+    /**
+     * Return the description to show below the transformation in the 'TRANSFORMATION' tab of the editor
+     * @param context used for accessing localization functions
+     * @param options user-set options for the transformation
+     */
     getDescription?(context: ILocalizationContext, options: OPTIONS): string;
 
+    /**
+     * Return the field meta for the user-editable options
+     */
     getFieldMeta(): FormFieldDef[] | FormFields<OPTIONS>;
 
-    validateOptions(options: any): options is OPTIONS;
-
+    /**
+     * Run the transformation.
+     * @param context public context
+     * @param table modify this table in the transformation. It is mutable.
+     * @param options user-set options for the transformation
+     */
     apply(context: IPublicContext, table: ITidyTable, options: OPTIONS): void;
 
 }

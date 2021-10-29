@@ -3,13 +3,13 @@
 The API allows for embedding the icCube Dashboards into an existing Web application. This API allows for a two ways
 communication between the host application and the icCube Dashboards.
 
-### Github Project
+### GitHub Project
 
-The dev. kit source code is available on Github [here](https://github.com/iccube-software/ic3-reporting-api).
+The dev. kit source code is available on GitHub [here](https://github.com/ic3-software/ic3-reporting-api).
 
 ### Working Examples
 
-### [ic3-demo-embedded-iframe-react](https://github.com/iccube-software/ic3-demo-embedded-iframe-react)
+### [ic3-demo-embedded-iframe-react](https://github.com/ic3-software/ic3-demo-embedded-iframe-react)
 
 This example is embedding/driving an icCube Dashboards instance using React and Material-UI (Typescript).
 

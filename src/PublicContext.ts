@@ -1,7 +1,7 @@
 import {LazyTreeViewProps} from "./LazyTreeView";
 import {ITidyTable} from "./PublicTidyTable";
 import {ITidyTableTransformation} from "./ITidyTableTransformation";
-import {Theme} from "@material-ui/core/styles";
+import {Theme} from "@mui/material/styles";
 import {ThemeTextFormatter} from "./PublicTheme";
 import {ITidyColumn} from "./PublicTidyColumn";
 
@@ -146,6 +146,31 @@ export interface IWidgetPublicContext extends IPublicContext {
 
     onWidgetRenderStatusChange(status: WidgetRenderLayoutStatus): void;
 
+    /**
+     * Event methods that do not depend on a Table
+     *
+     * @see ITidyTableInteractionEvent for more
+     */
+
+    /**
+     * returns true if the actionName in bound to a channel
+     */
+    firesEvent(actionName: string): boolean;
+
+    /**
+     * actionName if the action is bound to a channel, clears the event (has no value)
+     */
+    fireClearEvent(actionName: string): void;
+
+    /**
+     * actionName if the action is bound to a channel, send an Mdx Event (value,mdx)
+     */
+    fireMdxEvent(actionName: string, value: string, mdx: string): void;
+
+    /**
+     * Cypress testing purpose, after a rendering of the chart
+     */
+    incrementWidgetContentRendering(): void;
 }
 
 export interface IWidgetEditorPublicContext {

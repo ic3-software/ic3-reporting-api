@@ -12,10 +12,11 @@ import {
     TidyColumnsType,
 } from "./PublicTidyTableTypes";
 import {TidyActionEvent} from "./IcEvent";
-import {ITidyTable} from "./PublicTidyTable";
 import {ReactElement} from "react";
 import {ThemeTextFormatter} from "./PublicTheme";
 import {Property} from "csstype";
+import {AppNotification} from "./INotification";
+import {ITidyTable} from "./PublicTidyTable";
 
 /**
  * Properties with a special meaning
@@ -28,18 +29,18 @@ export enum ITidyColumnNamedProperties {
     mdxCellFormattedValue = "formattedValue",
 
     /**
-     * Mdx related colorings
+     * MDX related colorings
      */
     mdxCellBackColor = "mdxCellBackColor",
 
     /**
-     * Mdx related colorings
+     * MDX related colorings
      */
     mdxCellForeColor = "mdxCellForeColor",
 
     /**
-     * The format string for the cell value. For example, euros are formatted using €#,###. and percentages using
-     * Percent.
+     * The format string for the cell value. For example, euros are formatted using €#,###.
+     * and percentages using #0.00%.
      */
     mdxCellFormatString = "mdxCellFormatString",
 
@@ -47,6 +48,20 @@ export enum ITidyColumnNamedProperties {
      * The main color of the cell
      */
     mdxCellColor = "color",
+
+    /**
+     * Column defined to fire an app. notification.
+     *
+     * The name of the notification (e.g., print-report).
+     */
+    appNotificationType = "appNotificationType",
+
+    /**
+     * Column defined to fire an app. notification.
+     *
+     * The parameters of the notification (e.g., page size, filename, ...) as a JSON or a string.
+     */
+    appNotificationPayload = "appNotificationPayload",
 
     /**
      * Column defined to fire events, the name of the event
@@ -137,26 +152,13 @@ export type AllowedColumnType<T> = TidyColumnsType.UNKNOWN
     | (NonNullable<T> extends boolean ? TidyColumnsType.LOGICAL : TidyColumnsType.UNKNOWN)
     | (NonNullable<T> extends any[] ? TidyColumnsType.LIST : TidyColumnsType.UNKNOWN)
     | (NonNullable<T> extends Date ? TidyColumnsType.DATETIME : TidyColumnsType.UNKNOWN)
+    | (NonNullable<T> extends unknown ? TidyColumnsType : TidyColumnsType.UNKNOWN)
     | (T extends null ? TidyColumnsType.NULL : TidyColumnsType.UNKNOWN);
 
 /**
  * Base interface for nullable column.
  */
 export interface ITidyBaseColumn<T> {
-
-    /**
-     * The name of the column.
-     */
-    name: string;
-
-    /**
-     * Create a column.
-     * @param name name of the column.
-     * @param values values in the column.
-     * @param type optional type of the column.
-     */
-
-    // constructor(name: string, values: T[], type?: TidyColumnsType);
 
     /**
      * Returns the name of the column.
@@ -166,6 +168,9 @@ export interface ITidyBaseColumn<T> {
     /**
      * Set the name of the column.
      * @param name set this as the caption of the column.
+     *
+     * Note, do not use this for columns that are in tables as it can cause duplicate columns in a table.
+     * Use setCaption to change the name visible to the user.
      */
     setName(name: string): void;
 
@@ -228,11 +233,21 @@ export interface ITidyBaseColumn<T> {
      */
     setSource(source: ITidyColumnsSource): void;
 
+    /**
+     * Return the formatted value. Fallback on the value itself.
+     */
     getFormattedValueOrValue(idx: number): string | undefined;
 
-    setNumberFormat(format: ThemeTextFormatter, fv: (value: T | undefined) => string): void;
+    /**
+     * Set the number formatter of the column, calculating and adding the 'formattedValue' property.
+     */
+    setNumberFormat(format: ThemeTextFormatter | undefined): void;
 
-    setFormattedValues(formatString: string, formattedValues: string[]): void;
+    /**
+     * Set the formatted values. Use this if you have the formatted values pre-calculated or a function to calculate
+     * the formatted values.
+     */
+    setFormattedValues(formattedValues: (string | null)[] | ((value: T | undefined) => string)): void;
 
     /**
      * Returns the formatter of the column.
@@ -297,6 +312,11 @@ export interface ITidyBaseColumn<T> {
     mapAxisOrRows<K>(callbackfn: (rowIdx: number, column: ITidyBaseColumn<T>) => K): K[];
 
     /**
+     * Get the array of mdx info in the column. Returns an empty array if there is no mdx info.
+     */
+    getMdxInfos(): MdxInfo[];
+
+    /**
      * Returns true if and only if the column has zero rows.
      */
     isEmpty(): boolean;
@@ -333,8 +353,14 @@ export interface ITidyBaseColumn<T> {
 
     isWithEntityItem(): boolean;
 
+    /**
+     * Create and return the entity item at position idx for generating events
+     */
     getEntityItem(idx: number): EntityItem;
 
+    /**
+     * Get the mdx coordinates of the cell at rowIdx
+     */
     getMdxCoordinates(rowIdx: number): MdxMemberCoordinates | undefined;
 
     /**
@@ -383,6 +409,7 @@ export interface ITidyBaseColumn<T> {
 
     /**
      * @param callbackfn  , if the return value is undefined do not map the row
+     * @param forceMapAllRows
      */
     mapAllRows<P>(callbackfn: (index: number, column: ITidyBaseColumn<T>) => P | undefined, forceMapAllRows?: boolean): P[];
 
@@ -402,6 +429,9 @@ export interface ITidyBaseColumn<T> {
      */
     getLevelDepth(idx: number): number;
 
+    /**
+     * Returns true if and only if the mdx member at rowIdx has children
+     */
     hasMdxChildren(rowIdx: number): boolean;
 
     /**
@@ -412,7 +442,7 @@ export interface ITidyBaseColumn<T> {
     /**
      * Returns true if the column has a property of requested name.
      */
-    hasProperty(name: ITidyColumnNamedProperties): boolean;
+    hasProperty(name: ITidyColumnNamedProperties | string): boolean;
 
     /**
      * Returns the property at the specified property coordinate.
@@ -434,8 +464,7 @@ export interface ITidyBaseColumn<T> {
     getPropertyAt(name: ITidyColumnNamedProperties | string, rowIdx: number): any;
 
     /**
-     * Returns true if the column has color property  or is a color column
-     *
+     * Returns true if the column has color property or is a color column
      */
     hasColorProperty(): boolean;
 
@@ -445,7 +474,7 @@ export interface ITidyBaseColumn<T> {
      * If the column has type 'color', then it returns itself. Else it returns the
      * column of the first property with type 'color'.
      */
-    getColorColumn(): ITidyBaseColumn<string> | undefined;
+    getColorColumn(): ITidyColorColumn | undefined;
 
     /**
      * Returns the color of a cell (if defined).
@@ -453,7 +482,7 @@ export interface ITidyBaseColumn<T> {
      * If the column has type 'color', then it returns the cell value. Else it returns the
      * value at rowIdx of the first property with type 'color' (if it is defined).
      */
-    getColor(rowIdx: number): string | undefined;
+    getColor(rowIdx: number): Property.Color | undefined;
 
     /**
      * Return available properties for this column as a list of columns.
@@ -528,6 +557,9 @@ export interface ITidyBaseColumn<T> {
      */
     getError(idx: number): TidyCellError | undefined;
 
+    /**
+     * Set the errors of the column, where error[i] = the error for the column cell at idx i, for i = 0, ..., N-1.
+     */
     setErrors(errors: (TidyCellError | undefined)[]): void;
 
     /**
@@ -547,7 +579,7 @@ export interface ITidyBaseColumn<T> {
      * Get the default member of the dimension that the column represents. Returns undefined
      * if the column is not a MDX dimension.
      */
-    getHierarchyDefaultMember(): string | undefined;
+    getHierarchyDefaultMember(): EntityItem | undefined;
 
     /**
      * Get extra information of the MDX axis used for this column, if available.
@@ -577,6 +609,11 @@ export interface ITidyBaseColumn<T> {
      * @param rowIdx column index of the node.
      */
     getNodePath(rowIdx: number): number[];
+
+    /**
+     * Returns if present a notification as defined by the properties of the columns
+     */
+    getAppNotification(rowIdx: number): AppNotification | undefined;
 
     /**
      * Returns if present an action as defined by the properties of the columns
@@ -630,51 +667,31 @@ export interface ITidyBaseColumn<T> {
 
     /**
      * Function used for value comparison in sorting and ranking. Return a positive number if a > b, a negative
-     * number if a < b and 0 otherwise. Add the sorting type if nulls and NaNs should be pushed to the back of the
-     * column.
+     * number if a < b and 0 otherwise.
      * @param a value 1
      * @param b value 2
      */
     compare(a: T, b: T): number;
 
     /**
-     * True <=> column has numeric values. E.g., 1, 2, null, 5, 3.
+     * Check if column is of type
+     * @param type check this type
      */
-    isNumeric(): this is ITidyNumericColumn;
+    is<T extends TidyColumnsType>(type: T): this is ITidyColumnIsType<T>;
 
     /**
-     * True <=> column has list values. E.g., ['a', 'b'], null, [5, 3].
+     * Returns true if and only if the column is of the type(s) specified
+     * @param typesToCheck one or more types to check this column against
      */
-    isList(): this is ITidyListColumn;
-
-    /**
-     * True <=> column has date-times. E.g., Date(2020, 1, 1), Date(2020, 2, 1, 4, 0, 1).
-     */
-    isDatetime(): this is ITidyDateColumn;
-
-    /**
-     * True <=> column has text values. E.g., 'a', 'b', 'c'.
-     */
-    isCharacter(): this is ITidyCharacterColumn;
-
-    /**
-     * True <=> column has booleans. E.g., true, false.
-     */
-    isLogical(): this is ITidyLogicalColumn;
-
-    /**
-     * True <=> column has colors. E.g., 'red', '#000'.
-     */
-    isColor(): this is ITidyColorColumn;
-
-    isUnknown(): this is ITidyUnknownColumn;
-
-    isNull(): this is ITidyNullColumn;
+    isOfType(...typesToCheck: TidyColumnsType[]): boolean;
 
     /**
      * Convert the column to another type. This modifies the values to be of that type.
+     *
+     * If type is datetime, then the settings contain the date locale (default='en_US') and
+     * the dateformat (default = 'yyyy-MM-dd').
      */
-    convertToType(type: TidyColumnsType): void;
+    convertToType(type: TidyColumnsType, settings?: { locale?: string, dateFormat?: string }): void;
 
     /**
      * Change the type of the column. Note, only types that model the values in the column are allowed. For conversion,
@@ -683,6 +700,9 @@ export interface ITidyBaseColumn<T> {
      */
     setType(type: AllowedColumnType<T>): void;
 
+    /**
+     * Return the type of the column
+     */
     getType(): AllowedColumnType<T>;
 
     /**
@@ -690,6 +710,9 @@ export interface ITidyBaseColumn<T> {
      */
     setCellDecoration(decoration: PublicTidyColumnCellDecoration): void;
 
+    /**
+     * Return the celldecoration of the column
+     */
     getCellDecoration(): PublicTidyColumnCellDecoration;
 
     /**
@@ -711,6 +734,22 @@ export interface ITidyBaseColumn<T> {
      * Returns the type for Material-UI Table/Grid
      */
     getXGridType(): "string" | "number" | "date" | "dateTime" | "boolean" | undefined;
+
+    /**
+     * Get the display name of the column. Both the name and the caption form the display name of the column.
+     */
+    getDisplayName(): string;
+
+    /**
+     * Get the MDX role of the column
+     */
+    getRole(): string | undefined;
+
+    /**
+     * Set the role of the column.
+     * @param role
+     */
+    setRole(role: string | undefined): void;
 }
 
 export type PublicTidyColumnCellDecoration = Partial<{
@@ -733,7 +772,21 @@ export type ITidyColorColumn = ITidyBaseColumn<Property.Color | null>;
 export type ITidyDateColumn = ITidyBaseColumn<Date | null>;
 export type ITidyLogicalColumn = ITidyBaseColumn<boolean | null>;
 export type ITidyListColumn = ITidyBaseColumn<any[] | null>;
-export type ITidyVectorColumn = ITidyBaseColumn<(number | null)[] | null>;
+
+export type ITidyColumnIsType<T extends TidyColumnsType> =
+    T extends TidyColumnsType.ANY ? ITidyColumn :
+        T extends TidyColumnsType.COLOR ? ITidyColorColumn :
+            T extends TidyColumnsType.LONGITUDE ? ITidyBaseColumn<number> :
+                T extends TidyColumnsType.LATITUDE ? ITidyBaseColumn<number> :
+                    T extends TidyColumnsType.ISO2_LOCATION_CODE ? ITidyCharacterColumn :
+                        T extends TidyColumnsType.DATETIME ? ITidyDateColumn :
+                            T extends TidyColumnsType.NUMERIC ? ITidyNumericColumn :
+                                T extends TidyColumnsType.CHARACTER ? ITidyCharacterColumn :
+                                    T extends TidyColumnsType.LOGICAL ? ITidyLogicalColumn :
+                                        T extends TidyColumnsType.LIST ? ITidyListColumn :
+                                            T extends TidyColumnsType.MIXED ? ITidyColumn :
+                                                T extends TidyColumnsType.NULL ? ITidyNullColumn :
+                                                    ITidyUnknownColumn;
 
 /**
  * Introduced for tidy table HTML expression (e.g., tooltip) completion.
@@ -756,6 +809,9 @@ export const TidyTableTextExprColumnMetas: TidyTableExprColumnMeta[] = [
     {caption: "median", method: "median"},
     {caption: "min", method: "min"},
     {caption: "max", method: "max"},
+    {caption: "variance", method: "variance"},
+    {caption: "standardDeviation", method: "standardDeviation"},
+    {caption: "count", method: "count"},
 
     {caption: "percent", method: "percent", argRow: true},
 
@@ -770,6 +826,9 @@ export const TidyTableNumberExprColumnMetas: TidyTableExprColumnMeta[] = [
     {caption: "median", method: "median"},
     {caption: "min", method: "min"},
     {caption: "max", method: "max"},
+    {caption: "variance", method: "variance"},
+    {caption: "standardDeviation", method: "standardDeviation"},
+    {caption: "count", method: "count"},
 
     {caption: "percent", method: "percent", argRow: true},
 

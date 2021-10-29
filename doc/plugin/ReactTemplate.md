@@ -33,7 +33,7 @@ The React element will be re-rendered while editing it (e.g., new options being 
 as well as when reacting to end-user interactions (e.g., filter being applied, click row of a table updating its
 selection, etc...).
 
-For additional and up-to-date information check in Github the working example
-[ic3-demo-plugin-react](https://github.com/iccube-software/ic3-demo-plugin-react).
+For additional and up-to-date information check in GitHub the working example
+[ic3-demo-plugin-react](https://github.com/ic3-software/ic3-demo-plugin-react).
 
 _

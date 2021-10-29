@@ -1,3 +1,5 @@
+import {IWidgetPublicContext} from "../PublicContext";
+
 export interface HtmlBoxClasses {
 
     /**
@@ -31,6 +33,8 @@ export type HtmlBoxVariant =
     ;
 
 export interface HtmlBoxProps {
+
+    context?: IWidgetPublicContext;
 
     variant?: HtmlBoxVariant;
     html: string;

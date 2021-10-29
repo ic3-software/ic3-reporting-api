@@ -1,4 +1,4 @@
-import {CSSInterpolation} from "@material-ui/system";
+import {CSSInterpolation} from "@mui/system";
 
 export enum EmbeddedThemeNames {
 

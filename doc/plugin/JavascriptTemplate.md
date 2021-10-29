@@ -36,7 +36,7 @@ widget is being re-rendered while editing it (e.g., new options being applied, n
 when reacting to end-user interactions (e.g., filter being applied, click row of a table updating its selection, etc...)
 .
 
-For additional and up-to-date information check in Github the working example
-[ic3-demo-plugin-js](https://github.com/iccube-software/ic3-demo-plugin-js).
+For additional and up-to-date information check in GitHub the working example
+[ic3-demo-plugin-js](https://github.com/ic3-software/ic3-demo-plugin-js).
 
 _

@@ -33,8 +33,8 @@ const PluginDefinition = ApiUtils.makePlugin({
 });
 ```
 
-Please refer to the available [source](https://github.com/iccube-software/ic3-reporting-api) code of the API that
-provides for up-to-date and detailed information. You can refer as well to the source code of the various
+Please refer to the available [source](https://github.com/ic3-software/ic3-reporting-api) code of the API that provides
+for up-to-date and detailed information. You can refer as well to the source code of the various
 working [examples](./Examples.md) for several plugin definitions.
 
 ### Webpack Module Federation
@@ -49,10 +49,10 @@ new ModuleFederationPlugin({
     exposes: {
         "./PluginDefinition": "./src/PluginDefinition",
     },
-}),
+})
 ```
 
 The icCube Dashboards application is then configured to load that plugin at runtime via the `ic3report-config.js`
-file. More information can be found at this [page](./Install.md#configuration)
+file. More information can be found at this [page](./Install.md#configuration).
 
 _

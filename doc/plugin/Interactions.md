@@ -49,8 +49,8 @@ If the user has decided to use the `Year`, then clicking on the first row will e
 |0| France    | 2020     | 65,273,511
 |3| Spain     | 2020     | 55,173,411
 
-For additional and up-to-date information check in Github the `SimpleTable` widget in the working example
-[ic3-demo-plugin-js](https://github.com/iccube-software/ic3-demo-plugin-js) that is selecting its rows.
+For additional and up-to-date information check in GitHub the `SimpleTable` widget in the working example
+[ic3-demo-plugin-js](https://github.com/ic3-software/ic3-demo-plugin-js) that is selecting its rows.
 
 #### Mode
 

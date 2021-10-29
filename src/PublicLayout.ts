@@ -1,4 +1,3 @@
-//TODO: better way to do this: import {CSSProperties} from "react";
 type CSSProperties = any;
 
 /**

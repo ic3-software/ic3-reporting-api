@@ -1,6 +1,7 @@
 export * from "./ApiUtils";
 export * from "./IcEvent";
 export * from "./ILocalizationManager";
+export * from "./INotification";
 export * from "./IPluginDefinition";
 export * from "./IRemotePluginName";
 export * from "./IReporting";
@@ -26,6 +27,7 @@ export * from "./PublicTidyTable";
 export * from "./PublicTidyTableInteractions";
 export * from "./PublicTidyTableTypes";
 export * from "./PublicTidyTree";
+export * from "./PublicTidyHistogram";
 export * from "./RemoteContainerUtils";
 export * from "./ReportingVersion";
 
@@ -40,4 +42,5 @@ export * from "./theme/ThemeReportAppBar"
 export * from "./theme/ThemeReportAppMenu"
 export * from "./theme/ThemeWidgetBox"
 export * from "./theme/ThemeWidgetBoxContentMessage"
+
 

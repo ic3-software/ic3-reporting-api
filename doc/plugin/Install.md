@@ -14,12 +14,13 @@ section later in this document.
 ### Configuration
 
 The file `ic3report-config.js` in the `/ic3-reporting/app-local` directory allows for configuring the Dashboards
-application and amongst others for listing the plugins to load:
+application and amongst others for listing the plugins to load. The context object to access some extra information
+(e.g., the name and the role of the user) to perform ad-hoc configuration.
 
 ```javascript
-const ic3config = function (mode, options) {
+const ic3config = function (mode, options, context) {
 
-    console.log("[ic3-config] mode [" + mode + "] processing the options", options);
+    console.log("[ic3-config] mode [" + mode + "] processing the options", options, context);
 
     // Plugins ( mode = "production"|"development" ) .
 

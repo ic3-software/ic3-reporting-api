@@ -1,6 +1,8 @@
 import {FormFieldObject} from "../PublicTemplateForm";
 import {TreeFireEventMode} from "../PublicTidyTableInteractions";
 
+export type FilterFireEventMode = TreeFireEventMode.ALL_SELECTED | TreeFireEventMode.COMPACT_ON_PARENT;
+
 export interface FilterTreeOptions extends FormFieldObject {
     /**
      * variants (if any)
@@ -31,7 +33,7 @@ export interface FilterTreeOptions extends FormFieldObject {
     /**
      * When firing an event, do not fire children if the parent is selected (i.e. the filter is used as an MDX filter)
      */
-    fireMode: TreeFireEventMode.ALL_SELECTED | TreeFireEventMode.COMPACT_ON_PARENT,
+    fireMode: FilterFireEventMode,
 
     /**
      * Search feature to the tree

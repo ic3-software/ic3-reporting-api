@@ -1,4 +1,4 @@
-### Events
+## Events
 
 icCube widgets (e.g., charts, filters, tables, ...) are communicating to each others via events.
 
@@ -51,7 +51,7 @@ select
 filterby @{year}
 ```
 
-Please refer to this [page](../../Events.md) for more information about accessing event value.
+Please refer to this [page](../../reference/Events.md) for more information about accessing event value.
 
 #### Channel (aka. Topic)
 
@@ -80,7 +80,7 @@ Sales: 2020
 ```
 
 At the programing level, an event content might be more than a simple string. You can check the API source
-code [code](https://github.com/iccube-software/ic3-reporting-api/blob/master/src/IcEvent.ts) that provides for an
+code [code](https://github.com/ic3-software/ic3-reporting-api/blob/master/src/IcEvent.ts) that provides for an
 up-to-date documentation
 
 #### Widget Meta Information (Event Roles)
@@ -123,4 +123,4 @@ notified only on event content change.
 Those actions are internally managed by icCube to synchronize selection in `ITidyTableInteraction`. The actual state and
 the consistency of the selection is managed by icCube. Refer to this [page](./Interactions.md) for more information.
 
-__
+_

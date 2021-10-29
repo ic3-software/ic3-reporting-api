@@ -1,23 +1,25 @@
 import {
     AxisCoordinate,
-    EntityItem,
     IAmCharts4Data,
     IAmCharts4DataTreeMap,
-    ITidyRow, MdxMemberCoordinates,
+    ITidyRow,
+    MdxMemberCoordinates,
     SortingType,
+    TidyColumnIndex,
     TidyColumnsType,
-    TidyTableMappingCoordinate
+    TidyTableColumnSelector
 } from "./PublicTidyTableTypes";
 import {
     AllowedColumnType,
     ITidyBaseColumn,
     ITidyCharacterColumn,
     ITidyColumn,
-    ITidyDateColumn,
+    ITidyLogicalColumn,
     ITidyNumericColumn,
     ITidyUnknownColumn
 } from "./PublicTidyColumn";
 import {TidyTree} from "./PublicTidyTree";
+import {SelectionGranularityOptions} from "./PublicTemplate";
 
 export type ITidyTableType = "data" | "properties";
 
@@ -38,10 +40,14 @@ export type ITidyTableType = "data" | "properties";
  */
 export interface ITidyTable {
 
-    // constructor(columns?: ITidyColumn, rowCount?: number);
-
+    /**
+     * Get the type of the table
+     */
     getType(): ITidyTableType;
 
+    /**
+     * Get the query uid
+     */
     getQueryUid(): number;
 
     asPivotTableForExcel(nullValue: any): ITidyTable;
@@ -66,49 +72,39 @@ export interface ITidyTable {
      */
     getColumnCount(): number;
 
+    /**
+     * Get the nth character column in the table
+     * @param axisPosition
+     */
     getAxisN(axisPosition: number): ITidyCharacterColumn;
 
     /**
-     * @deprecated
-     * @see {getOptionalColumnByType}
+     * @see {getAxisN}
      */
     getOptionalAxisN(axisPosition: number): ITidyCharacterColumn | undefined;
 
     /**
-     * @deprecated
-     * @see {getOptionalColumnByType}
+     * Get the nth numeric column in the table
      * @param axisPosition
      */
     getMeasureN(axisPosition: number): ITidyNumericColumn;
 
     /**
-     * @deprecated
-     * @see {getOptionalColumnByType}
+     * @see {getMeasureN}
      * @param axisPosition
      */
     getOptionalMeasureN(axisPosition: number): ITidyNumericColumn | undefined;
 
     /**
-     * Returns the column at the index.
-     * @param index index of column.
+     * Get a column by name (case insensitive) or index. If no column is found, it gives an error.
+     * @param identifier name or index of the column
      */
-    getColumnN(index: number): ITidyUnknownColumn;
-
-    /**
-     * @see {getColumnN}
-     */
-    getOptionalColumnN(index: number): ITidyUnknownColumn | undefined;
-
-    /**
-     * Returns the first column with name. If no column is found, it gives an error.
-     * @param name name of the column.
-     */
-    getColumn(name: string): ITidyUnknownColumn;
+    getColumn(identifier: string | number): ITidyUnknownColumn;
 
     /**
      * @see {getColumn}
      */
-    getOptionalColumn(name: string): ITidyUnknownColumn | undefined;
+    getOptionalColumn(identifier: string | number): ITidyUnknownColumn | undefined;
 
     /**
      * Column getters with mapping defined, throws an error if the column is not found.
@@ -127,13 +123,22 @@ export interface ITidyTable {
      */
     getOptionalColumnByAlias(alias: string): ITidyUnknownColumn | undefined;
 
-    getOptionalColumnCoordinateByAlias(alias: string): TidyTableMappingCoordinate | undefined;
+    /**
+     * Get the coordinate of the column using the alias for the mapping
+     * @param alias the name of the mapping
+     */
+    getOptionalColumnCoordinateByAlias(alias: string): TidyTableColumnSelector | undefined;
 
     /**
-     * Get a column using the coordinate from a 'columnCoordinate' option field.
-     * @param coordinate coordinate to the column or property.
+     * @param granularityOption , if valid a SelectionGranularityOptions
      */
-    getColumnByCoordinate(coordinate: TidyTableMappingCoordinate | undefined): ITidyUnknownColumn | undefined;
+    getOptionalColumnBySelectionGranularity(granularityOption: string | SelectionGranularityOptions): ITidyColumn[] | undefined;
+
+    /**
+     * Get column(s) using a selector
+     * @param selector coordinate to the column or property.
+     */
+    getColumnBySelector(selector?: TidyTableColumnSelector): ITidyUnknownColumn[] | undefined;
 
     /**
      * Get a column using the coordinate of an axis.
@@ -148,20 +153,9 @@ export interface ITidyTable {
     getMdxAxisCount(): number;
 
     /**
-     * Get a numeric column from the alias.
-     * @param alias name in the mapping meta.
-     * @see {getColumnByAlias}
-     * @deprecated Use getColumnByAlias and test if the result is a numeric. The error from this function is not localized.
+     * Get the column for the text formatter
+     * @param nameOrAlias the name or the mapping alias for the column
      */
-    getNumericColumnByAlias(alias: string): ITidyNumericColumn;
-
-    /**
-     * @see {getNumericColumnByAlias}
-     * @see {getColumnByAlias}
-     * @deprecated Use getOptionalColumnByAlias and test if the result is a numeric. The error from this function is not localized.
-     */
-    getOptionalNumericColumnByAlias(alias: string): ITidyNumericColumn | undefined;
-
     getColumnForTextFormatter(nameOrAlias: string): ITidyUnknownColumn | undefined;
 
     /**
@@ -178,33 +172,44 @@ export interface ITidyTable {
     toArray(major?: 'row' | 'column'): any[][];
 
     /**
-     * Get the alias names of the tidy table.
-     */
-    getAliasNames(): string[];
-
-    /**
-     * Get the column names of the tidy table.
+     * Get the column names of the tidy table. Each column in the table has a unique name.
      */
     getColumnNames(): string[];
 
     /**
-     * Get the column which is of type classId and at position. Examples,
-     * getColumnByClassAndIdx("COLOR", 0) would give the first column of class COLOR
-     * getColumnByClassAndIdx("COLOR", 1) would give the second column of class COLOR
-     * getColumnByClassAndIdx("Axis", 1) would give the first column of class Axis
-     * @param type the column class to look for
-     * @param position get the nth column of type. Default = 0.
+     * Get the column captions of the tidy table
      */
-    getColumnByType(type: TidyColumnsType, position?: number): ITidyUnknownColumn;
+    getColumnCaptions(): string[];
+
+    /**
+     * Get a column by its type
+     * @param type columns of this type are in the result set
+     * @param position get the nth column of the result set, default = 0
+     */
+    getColumnByType(type: TidyColumnsType, position?: number): ITidyColumn;
 
     /**
      * @see {getColumnByType}
      */
-    getOptionalColumnByType(type: TidyColumnsType, position?: number): ITidyUnknownColumn | undefined;
+    getOptionalColumnByType(type: TidyColumnsType, position?: number): ITidyColumn | undefined;
 
+    /**
+     * Search through the columns in the table returning the n-th column that is found.
+     * @param predicate function that returns true if and only if the column is in the result set.
+     * @param position the position in the result set. Defaults to 0.
+     */
+    searchColumn(predicate: (column: ITidyColumn) => boolean, position?: number): ITidyUnknownColumn | undefined;
+
+    /**
+     * Return a list of the types of the column in the table
+     */
     getColumnTypes(): TidyColumnsType[];
 
-    lookupColumnIdx(axis?: ITidyColumn): number;
+    /**
+     * Get the index of the column in the table
+     * @param col
+     */
+    lookupColumnIdx(col?: ITidyColumn): number;
 
     /**
      * Return a single row from the table.
@@ -229,10 +234,11 @@ export interface ITidyTable {
      * Map the columns of the table, resulting in a list with length equal to the number of columns.
      * @param mapper
      */
-    mapColumns<T>(mapper: (colIdx: ITidyColumn, colData: (rowIdx: number) => any, rowCount: number) => T): T[] ;
+    mapColumns<T>(mapper: (colIdx: ITidyColumn, colData: (rowIdx: number) => any, rowCount: number) => T): T[];
 
-    getEntityItem(colIdx: number, rowIdx: number): EntityItem | undefined;
-
+    /**
+     * Get the mdx coordinates of a cell in the table
+     */
     getMdxCoordinates(colIdx: number, rowIdx: number): MdxMemberCoordinates | undefined;
 
     /**
@@ -307,6 +313,16 @@ export interface ITidyTable {
     melt(columns: ITidyColumn[], namesCaption?: string, valuesCaption?: string): void;
 
     /**
+     * Pivot a tidy table from long to wide format
+     * @param column Pivot on this column
+     * @param valueCols transpose the values in these column
+     *
+     * The other columns form the id columns, where each unique combination is a row in the transformed table.
+     * Duplicated rows are discarded.
+     */
+    cast(column: ITidyColumn, valueCols: ITidyColumn[]): void;
+
+    /**
      * Sort the table based on the certain columns. Default sorting is descending.
      * @param columns column(s) used for sorting. Columns earlier in the list take priority over columns with
      * higher indexes in determining the order.
@@ -327,8 +343,16 @@ export interface ITidyTable {
      * Add a new column to the table. If the column name already exits, a new name is generated.
      * If the column is already in the table, nothing is done.
      * @param column
+     * @param onConflict what to do if a column with the name already exists?
+     *   - rename: (default) add a number to the name, e.g., name -> name1
+     *   - replace: replace the column with the new column
      */
-    addColumn(column: ITidyColumn): void;
+    addColumn(column: ITidyColumn, onConflict?: "rename" | "replace"): void;
+
+    /**
+     * Convert the tidy table to a data object that can be used by amCharts V5.
+     */
+    toAmcharts5Data(axis: ITidyColumn, group: ITidyColumn | undefined, value: Record<string, ITidyColumn | undefined>): any
 
     /**
      * Convert the tidy table to a data object that can be used by amCharts.
@@ -461,6 +485,7 @@ export interface ITidyTable {
      * 7   undefined |undefined |undefined |
      *
      * @param index list of integers.
+     * @param keepingAxisOrder
      */
     reIndex(index: number[], keepingAxisOrder?: boolean): void;
 
@@ -478,28 +503,10 @@ export interface ITidyTable {
     repeat(newLength: number, repetition?: number): void;
 
     /**
-     * Get the column associated with the first item in the mapping meta.
-     */
-    getFirstMappedColumn(): ITidyColumn | undefined;
-
-    /**
-     * Returns the list of columns that are mapped in the mapping.
-     */
-    getMappedColumns(): ITidyColumn[];
-
-    /**
      * Returns true if and only if each row of the columns is unique.
      * @param columns columns from the table.
      */
     isUnique(columns: ITidyColumn[]): boolean;
-
-    /**
-     * Returns a datetime column by alias.
-     * @param alias name as defined in the mapping meta.
-     *
-     * @deprecated Use getColumnByAlias and test if the result is a numeric. The error from this function is not localized.
-     */
-    getDateColumnByAlias(alias: string): ITidyDateColumn;
 
     /**
      * Delete a column from the table (if it exists).
@@ -523,6 +530,9 @@ export interface ITidyTable {
      */
     createColumn<T>(name: string, values: T[], type?: AllowedColumnType<T>): ITidyBaseColumn<T>;
 
+    /**
+     * Print the table as a markdown table
+     */
     toMarkdown(): string;
 
     /**
@@ -534,6 +544,49 @@ export interface ITidyTable {
      * Adds an empty row at the end of the table
      */
     addEmptyRow(): void;
+
+    /**
+     * Return the values of the tidy table.
+     * @param order how to structure the array, default = column-major.
+     *     Say the table has n rows and m columns, then
+     *     > row-major - returns an array of row-values
+     *         [
+     *            [val11, val12, ..., val1m],
+     *            [val21, val22, ..., val2m],
+     *            ...,
+     *            [valn1, valn2, ..., valnm]
+     *         ]
+     *
+     *     > column-major - returns an array of column-values
+     *         [
+     *            [val11, val21, ..., valn1],
+     *            [val21, val22, ..., valn2],
+     *            ...,
+     *            [valm1, valm2, ..., valnm]
+     *         ]
+     */
+    getValues(order?: "row-major" | "column-major"): any[][];
+
+    /**
+     * Add a tag, name combination to the mapping
+     * @param tag name, mapping, role, etc..
+     * @param identifier name of the column in the table. Not exist = error.
+     */
+    addToColumnIndex(tag: string, identifier: string | number): void;
+
+    /**
+     * Add a new index to the existing index, overwriting what already exists.
+     * @param index
+     */
+    addColumnIndex(index: TidyColumnIndex): void;
+
+    getQueryLimit(): number | undefined;
+
+    isTotalRow(rowIdx: number): boolean;
+
+    setTotalRow(rowIdx: number, isTotal: boolean): void;
+
+    getTotalRows(): ITidyLogicalColumn | undefined;
 
 }
 

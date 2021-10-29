@@ -1,11 +1,8 @@
 import {IWidgetEditorPublicContext} from "./PublicContext";
 import {ITidyColumn} from "./PublicTidyColumn";
 import * as React from "react";
-import {
-    AutocompleteRenderInputParams,
-    AutocompleteRenderOptionState
-} from "@material-ui/core/Autocomplete/Autocomplete";
-import {TidyTableMappingCoordinate} from "./PublicTidyTableTypes";
+import {AutocompleteRenderInputParams, AutocompleteRenderOptionState} from "@mui/material/Autocomplete/Autocomplete";
+import {TidyColumnsType, TidyTableColumnSelector} from "./PublicTidyTableTypes";
 
 
 export function formFieldIsSelection(field: IFormFieldDef<any>) {
@@ -120,10 +117,10 @@ export type FormFields<T extends FormFieldObject> = {
         Required<T>[key] extends FormFieldObject ? Omit<IFormEmbeddedFieldDef<Required<T>[key]>, 'fieldPath'> :
             Required<T>[key] extends IPaletteDef ? Omit<IFormPaletteEditorFieldDef, 'fieldPath'> :
                 Required<T>[key] extends IColorDef ? Omit<IFormColorEditorFieldDef, 'fieldPath'> :
-                    Required<T>[key] extends TidyTableMappingCoordinate[] ? Omit<IFormColumnCoordinateFieldDef, 'fieldPath'> :
-                        Required<T>[key] extends TidyTableMappingCoordinate ? Omit<IFormColumnCoordinateFieldDef, 'fieldPath'> :
+                    Required<T>[key] extends TidyTableColumnSelector[] ? Omit<IFormColumnChooserFieldDef, 'fieldPath'> :
+                        Required<T>[key] extends TidyTableColumnSelector ? Omit<IFormColumnChooserFieldDef, 'fieldPath'> :
                             Required<T>[key] extends boolean ? Omit<IFormBooleanFieldDef, 'fieldPath'> :
-                                Required<T>[key] extends number ? Omit<IFormNumberFieldDef, 'fieldPath'>:
+                                Required<T>[key] extends number ? Omit<IFormNumberFieldDef, 'fieldPath'> :
                                     Required<T>[key] extends string ? Omit<IFormOptionFieldSingleDef, 'fieldPath'>
                                         | Omit<IFormStringFieldDef, 'fieldPath'>
                                         | Omit<IFormWidgetVariantFieldDef, 'fieldPath'>
@@ -136,15 +133,11 @@ export type FormFields<T extends FormFieldObject> = {
                                         | Omit<IFormTidyTableColorRowExprFieldDef, 'fieldPath'>
                                         | Omit<IFormTidyTableStringRowExprFieldDef, 'fieldPath'>
                                         | Omit<IFormTidyTableScaleRowExprFieldDef, 'fieldPath'>
-                                        | Omit<IFormColorEditorFieldDef, 'fieldPath'>
                                         | Omit<IFormJsFieldDef, 'fieldPath'>
                                         | Omit<IFormJsonFieldDef, 'fieldPath'>
-                                        | Omit<IFormMarkdownFieldDef, 'fieldPath'>
-                                        | Omit<IFormColumnChooserFieldDef, 'fieldPath'> :
+                                        | Omit<IFormMarkdownFieldDef, 'fieldPath'> :
 
                                         Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
-                                            | Omit<IFormPaletteEditorFieldDef, 'fieldPath'>
-                                            | Omit<IFormColumnsChooserFieldDef, 'fieldPath'>
                                             | Omit<IFormGroupsFieldDef, 'fieldPath'> :
 
                                             never /* type not supported */
@@ -175,10 +168,6 @@ export type FormFieldType =
      * @see IFormColorEditorFieldDef
      */
     "color" |
-    /**
-     * @see IFormColumnCoordinateFieldDef
-     */
-    "columnCoordinate" |
     /**
      * @see IFormColumnChooserFieldDef
      */
@@ -325,7 +314,7 @@ export function isTidyTableExprTable(type: FormFieldType) {
         ;
 }
 
-export function isTidyTableExprRow(type: FormFieldType) {
+export function isTidyTableExprRow(type: FormFieldType): boolean {
     return type === "tidyTableHtmlRowExpr"
         || type === "tidyTableTextRowExpr"
         || type === "tidyTableNumericRowExpr"
@@ -396,6 +385,7 @@ export function isCodeMirrorModeExpr(mode: CodeMirrorMode) {
 export type FormFieldDialogEditorModelType =
     "unknown" |
     "markdown" |
+    "mdxExpression" |
     FormFieldTidyTableExprType
     ;
 
@@ -464,6 +454,8 @@ export interface IFormAutocompleteFieldDef<OPTION> extends IFormFieldDef<OPTION>
             onClose: () => void
         ) => React.ReactNode;
 
+        disableClearable?: boolean;
+
     }
 }
 
@@ -491,46 +483,54 @@ export interface IFormColorEditorFieldDef extends IFormFieldDef<IColorDef> {
 
 /**
  * @see FormFieldDef
+ *
+ * Use the fieldPath to access the column directly in the tidy table with table.getColumnByAlias(...).
+ * If multiple columns are in this field, it returns the first column.
+ *
+ * If the columns chooser is mandatory, the widget or transformation returns an error if there is no column either
+ * selected by the user or in the fallback.
+ *
  */
-export interface IFormColumnCoordinateFieldDef extends IFormFieldDef<never> {
+export interface IFormColumnChooserFieldDef extends IFormFieldDef<TidyTableColumnSelector> {
 
-    fieldType: "columnCoordinate",
+    fieldType: "columnsChooser",
 
     editorConf?: {
 
+        /**
+         * The user can select multiple columns / selectors
+         */
         multiple?: boolean;
+
+        /**
+         * The user can select the same column more than once
+         */
         allowDuplicate?: boolean;
-        allowedTypes?: (column: ITidyColumn) => boolean;
+
+        /**
+         * Only columns of this/these type(s) are allowed.
+         */
+        allowedTypes?: TidyColumnsType[] | ((column: ITidyColumn) => boolean);
+
+        /**
+         * The user can select properties of columns
+         */
         includeProperties?: boolean;
+
+        /**
+         * The user can choose a selector, see TidyTableMappingColumnSelectorOptions
+         */
+        includeSelectors?: boolean;
+
+        /**
+         * Fallback to a column that has a type that is allowed. Note, properties of columns are not considered.
+         */
         fallback?: boolean;
 
-    }
-
-}
-
-/**
- * @see FormFieldDef
- */
-export interface IFormColumnChooserFieldDef extends IFormFieldDef<never> {
-
-    fieldType: "columnsChooser",
-
-    editorConf?: {
-
-        multiple?: false;
-
-    }
-
-}
-
-export interface IFormColumnsChooserFieldDef extends IFormFieldDef<never> {
-
-    fieldType: "columnsChooser",
-
-    editorConf: {
-
-        multiple: true;
-
+        /**
+         * In the expression editor, use the alias to reference the column. Use the alias in table.getColumnByAlias(...).
+         */
+        alias?: string;
     }
 
 }
@@ -619,6 +619,8 @@ export interface IFormMarkdownFieldDef extends IFormFieldDef<string> {
 
 }
 
+export type MdxExpressionType = "calcMeasure" | "drilldown";
+
 /**
  * @see FormFieldDef
  */
@@ -626,6 +628,11 @@ export interface IFormMdxFieldDef extends IFormFieldDef<string> {
 
     fieldType: "mdxExpression",
 
+    editorConf: {
+
+        mdxExpressionType: MdxExpressionType;
+
+    }
 }
 
 /**
@@ -759,6 +766,7 @@ export interface IFormStringFieldDef extends IFormFieldDef<string> {
          */
         suggestions?: string[] | ((callback: ((candidates: string[]) => void), dependsOnValue?: any) => void);
 
+        copyToClipboard?: boolean;
     }
 
 }
@@ -931,7 +939,7 @@ export type FormFieldDef =
     IFormAutocompleteFieldDef<any> |
     IFormBooleanFieldDef |
     IFormColorEditorFieldDef |
-    IFormColumnCoordinateFieldDef |
+    IFormColumnChooserFieldDef |
     IFormColumnSelectionFieldDef |
     IFormEventMappingArrayFieldDef |
     IFormFileUploaderFieldDef |

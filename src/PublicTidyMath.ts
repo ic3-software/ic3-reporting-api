@@ -1,7 +1,6 @@
 import {ITidyBaseColumn, ITidyColumn, ITidyNumericColumn} from "./PublicTidyColumn";
-import {HistogramBucket, HistogramData} from "./PublicTidyTableTypes";
-
-export type RealValuedFunction = (x: number) => number;
+import {HistogramData, HistogramOptions} from "./PublicTidyTableTypes";
+import {TidyHistogramBucketType} from "./PublicTidyHistogram";
 
 interface ITidyMath {
     /**
@@ -78,14 +77,18 @@ interface ITidyMath {
     /**
      * Creates a histogram data object from the column.
      * @param column
-     * @param bins number of buckets or a specification for the buckets. If it's the number of buckets,
-     * then it calculates the bin size so that the left and rightmost bin have at least 1 datapoint.
+     * @param options see HistogramOptions
      *
      * @Returns an array of histogram buckets
      */
-    hist(column: ITidyNumericColumn, bins: number | HistogramBucket[]): HistogramData[];
+    hist(column: ITidyNumericColumn, options: Partial<HistogramOptions>): HistogramData[];
 
-    ols(column: ITidyNumericColumn): RealValuedFunction | undefined;
+    /**
+     * Return a regression model with one predictor: y = a0 + a1*x + error
+     * @param y column x
+     * @param x column y
+     */
+    ols(y: ITidyNumericColumn, x: ITidyNumericColumn): ((x: number) => number) | undefined;
 
     /**
      * Calculate the percentage w.r.t. the total of the column.
@@ -122,6 +125,11 @@ interface ITidyMath {
      * @returns undefined if one of the values in the scalar could not be calculated.
      */
     scaleStandardize(column: ITidyNumericColumn, idx: number): number | undefined;
+
+    /**
+     * Returns the covariance between two columns. Nulls are interpreted as zeros.
+     */
+    covariance(x: ITidyNumericColumn, y: ITidyNumericColumn): number | undefined;
 }
 
 class TidyMathImpl implements ITidyMath {
@@ -133,6 +141,25 @@ class TidyMathImpl implements ITidyMath {
         return undefined;
     }
 
+    covariance(x: ITidyNumericColumn, y: ITidyNumericColumn): number | undefined {
+        const xMean = this.mean(x);
+        const yMean = this.mean(y);
+        if (xMean == null || yMean == null) {
+            return undefined;
+        }
+        let covSum = 0;
+        let count = 0;
+        for (let i = 0; i < x.length(); i++) {
+            const xVal = x.getValue(i);
+            const yVal = y.getValue(i);
+            if (xVal != null && yVal != null) {
+                covSum += (xVal - xMean) * (yVal - yMean);
+                count++;
+            }
+        }
+        return covSum / (count - 1);
+    }
+
     scaleMaxAbsolute(column: ITidyNumericColumn, idx: number): number | undefined {
         const absMax = this.absoluteMax(column);
         const x = column.getValue(idx);
@@ -142,18 +169,22 @@ class TidyMathImpl implements ITidyMath {
         return x / absMax;
     }
 
-    scaleNormalize(column: ITidyNumericColumn, idx: number, min: number | undefined, max: number | undefined, val: number | undefined): number | undefined {
+    scaleNormalize(column: ITidyNumericColumn | undefined, idx: number, min: number | undefined, max: number | undefined, val: number | undefined): number | undefined {
+
+        if (column == null && (min == null || max == null || val == null)) {
+            throw new Error("missing default column");
+        }
 
         if (min == null) {
-            min = TidyMath.min(column) ?? undefined;
+            min = TidyMath.min(column!) ?? undefined;
         }
 
         if (max == null) {
-            max = TidyMath.max(column) ?? undefined;
+            max = TidyMath.max(column!) ?? undefined;
         }
 
         if (val == null) {
-            val = column.getValue(idx) ?? undefined;
+            val = column!.getValue(idx) ?? undefined;
         }
 
         if (min == null || max == null || val == null) {
@@ -335,82 +366,101 @@ class TidyMathImpl implements ITidyMath {
         return (values[half - 1] + values[half]) / 2.0;
     }
 
-    hist(column: ITidyNumericColumn, bins: number | HistogramBucket[] = 10): HistogramData[] {
+    hist(column: ITidyNumericColumn, options: Partial<HistogramOptions>): HistogramData[] {
 
+        const bins = options.bins ?? 10;
+        const rightClosed = options.intervalType !== TidyHistogramBucketType.LEFT_CLOSED;
+        const includeEndPoints = options.includeEndPoints ?? true;
+
+        let binData: HistogramData[];
+        let lowestBin: HistogramData;
+        let largestBin: HistogramData;
         if (typeof bins === "number") {
             const valueMin = this.min(column)
             const valueMax = this.max(column)
             if (bins <= 0 || column.length() === 0 || valueMin == null || valueMax == null) {
                 return [];
+            } else {
+                binData = new Array<HistogramData>(bins);
+                const valueRange = valueMax - valueMin;
+                const valueStep = valueRange / bins;
+                for (let b = 0; b < bins; b++) {
+                    binData[b] = {
+                        from: roundFloatingPointNumber(valueMin + valueStep * b, 6),
+                        to: roundFloatingPointNumber(valueMin + valueStep * (b + 1), 6),
+                        count: 0,
+                        rows: []
+                    };
+                }
             }
-            const valueRange = valueMax - valueMin;
-            const valueStep = valueRange / bins;
-            const binData = new Array<HistogramData>(bins);
-            for (let b = 0; b < bins; b++) {
-                binData[b] = {
-                    from: valueMin + valueStep * b,
-                    to: valueMin + valueStep * (b + 1),
+            lowestBin = binData[0];
+            largestBin = binData[binData.length - 1];
+        } else {
+            if (bins.length === 0) {
+                return [];
+            }
+            binData = bins.map(b => {
+                return {
+                    ...b,
                     count: 0,
                     rows: []
                 };
-            }
-            column.getValues().forEach((value, i) => {
-                if (value != null) {
-                    const b = valueRange === 0 ? 0 : Math.floor((value - valueMin) / valueRange * (bins - 1));
-                    binData[b].count++;
-                    binData[b].rows.push(i)
-                }
-            })
-            return binData;
+            });
+            lowestBin = binData.reduce((a, b) => a.from == null ? a : b.from == null ? b : a.from < b.from ? a : b);
+            largestBin = binData.reduce((a, b) => a.from == null ? b : b.from == null ? a : a.from < b.from ? b : a);
         }
 
         const columnValues = column.getValues();
-        return bins.map(bin => {
-            let count = 0;
-            const rows: number[] = [];
-            columnValues.forEach((value, i) => {
-                if (value != null) {
-                    if ((bin.from == null || value >= bin.from) && (bin.to == null || value < bin.to)) {
-                        count++;
-                        rows.push(i);
-                    }
+        columnValues.forEach((value, idx) => {
+            if (value == null) {
+                return;
+            }
+            const rValue = roundFloatingPointNumber(value, 6);
+            let bin: HistogramData | undefined;
+            if (rightClosed) {
+                bin = binData.find(b => (b.from == null || rValue > b.from) && (b.to == null || rValue <= b.to));
+                if (bin == null && includeEndPoints) {
+                    bin = lowestBin;
                 }
-            });
-            return {from: bin.from, to: bin.to, count, rows};
+            } else {
+                bin = binData.find(b => (b.from == null || rValue >= b.from) && (b.to == null || rValue < b.to));
+                if (bin == null && includeEndPoints) {
+                    bin = largestBin;
+                }
+            }
+            if (bin != null) {
+                bin.count++;
+                bin.rows.push(idx);
+            }
         });
+        return binData;
     }
 
-    ols(column: ITidyNumericColumn): RealValuedFunction | undefined {
+    ols(y: ITidyNumericColumn, x: ITidyNumericColumn): ((x: number) => number) | undefined {
 
-        const values: number[] = [];
-        column.getValues().forEach(v => v && values.push(v));
-
-        const data = values.map((value, index) => [index, value]);
-
-        if (data.length < 2) {
+        if (x.length != y.length) {
+            // Cannot make linear model, ${y.name} and ${x.name} are not of same length
             return undefined;
         }
 
-        const sum_y = data.reduce((a, b) => a + b[1], 0);
-
-        const sum_x = data.reduce((a, b) => a + b[0], 0);
-        const sum_x_squared = data.reduce((a, b) => a + b[0] * b[0], 0);
-
-        const variance_x = sum_x_squared - sum_x * sum_x / data.length;
-
-        const cov = data.reduce((a, b) => a + b[0] * b[1], 0) - sum_x * sum_y / data.length;
-
-        const b = cov / variance_x;
-        const a = sum_y / data.length - b * sum_x / data.length;
-
-        if (isNaN(b) || isNaN(a)) {
+        if (x.length() < 2) {
+            // Cannot make linear model, number of rows < 2
             return undefined;
         }
+
+        const xVar = this.variance(x);
+        const xyCov = this.covariance(x, y);
+        const yMean = this.mean(y);
+        const xMean = this.mean(x);
+        if (xVar == null || xyCov == null || yMean == null || xMean == null) {
+            return undefined;
+        }
+        const beta = xyCov / xVar;
+        const alpha = yMean - beta * xMean;
 
         return (x: number) => {
-            return a + b * x;
+            return alpha + beta * x;
         }
-
     }
 
     valueCounts<T>(column: ITidyBaseColumn<T>): Map<T, number> {
@@ -420,6 +470,10 @@ class TidyMathImpl implements ITidyMath {
         })
         return counts;
     }
+}
+
+function roundFloatingPointNumber(num: number, decimals = 0) {
+    return Math.round(num * Math.pow(10, decimals) + Number.EPSILON) / Math.pow(10, decimals);
 }
 
 /**

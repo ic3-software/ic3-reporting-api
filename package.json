@@ -1,9 +1,9 @@
 {
   "name": "@ic3/reporting-api",
-  "version": "8.0.0-alpha.12",
+  "version": "8.0.0-alpha.15",
   "description": "icCube dashboards API",
-  "homepage": "https://github.com/iccube-software/ic3-reporting-api",
-  "repository": "https://github.com/iccube-software/ic3-reporting-api",
+  "homepage": "https://github.com/ic3-software/ic3-reporting-api",
+  "repository": "https://github.com/ic3-software/ic3-reporting-api",
   "type": "commonjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,13 +14,14 @@
     "access": "public"
   },
   "devDependencies": {
-    "@material-ui/core": "5.0.0-beta.4",
+    "@mui/material": "5.0.4",
+    "@mui/system": "5.0.4",
     "@types/googlemaps": "3.43.3",
     "@types/markerclustererplus": "2.1.33",
-    "@types/node": "16.6.1",
-    "@types/react": "17.0.18",
+    "@types/node": "16.11.4",
+    "@types/react": "17.0.32",
     "del-cli": "4.0.1",
-    "typescript": "4.3.5"
+    "typescript": "4.4.4"
   },
   "scripts": {
     "build": "del-cli dist && npx tsc",

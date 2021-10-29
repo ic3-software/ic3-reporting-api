@@ -2,15 +2,16 @@
 
 Several working examples with their source code are available:
 
-### [ic3-demo-plugin-js](https://github.com/iccube-software/ic3-demo-plugin-js)
+### [ic3-demo-plugin-js](https://github.com/ic3-software/ic3-demo-plugin-js)
 
-This example is creating new widgets using plain Javascript/Typescript code (i.e., no dependency on React).
+This example is creating new widgets and transformation using plain Javascript/Typescript code
+(i.e., no dependency on React).
 
-### [ic3-demo-plugin-react](https://github.com/iccube-software/ic3-demo-plugin-react)
+### [ic3-demo-plugin-react](https://github.com/ic3-software/ic3-demo-plugin-react)
 
 This example is creating new widgets using React and Material-UI (Typescript).
 
-### [ic3-demo-plugin-theme](https://github.com/iccube-software/ic3-demo-plugin-theme)
+### [ic3-demo-plugin-theme](https://github.com/ic3-software/ic3-demo-plugin-theme)
 
 This example is creating a new theme.
 

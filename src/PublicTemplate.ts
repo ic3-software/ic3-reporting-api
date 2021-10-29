@@ -1,18 +1,101 @@
 import {ITidyTable} from "./PublicTidyTable";
-import {ChartTemplateDataMapping, TidyColumnsType} from "./PublicTidyTableTypes";
 import {ITidyTableInteraction} from "./PublicTidyTableInteractions";
 import {IWidgetPublicContext} from "./PublicContext";
-import {FormFieldDef, FormFieldObject, FormFields} from "./PublicTemplateForm";
+import {FormFieldDef, FormFieldObject, FormFields, IFormColumnChooserFieldDef} from "./PublicTemplateForm";
 import {IWidgetVariantManager} from "./IWidgetVariantManager";
 import {ITidyColumn} from "./PublicTidyColumn";
 import {ReactElement} from "react";
-import {Theme} from "@material-ui/core/styles";
+import {Theme} from "@mui/material/styles";
 
 type ChartTemplateWidgetProps = any;
 
 export type IPublicWidgetTemplateDefinition<T extends FormFieldObject> =
     IPublicWidgetReactTemplateDefinition<T> | IPublicWidgetJsTemplateDefinition<T>;
 
+export enum IWidgetTemplateMdxBuilderAxisPropsConstraint {
+    DateType = 'DateType',
+    GeoLatLong = 'GeoLatLong',
+    GeoIso2Code = 'GeoIso2Code',
+}
+
+export interface IWidgetTemplateMdxBuilderAxisProps {
+
+    /**
+     * Unique name used in the UI and if mdxAxisName not defined for building the query.
+     * If name is 'rows' for example, then in the query it will use 'ON "rows"'.
+     */
+    name: string,
+
+    /**
+     * The axis can be empty
+     */
+    isOptional?: true;
+
+    /**
+     * All axes with the same (not null) value for mdxAxisName are put as a tuple on the same axis. The axis name
+     * of the first one in the set is used.
+     */
+    mdxAxisName?: string,
+
+    /**
+     * Disable empty
+     */
+    disableNonEmpty?: true;
+
+    /**
+     * For filters add lazy load feature to the axis
+     */
+    addLazyLoad?: true;
+
+    /**
+     * Allow only a single member
+     */
+    singleMember?: true,
+
+    /**
+     * Allow a multiple hierarchies to build a crossjoin
+     */
+    multipleHierarchy?: true,
+
+    /**
+     * Additional constraints for the set/members
+     */
+    constraint?: IWidgetTemplateMdxBuilderAxisPropsConstraint;
+
+    decoration?: {
+        with?: string,
+        set: string,
+    }
+
+    /**
+     * Show the mdxAxis names in this order in the builder
+     */
+    showOrder?: number;
+}
+
+export interface IWidgetTemplateMdxBuilderMapping {
+
+    /**
+     * The order determines the order of the statements in the query. E.g., the first position is ON 0, the second ON 1,
+     * etc., where '0' and '1' are replaced by the name.
+     */
+    mdxAxis: Readonly<IWidgetTemplateMdxBuilderAxisProps[]>;
+
+    /**
+     * The generated Mdx is for a filter (the cell values are not of interest)
+     */
+    mdxIsForFilter?: true;
+
+    /**
+     * the cell values are not needed
+     */
+    withoutCellValues?: true;
+
+    /**
+     * an MDX query if the builder is empty
+     */
+    mdxQueryIfEmpty?: boolean;
+}
 
 /**
  * A widget that renders using React.
@@ -74,6 +157,17 @@ export interface IPublicWidgetJsTemplateDefinition<T extends FormFieldObject> ex
     reactComponent?: false;
 }
 
+
+/**
+ * List of special selection granularities (column selectors)
+ */
+
+export enum SelectionGranularityOptions {
+    PivotTableTopHeader = 'ic3pivotTableTopHeader',
+    PivotTableLeftHeader = 'ic3pivotTableLeftHeader',
+    PivotTableCell = 'ic3pivotTableCell',
+}
+
 /**
  * Definition - static - of a widget template
  */
@@ -86,7 +180,7 @@ interface IPublicCommonWidgetTemplateDefinition {
     type: WidgetTemplateDefinitionType;
 
     /**
-     * Unique within the plugin. Must not contain any dot.
+     * Unique within the plugin. Must not contain any dot (this is NOT the templateId)
      *
      * The widget chooser is using that id to localize its name and description.
      *
@@ -96,6 +190,11 @@ interface IPublicCommonWidgetTemplateDefinition {
      * </pre>
      */
     id: string;
+
+    /**
+     * Internal usage: while investigating lazy registration (setup upon registration).
+     */
+    debug?: string;
 
     /**
      * Internal usage: pluginId.templateId (setup upon registration).
@@ -168,7 +267,9 @@ interface IPublicCommonWidgetTemplateDefinition {
 
     withoutSelection?: boolean;
     withoutDrilldown?: boolean;
+    withoutEvents?: boolean;
     withoutUserMenu?: boolean;
+    withoutGlobalFilter?: boolean;
 
     renderIfNotInViewport?: boolean;
 
@@ -190,7 +291,7 @@ interface IPublicCommonWidgetTemplateDefinition {
     withOptionAutoExpandKeepTableHeader?: boolean;
 
     /**
-     * When defined, set the option as invisible and its value.
+     * If and only if not null, hide option 'Interactions' > 'Drilldown' > 'Pivot Table Like' and set it default value to withDrilldownPivotTableLikeAs.
      */
     withDrilldownPivotTableLikeAs?: boolean;
 
@@ -198,9 +299,22 @@ interface IPublicCommonWidgetTemplateDefinition {
     userMenuOptionsOnEditing?: string[];
 
     /**
+     * Disables the user menu option to switch between selection and drilldown
+     *
+     * E.g a Pivot table can manage both modes
+     */
+    userMenuDisableInteractionMode?: boolean;
+
+    /**
      * @deprecated
      */
     withoutTidyTable?: boolean;
+
+    /**
+     * This widget knows how to render a result without any data.
+     * (e.g., data picker)
+     */
+    handlesNoData?: boolean;
 
     /**
      * This widget is responsible to notify its rendered status. Required with asynchronous rendering
@@ -213,19 +327,21 @@ interface IPublicCommonWidgetTemplateDefinition {
     eventRoles?: ITemplateEventActionDef;
 
     selection?: {
-
         /**
          * The list of columns that can be part of the selection. The end-user can then select the actual
          * columns from the Interaction/Selection configuration (see Selection Granularity).
          */
         allowedColumns: (column: ITidyColumn) => boolean;
 
+        optionValues?: undefined;
+
+    } | {
+        allowedColumns?: undefined;
+
+        optionValues?: SelectionGranularityOptions[];
     }
 
-    /**
-     * The meta information that defined which data column to use in the widget.
-     */
-    dataMappingMeta?: IWidgetTemplateDataMappingDef[];
+    mdxBuilderSettings?: IWidgetTemplateMdxBuilderMapping;
 
     /**
      * The meta information required for editing the widget options.
@@ -277,7 +393,6 @@ export enum WidgetTemplateDefinitionType {
 
 export interface IChartVisualizationInput {
 
-    mapping: ChartTemplateDataMapping;
     table: ITidyTable;
     inter: ITidyTableInteraction;
 
@@ -289,7 +404,6 @@ export interface IWidgetTemplateTidyData {
     table: ITidyTable;
     inter: ITidyTableInteraction;
 
-    mapping: ChartTemplateDataMapping;
 }
 
 
@@ -297,51 +411,16 @@ export interface IChartVisualizationTypedInput<T extends FormFieldObject> {
 
     table: ITidyTable;
     inter: ITidyTableInteraction;
-    mapping: ChartTemplateDataMapping;
 
     options: T;
 }
 
 /**
- * The mapping meta describes the coordinate system of the chart (e.g. axis, groups, values).
- * An error occurs when the columns in the mapping do not uniquely identify each row in the table.
+ * The mapping meta are all the column that the user can select in the chart options. These options are checked for
+ * validity. The widget generates an error if columns are selected that are not in the allowed properties, or if
+ * columns are mandatory but there is no selection or fallback.
  */
-export interface IWidgetTemplateDataMappingDef {
-
-    /**
-     * The alias for the column.
-     */
-    mappingName: string;
-
-    /**
-     * When defined, adds the mapping options to a group in the widget editor.
-     */
-    mappingGroup?: string;
-
-    /**
-     * When defined, the value is added as a prefix to the fieldPath to defined the localization tag.
-     */
-    mappingTag?: string;
-
-    /**
-     * Only columns of this/these type(s) are allowed.
-     */
-    allowedTypes: TidyColumnsType[] | ((column: ITidyColumn) => boolean);
-
-    /**
-     * If true, fallback to a column that is both an Mdx axis and has a type that is allowed.
-     * Note, properties of columns are not considered.
-     */
-    fallback?: boolean;
-
-    /**
-     * A column must be mapped to this alias, either by fallback or by user input.
-     * Throw an error of no column is mapped to this alias.
-     */
-    mandatory?: boolean;
-
-    isForDrilldown?: boolean;
-}
+export type IWidgetTemplateDataMappingDef = IFormColumnChooserFieldDef;
 
 /**
  * Predefined roles

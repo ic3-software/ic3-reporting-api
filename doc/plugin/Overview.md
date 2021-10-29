@@ -10,9 +10,9 @@ favourite libraries. See the working example section below.
 
 Note that Material-UI 5.x is required for accessing and developing a new theme.
 
-### Github Project
+### GitHub Project
 
-The dev. kit source code is available on Github [here](https://github.com/iccube-software/ic3-reporting-api).
+The dev. kit source code is available on GitHub [here](https://github.com/ic3-software/ic3-reporting-api).
 
 ### Working Examples
 

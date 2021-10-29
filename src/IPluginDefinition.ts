@@ -3,7 +3,7 @@ import {IThemeManager} from "./IThemeManager";
 import {IWidgetManager} from "./IWidgetManager";
 import {ITidyTableTransformationManager} from "./ITidyTableTransformationManager";
 import {IWidgetDefaultsManager} from "./IWidgetDefaultsManager";
-import {Theme} from "@material-ui/core/styles";
+import {Theme} from "@mui/material/styles";
 
 export interface IPluginDefinition {
 

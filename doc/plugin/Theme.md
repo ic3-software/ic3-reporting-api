@@ -33,7 +33,7 @@ theme.palette.ic3 = {
     selected: '#a05195',
 
     /**
-     * list of palettes available in the reporting
+     * list of palettes available in the Dashboards application
      */
     chartPalettes: {
         default: ["#e07a5f", "#f4f1de", "#3d405b", "#81b29a", "#f2cc8f"],
@@ -97,13 +97,13 @@ theme.components.WidgetBox = {
 
 After definition, the `Rounded` variant will be available in the dropdown of the Widget Editor (Box tab).
 
-For additional information check [ic3-demo-plugin-theme](https://github.com/iccube-software/ic3-demo-plugin-theme)
-in Github.
+For additional information check [ic3-demo-plugin-theme](https://github.com/ic3-software/ic3-demo-plugin-theme)
+in GitHub.
 
 ### Defining a new Theme
 
 To define a new theme we advise you to look at
-the [ic3-demo-plugin-theme](https://github.com/iccube-software/ic3-demo-plugin-theme)
+the [ic3-demo-plugin-theme](https://github.com/ic3-software/ic3-demo-plugin-theme)
 project as base or inspiration. This plugin contains a theme only for the sake of simplicity but a plugin can contain
 both a theme and widget definitions.
 
@@ -111,6 +111,6 @@ Bear in mind, you are free to add new fields to your theme to use across your wi
 Javascript/Typescript objects and can hold primitive types as well as function.
 
 Looking for inspiration? You can check
-[Material UI Theme Builder](https://next.material-ui.com/customization/theming/#theme-builder)
+[Material UI Theme Builder](https://next.material-ui.com/customization/theming#theme-builder)
 and [Mui Treasury site](https://mui-treasury.com/),  
 

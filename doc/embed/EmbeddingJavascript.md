@@ -10,7 +10,7 @@ This integration allows for a two ways communication between the host applicatio
 - listen to events from a dashboard,
 - etc...
 
-The source code of a running [example](https://github.com/iccube-software/ic3-demo-embedded-iframe-react)
+The source code of a running [example](https://github.com/ic3-software/ic3-demo-embedded-iframe-react)
 is available for more (up to date) details.
 
 ### Loading icCube
@@ -84,7 +84,7 @@ Dashboards parameters are used to initialize the initial value of the dashboard'
 selection of the filters (or charts/tables acting as filters) that are publishing a selection event with the names of
 the parameters.
 
-You can check the `FilterDashboard.tsx` in the source code of the live example as mentioned earlier.
+You can check the `Dashboard2wayFilterSync.tsx` in the source code of the live example as mentioned earlier.
 
 #### Sending Events to icCube Dashboards
 
@@ -108,7 +108,7 @@ Note that the unique name is an actual MDX unique name.
 ##### Query Generation
 
 Note that event values are not limited to filter widgets. Indeed, an event value can for example be used to generate the
-actual query being used by a dashboard widget. Have a look to the `QueriesDashboard.tsx`
+actual query being used by a dashboard widget. Have a look to the `Dashboard1wayDynamicQuery.tsx`
 in the source code of the live example as mentioned earlier.
 
 #### Listen to Events from icCube Dashboards
@@ -116,6 +116,21 @@ in the source code of the live example as mentioned earlier.
 The `IReportin.onEvent()` allows for listening events fired in the opened dashboard and to for example keep the host
 application synchronized with the dashboard.
 
-You can check the `FilterDashboard.tsx` in the source code of the live example as mentioned earlier.
+You can check the `Dashboard2wayFilterSync.tsx` in the source code of the live example as mentioned earlier.
+
+#### Sending Notifications to icCube Dashboards
+
+Notifications can be thought of as an action triggered by the host application. For example, the host application can
+request icCube to print the opened dashboard.
+
+```javascript
+reporting.fireAppNotification({
+    type: "print-report",
+    payload: {
+        paperSizeName: "A4",
+        fileName: "my-report.pdf"
+    }
+});
+```
 
 _

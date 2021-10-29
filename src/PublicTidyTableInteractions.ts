@@ -3,7 +3,7 @@ import {ITidyBaseColumn, ITidyColumn} from "./PublicTidyColumn";
 import {ILazyTreeViewLoader} from "./LazyTreeView";
 import {PublicIcEvent} from "./IcEvent";
 import {ReactElement} from "react";
-import {Theme} from "@material-ui/core/styles";
+import {Theme} from "@mui/material/styles";
 
 export enum SelectionMode {
     /**
@@ -180,7 +180,9 @@ export interface ITidyTableInteractionEvent {
     /**
      * actionName if the action is bound to a channel, sends the events ( e.g. 'onClick' to the channel 'year' )
      */
-    fireEvent(actionName: string, column: ITidyColumn, rowIdx: number | number[]): void;
+    fireEvent(actionName: string, column: ITidyColumn | ITidyColumn[] | undefined, rowIdx: number | number[]): void;
+
+    fireClearEvent(actionName: string): void;
 
     /**
      * actionName if the action is bound to a channel, sends the emptySet event, ∅
@@ -256,5 +258,7 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
     asLazyTreeViewLoader(column: ITidyColumn): ILazyTreeViewLoader;
 
     getCompactedSelectionNames(): string[] | undefined;
+
+    isSelectable(col: ITidyColumn): boolean;
 }
 
