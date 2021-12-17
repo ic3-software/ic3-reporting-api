@@ -1,14 +1,14 @@
 import {
     AxisCoordinate,
+    ConvertToTypeParseSettings,
     EntityItem,
     IMdxAxisSeriesInfo,
     ITidyColumnsSource,
     ITidyTableSelection,
     MdxInfo,
     MdxMemberCoordinates,
-    SortingType,
     TidyCellError,
-    TidyColumnCoordinateUniqueName,
+    TidyColumnsSubType,
     TidyColumnsType,
 } from "./PublicTidyTableTypes";
 import {TidyActionEvent} from "./IcEvent";
@@ -16,7 +16,32 @@ import {ReactElement} from "react";
 import {ThemeTextFormatter} from "./PublicTheme";
 import {Property} from "csstype";
 import {AppNotification} from "./INotification";
-import {ITidyTable} from "./PublicTidyTable";
+
+export interface ITidyColumnTypedValue {
+
+    value: any;
+    type: TidyColumnsType;
+
+}
+
+export type ITidyColumnAddValue = ITidyColumnAddValueInsert | ITidyColumnAddValueCopyRow;
+
+export interface ITidyColumnAddValueInsert {
+
+    options: "INSERT";
+
+    value: ITidyColumnTypedValue;
+    fValue?: string;
+
+}
+
+export interface ITidyColumnAddValueCopyRow {
+
+    options: "COPY_ROW";
+
+    rowIndex: number;
+
+}
 
 /**
  * Properties with a special meaning
@@ -99,6 +124,21 @@ export enum ITidyColumnNamedProperties {
     tooltip = "tooltip",
 }
 
+export const CharacterTidyColumnProperties = new Set<string>([
+
+    ITidyColumnNamedProperties.mdxCellFormattedValue,
+    ITidyColumnNamedProperties.uniqueName,
+
+    ITidyColumnNamedProperties.mdxCellFormatString,
+
+    ITidyColumnNamedProperties.appNotificationType,
+    ITidyColumnNamedProperties.eventName,
+
+    ITidyColumnNamedProperties.caption,
+    ITidyColumnNamedProperties.tooltip,
+
+]);
+
 /**
  * A copy from XLSX CellObject (we don't want the link to the library !)
  */
@@ -143,7 +183,9 @@ export interface ITidyColumnXlsxCell {
     s?: any;
 }
 
-type NonNullable<T> = Exclude<T, null | undefined>;  // Remove null and undefined from T
+// Remove null and undefined from T
+type NonNullable<T> = Exclude<T, null | undefined>;
+
 export type AllowedColumnType<T> = TidyColumnsType.UNKNOWN
     | TidyColumnsType.MIXED
     | (NonNullable<T> extends Property.Color ? TidyColumnsType.COLOR : TidyColumnsType.UNKNOWN)
@@ -155,10 +197,46 @@ export type AllowedColumnType<T> = TidyColumnsType.UNKNOWN
     | (NonNullable<T> extends unknown ? TidyColumnsType : TidyColumnsType.UNKNOWN)
     | (T extends null ? TidyColumnsType.NULL : TidyColumnsType.UNKNOWN);
 
-/**
- * Base interface for nullable column.
- */
-export interface ITidyBaseColumn<T> {
+export interface ITidyBaseColumnReadonly<T> {
+
+    /**
+     * Returns the length of the value array.
+     */
+    length(): number;
+
+    /**
+     * Returns true if and only if the column has zero rows.
+     */
+    isEmpty(): boolean;
+
+    getSource(): ITidyColumnsSource;
+
+    /**
+     * Get the MDX role of the column
+     */
+    getRole(): string | undefined;
+
+    /**
+     * Return the type of the column
+     */
+    getType(): AllowedColumnType<T>;
+
+    /**
+     * E.g., datetime column: YEAR, ...
+     */
+    getSubType(): TidyColumnsSubType | undefined;
+
+    /**
+     * Check if column is of type
+     * @param type check this type
+     */
+    is<T extends TidyColumnsType>(type: T): this is ITidyColumnIsType<T>;
+
+    /**
+     * Returns true if and only if the column is of the type(s) specified
+     * @param typesToCheck one or more types to check this column against
+     */
+    isOfType(...typesToCheck: TidyColumnsType[]): boolean;
 
     /**
      * Returns the name of the column.
@@ -166,13 +244,9 @@ export interface ITidyBaseColumn<T> {
     getName(): string;
 
     /**
-     * Set the name of the column.
-     * @param name set this as the caption of the column.
-     *
-     * Note, do not use this for columns that are in tables as it can cause duplicate columns in a table.
-     * Use setCaption to change the name visible to the user.
+     * Get the display name of the column. Both the name and the caption form the display name of the column.
      */
-    setName(name: string): void;
+    getDisplayName(): string;
 
     /**
      * Returns the caption of the column. The caption is used for displaying localised
@@ -181,11 +255,24 @@ export interface ITidyBaseColumn<T> {
     getCaption(): string;
 
     /**
-     * Set the caption of the column. The caption is used for displaying localised
-     * or custom captions for the axis, header, etc.
-     * @param caption set this as the caption of the column.
+     * Returns the formatter of the column.
      */
-    setCaption(caption: string): void;
+    getNumberFormat(): ThemeTextFormatter | undefined;
+
+    /**
+     * Returns true if the column is a hierarchical structure
+     */
+    isHierarchy(): boolean;
+
+    /**
+     * For hierarchical structures the tree depth (starts at zero).
+     */
+    getLevelDepthR(idx: number): number;
+
+    /**
+     * Returns the column values.
+     */
+    getValues(): ReadonlyArray<T>;
 
     /**
      * Get the value of the column at position idx.
@@ -194,24 +281,48 @@ export interface ITidyBaseColumn<T> {
     getValue(idx: number): T;
 
     /**
-     * Set the value of a column at a certain index.
-     * @param idx row index.
-     * @param newValue new value for the column.
+     * Function used for value comparison in sorting and ranking. Return a positive number if a > b, a negative
+     * number if a < b and 0 otherwise.
+     * @param a value 1
+     * @param b value 2
      */
-    setValue(idx: number, newValue: T): void;
+    compare(a: T, b: T): number;
 
     /**
-     * Add a value to the column making the length of the column 1 longer.
-     * @param value
-     */
-    pushValue(value: T): void;
-
-    /**
-     * Get cell as expected by xlsx library (do not include the interface as it's lazy loaded !)
+     * Apply a function to the groups of unique values in this column
      *
-     * @param idx the position to return the value of.
+     * @return a map with the string value and the row indices in the group.
      */
-    getExcelCell(idx: number): ITidyColumnXlsxCell | undefined;
+    groupBy(): Map<string, number[]>;
+
+    /**
+     * Same as reIndex but creating a new column leaving this column untouched.
+     *
+     * @see ITidyBaseColumn.reIndex
+     */
+    reIndexN(index: number[]): ITidyBaseColumn<T>;
+
+}
+
+/**
+ * Base interface for nullable column.
+ */
+export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
+
+    getErrors(): (TidyCellError | undefined)[];
+
+    /**
+     * If an error occurred in the calculation of cells for a column, then the error can be
+     * retrieved using this function.
+     * @param idx the row index of the cell to retrieve the error of.
+     */
+    getError(idx: number): TidyCellError | undefined;
+
+    /**
+     * Returns first value where callback does not return undefined.
+     * @param callback given the row index, outputs a value or undefined.
+     */
+    findFirst<P>(callback: (idx: number) => P | undefined): P | undefined;
 
     /**
      * Get the formatted value of the column at position idx.
@@ -224,244 +335,34 @@ export interface ITidyBaseColumn<T> {
     getFormattedValue(idx: number): string | undefined;
 
     /**
-     * Get the source of the column
-     */
-    getSource(): ITidyColumnsSource;
-
-    /**
-     * Get the source of the column
-     */
-    setSource(source: ITidyColumnsSource): void;
-
-    /**
      * Return the formatted value. Fallback on the value itself.
      */
     getFormattedValueOrValue(idx: number): string | undefined;
 
-    /**
-     * Set the number formatter of the column, calculating and adding the 'formattedValue' property.
-     */
-    setNumberFormat(format: ThemeTextFormatter | undefined): void;
-
-    /**
-     * Set the formatted values. Use this if you have the formatted values pre-calculated or a function to calculate
-     * the formatted values.
-     */
-    setFormattedValues(formattedValues: (string | null)[] | ((value: T | undefined) => string)): void;
-
-    /**
-     * Returns the formatter of the column.
-     */
-    getNumberFormat(): ThemeTextFormatter | undefined;
-
     getNumberFormatInfo(): string | undefined;
 
     /**
-     * Returns the column values.
-     */
-    getValues(): Array<T>;
-
-    /**
-     * Set the values of this column. Ensure that the length remains the same, if not, an error is thrown.
-     * @param values new values of the column.
-     */
-    setValues<P>(values: P[]): void;
-
-    /**
-     * Return a new column with transformed values.
-     * @param fun function with one parameter. Describes the transformation.
-     * @param columnName the name of the new column.
-     * @param newType new type for the column. Leave blank for auto inference of the type.
-     */
-    mapToColumn<P>(fun: (value: T, index: number) => P, columnName: string, newType?: AllowedColumnType<P>): ITidyBaseColumn<P>;
-
-    /**
-     * Apply a transformation to all values in the column. Note, this functions alters the values in the column.
-     * @param fun function with one parameter. Describes the transformation. In the function, index represents the
-     * index of the internal data structure.
-     * @param newType new type for the column. Leave blank for auto inference of the type.
-     */
-    apply<P>(fun: (value: T, index: number) => P, newType?: AllowedColumnType<P>): void;
-
-    /**
-     * Fill the column with a single value.
-     */
-    fill<P>(value: P): void;
-
-    /**
-     * Get the unique values in this column.
-     */
-    unique(): T[];
-
-    /**
-     * Get the axis values in this column.
+     * Get cell as expected by xlsx library (do not include the interface as it's lazy loaded !)
+     * Does not return the format string.
      *
-     * If it's an MDX Axis, the potentially sorted MDX axis (e.g. pivot table sort)
-     *
-     * If it's not, return undefined
+     * @param idx the position to return the value of.
      */
-    mdxAxis(): T[] | undefined;
+    getExcelCell(idx: number): ITidyColumnXlsxCell | undefined;
 
     /**
-     *
-     * if it's an mdx axis, for each row of the undelying mdx Axis
-     * if no, for each row
-     *
-     * @see mdxAxis
+     * Returns the type for Material-UI Table/Grid
      */
-    mapAxisOrRows<K>(callbackfn: (rowIdx: number, column: ITidyBaseColumn<T>) => K): K[];
+    getXGridType(): "string" | "number" | "date" | "dateTime" | "boolean" | undefined;
 
     /**
-     * Get the array of mdx info in the column. Returns an empty array if there is no mdx info.
+     * Return the cell decoration of the column
      */
-    getMdxInfos(): MdxInfo[];
-
-    /**
-     * Returns true if and only if the column has zero rows.
-     */
-    isEmpty(): boolean;
-
-    /**
-     * Returns the length of the value array.
-     */
-    length(): number;
-
-    /**
-     * Sort the values of the column. Edge cases such as NaN and null are sorted to the end of the column.
-     * Sort ascending by default.
-     */
-    sort(order?: SortingType): void;
-
-    /**
-     * Get the ranking of the values. Smallest value gets rank 0,
-     * second smallest rank 1, etc. until rank n-1. Sort ascending by default.
-     * @param order sorting order. Default = ascending.
-     */
-    getRank(order?: SortingType): number[];
-
-    /**
-     * Export the column as a flat object.
-     */
-    toChartData(): { [key: string]: T }[];
-
-    /**
-     * Returns the mdx info at a row index.
-     *
-     * If the column is an axis (e.g. measure one), it's the same for all rows
-     */
-    getMdxInfo(idx: number): MdxInfo;
-
-    isWithEntityItem(): boolean;
-
-    /**
-     * Create and return the entity item at position idx for generating events
-     */
-    getEntityItem(idx: number): EntityItem;
-
-    /**
-     * Get the mdx coordinates of the cell at rowIdx
-     */
-    getMdxCoordinates(rowIdx: number): MdxMemberCoordinates | undefined;
-
-    /**
-     * Returns true if the column is a hierarchical structure
-     */
-    isHierarchy(): boolean;
-
-    /**
-     * Get the index of the parent. Returns idx if there is no hierarchy.
-     * @param idx the index to find the parent of.
-     */
-    getParentIdx(idx: number): number;
-
-    /**
-     * Returns true if the entry at position idx does not have children
-     * @param idx the position to check
-     */
-    isLeaf(idx: number): boolean;
-
-    /**
-     * Get the indices of the level 0 children of this node. Returns [] if the
-     * column is not a hierarchy.
-     * @param idx
-     */
-    getLeaves(idx: number): number[];
-
-    /**
-     * Return the descendants of the node in the hierarchy at the index.
-     * Returned set excludes the node itself.
-     * @param index
-     */
-    getDescendants(index: number): number[];
-
-    /**
-     * Returns the children of the node in the hierarchy. Excludes the node itself.
-     * @param index
-     */
-    getChildren(index: number): number[];
-
-    /**
-     * Return the siblings of the node in the hierarchy at the index.
-     * Including the node itself.
-     * @param index
-     */
-    getSiblings(index: number): number[];
-
-    /**
-     * @param callbackfn  , if the return value is undefined do not map the row
-     * @param forceMapAllRows
-     */
-    mapAllRows<P>(callbackfn: (index: number, column: ITidyBaseColumn<T>) => P | undefined, forceMapAllRows?: boolean): P[];
-
-
-    /**
-     * Map the rows that are visible given a hierarchical axis and an array of boolean values
-     * @param expanded an array indicating for each index if it is expanded or not. If it is collapsed, then all
-     * children are not visible.
-     * @param fun function to apply
-     */
-    mapVisibleRows<P>(expanded: (rowIdx: number) => boolean, fun: (index: number) => P): P[];
-
-    mapTreeVisibleRows<P extends ReactElement>(expanded: (rowIdx: number) => boolean, fun: (index: number) => P, filter?: (info: MdxInfo) => boolean): P[];
-
-    /**
-     * For hierarchical structures de tree depth, starts at zero.
-     */
-    getLevelDepth(idx: number): number;
-
-    /**
-     * Returns true if and only if the mdx member at rowIdx has children
-     */
-    hasMdxChildren(rowIdx: number): boolean;
-
-    /**
-     * Returns a string representation of the coordinate
-     */
-    getCoordinateUniqueName(rowIdx: number): TidyColumnCoordinateUniqueName;
+    getCellDecoration(): PublicTidyColumnCellDecoration | undefined;
 
     /**
      * Returns true if the column has a property of requested name.
      */
     hasProperty(name: ITidyColumnNamedProperties | string): boolean;
-
-    /**
-     * Returns the property at the specified property coordinate.
-     * @param name name of the property.
-     */
-    getProperty(name: ITidyColumnNamedProperties | string): ITidyUnknownColumn;
-
-    /**
-     * Returns the property at the specified property coordinate.
-     * @param name name of the property.
-     */
-    getOptionalProperty(name: ITidyColumnNamedProperties | string): ITidyUnknownColumn | undefined;
-
-    /**
-     * Get the value of the property for the given property coordinate and the given row (undefined if the property does not exist)
-     * @param name name of the property.
-     * @param rowIdx row index for the value to return.
-     */
-    getPropertyAt(name: ITidyColumnNamedProperties | string, rowIdx: number): any;
 
     /**
      * Returns true if the column has color property or is a color column
@@ -485,35 +386,253 @@ export interface ITidyBaseColumn<T> {
     getColor(rowIdx: number): Property.Color | undefined;
 
     /**
-     * Return available properties for this column as a list of columns.
+     * Returns the property at the specified property coordinate.
+     * @param name name of the property.
      */
-    getProperties(): ITidyUnknownColumn[];
+    getProperty(name: ITidyColumnNamedProperties | string): ITidyUnknownColumn;
 
     /**
-     * Return the properties for the column as a table.
+     * Returns the property at the specified property coordinate.
+     * @param name name of the property.
      */
-    getPropertyTable(): ITidyTable;
+    getOptionalProperty(name: ITidyColumnNamedProperties | string): ITidyUnknownColumn | undefined;
 
     /**
-     * Set a table as the properties for this column. Ensure that the row count of the table is equal to the length
-     * of the column.
-     * @param tableWithProperties table with columns that will become properties of the column.
+     * Get the value of the property for the given property coordinate and the given row (undefined if the property does not exist)
+     * @param name name of the property.
+     * @param rowIdx row index for the value to return.
      */
-    setPropertyTable(tableWithProperties: ITidyTable): void;
+    getPropertyAt(name: ITidyColumnNamedProperties | string, rowIdx: number): any;
 
     /**
      * Return the properties of a column for a given cell index.
+     *
      * @param idx row index of cell.
      */
     getPropertiesAt(idx: number): Record<string, any>;
 
     /**
-     * For each row matching the lookup value call func()
-     *
-     * @param lookupValue
-     * @param func  if false, stop the foreach
+     * Return available properties for this column as a list of columns.
      */
-    forEachMatching(lookupValue: any, func: (rowIdx: number) => void | boolean): void;
+    getPropertiesAsColumns(): ITidyUnknownColumn[];
+
+    isWithEntityItem(): boolean;
+
+    /**
+     * Create and return the entity item at position idx for generating events.
+     */
+    getEntityItem(idx: number): EntityItem | undefined;
+
+    /**
+     * Get the index of the parent. Returns -1 if the parent is the root.
+     * @param idx the index to find the parent of.
+     */
+    getParentIdx(idx: number): number;
+
+    /**
+     * Return the descendants of the node in the hierarchy at the index.
+     * Returned set excludes the node itself.
+     * @param index
+     */
+    getDescendants(index: number): number[];
+
+    /**
+     * Return the siblings of the node in the hierarchy at the index.
+     * Including the node itself.
+     * @param index
+     */
+    getSiblings(index: number): number[];
+
+    /**
+     * Get the default member of the dimension that the column represents. Returns undefined
+     * if the column is not a MDX dimension.
+     */
+    getHierarchyDefaultMember(): EntityItem | undefined;
+
+    /**
+     * Get the mdx coordinate (axeIdx,hierIdx,tupleIdx) of the cell at rowIdx. Defines a member in a MDX Query result axes
+     */
+    getMdxCoordinates(rowIdx: number): MdxMemberCoordinates | undefined;
+
+    /**
+     * Get the array of MDX info in the column.
+     * Returns an empty array if there is no MDX info.
+     */
+    getMdxInfos(): (MdxInfo | undefined)[];
+
+    /**
+     * Returns the MDX info at a row index.
+     */
+    getMdxInfo(idx: number): MdxInfo | undefined;
+
+    /**
+     * Get extra information of the MDX axis used for this column, if available.
+     */
+    getAxisInfo(): IMdxAxisSeriesInfo | undefined;
+
+    /**
+     * Get the MDX axis coordinate, if available.
+     * @see {AxisCoordinate}
+     */
+    getAxisCoordinate(): AxisCoordinate | undefined;
+
+    /**
+     * Get the axis values in this column.
+     *
+     * If it's an MDX Axis, the potentially sorted MDX axis (e.g. pivot table sort)
+     *
+     * If it's not, return undefined
+     */
+    mdxAxis(): ReadonlyArray<T> | undefined;
+
+    /**
+     * Get the unique values in this column.
+     */
+    unique(ignoreNull: boolean): T[];
+
+    /**
+     * Set the name of the column.
+     * @param name set this as the caption of the column.
+     *
+     * Note, do not use this for columns that are in tables as it can cause duplicate columns in a table.
+     * Use setCaption to change the name visible to the user.
+     */
+    setName(name: string): void;
+
+    /**
+     * Set the number formatter of the column, calculating and adding the 'formattedValue' property.
+     */
+    setNumberFormat(format: ThemeTextFormatter | undefined): void;
+
+    /**
+     * Set the caption of the column. The caption is used for displaying localised
+     * or custom captions for the axis, header, etc.
+     * @param caption set this as the caption of the column.
+     */
+    setCaption(caption: string): void;
+
+    /**
+     * Convert the column to another type. This modifies the values to be of that type.
+     *
+     * If type is datetime, then the settings contain the date locale (default='en_US') and
+     * the dateformat (default = 'yyyy-MM-dd').
+     */
+    convertToType(type: TidyColumnsType, settings?: ConvertToTypeParseSettings): void;
+
+    /**
+     * Same as convertToType but creating a new column.
+     */
+    convertToTypeN(type: TidyColumnsType, settings?: ConvertToTypeParseSettings): ITidyBaseColumn<T>;
+
+    /**
+     * Create a new column with the content of this column changing both its name and its caption.
+     */
+    duplicate(name: string, caption: string): ITidyBaseColumn<T>;
+
+    /**
+     * Change the values of the column.
+     * @param values the new values for the column.
+     * @param newType the new type of the column. Leave undefined for automatic inference.
+     */
+    setValues<P>(values: P[], newType?: AllowedColumnType<P>): void;
+
+    /**
+     * Apply a transformation to all values in the column. Note, this functions alters the values in the column.
+     * @param fun function with one parameter. Describes the transformation. In the function, index represents the
+     * index of the internal data structure.
+     * @param newType new type for the column. Leave blank for auto inference of the type.
+     */
+    apply<P>(fun: (value: T, index: number) => P, newType?: AllowedColumnType<P>): void;
+
+    /**
+     * Inserts are sorted according to the insertion indices.
+     *
+     * e.g., add totals.
+     */
+    insertValues(inserts: Map<number, ITidyColumnAddValue>): void;
+
+    /**
+     * Repeat the values in the column.
+     *
+     * Examples:
+     * column.getValues() --> ['a','b','c']
+     * column.repeat(6,1) --> ['a','b','c','a','b','c']
+     * column.repeat(6,2) --> ['a','a','b','b','c','c']
+     * column.repeat(12,2) --> ['a','a','b','b','c','c','a','a','b','b','c','c']
+     *
+     * @param newLength new length of the array.
+     * @param repetition how many times to repeat each value.
+     */
+    repeat(newLength: number, repetition?: number): void;
+
+    /**
+     * Same as repeat but creating a new column leaving this column untouched.
+     *
+     * @see repeat
+     */
+    repeatN(newLength: number, repetition?: number): ITidyBaseColumn<T>;
+
+    /**
+     * Push a value to the end of the column's values.
+     */
+    pushValue(pushValue: ITidyColumnTypedValue): void;
+
+    /**
+     * Apply a new index to the column and its properties (e.g., limiting rows, reordering rows, copying rows).
+     *
+     * Examples:
+     * <pre>
+     *      initial values       -> [ 'a', 'b', 'c']
+     *        reIndex: [2,1,0]   -> [ 'c', 'b', 'a']
+     *        reIndex: [2,2,1]   -> [ 'c', 'c', 'b']
+     *        reIndex: [0,1,2,2] -> [ 'a', 'b', 'c','c']
+     *        reIndex: [0]       -> [ 'a' ]
+     *        reIndex: [0,5]     -> [ 'a', null ]
+     * </pre>
+     *
+     * @param index new row indices
+     *
+     * @see ITidyColumn.reIndexN
+     */
+    reIndex(index: number[]): void;
+
+    /**
+     * Set the formatted values. Use this if you have the formatted values pre-calculated
+     * or a function to calculate the formatted values.
+     */
+    setFormattedValues(formattedValues: (string | null)[] | ((value: T | undefined) => string)): void;
+
+    /**
+     * Return a new column with transformed values.
+     * @param fun function with one parameter. Describes the transformation.
+     * @param columnName the name of the new column.
+     * @param newType new type for the column. Leave blank for auto inference of the type.
+     */
+    mapToColumn<P>(fun: (value: T, index: number) => P, columnName: string, newType: AllowedColumnType<P>): ITidyBaseColumn<P>;
+
+    /**
+     *
+     * if it's an mdx axis, for each row of the undelying mdx Axis
+     * if no, for each row
+     *
+     * @see mdxAxis
+     */
+    mapAxisOrRows<K>(callbackfn: (rowIdx: number, column: ITidyBaseColumn<T>) => K): K[];
+
+    /**
+     * @param callbackfn  if the return value is undefined do not map the row
+     */
+    mapAllRows<P>(callbackfn: (index: number, column: ITidyBaseColumn<T>) => P | undefined, forceMapAllRows?: boolean): P[];
+
+    /**
+     * Map the rows that are visible given a hierarchical axis and an array of boolean values
+     * @param expanded an array indicating for each index if it is expanded or not. If it is collapsed, then all
+     * children are not visible.
+     * @param fun function to apply
+     */
+    mapVisibleRows<P>(expanded: (rowIdx: number) => boolean, fun: (index: number) => P): P[];
+
+    mapTreeVisibleRows<P extends ReactElement>(expanded: (rowIdx: number) => boolean, fun: (index: number) => P, filter?: (info: MdxInfo) => boolean): P[];
 
     /**
      * Set a property on the column. If the property already exists, it is overwritten.
@@ -524,13 +643,7 @@ export interface ITidyBaseColumn<T> {
     /**
      * Delete a property on the column
      */
-    deleteProperty(propertyName: string): void;
-
-    /**
-     * Returns first value where callback does not return undefined.
-     * @param callback given the row index, outputs a value or undefined.
-     */
-    findFirst<P>(callback: (idx: number) => P | undefined): P | undefined;
+    deleteProperty(propertyName: ITidyColumn | string): void;
 
     /**
      * @param column the initial selection as a column
@@ -551,46 +664,12 @@ export interface ITidyBaseColumn<T> {
     findRowIdxForSelection(sel: ITidyTableSelection, colIdx?: number, startIdx?: number): number | undefined;
 
     /**
-     * If an error occurred in the calculation of cells for a column, then the error can be
-     * retrieved using this function.
-     * @param idx the row index of the cell to retrieve the error of.
-     */
-    getError(idx: number): TidyCellError | undefined;
-
-    /**
-     * Set the errors of the column, where error[i] = the error for the column cell at idx i, for i = 0, ..., N-1.
-     */
-    setErrors(errors: (TidyCellError | undefined)[]): void;
-
-    /**
-     * Returns the row index of the first occurrence where the values of this column equals value. Returns undefined
-     * if it did not find the value.
+     * Returns the row index of the first occurrence where the values of this column equals value.
+     * Returns undefined if it did not find the value.
+     *
      * @param value value to search for.
      */
     getRowIndexOf(value: T): number | undefined;
-
-
-    /**
-     * Apply a function to the groups of unique values in this column
-     */
-    groupBy(): Map<T, number[]>;
-
-    /**
-     * Get the default member of the dimension that the column represents. Returns undefined
-     * if the column is not a MDX dimension.
-     */
-    getHierarchyDefaultMember(): EntityItem | undefined;
-
-    /**
-     * Get extra information of the MDX axis used for this column, if available.
-     */
-    getAxisInfo(): IMdxAxisSeriesInfo | undefined;
-
-    /**
-     * Get the MDX axis coordinate, if available.
-     * @see {AxisCoordinate}
-     */
-    getAxisCoordinate(): AxisCoordinate | undefined;
 
     /**
      * For a hierarchical columns returns a a list of transformed colummns  columns as needed by a pivot
@@ -620,136 +699,12 @@ export interface ITidyBaseColumn<T> {
      */
     getEventAction(rowIdx: number): [string, TidyActionEvent] | undefined;
 
-    /**
-     * Insert a column into this column.
-     * @param column column to add.
-     * @param index insert the column at this index. If undefined, insert at the start of the
-     * this column.
-     */
-    insertColumn(column: ITidyColumn, index?: number): void;
-
     mapUniqueNames<T>(uniqueNames: string[], mapper: (idx: number) => T | null | undefined): T[];
-
-    /**
-     * Apply a new index to the column and its properties.
-     *
-     * Examples:
-     * column.getValues() --> ['a','b','c']
-     * column.reIndex([2,1,0]) --> ['c','b','a']
-     * column.reIndex([2,2,1]) --> ['c','c','b']
-     * column.reIndex([0]) --> ['a']
-     * column.reIndex([0,5]) --> ['a',undefined]
-     *
-     * @param index list of integers.
-     * @param keepingAxisOrder
-     */
-    reIndex(index: number[], keepingAxisOrder?: boolean): void;
-
-    /**
-     * Subset the data in a column returning a new column
-     * @param index the row indices to include in the new column
-     */
-    subset(index: number[]): ITidyBaseColumn<T>;
-
-    /**
-     * Repeat the values in the column.
-     *
-     * Examples:
-     * column.getValues() --> ['a','b','c']
-     * column.repeat(6,1) --> ['a','b','c','a','b','c']
-     * column.repeat(6,2) --> ['a','a','b','b','c','c']
-     * column.repeat(12,2) --> ['a','a','b','b','c','c','a','a','b','b','c','c']
-     *
-     * @param newLength new length of the array.
-     * @param repetition how many times to repeat each value.
-     */
-    repeat(newLength: number, repetition?: number): void;
-
-    /**
-     * Function used for value comparison in sorting and ranking. Return a positive number if a > b, a negative
-     * number if a < b and 0 otherwise.
-     * @param a value 1
-     * @param b value 2
-     */
-    compare(a: T, b: T): number;
-
-    /**
-     * Check if column is of type
-     * @param type check this type
-     */
-    is<T extends TidyColumnsType>(type: T): this is ITidyColumnIsType<T>;
-
-    /**
-     * Returns true if and only if the column is of the type(s) specified
-     * @param typesToCheck one or more types to check this column against
-     */
-    isOfType(...typesToCheck: TidyColumnsType[]): boolean;
-
-    /**
-     * Convert the column to another type. This modifies the values to be of that type.
-     *
-     * If type is datetime, then the settings contain the date locale (default='en_US') and
-     * the dateformat (default = 'yyyy-MM-dd').
-     */
-    convertToType(type: TidyColumnsType, settings?: { locale?: string, dateFormat?: string }): void;
-
-    /**
-     * Change the type of the column. Note, only types that model the values in the column are allowed. For conversion,
-     * use {@link convertToType}
-     * @param type
-     */
-    setType(type: AllowedColumnType<T>): void;
-
-    /**
-     * Return the type of the column
-     */
-    getType(): AllowedColumnType<T>;
 
     /**
      * Cell decoration
      */
     setCellDecoration(decoration: PublicTidyColumnCellDecoration): void;
-
-    /**
-     * Return the celldecoration of the column
-     */
-    getCellDecoration(): PublicTidyColumnCellDecoration;
-
-    /**
-     * Set a value in the cache of the column.
-     */
-    setCachedValue(key: string, value: any): void;
-
-    /**
-     * Get a value from the columns cache.
-     */
-    getCachedValue(key: string): any;
-
-    /**
-     * Clear the columns cache.
-     */
-    clearCache(): void;
-
-    /**
-     * Returns the type for Material-UI Table/Grid
-     */
-    getXGridType(): "string" | "number" | "date" | "dateTime" | "boolean" | undefined;
-
-    /**
-     * Get the display name of the column. Both the name and the caption form the display name of the column.
-     */
-    getDisplayName(): string;
-
-    /**
-     * Get the MDX role of the column
-     */
-    getRole(): string | undefined;
-
-    /**
-     * Set the role of the column.
-     * @param role
-     */
-    setRole(role: string | undefined): void;
 }
 
 export type PublicTidyColumnCellDecoration = Partial<{
@@ -758,13 +713,13 @@ export type PublicTidyColumnCellDecoration = Partial<{
 
     appliesToCell: (rowIdx: number) => boolean;
 
-    rendered: (rowIdx: number) => React.ReactElement;
+    rendered: (rowIdx: number, sizing?: { width: number, height: number }) => React.ReactElement;
 
     cssStyles: (rowIdx: number) => Record<string, any> | undefined;
 }>;
 
 export type ITidyColumn = ITidyBaseColumn<any>;
-export type ITidyUnknownColumn = ITidyBaseColumn<unknown>;
+export type ITidyUnknownColumn = ITidyBaseColumn<unknown | null>;
 export type ITidyNullColumn = ITidyBaseColumn<null>;
 export type ITidyNumericColumn = ITidyBaseColumn<number | null>;
 export type ITidyCharacterColumn = ITidyBaseColumn<string | null>;
@@ -776,8 +731,8 @@ export type ITidyListColumn = ITidyBaseColumn<any[] | null>;
 export type ITidyColumnIsType<T extends TidyColumnsType> =
     T extends TidyColumnsType.ANY ? ITidyColumn :
         T extends TidyColumnsType.COLOR ? ITidyColorColumn :
-            T extends TidyColumnsType.LONGITUDE ? ITidyBaseColumn<number> :
-                T extends TidyColumnsType.LATITUDE ? ITidyBaseColumn<number> :
+            T extends TidyColumnsType.LONGITUDE ? ITidyBaseColumn<number | null> :
+                T extends TidyColumnsType.LATITUDE ? ITidyBaseColumn<number | null> :
                     T extends TidyColumnsType.ISO2_LOCATION_CODE ? ITidyCharacterColumn :
                         T extends TidyColumnsType.DATETIME ? ITidyDateColumn :
                             T extends TidyColumnsType.NUMERIC ? ITidyNumericColumn :

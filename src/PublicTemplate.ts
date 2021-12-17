@@ -38,6 +38,11 @@ export interface IWidgetTemplateMdxBuilderAxisProps {
     mdxAxisName?: string,
 
     /**
+     * The test used to generated the axis role (see KPI card).
+     */
+    mdxAxisRole?: string;
+
+    /**
      * Disable empty
      */
     disableNonEmpty?: true;
@@ -271,6 +276,11 @@ interface IPublicCommonWidgetTemplateDefinition {
     withoutUserMenu?: boolean;
     withoutGlobalFilter?: boolean;
 
+    /**
+     * Otherwise the widget box is rendering a floating icon to mention some data errors.
+     */
+    handleCellsOnError?: boolean;
+
     renderIfNotInViewport?: boolean;
 
     /**
@@ -296,6 +306,10 @@ interface IPublicCommonWidgetTemplateDefinition {
     withDrilldownPivotTableLikeAs?: boolean;
 
     userMenuOptions?: string[];
+
+    /**
+     * Additional widget user menu options when in editing mode.
+     */
     userMenuOptionsOnEditing?: string[];
 
     /**
@@ -369,7 +383,7 @@ interface IPublicCommonWidgetTemplateDefinition {
      */
     reactComponent?: boolean;
 
-    resolveDefinition?: () => Promise<IPublicWidgetTemplateDefinition<any>>;
+    resolveDefinition?: (library: IResolveDefinitionLibrary) => Promise<IPublicWidgetTemplateDefinition<any>>;
 
     /**
      * When defining new widgets using amCharts 4, this method registers the icCube license.
@@ -466,5 +480,11 @@ export interface ITemplateEventActionDef {
      * The actions subscribing to the 'selection' channel
      */
     selectionSubscribe?: string;
+
+}
+
+export interface IResolveDefinitionLibrary {
+
+    wrapTemplateDefinition(id: string): Promise<IPublicWidgetTemplateDefinition<any>>;
 
 }

@@ -43,9 +43,9 @@ Keep that name simple (i.e., ASCII letter without any space, separator, etc...) 
 (once deployed into an icCube server), Webpack module name, localization id, etc... That name must be unique across all
 the plugins loaded into an icCube server.
 
-### Debug
+### Develop
 
-Refer to this [page](./Debug.md) that is explaining how to debug a plugin.
+Refer to this [page](./Develop.md) that is explaining how to develop a plugin.
 
 ### Build/Deploy
 

@@ -20,6 +20,8 @@ import {FilterButtonsClassKey, FilterButtonsProps} from "./theme/ThemeFilterButt
 import {FilterSliderClassKey, FilterSliderProps} from "./theme/ThemeFilterSlider";
 import {GoogleMapMarkerProps} from "./theme/ThemeGoogleMapMarker";
 import {IPublicContext} from "./PublicContext";
+import {TableClassKey, TableProps} from "./theme/ThemeTable";
+import {PivotTableClassKey, PivotTableProps} from "./theme/ThemePivotTable";
 
 export interface INoSchemaRendererOptions {
 
@@ -304,6 +306,7 @@ export interface ic3Theme {
      * Icons used in tables and trees
      */
     icons: {
+        none: (className: string) => ReactElement | string;
         // tree icons
         expanded: (className: string) => ReactElement | string;
         collapse: (className: string) => ReactElement | string;
@@ -350,8 +353,7 @@ export interface ic3Theme {
                 hoverColor: string;  // Color when hovering
                 downColor: string;  // Color when mouse down on the button
             }
-        }
-
+        },
     },
 
     /**
@@ -516,10 +518,6 @@ declare module '@mui/material/styles/components' {
         ErrorRenderer?: {
             styleOverrides?: ComponentsOverrides["ErrorRenderer"];
         }
-        HtmlBox?: {
-            styleOverrides?: ComponentsOverrides["HtmlBox"];
-            variants?: ComponentsVariants["HtmlBox"];
-        }
         // FilterCheckbox: {
         //     styleOverrides?: ComponentsOverrides["FilterCheckbox"];
         //     variants?: ComponentsVariants["FilterCheckbox"];
@@ -532,11 +530,21 @@ declare module '@mui/material/styles/components' {
             styleOverrides?: ComponentsOverrides["FilterSlider"];
             variants?: ComponentsVariants["FilterSlider"];
         }
+        GoogleMapMarker?: {
+            variants?: ComponentsVariants['GoogleMapMarker'];
+        }
+        HtmlBox?: {
+            styleOverrides?: ComponentsOverrides["HtmlBox"];
+            variants?: ComponentsVariants["HtmlBox"];
+        }
         Layout?: {
             styleOverrides?: ComponentsOverrides["Layout"];
         }
         LayoutPage?: {
             styleOverrides?: ComponentsOverrides["LayoutPage"];
+        }
+        PivotTable?: {
+            styleOverrides?: ComponentsOverrides["PivotTable"];
         }
         ReportAppBar?: {
             styleOverrides?: ComponentsOverrides["ReportAppBar"];
@@ -544,15 +552,15 @@ declare module '@mui/material/styles/components' {
         ReportAppMenu?: {
             styleOverrides?: ComponentsOverrides["ReportAppMenu"];
         }
+        Table?: {
+            styleOverrides?: ComponentsOverrides["Table"];
+        }
         WidgetBox?: {
             variants?: ComponentsVariants['WidgetBox'];
             styleOverrides?: ComponentsOverrides["WidgetBox"];
         }
         WidgetBoxContentMessage?: {
             styleOverrides?: ComponentsOverrides["WidgetBoxContentMessage"];
-        }
-        GoogleMapMarker?: {
-            variants?: ComponentsVariants['GoogleMapMarker'];
         }
     }
 
@@ -578,8 +586,12 @@ declare module '@mui/material/styles/overrides' {
         Layout: LayoutClassKey;
         LayoutPage: LayoutPageClassKey;
 
+        PivotTable: PivotTableClassKey;
+
         ReportAppBar: ReportAppBarClassKey;
         ReportAppMenu: ReportAppMenuClassKey;
+
+        Table: TableClassKey;
 
         WidgetBox: WidgetBoxClassKey;
         WidgetBoxContentMessage: WidgetBoxContentMessageClassKey;
@@ -592,16 +604,19 @@ declare module '@mui/material/styles/props' {
 
     interface ComponentsPropsList {
 
-        HtmlBox: HtmlBoxProps;
-
-        WidgetBox: Record<never, any>;
-
         FilterButtons: FilterButtonsProps;
 
         FilterSlider: FilterSliderProps;
 
         GoogleMapMarker: GoogleMapMarkerProps;
 
+        HtmlBox: HtmlBoxProps;
+
+        PivotTable: PivotTableProps;
+
+        Table: TableProps;
+
+        WidgetBox: Record<never, any>;
     }
 
 }

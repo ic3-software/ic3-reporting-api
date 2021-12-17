@@ -1,9 +1,9 @@
-import {MdxInfo, SelectionBehaviour} from "./PublicTidyTableTypes";
+import {SelectionBehaviour} from "./PublicTidyTableTypes";
 import {ITidyBaseColumn, ITidyColumn} from "./PublicTidyColumn";
 import {ILazyTreeViewLoader} from "./LazyTreeView";
 import {PublicIcEvent} from "./IcEvent";
-import {ReactElement} from "react";
 import {Theme} from "@mui/material/styles";
+import {MdxNodeIdentifier} from "./PublicTidyTable";
 
 export enum SelectionMode {
     /**
@@ -161,18 +161,11 @@ export interface ITidyTableInteractionSelection {
 
 export interface ITidyTableDrilldown {
 
-    handleDrilldown(rowIdx: number, event: TidyEvent | undefined): void;
-
-    /**
-     * drilldown
-     *
-     * @see pivotTableLikeDrilldown
-     */
-    onDrilldown(column: ITidyColumn, rowIdx: number, event: TidyEvent | undefined): void;
+    handleDrilldown(rowIdx: number, event: TidyEvent | undefined, stopDrillDownDepth?: number): void;
 
     hasDrilldown(): boolean;
 
-    hasNodeDrilldown(column: ITidyColumn, rowIdx: number, stopDrillDownDepth?: any): boolean;
+    hasNodeDrilldown(nodeInfo: MdxNodeIdentifier, stopDrillDownDepth?: number): boolean;
 }
 
 export interface ITidyTableInteractionEvent {
@@ -235,7 +228,7 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      */
     mapVisibleRows<T>(column: ITidyColumn, mapper: (index: number) => T, inverse?: boolean): T[];
 
-    mapTreeVisibleRows<T extends ReactElement>(column: ITidyColumn, mapper: (index: number) => T, filter?: (info: MdxInfo) => boolean): T[];
+    // mapTreeVisibleRows<T extends ReactElement>(column: ITidyColumn, mapper: (index: number) => T, filter?: (info: MdxInfo) => boolean): T[];
 
     isCollapsed(column: ITidyColumn, rowIdx: number): boolean;
 
@@ -251,7 +244,9 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      *
      * pay attention that the query needs to set the flag, pivot table like (to insert data)
      */
-    pivotTableLikeDrilldown(column: ITidyColumn, rowIdx: number, event: TidyEvent, stopDrillDownDepth?: number): void;
+    pivotTableLikeDrilldown(event: TidyEvent, column: ITidyColumn, rowIdx: number, stopDrillDownDepth?: number): void;
+
+    pivotTableLikeDrilldownOnNode(event: TidyEvent, nodeInfo: MdxNodeIdentifier, stopDrillDownDepth?: number): void;
 
     pivotTableLikeNodeStatus(column: ITidyColumn, rowIdx: number, stopDrillDownDepth?: number): TidyPivotTableLikeNodeStatus;
 

@@ -3,6 +3,8 @@
  */
 
 import {TidyHistogramBucketType} from "./PublicTidyHistogram";
+import {ITidyColumnAddValueInsert} from "./PublicTidyColumn";
+import {MdxNodeIdentifier} from "./PublicTidyTable";
 
 export enum TidyColumnsType {
     /**
@@ -63,6 +65,22 @@ export enum TidyColumnsType {
      */
     ANY = 'any'
 }
+
+export type TidyColumnsSubType =
+    "YEAR" |
+    "HALF_YEAR" |
+    "QUARTER" |
+    "MONTH" |
+    "WEEK" |
+    "DAY" |
+    "DAY_MONTH" |
+    "DAY_YEAR" |
+    "HOUR" |
+    "HALF_HOUR" |
+    "QUARTER_HOUR" |
+    "MINUTE" |
+    "SECOND"
+    ;
 
 export enum ITidyColumnsSource {
     QUERY = 'query',
@@ -154,7 +172,7 @@ export interface MdxRepetitionInfo {
 /**
  * identifier of a column value ( uniqueName if it´s an axis or idx if measure )
  */
-export type TidyColumnCoordinateUniqueName = string;
+export type TidyColumnCoordinateUniqueName = MdxNodeIdentifier['uid'];
 
 export enum IAmcharts4DataKey {
     /**
@@ -186,32 +204,29 @@ export interface IAmCharts4DataTreeMap extends IAmCharts4Data {
 export type ITidyRow = any[];
 
 export interface MdxInfo {
-    /**
-     *  mdx unique name
-     */
+
     uniqueName: string;
     key: string;
-    pun?: string;
-    lcaption?: string;
-    ld: number;
-    cc?: number;
 
-    /**
-     * localized version, same as name if no localization
-     */
+    name: string;
     caption: string;
 
-    /**
-     * Not localized version
-     */
-    name: string;
-
-    /**
-     * Index of the member on the mdx-axis.
-     */
-    index: number;
-
     isAll?: boolean;
+    pun?: string;
+    cc?: number;
+
+    levelCaption?: string;
+
+    /**
+     * Relative: starts at 0.
+     */
+    levelDepthR: number;
+
+    /**
+     * Index on the MDX axis of the tuple the member belongs to.
+     */
+    tupleIndex: number;
+
 }
 
 export interface IMdxAxisSeriesInfo {
@@ -236,18 +251,20 @@ export interface IMdxAxisSeriesInfo {
 
 export interface EntityItem {
 
-    uniqueName: string; /* mdx unique name */
-    name: string; /* not localized version */
-    caption: string; /* localized version , same as name if no localization */
+    uniqueName: string;
     key?: string;
 
-    hierUN?: string;
+    name: string;
+    caption: string;
+
     parentUN?: string;
+    hierUN?: string;
+
     selected?: boolean;
     empty?: boolean;
 
-    tupleUNames?: string[];  /* it's a tuple */
-    tidyIdxHint?: number;   /* if it's a rowIdx from a tidy table, potentially the rowIdx (on drilldown it's broken) */
+    tupleUNames?: string[];
+    tidyIdxHint?: number;
 }
 
 export interface TidyCellError {
@@ -316,7 +333,8 @@ export enum SelectionBehaviour {
 
 export enum SortingType {
     ASCENDING = 'ASCENDING',
-    DESCENDING = 'DESCENDING'
+    DESCENDING = 'DESCENDING',
+    KEEP_ORDER="KEEP_ORDER"
 }
 
 export interface HistogramBucket {
@@ -377,4 +395,24 @@ export enum InterpolationType {
     HCL = 'hcl',
     HSL = 'hsl',
     LAB = 'lab'
+}
+
+export interface ConvertToTypeParseSettings {
+    locale?: string;
+    dateFormat?: string;
+    listSeparator?: string;
+}
+
+export interface ITotalRowValues {
+
+    /**
+     * Keys as column names.
+     */
+    totalValues: Record<string, ITidyColumnAddValueInsert>;
+
+    /**
+     * Keys as column names.
+     */
+    totalTexts: Record<string, ITidyColumnAddValueInsert>;
+
 }

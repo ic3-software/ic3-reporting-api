@@ -524,6 +524,13 @@ export interface IFormColumnChooserFieldDef extends IFormFieldDef<TidyTableColum
 
         /**
          * Fallback to a column that has a type that is allowed. Note, properties of columns are not considered.
+         *
+         * It finds the column to fallback on by
+         * 1. role equal to fieldPath and type is allowed,
+         * 2. role equal to editorConfig.alias and type is allowed,
+         * 3. type is allowed.
+         *
+         * Already mapped columns are skipped.
          */
         fallback?: boolean;
 
@@ -631,6 +638,10 @@ export interface IFormMdxFieldDef extends IFormFieldDef<string> {
     editorConf: {
 
         mdxExpressionType: MdxExpressionType;
+
+        metaReadOnly?: boolean;
+        schemaName?: string;
+        cubeName?: string;
 
     }
 }

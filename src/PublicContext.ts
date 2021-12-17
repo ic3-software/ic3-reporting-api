@@ -4,6 +4,8 @@ import {ITidyTableTransformation} from "./ITidyTableTransformation";
 import {Theme} from "@mui/material/styles";
 import {ThemeTextFormatter} from "./PublicTheme";
 import {ITidyColumn} from "./PublicTidyColumn";
+import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
+import {ITidyMath} from "./PublicTidyMath";
 
 export enum WidgetRenderLayoutStatus {
     RENDERING = "RENDERING",
@@ -34,6 +36,11 @@ export interface IPublicContext {
     localize(name: string, ...args: any[]): string;
 
     translateContent(content: string): string;
+
+    /**
+     * A bunch of mathematical functions related to the tidy table.
+     */
+    tidyMath(): ITidyMath;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -171,6 +178,27 @@ export interface IWidgetPublicContext extends IPublicContext {
      * Cypress testing purpose, after a rendering of the chart
      */
     incrementWidgetContentRendering(): void;
+
+    getWidgetTemplateDefinition(qualifiedId: string): IPublicWidgetTemplateDefinition<any>;
+
+    resolveWidgetTemplateDefinition(definition: IPublicWidgetTemplateDefinition<any>): Promise<IPublicWidgetTemplateDefinition<any>>;
+
+    /**
+     * React -> combines useReduxOwnProps and setReduxOwnProps with a similar syntax to Redux.useState
+     *
+     * Note it's NOT the initial value but value if undefined
+     */
+    useReduxOwnPropsState<T>(fieldName: string, valueIfUndefined?: T): [T, (newValue: T) => void];
+
+    /**
+     * React -> useSelector on widgetOwnProps[fieldName]
+     */
+    useReduxOwnProps<T>(fieldName: string): T;
+
+    /**
+     * Redux -> set in Redux value in widgetOwnProps[fieldName]
+     */
+    setReduxOwnProps(fieldName: string, value: any): void;
 }
 
 export interface IWidgetEditorPublicContext {

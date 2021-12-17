@@ -16,6 +16,10 @@ export interface IReportDefinition {
     setDefaultCubeName(name: string): void;
 }
 
+export interface IReportAppDefinition {
+
+}
+
 export interface IEventContentItem {
 
     /**
@@ -72,6 +76,17 @@ export interface IOpenReportAppOptions {
      */
     path: string;
 
+    /**
+     * Called before the application definition is actually applied.
+     * Give the opportunity to change the definition.
+     */
+    onDefinition?: (report: IReportAppDefinition) => void;
+
+    /**
+     * If the method exist and return true then the default error dispatcher is not
+     * being called. Give the caller the opportunity to render the error.
+     */
+    onError?: (error: any) => boolean;
 }
 
 /**
@@ -81,7 +96,18 @@ export interface IReporting {
 
     getVersion(): ReportingVersion;
 
-    openReport(options: IOpenReportOptions): void;
+    /**
+     * @param options
+     * @param pushToHistory    defaulted to true
+     * @param keepGlobalFilter defaulted to true
+     */
+    openReport(options: IOpenReportOptions, pushToHistory?: boolean, keepGlobalFilter?: boolean): void;
+
+    /**
+     * @param options
+     * @param pushToHistory    defaulted to true
+     */
+    openReportApp(options: IOpenReportAppOptions, pushToHistory?: boolean): void;
 
     fireEvent(eventName: string, value: IEventContent | null): void;
 
