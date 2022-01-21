@@ -29,13 +29,28 @@ export interface IPublicContext {
 
     getNumberFormatter(format: ThemeTextFormatter): (value: any | undefined) => string;
 
-    localizeTransformationCaption(template: ITidyTableTransformation<any>): { info: string, description?: string };
+    /**
+     * translate the content of a report (the title of widgets, content of some widgets...). This does use another file
+     *
+     * aka content localization
+     */
+    translateContent(content: string): string;
 
-    localizeError(name: string, ...args: any[]): string;
-
+    /**
+     * localized report application tags (e.g. edit, write, save.. )
+     */
     localize(name: string, ...args: any[]): string;
 
-    translateContent(content: string): string;
+    /**
+     * localized report application error tags
+     */
+    localizeError(name: string, ...args: any[]): string;
+
+    /**
+     * Localization for transformations
+     */
+    localizeTransformationCaption(template: ITidyTableTransformation<any>): { info: string, description?: string };
+
 
     /**
      * A bunch of mathematical functions related to the tidy table.

@@ -3,9 +3,9 @@ import {HistogramData, HistogramOptions} from "./PublicTidyTableTypes";
 
 export interface ITidyMath {
     /**
-     * Mathematical functions, null is counted as zero in the sum.
+     * Sum of all values in the column.
      */
-    sum(column: ITidyBaseColumnReadonly<number | null>): number;
+    sum(column: ITidyBaseColumnReadonly<number | null>): number | null;
 
     /**
      * Get the extreme value of the column. Null values are skipped.

@@ -81,6 +81,8 @@ export interface IFormFieldDef<DEFAULT_VALUE_TYPE> {
 
     /**
      * When defined the content of the field is translated (using context.translateContent).
+     *
+     * Only works for chart/widgetOptions !!
      */
     translated?: boolean;
 

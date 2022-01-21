@@ -1,11 +1,11 @@
-import {ITidyTable} from "./PublicTidyTable";
-import {ITidyTableInteraction} from "./PublicTidyTableInteractions";
-import {IWidgetPublicContext} from "./PublicContext";
-import {FormFieldDef, FormFieldObject, FormFields, IFormColumnChooserFieldDef} from "./PublicTemplateForm";
-import {IWidgetVariantManager} from "./IWidgetVariantManager";
-import {ITidyColumn} from "./PublicTidyColumn";
-import {ReactElement} from "react";
-import {Theme} from "@mui/material/styles";
+import { ITidyTable } from "./PublicTidyTable";
+import { ITidyTableInteraction } from "./PublicTidyTableInteractions";
+import { IWidgetPublicContext } from "./PublicContext";
+import { FormFieldDef, FormFieldObject, FormFields, IFormColumnChooserFieldDef } from "./PublicTemplateForm";
+import { IWidgetVariantManager } from "./IWidgetVariantManager";
+import { ITidyColumn } from "./PublicTidyColumn";
+import { ReactElement } from "react";
+import { Theme } from "@mui/material/styles";
 
 type ChartTemplateWidgetProps = any;
 
@@ -32,15 +32,10 @@ export interface IWidgetTemplateMdxBuilderAxisProps {
     isOptional?: true;
 
     /**
-     * All axes with the same (not null) value for mdxAxisName are put as a tuple on the same axis. The axis name
-     * of the first one in the set is used.
+     * All axes with the same (not null) value for mdxAxisName are put as a tuple on the same axis. And the roles are
+     * comma separated.
      */
     mdxAxisName?: string,
-
-    /**
-     * The test used to generated the axis role (see KPI card).
-     */
-    mdxAxisRole?: string;
 
     /**
      * Disable empty
@@ -390,6 +385,10 @@ interface IPublicCommonWidgetTemplateDefinition {
      */
     registerAmCharts4?: (callback: (am4core: any) => void) => void;
 
+    /**
+     * When opening "Use Global Filter" option on Interaction tab
+     */
+    enableUseGlobalFilter?: boolean;
 }
 
 /**

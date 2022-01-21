@@ -240,6 +240,12 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
     setSelectionColumns(columns: ITidyColumn[]): void;
 
     /**
+     * Change the default drilldown column.
+     * @param column column to use for the drill-downs. Use undefined to reset to default.
+     */
+    setDrilldownColumn(column: ITidyColumn | undefined): void;
+
+    /**
      * Pivot Type behavior ( nodes can collapse/expand + drilldown might return some values)
      *
      * pay attention that the query needs to set the flag, pivot table like (to insert data)
