@@ -14,6 +14,10 @@ export interface IReportDefinition {
     getDefaultCubeName(): string | undefined;
 
     setDefaultCubeName(name: string): void;
+
+    getThemeUID(): string;
+
+    setThemeUID(uid: string): void;
 }
 
 export interface IReportAppDefinition {

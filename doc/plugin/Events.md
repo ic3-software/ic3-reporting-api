@@ -51,7 +51,7 @@ select
 filterby @{year}
 ```
 
-Please refer to this [page](../../reference/Events.md) for more information about accessing event value.
+Please refer to this [page](../../interactions/Events.md) for more information about accessing event value.
 
 #### Channel (aka. Topic)
 

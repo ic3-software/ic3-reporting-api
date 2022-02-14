@@ -1,3 +1,5 @@
+import {PaperOrientation, PaperSizeName} from "./ITypes";
+
 export type AppNotificationType =
     "edit-report" |
     "print-report-dialog" |
@@ -43,8 +45,8 @@ export interface AppPrintReportNotificationPayload {
 
     fileName?: string;
 
-    paperSizeName?: "A5" | "A4" | "A3" | "B5" | "B4" | "Letter" | "Legal" | "Ledger" | "JIS-B5" | "JIS-B4";
-    layout?: "portrait" | "landscape";
+    paperSizeName?: PaperSizeName;
+    layout?: PaperOrientation;
 
 }
 

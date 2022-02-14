@@ -1,3 +1,5 @@
+import {PaperOrientation, PaperSizeUnits} from "./ITypes";
+
 type CSSProperties = any;
 
 /**
@@ -6,38 +8,20 @@ type CSSProperties = any;
  * </pre>
  */
 export type PageSize = "known" | "manual" | "unlimited";
-export type PageSizeUnit = "px" | "mm" | "cm" | "in";
-
-export type PageOrientation = "portrait" | "landscape";
 
 export interface IPageSize {
     type: PageSize;
 }
 
 /**
- * From icCube server print component configuration:
- *
- * <pre>
- *   <paperSize name="A5" unit="in" width="5.8" height="8.3"/>
- *   <paperSize name="A4" unit="in" width="8.3" height="11.7"/>
- *   <paperSize name="A3" unit="in" width="11.7" height="16.5"/>
- *   <paperSize name="B5" unit="in" width="6.9" height="9.8"/>
- *   <paperSize name="B4" unit="in" width="9.8" height="13.9"/>
- *
- *   <paperSize name="JIS-B5" unit="in" width="7.2" height="10.1"/>
- *   <paperSize name="JIS-B4" unit="in" width="10.1" height="14.3"/>
- *
- *   <paperSize name="Letter" unit="in" width="8.5" height="11"/>
- *   <paperSize name="Legal" unit="in" width="8.5" height="14"/>
- *   <paperSize name="Ledger" unit="in" width="11" height="17"/>
- * </pre>
+ * From icCube server print component configuration.
  */
 export interface IKnownPageSize extends IPageSize {
     name: string;
 }
 
 export interface IManualPageSize extends IPageSize {
-    pageSizeUnits: PageSizeUnit;
+    pageSizeUnits: PaperSizeUnits;
     pageWidth: number;
     pageHeight: number;
 }
@@ -46,12 +30,12 @@ export interface IManualPageSize extends IPageSize {
  * Unlimited in height.
  */
 export interface IUnlimitedPageSize extends IPageSize {
-    pageSizeUnits: PageSizeUnit;
+    pageSizeUnits: PaperSizeUnits;
     pageWidth: number;
 }
 
 export interface IPageMargin {
-    sizeUnits: PageSizeUnit;
+    sizeUnits: PaperSizeUnits;
 
     top: number;
     bottom: number;
@@ -137,7 +121,7 @@ export interface IPageHeaderFooterPartDefinition {
 
 export interface IPageHeaderFooterDefinition {
 
-    sizeUnits: PageSizeUnit;
+    sizeUnits: PaperSizeUnits;
     height: number
 
     // CSS
@@ -162,7 +146,7 @@ export interface IWidgetLayoutDefinition {
     cssClass?: string;
 
     pageSize: IKnownPageSize | IManualPageSize | IUnlimitedPageSize;
-    pageOrientation: PageOrientation;
+    pageOrientation: PaperOrientation;
 
     pageMargin: IPageMargin;
     pageBackgroundColor: string;

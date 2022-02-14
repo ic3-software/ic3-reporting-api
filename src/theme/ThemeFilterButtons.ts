@@ -2,9 +2,9 @@ import {FormFieldObject} from "../PublicTemplateForm";
 
 export interface FilterButtonsProps extends FormFieldObject {
     /**
-     * Predefined variants
+     * Predefined variants (add string to allow new variant without type augmentation)
      */
-    variant: 'contained' | 'outlined' | 'text';
+    variant: 'text' | 'outlined' | 'contained' | string;
 
     /**
      * Size of buttons
@@ -21,6 +21,11 @@ export interface FilterButtonsProps extends FormFieldObject {
      * If defined, buttons will be positioned in columns
      */
     columns?: number;
+
+    /**
+     * If defined, buttons will be grouped by layout
+     */
+    layout?: 'horizontal' | 'vertical'
 }
 
 

@@ -5,9 +5,11 @@ export class PivotTableClasses {
     static readonly cell = "ic3-pt-cell";
 
     static readonly leftHeaderCell = "ic3-pt-col.lh";
+
     static readonly leftHeaderTitle = "ic3-pt-col.lh .ic3-pt-header-label";
 
     static readonly topHeaderCell = "ic3-pt-col.th";
+
     static readonly topHeaderTitle = "ic3-pt-col.th .ic3-pt-header-label";
 
     static readonly column = "ic3-pt-col";

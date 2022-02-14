@@ -17,6 +17,13 @@ export interface IFormFieldDef<DEFAULT_VALUE_TYPE> {
     fieldPath: string;
 
     /**
+     * Default: false ,
+     *
+     * If defaultValue is defined,
+     */
+    mandatory?: boolean;
+
+    /**
      * The default value defined at field level (note: can be defined at Theme level as well).
      */
     defaultValue?: DEFAULT_VALUE_TYPE;
@@ -53,11 +60,6 @@ export interface IFormFieldDef<DEFAULT_VALUE_TYPE> {
      * Override default localization.
      */
     fieldDescription?: string;
-
-    /**
-     * Default: false
-     */
-    mandatory?: boolean;
 
     /**
      * Default: false
@@ -111,7 +113,7 @@ export type FormFields<T extends FormFieldObject> = {
     (
         // A field cannot both be mandatory and have a default value
         // Only use mandatory when there is an action required by the user
-        Required<T>[key] extends FormFieldObject ? unknown : { defaultValue?: undefined, mandatory: true } | { defaultValue?: any, mandatory?: false }
+        Required<T>[key] extends FormFieldObject ? unknown : { defaultValue?: any, mandatory?: true } | { defaultValue?: any, mandatory?: false }
         )
     &
     (
@@ -125,6 +127,7 @@ export type FormFields<T extends FormFieldObject> = {
                                 Required<T>[key] extends number ? Omit<IFormNumberFieldDef, 'fieldPath'> :
                                     Required<T>[key] extends string ? Omit<IFormOptionFieldSingleDef, 'fieldPath'>
                                         | Omit<IFormStringFieldDef, 'fieldPath'>
+                                        | Omit<IFormFormatterPickerFieldDef, 'fieldPath'>
                                         | Omit<IFormWidgetVariantFieldDef, 'fieldPath'>
                                         | Omit<IFormTidyTableTextExprFieldDef, 'fieldPath'>
                                         | Omit<IFormTidyTableTextRowExprFieldDef, 'fieldPath'>
@@ -190,6 +193,10 @@ export type FormFieldType =
      * @see IFormFileUploaderFieldDef
      */
     "fileUploader" |
+    /**
+     * @see IFormFormatterPickerFieldDef
+     */
+    "formatterPicker" |
     /**
      * @see IFormBooleanFieldDef
      */
@@ -493,7 +500,9 @@ export interface IFormColorEditorFieldDef extends IFormFieldDef<IColorDef> {
  * selected by the user or in the fallback.
  *
  */
-export interface IFormColumnChooserFieldDef extends IFormFieldDef<TidyTableColumnSelector> {
+export type IFormColumnChooserFieldDef = IFormColumnChooserSingleFieldDef | IFormColumnChooserMultipleFieldDef;
+
+interface IFormColumnChooserSingleFieldDef extends IFormFieldDef<TidyTableColumnSelector> {
 
     fieldType: "columnsChooser",
 
@@ -502,7 +511,7 @@ export interface IFormColumnChooserFieldDef extends IFormFieldDef<TidyTableColum
         /**
          * The user can select multiple columns / selectors
          */
-        multiple?: boolean;
+        multiple?: false;
 
         /**
          * The user can select the same column more than once
@@ -543,6 +552,58 @@ export interface IFormColumnChooserFieldDef extends IFormFieldDef<TidyTableColum
     }
 
 }
+
+interface IFormColumnChooserMultipleFieldDef extends IFormFieldDef<TidyTableColumnSelector[]> {
+
+    fieldType: "columnsChooser",
+
+    editorConf?: {
+
+        /**
+         * The user can select multiple columns / selectors
+         */
+        multiple: true;
+
+        /**
+         * The user can select the same column more than once
+         */
+        allowDuplicate?: boolean;
+
+        /**
+         * Only columns of this/these type(s) are allowed.
+         */
+        allowedTypes?: TidyColumnsType[] | ((column: ITidyColumn) => boolean);
+
+        /**
+         * The user can select properties of columns
+         */
+        includeProperties?: boolean;
+
+        /**
+         * The user can choose a selector, see TidyTableMappingColumnSelectorOptions
+         */
+        includeSelectors?: boolean;
+
+        /**
+         * Fallback to a column that has a type that is allowed. Note, properties of columns are not considered.
+         *
+         * It finds the column to fallback on by
+         * 1. role equal to fieldPath and type is allowed,
+         * 2. role equal to editorConfig.alias and type is allowed,
+         * 3. type is allowed.
+         *
+         * Already mapped columns are skipped.
+         */
+        fallback?: boolean;
+
+        /**
+         * In the expression editor, use the alias to reference the column. Use the alias in table.getColumnByAlias(...).
+         */
+        alias?: string;
+    }
+
+}
+
 
 /**
  * @see FormFieldDef
@@ -812,6 +873,11 @@ export interface IFormTidyTableHtmlRowExprFieldDef extends IFormFieldDef<string>
 
     editorConf?: {
         defaultColumn?: boolean,
+
+        /**
+         * Default = available columns + roles. Set here to override.
+         */
+        completionMeta?: string[];
     },
 
 }
@@ -943,6 +1009,10 @@ export interface IFormWidgetVariantFieldDef extends IFormFieldDef<string> {
     }
 }
 
+ export interface IFormFormatterPickerFieldDef extends IFormFieldDef<string> {
+    fieldType: "formatterPicker"
+}
+
 
 // ---------------------------------------------------------------------------------------------------------------------
 //      Allows for typing the field meta definitions.
@@ -977,7 +1047,8 @@ export type FormFieldDef =
     IFormTidyTableScaleRowExprFieldDef |
     IFormTidyTableTextExprFieldDef |
     IFormTidyTableTextRowExprFieldDef |
-    IFormWidgetVariantFieldDef
+    IFormWidgetVariantFieldDef |
+    IFormFormatterPickerFieldDef
     ;
 
 

@@ -164,7 +164,7 @@ export interface IWidgetPublicContext extends IPublicContext {
      * template form fields, FormFieldDef (i.e.  {zoom:14} to set the zoom to 14). If in editing mode,
      * the edited options in the widget editor panel will be updated.
      */
-    onUserMenuAction(userMenuAction: string, callback: (event: any) => Record<string, any> | undefined): void;
+    onUserMenuAction(callback: (userMenuAction: string, event: any) => Record<string, any> | undefined): void;
 
     onWidgetRenderStatusChange(status: WidgetRenderLayoutStatus): void;
 

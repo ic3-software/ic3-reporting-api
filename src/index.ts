@@ -8,6 +8,7 @@ export * from "./IReporting";
 export * from "./IThemeManager";
 export * from "./ITidyTableTransformation"
 export * from "./ITidyTableTransformationManager"
+export * from "./ITypes"
 export * from "./IVersionedPluginDefinition";
 export * from "./IWidgetDefaultsManager";
 export * from "./IWidgetVariantManager";
@@ -31,16 +32,24 @@ export * from "./PublicTidyHistogram";
 export * from "./RemoteContainerUtils";
 export * from "./ReportingVersion";
 
-export * from "./theme/ThemeAlertDialog"
-export * from "./theme/ThemeApp"
-export * from "./theme/ThemeDrilldownUserSelectMenu"
-export * from "./theme/ThemeErrorRenderer"
-export * from "./theme/ThemeHtmlBox"
-export * from "./theme/ThemeLayout"
-export * from "./theme/ThemeLayoutPage"
-export * from "./theme/ThemeReportAppBar"
-export * from "./theme/ThemeReportAppMenu"
-export * from "./theme/ThemeWidgetBox"
-export * from "./theme/ThemeWidgetBoxContentMessage"
+export * from "./theme/ThemeAlertDialog";
+export * from "./theme/ThemeApp";
+export * from "./theme/ThemeDrilldownUserSelectMenu";
+export * from "./theme/ThemeErrorRenderer";
+export * from "./theme/ThemeFilterAutocomplete";
+export * from "./theme/ThemeFilterButtons";
+export * from "./theme/ThemeFilterCheckboxes";
+export * from "./theme/ThemeFilterSlider";
+export * from "./theme/ThemeFilterTree";
+export * from "./theme/ThemeGoogleMapMarker";
+export * from "./theme/ThemeHtmlBox";
+export * from "./theme/ThemeLayout";
+export * from "./theme/ThemeLayoutPage";
+export * from "./theme/ThemePivotTable";
+export * from "./theme/ThemeReportAppBar";
+export * from "./theme/ThemeReportAppMenu";
+export * from "./theme/ThemeTable";
+export * from "./theme/ThemeWidgetBox";
+export * from "./theme/ThemeWidgetBoxContentMessage";
 
 

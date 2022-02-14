@@ -37,6 +37,7 @@ export interface HtmlBoxProps {
     context?: IWidgetPublicContext;
 
     variant?: HtmlBoxVariant;
+
     html: string;
 
 }

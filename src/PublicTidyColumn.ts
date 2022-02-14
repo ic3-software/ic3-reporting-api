@@ -20,6 +20,7 @@ import {AppNotification} from "./INotification";
 export interface ITidyColumnTypedValue {
 
     value: any;
+    fValue?: string;
     type: TidyColumnsType;
 
 }
@@ -31,7 +32,6 @@ export interface ITidyColumnAddValueInsert {
     options: "INSERT";
 
     value: ITidyColumnTypedValue;
-    fValue?: string;
 
 }
 
@@ -220,6 +220,11 @@ export interface ITidyBaseColumnReadonly<T> {
      * Return the type of the column
      */
     getType(): AllowedColumnType<T>;
+
+    /**
+     * e.g., List<T>.
+     */
+    getTypeParam(): TidyColumnsType | undefined;
 
     /**
      * E.g., datetime column: YEAR, ...

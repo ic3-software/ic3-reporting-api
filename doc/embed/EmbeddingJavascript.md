@@ -48,9 +48,13 @@ const url = "/icCube/report/viewer?ic3demo=";
 
 The `IReporting.openReport()` allows for opening a dashboard with an optional list of parameters.
 
-The `onDefinition()` callback allows for retrieving the report definition. Note that this definition can be **modified**
-to change for example the default schema/cube used by the dashboard. This allows for **adapting** a single dashboard
-definition according to the host application needs before the icCube Dashboards application is using it.
+#### Changing Schema/Cube and Theme
+
+The `onDefinition()` callback allows for retrieving the report definition. This definition can be modified to change for
+example the default **schema/cube** and the **theme** used by the dashboard. This allows for **adapting a single
+dashboard definition** according to the host application needs before the icCube Dashboards application is using it.
+Check the [IReporting](https://github.com/ic3-software/ic3-reporting-api/blob/main/src/IReporting.ts) source code for
+up-to-date information.
 
 Following is an extract of the source code of the live example as mentioned earlier that is opening the
 dashboard `shared:/Embedded/Sales` passing the `continent` parameter:

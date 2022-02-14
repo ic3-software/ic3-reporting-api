@@ -22,6 +22,7 @@ import {GoogleMapMarkerProps} from "./theme/ThemeGoogleMapMarker";
 import {IPublicContext} from "./PublicContext";
 import {TableClassKey, TableProps} from "./theme/ThemeTable";
 import {PivotTableClassKey, PivotTableProps} from "./theme/ThemePivotTable";
+import {Components} from "@mui/material/styles/components";
 
 export interface INoSchemaRendererOptions {
 
@@ -243,20 +244,6 @@ export interface ic3PaletteOptions {
 
 }
 
-declare module "@mui/material/styles/createPalette" {
-
-    interface Palette {
-
-        ic3: ic3Palette;
-
-    }
-
-    interface PaletteOptions {
-
-        ic3?: ic3PaletteOptions;
-
-    }
-}
 
 export interface ic3Typography {
 
@@ -266,23 +253,10 @@ export interface ic3Typography {
 
 export interface ic3TypographyOptions {
 
+    /**
+     * Typography for the amCharts plugin.
+     */
     amCharts4?: TypographyStyleOptions
-
-}
-
-declare module "@mui/material/styles/createTypography" {
-
-    interface Typography {
-
-        ic3: ic3Typography;
-
-    }
-
-    interface TypographyOptions {
-
-        ic3?: ic3TypographyOptions;
-
-    }
 
 }
 
@@ -481,6 +455,114 @@ export interface ic3ThemeOptions {
     noSchemaRenderer?: (context: IPublicContext, options: INoSchemaRendererOptions) => ReactElement;
 }
 
+
+interface ic3BaseComponents {
+
+    AlertDialog?: {
+        styleOverrides?: ComponentsOverrides["AlertDialog"];
+    }
+    App?: {
+        styleOverrides?: ComponentsOverrides["App"];
+    }
+    DrilldownUserSelectMenu?: {
+        styleOverrides?: ComponentsOverrides["DrilldownUserSelectMenu"];
+    }
+    ErrorRenderer?: {
+        styleOverrides?: ComponentsOverrides["ErrorRenderer"];
+    }
+    // FilterCheckbox: {
+    //     styleOverrides?: ComponentsOverrides["FilterCheckbox"];
+    //     variants?: ComponentsVariants["FilterCheckbox"];
+    // }
+    FilterButtons?: {
+        styleOverrides?: ComponentsOverrides["FilterButtons"];
+        variants?: ComponentsVariants["FilterButtons"];
+    }
+    FilterSlider?: {
+        styleOverrides?: ComponentsOverrides["FilterSlider"];
+        variants?: ComponentsVariants["FilterSlider"];
+    }
+    GoogleMapMarker?: {
+        variants?: ComponentsVariants['GoogleMapMarker'];
+    }
+    HtmlBox?: {
+        styleOverrides?: ComponentsOverrides["HtmlBox"];
+        variants?: ComponentsVariants["HtmlBox"];
+    }
+    Layout?: {
+        styleOverrides?: ComponentsOverrides["Layout"];
+    }
+    LayoutPage?: {
+        styleOverrides?: ComponentsOverrides["LayoutPage"];
+    }
+    PivotTable?: {
+        variants?: ComponentsVariants['PivotTable'];
+        styleOverrides?: ComponentsOverrides["PivotTable"];
+    }
+    ReportAppBar?: {
+        styleOverrides?: ComponentsOverrides["ReportAppBar"];
+    }
+    ReportAppMenu?: {
+        styleOverrides?: ComponentsOverrides["ReportAppMenu"];
+    }
+    Table?: {
+        variants?: ComponentsVariants['Table'];
+        styleOverrides?: ComponentsOverrides["Table"];
+    }
+    WidgetBox?: {
+        variants?: ComponentsVariants['WidgetBox'];
+        styleOverrides?: ComponentsOverrides["WidgetBox"];
+    }
+    WidgetBoxContentMessage?: {
+        styleOverrides?: ComponentsOverrides["WidgetBoxContentMessage"];
+    }
+}
+
+/**
+ * For Typing purpose extending MUI Theme with ic3 components
+ */
+export interface ic3Components extends ic3BaseComponents, Components {
+
+}
+
+
+/**
+ *
+ * MUI Module augmentation
+ *
+ */
+
+declare module "@mui/material/styles/createPalette" {
+
+    interface Palette {
+
+        ic3: ic3Palette;
+
+    }
+
+    interface PaletteOptions {
+
+        ic3?: ic3PaletteOptions;
+
+    }
+}
+
+declare module "@mui/material/styles/createTypography" {
+
+    interface Typography {
+
+        ic3: ic3Typography;
+
+    }
+
+    interface TypographyOptions {
+
+        ic3?: ic3TypographyOptions;
+
+    }
+
+}
+
 declare module '@mui/material/styles/createTheme' {
 
     interface Theme {
@@ -505,63 +587,8 @@ declare module '@mui/material/styles/createTheme' {
  */
 declare module '@mui/material/styles/components' {
 
-    interface Components {
-        AlertDialog?: {
-            styleOverrides?: ComponentsOverrides["AlertDialog"];
-        }
-        App?: {
-            styleOverrides?: ComponentsOverrides["App"];
-        }
-        DrilldownUserSelectMenu?: {
-            styleOverrides?: ComponentsOverrides["DrilldownUserSelectMenu"];
-        }
-        ErrorRenderer?: {
-            styleOverrides?: ComponentsOverrides["ErrorRenderer"];
-        }
-        // FilterCheckbox: {
-        //     styleOverrides?: ComponentsOverrides["FilterCheckbox"];
-        //     variants?: ComponentsVariants["FilterCheckbox"];
-        // }
-        FilterButtons?: {
-            styleOverrides?: ComponentsOverrides["FilterButtons"];
-            variants?: ComponentsVariants["FilterButtons"];
-        }
-        FilterSlider?: {
-            styleOverrides?: ComponentsOverrides["FilterSlider"];
-            variants?: ComponentsVariants["FilterSlider"];
-        }
-        GoogleMapMarker?: {
-            variants?: ComponentsVariants['GoogleMapMarker'];
-        }
-        HtmlBox?: {
-            styleOverrides?: ComponentsOverrides["HtmlBox"];
-            variants?: ComponentsVariants["HtmlBox"];
-        }
-        Layout?: {
-            styleOverrides?: ComponentsOverrides["Layout"];
-        }
-        LayoutPage?: {
-            styleOverrides?: ComponentsOverrides["LayoutPage"];
-        }
-        PivotTable?: {
-            styleOverrides?: ComponentsOverrides["PivotTable"];
-        }
-        ReportAppBar?: {
-            styleOverrides?: ComponentsOverrides["ReportAppBar"];
-        }
-        ReportAppMenu?: {
-            styleOverrides?: ComponentsOverrides["ReportAppMenu"];
-        }
-        Table?: {
-            styleOverrides?: ComponentsOverrides["Table"];
-        }
-        WidgetBox?: {
-            variants?: ComponentsVariants['WidgetBox'];
-            styleOverrides?: ComponentsOverrides["WidgetBox"];
-        }
-        WidgetBoxContentMessage?: {
-            styleOverrides?: ComponentsOverrides["WidgetBoxContentMessage"];
-        }
+    interface Components extends ic3BaseComponents {
+
     }
 
 }

@@ -201,6 +201,11 @@ export interface ITidyTableInteractionEvent {
      * register a callback that will be called each time an event is send to the channel bound to the actionName
      */
     onNotification(actionName: string, callback: (event: any) => void): void;
+
+    /**
+     * Should the interactions be based on rowIds or on row values? Default = true = rowIds.
+     */
+    useHitRowIdxInSelection(value: boolean): void;
 }
 
 export interface ITidyTableInteraction extends ITidyTableInteractionSelection, ITidyTableInteractionEvent, ITidyTableDrilldown {
