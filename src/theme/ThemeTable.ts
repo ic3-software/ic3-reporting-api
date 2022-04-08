@@ -1,7 +1,10 @@
+import {BaseTableChartOptions} from "./ThemeBaseTable";
+import {TidyTableColumnSelector} from "../PublicTidyTableTypes";
+
 /**
  * List of classNames available
  */
-export declare type TableClassKey = keyof Record<string, any>;
+export declare type TableClassKey = keyof TableClasses;
 
 
 /**
@@ -180,5 +183,83 @@ export class TableClasses {
     static readonly 'treeDataGroupingCell' = "MuiDataGrid-treeDataGroupingCell";
     /* 	Styles applied to the toggle of the grouping column of the tree data. */
     static readonly 'treeDataGroupingCellToggle' = "MuiDataGrid-treeDataGroupingCellToggle";
+
+}
+
+/**
+ * Table Options (fields of the "Chart" tab in the widget editor).
+ *
+ * <pre>
+ *      Plugin ID         : ic3
+ *      Widget/Template ID: Table
+ * </pre>
+ *
+ * @see WidgetTemplateChartOptions
+ */
+export interface TableChartOptions extends BaseTableChartOptions {
+
+    /**
+     * Name of a variant. Note that a variant is possibly overriding defined options.
+     */
+    variant?: string;
+
+    /**
+     * Cell Value.
+     *
+     * If 'Axe(1) as Column' is active, defines the column containing the measures for the cells.
+     */
+    cellValue?: TidyTableColumnSelector;
+
+    /**
+     * Axis(1) as Column.
+     *
+     * If active and the MDX query has 3 axis or more, the second MDX axis (ON ROWS or ON 1)
+     * is used as the table column(s).
+     */
+    useMdxSecondAxisAsTableColumn: boolean;
+
+    /**
+     * Footer.
+     *
+     * Display a footer. Does not apply when the table is auto-expanding vertically.
+     */
+    footer: boolean;
+
+    /**
+     * Add Pagination.
+     *
+     * Incompatible with 'Row Count' and/or 'Selected Row Count' settings.
+     */
+    footerPagination: boolean;
+
+    /**
+     * Add Row Count.
+     *
+     * Incompatible with 'Pagination'.
+     */
+    footerRowCount: boolean;
+
+    /**
+     * Add Selected Row Count.
+     *
+     * Incompatible with 'Pagination'.
+     */
+    footerSelectedRowCount: boolean;
+
+    /**
+     * Page Size.
+     *
+     * Set the initial number of rows in one page.
+     */
+    pageSize: number;
+
+    /**
+     * Page Size Options (CSV).
+     *
+     * Select the 'Page Size' dynamically using the component UI. A comma separated list of integer values.
+     *
+     * E.g., 10,20,50
+     */
+    rowsPerPageOptions: string;
 
 }

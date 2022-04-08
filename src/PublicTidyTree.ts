@@ -24,6 +24,11 @@ export interface TidyTreeNode {
      * children of this tree
      */
     children: TidyTreeNode[];
+
+    /**
+     * True if and only if the node is the root node
+     */
+    isRoot: boolean;
 }
 
 type ArrayReducer<T> = (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T;
@@ -56,10 +61,12 @@ export class TidyTree {
     root: TidyTreeNode;
 
     constructor(root?: TidyTreeNode) {
-        this.root = root ?? {
+        this.root = {
             rowIds: [],
             nodeLabel: 'root',
             children: [],
+            isRoot: true,
+            ...root
         };
     }
 
@@ -72,19 +79,28 @@ export class TidyTree {
     }
 
     /**
-     * Performs the specified action on each node of the tree
-     * if callbackfn return false, it will not perform a foreach on it's children
+     * Performs the specified action on each node of the tree.
+     * If callbackfn return false, it will not perform a foreach on it's children.
+     * The callback function does not run for the root node.
+     * Leveldepth = number of nodes between node and the root node.
      */
-    forEach(callbackfn: (node: TidyTreeNode, levelDepth: number, parentNode: TidyTreeNode, nodeChildrenIdx: number) => boolean | void): void {
-        function forEachNested(children: TidyTreeNode[], levelDepth: number, parent: TidyTreeNode, callbackfn: (node: TidyTreeNode, levelDepth: number, parentNode: TidyTreeNode, nodeChildrenIdx: number) => boolean | void) {
+    forEach<T>(callbackfn: ForEachNodeCallbackFn<T>, getTopParentStat?: (topParentNode: TidyTreeNode) => T): void {
+
+        function forEachNested(children: TidyTreeNode[], levelDepth: number, parent: TidyTreeNode, callbackfn: ForEachNodeCallbackFn<T>, topParentStat?: T) {
             children.forEach((node, idx) => {
-                if (callbackfn(node, levelDepth, parent, idx) !== false) {
-                    forEachNested(node.children, levelDepth + 1, node, callbackfn);
+                if (callbackfn(node, levelDepth, parent, idx, topParentStat) !== false) {
+                    forEachNested(node.children, levelDepth + 1, node, callbackfn, topParentStat);
                 }
             })
         }
 
-        forEachNested(this.root.children, 1, this.root, callbackfn);
+        this.root.children.forEach((topParentNode, idx) => {
+            const topParentSummary = getTopParentStat != null ? getTopParentStat(topParentNode) : undefined;
+            if (callbackfn(topParentNode, 0, this.root, idx, topParentSummary) !== false) {
+                forEachNested(topParentNode.children, 1, topParentNode, callbackfn, topParentSummary);
+            }
+        });
+
     }
 
     /**
@@ -95,8 +111,11 @@ export class TidyTree {
         if (node.originalColumn?.isHierarchy()) {
             return measure.getValue(node.rowIds[0]);
         }
-        const values = node.rowIds.map(i => measure.getValue(i));
         const aggregateValues = aggrfn ?? sumAggregation;
+        if (node.isRoot) {
+            return [...measure.getValues()].reduce(aggregateValues);
+        }
+        const values = node.rowIds.map(i => measure.getValue(i));
         return values.reduce(aggregateValues);
     }
 }
@@ -109,3 +128,7 @@ function sumAggregation(a: any, b: any) {
     return a + b;
 }
 
+/**
+ * Top parent node = the node that is a direct child of root and of which node is a descendant.
+ */
+export type ForEachNodeCallbackFn<T> = (node: TidyTreeNode, levelDepth: number, parent: TidyTreeNode, nodeChildrenIdx: number, parentSummary?: T) => boolean | void;

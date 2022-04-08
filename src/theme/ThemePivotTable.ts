@@ -1,3 +1,6 @@
+import {BaseTableChartOptions} from "./ThemeBaseTable";
+import {TidyTableColumnSelector} from "../PublicTidyTableTypes";
+
 export class PivotTableClasses {
 
     static readonly main = "ic3-pt";
@@ -38,5 +41,74 @@ export declare type PivotTableClassKey = keyof PivotTableClasses;
 export interface PivotTableProps {
 
     variant?: string;
+}
+
+export enum PivotTableHoverEffectOptions {
+    NONE = 'NONE',
+    SELECTION_OR_ROW = 'SELECTION_OR_ROW',
+    ROW_OR_COLUMN = 'ROW_OR_COLUMN',
+    ROW_AND_COLUMN = 'ROW_AND_COLUMN',
+    ROW_ONLY = 'ROW_ONLY',
+    COLUMN_ONLY = 'COLUMN_ONLY',
+}
+
+/**
+ * Pivot Table Options (fields of the "Chart" tab in the widget editor).
+ *
+ * <pre>
+ *      Plugin ID         : ic3
+ *      Widget/Template ID: PivotTable
+ * </pre>
+ *
+ * @see WidgetTemplateChartOptions
+ */
+export interface PivotTableChartOptions extends BaseTableChartOptions {
+
+    /**
+     * Name of a variant. Note that a variant is possibly overriding defined options.
+     */
+    variant?: string;
+
+    /**
+     * Cell Value. Defines the column containing the measures for the cells.
+     */
+    cellValue?: TidyTableColumnSelector;
+
+    /**
+     * Corner Text.
+     *
+     * The text to display in the top left corner.
+     */
+    cornerText?: string;
+
+    /**
+     * Wrap Top Header.
+     *
+     * Display the top header content on multiple lines.
+     */
+    topHeaderWrap: boolean;
+
+    /**
+     * Flatten Top Header.
+     *
+     * Removes drilldown and parent/child relations from top header.
+     */
+    flattenTopHeader: boolean;
+
+    /**
+     * Left Header Alignment (CSV).
+     *
+     * The first column (possibly a multi-hierarchy axis). A comma separated list of values:
+     * 'left', 'center', 'right'. The last value repeats itself.
+     */
+    columnLeftHeaderAlign: string;
+
+    /**
+     * Hover Behavior.
+     *
+     * Highlight rows and/or columns on hover.
+     */
+    hoverOptions: PivotTableHoverEffectOptions;
+
 }
 

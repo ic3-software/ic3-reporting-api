@@ -26,9 +26,24 @@ export class WidgetBoxClasses {
     static readonly container: string = "WidgetBox-container";
 
     /**
+     * Styles applied to the template JS content
+     */
+    static readonly templateJSContent: string = "WidgetBox-TemplateJS-content";
+
+    /**
+     * Styles applied to the template React content
+     */
+    static readonly templateReactContent: string = "WidgetBox-TemplateReact-content";
+
+    /**
      * Styles applied to the widgetBox content element (the widget without header and user menu)
      */
     static readonly content: string = "WidgetBox-content";
+
+    /**
+     * Styles applied to child of content (above)
+     */
+    static readonly contentRoot: string = "WidgetBox-content-root";
 
     /**
      * Styles applied to the widgetBox user menu element (the icons for the user menu)
@@ -66,5 +81,77 @@ export class WidgetBoxClasses {
     static readonly userMenuClosed: string = "WidgetBox-userMenuClosed";
 }
 
-
 export declare type WidgetBoxClassKey = keyof WidgetBoxClasses;
+
+export enum WidgetBoxTooltipType {
+    dialog = "dialog",
+    tooltip = "tooltip",
+}
+
+export enum WidgetBoxVisibilityType {
+    default = "default",
+    invisible = "invisible",
+    invisibleInPrinting = "invisibleInPrinting",
+}
+
+export enum ResizingConstraintOptions {
+    FixedWidthLeftAligned = "FixedWidthLeftAligned",
+    FixedWidthRightAligned = "FixedWidthRightAligned"
+}
+
+/**
+ * Support for repetition widget | pivot table expanding to make the whole content visible.
+ */
+export interface IWidgetBoxExpandOptions {
+
+    active: boolean;
+
+    keepBoxHeader: boolean;
+    keepTableHeader: boolean;
+}
+
+export interface IWidgetRectangle {
+    top: number;
+    left: number;
+    height: number;
+    width: number;
+}
+
+/**
+ * Widget Box Options (fields of the "Box" tab in the widget editor).
+ *
+ * @see https://github.com/ic3-software/ic3-demo-plugin-theme
+ */
+export interface WidgetBoxOptions {
+
+    /**
+     * Name of a variant. Note that a variant is possibly overriding defined options.
+     */
+    variant?: string;
+
+    /**
+     * Message that is displayed when the widget cannot render yet
+     * (waiting for its initial result or mandatory event value).
+     */
+    waitingEventOrResult?: string;
+
+    /**
+     * Use the chart title to define the information displayed in the widget box header.
+     */
+    withHeader: boolean;
+
+    visibility: WidgetBoxVisibilityType;
+
+    /**
+     * Behavior of the widget when the dashboard is being resized.
+     */
+    resizingConstraint?: ResizingConstraintOptions
+
+    /**
+     * The widget will (vertically) expand to fit its content.
+     */
+    autoExpandContent: IWidgetBoxExpandOptions;
+
+    rectangle: IWidgetRectangle;
+
+}

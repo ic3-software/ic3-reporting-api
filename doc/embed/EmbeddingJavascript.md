@@ -1,6 +1,6 @@
 ## icCube Dashboards API: Javascript Integration
 
-The Javascript API allows for loading the icCube Dashboards within an iFrame and then drive the Dashboards application
+The Javascript API allows for loading the icCube Dashboards within an iFrame and then drive the Dashboard application
 via the `IReporting` instance sent back icCube via a callback.
 
 This integration allows for a two ways communication between the host application and the icCube Dashboards:
@@ -8,7 +8,7 @@ This integration allows for a two ways communication between the host applicatio
 - open a dashboard,
 - send events to a dashboard,
 - listen to events from a dashboard,
-- etc...
+- etc.
 
 The source code of a running [example](https://github.com/ic3-software/ic3-demo-embedded-iframe-react)
 is available for more (up to date) details.
@@ -25,7 +25,7 @@ of `IReporting` using a callback registered in the global object `window.ic3load
 
 Following is an extract of the source code of the live example as mentioned earlier:
 
-```javascript
+```tsx
 
 // The icCube dashboards application as a IReporting instance.
 const [reporting, setReporting] = useState<IReporting>();
@@ -51,7 +51,7 @@ The `IReporting.openReport()` allows for opening a dashboard with an optional li
 #### Changing Schema/Cube and Theme
 
 The `onDefinition()` callback allows for retrieving the report definition. This definition can be modified to change for
-example the default **schema/cube** and the **theme** used by the dashboard. This allows for **adapting a single
+example the default **schema/cube**, or the **theme** used by the dashboard. This allows for **adapting a single
 dashboard definition** according to the host application needs before the icCube Dashboards application is using it.
 Check the [IReporting](https://github.com/ic3-software/ic3-reporting-api/blob/main/src/IReporting.ts) source code for
 up-to-date information.

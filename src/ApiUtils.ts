@@ -1,7 +1,53 @@
 import {IPluginDefinition} from "./IPluginDefinition";
 import {IVersionedPluginDefinition} from "./IVersionedPluginDefinition";
 import ReportingVersion from "./ReportingVersion";
-import {IPublicWidgetTemplateDefinition, IResolveDefinitionLibrary} from "./PublicTemplate";
+import {FormFieldObject} from "./PublicTemplateForm";
+import {
+    IPublicWidgetJsTemplateDefinition,
+    IPublicWidgetTemplateDefinition,
+    IWrappedWidgetTemplateDefinition
+} from "./PublicTemplate";
+import {IWidgetPublicContext} from "./PublicContext";
+import {WidgetTemplateIDs} from "./PublicTemplates";
+
+export interface AmCharts4WrappedDefinition<WIDGET extends WidgetTemplateIDs> {
+
+    /**
+     * Some free text used while registering the wrapper (e.g., error purpose).
+     */
+    readonly registrationInfo: string;
+
+    /**
+     * e.g., amCharts4.AmCharts4DonutChart
+     */
+    readonly wrappedWidgetTemplateId: WIDGET;
+
+    /**
+     * New overall meta-information (e.g., id, groupId, image, etc...).
+     */
+    readonly props: Partial<IPublicWidgetTemplateDefinition<FormFieldObject>>;
+
+    /**
+     * Meta-information for the editing of the widget options as well as the actual processing of those options
+     * (i.e., AmCharts 4 chart configuration). Lazy-loaded (and the underlying AmCharts 4 library) once required.
+     *
+     * <pre>
+     *      export default {
+     *
+     *          hookChartOptionsMeta: () => {
+     *              ...
+     *          },
+     *
+     *          hookChartOptions: () => {
+     *              ...
+     *          },
+     *
+     *      }
+     * </pre>
+     */
+    readonly hooks: Promise<any>;
+
+}
 
 export class ApiUtils {
 
@@ -10,15 +56,15 @@ export class ApiUtils {
      */
     public static readonly TAG_I18N_FIELD = "ic3t_";
 
-    static makePlugin(definition: IPluginDefinition): () => IVersionedPluginDefinition {
+    public static makePlugin(definition: IPluginDefinition): () => IVersionedPluginDefinition {
 
         return (): IVersionedPluginDefinition => {
 
             return {
 
                 apiVersion: new ReportingVersion(
-                    "8.0.0-rc.4" || "-",
-                    "Mon, 14 Feb 2022 08:45:05 GMT" || "-"
+                    "8.0.0" || "-",
+                    "Fri, 08 Apr 2022 12:23:38 GMT" || "-"
                 ),
 
                 ...definition,
@@ -29,42 +75,91 @@ export class ApiUtils {
     }
 
     /**
-     * Wrap the template from another widget. The widget can come from a plugin or from the included widgets.
-     * Wrapping means that the template receives its not-defined settings from the template that is wrapped.
-     * @param wrappedTemplateId the unique identifier of the template, e.g., amCharts4.AmCharts4DonutChart.
-     * @param newDefinition definition of the new widget.
-     * @param transformOptions create the available options using the options from the wrapped template.
+     * A helper method to create a widget template using the resolveDefinition method.
+     * Webpack lazy load of dependencies.
+     *
+     * @see IPublicWidgetJsTemplateDefinition#resolveDefinition
      */
-    static makeWidgetTemplateWrapper<T extends IPublicWidgetTemplateDefinition<any>>(
-        wrappedTemplateId: string, newDefinition: T, transformOptions?: (old: T['chartOptionsMeta']) => void
-    ): T {
+    public static createLazyJsWidgetTemplateDefinition<OPTIONS extends FormFieldObject>(definition: Omit<IPublicWidgetJsTemplateDefinition<OPTIONS>, "jsCode">): IPublicWidgetJsTemplateDefinition<OPTIONS> {
+
         return {
 
-            // New definition must have type, id, image & groupId for the widget selector.
-            ...newDefinition,
+            ...definition,
 
-            resolveDefinition: function (lib: IResolveDefinitionLibrary) {
-                const self = newDefinition;
-                return lib.wrapTemplateDefinition(wrappedTemplateId)
-                    .then(definition => ApiUtils.resolveTemplateDefinition(self, definition, transformOptions))
+            jsCode: (context: IWidgetPublicContext, container: HTMLDivElement) => {
+                throw new Error("JS Lazy: unexpected jsCode() call!");
             },
 
-            jsCode: () => {
-                throw Error("Wrapped widget template " + wrappedTemplateId + ": unexpected jsCode() call!");
-            },
+            reactComponent: false,
+
+            withDrilldownPivotTableLikeAs: false,
 
         }
+
     }
 
-    private static resolveTemplateDefinition<T extends IPublicWidgetTemplateDefinition<any>>(
-        self: T, definition: IPublicWidgetTemplateDefinition<any>, transformOptions?: (old: T["chartOptionsMeta"]) => void
-    ): T {
-        const newTemplate = {...definition, ...self, resolveDefinition: undefined};
-        // TODO (tom) use deepClone for the optionsMeta.
-        if (transformOptions != null) {
-            transformOptions(newTemplate.chartOptionsMeta);
-        }
-        return newTemplate;
+    public static resolveAmCharts4WidgetTemplateDefinition<OPTIONS extends FormFieldObject>(definition: IPublicWidgetTemplateDefinition<OPTIONS>, wrapped: IPublicWidgetTemplateDefinition<any>): IPublicWidgetTemplateDefinition<OPTIONS> {
+
+        return {
+
+            ...wrapped,
+            ...definition,
+
+            resolveDefinition: undefined,
+            jsCode: wrapped.jsCode,
+
+        } as IPublicWidgetTemplateDefinition<OPTIONS>
+
+    }
+
+    /**
+     * A utility function creating a wrapper widget template definition for existing AmCharts 4 widgets.
+     */
+    public static makeAmCharts4WrappedWidgetTemplateDefinition<WIDGET extends WidgetTemplateIDs>(props: AmCharts4WrappedDefinition<WIDGET>): IWrappedWidgetTemplateDefinition<WIDGET> {
+
+        return {
+
+            registrationInfo: props.registrationInfo,
+            wrappedWidgetTemplateId: props.wrappedWidgetTemplateId,
+
+            wrapper: (wrapped) => {
+
+                return {
+
+                    ...wrapped /* unresolved */,
+
+                    ...props.props /* e.g., id, groupId, etc... */,
+
+                    /**
+                     * amCharts 4 widgets are loading the amCharts 4 Javascript library on the fly.
+                     *
+                     * This extended widget has to use the resolveDefinition() mechanism as well to be able to re-use
+                     * the lazy-loaded jsCode (widgets are implemented as IPublicWidgetJsTemplateDefinition).
+                     */
+                    resolveDefinition: function (wrappedR) {
+
+                        const wrappedResolved = ApiUtils.resolveAmCharts4WidgetTemplateDefinition(this, wrappedR!);
+
+                        return new Promise((resolve, reject) => {
+
+                            props.hooks.then(definition => resolve({
+
+                                ...wrappedResolved,
+
+                                // our (lazy-loaded) widget meta-information and options hook.
+
+                                chartOptionsMeta: definition.default.hookChartOptionsMeta(wrappedResolved.chartOptionsMeta),
+                                hookChartOptions: definition.default.hookChartOptions,
+
+                            })).catch(err => reject(err))
+                        });
+
+                    }
+                }
+            }
+
+        } as IWrappedWidgetTemplateDefinition<WIDGET>;
+
     }
 
 }

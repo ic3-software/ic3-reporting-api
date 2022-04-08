@@ -1,39 +1,4 @@
-import {FormFieldObject} from "../PublicTemplateForm";
-
-export enum FilterSliderRenderingType {
-
-    MARKS = "MARKS",
-    TOOLTIPS = "TOOLTIPS",
-    MARKS_WITH_TOOLTIPS = "MARKS_WITH_TOOLTIPS",
-
-}
-
-export interface FilterSliderProps extends FormFieldObject {
-    /**
-     * Predefined variants
-     */
-    variant?: string;
-
-    /**
-     * Size of slider
-     */
-    size: 'small' | 'medium';
-
-    /**
-     * slider Orientation Vertical / Horizontal
-     */
-    orientation: "horizontal" | "vertical";
-
-    /**
-     * Styling the slider (marks/tooltips)
-     */
-    style: FilterSliderRenderingType;
-
-    /**
-     * The margin for starting/ending the slider (left/right or top/bottom)
-     */
-    margin: number;
-}
+import {FilterTidyTableChartOptions} from "./ThemeFilter";
 
 export class FilterSliderClasses {
 
@@ -59,5 +24,54 @@ export class FilterSliderClasses {
 
 }
 
-
 export declare type FilterSliderClassKey = keyof FilterSliderClasses;
+
+export enum FilterSliderRenderingType {
+
+    MARKS = "MARKS",
+    TOOLTIPS = "TOOLTIPS",
+    MARKS_WITH_TOOLTIPS = "MARKS_WITH_TOOLTIPS",
+
+}
+
+/**
+ * Filter Slider Options (fields of the "Chart" tab in the widget editor).
+ *
+ * <pre>
+ *      Plugin ID         : ic3
+ *      Widget/Template ID: FilterSlider
+ * </pre>
+ *
+ * @see WidgetTemplateChartOptions
+ */
+export interface FilterSliderChartOptions extends FilterTidyTableChartOptions {
+
+    /**
+     * Variant.
+     *
+     * Allows for selecting a set of preset options. Note that a variant is possibly overriding defined options.
+     */
+    variant?: string;
+
+    /**
+     * Size.
+     */
+    size: "small" | "medium";
+
+    /**
+     * Orientation.
+     */
+    orientation: "horizontal" | "vertical";
+
+    /**
+     * Style.
+     */
+    style: FilterSliderRenderingType;
+
+    /**
+     * Margins.
+     *
+     * Left/right (or top/down) margins of the slider.
+     */
+    margin: number;
+}

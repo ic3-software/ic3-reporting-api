@@ -15,9 +15,13 @@ export type HtmlBoxVariant =
     |
     "plain" |
     /**
-     * Used by the documentation dialog and possibly text box used for documentation.
+     * Used by the editor documentation dialog and text box used for Live Demo documentation.
      */
     "doc" |
+    /**
+     * Used by the dashboard documentation dialog (e.g., filter panel usage, box help icon).
+     */
+    "dashboardDoc" |
     /**
      * Used by the widget box tooltip/help icon.
      */

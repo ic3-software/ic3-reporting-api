@@ -1,14 +1,14 @@
-## icCube Dashboards API: PermaLink
+## icCube Dashboards API: Permalink
 
 This is the simplest way to embed an icCube dashboard. The host application can set up an iFrame using as `src`
-the permaLink of that dashboard to open that dashboard.
+the permalink of that dashboard to open that dashboard.
 
-### Dashboard PermaLink
+### Dashboard Permalink
 
-You can find the permaLink of a dashboard with the icCube Dashboards editor. It is located in the right drawer
-`INFO` tab. Alternatively you can use the `Visualize` button to open the dashboard in the browser using its permaLink.
+You can find the permalink of a dashboard with the icCube Dashboards editor. It is located in the right drawer
+`INFO` tab. Alternatively you can use the `Visualize` button to open the dashboard in the browser using its permalink.
 
-Assuming the icCube Dashboards application is available on the localhost, the permaLink for the dashboard whose path is
+Assuming the icCube Dashboards application is available on the localhost, the permalink for the dashboard whose path is
 `shared:/Failure Analysis/Daily Failures` will be:
 
 <pre>
@@ -18,7 +18,7 @@ http://localhost:8282/icCube/report/viewer?ic3report=shared:/Failure Analysis/Da
 
 #### ic3locale
 
-The `ic3locale` parameter can be appended to the permaLink URL to override the user's locale. This parameter follows the
+The `ic3locale` parameter can be appended to the permalink URL to override the user's locale. This parameter follows the
 Java locale syntax. For example the following URL is opening the report using the US english locale independently of the
 actual user's locale:
 

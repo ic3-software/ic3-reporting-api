@@ -1,33 +1,4 @@
-import {FormFieldObject} from "../PublicTemplateForm";
-
-export interface FilterButtonsProps extends FormFieldObject {
-    /**
-     * Predefined variants (add string to allow new variant without type augmentation)
-     */
-    variant: 'text' | 'outlined' | 'contained' | string;
-
-    /**
-     * Size of buttons
-     */
-    size: 'small' | 'medium' | 'large';
-
-
-    /**
-     * If true, buttons will be grouped together (visual effect)
-     */
-    group?: boolean;
-
-    /**
-     * If defined, buttons will be positioned in columns
-     */
-    columns?: number;
-
-    /**
-     * If defined, buttons will be grouped by layout
-     */
-    layout?: 'horizontal' | 'vertical'
-}
-
+import {FilterTidyTableChartOptions} from "./ThemeFilter";
 
 export class FilterButtonsClasses {
 
@@ -53,5 +24,52 @@ export class FilterButtonsClasses {
 
 }
 
-
 export declare type FilterButtonsClassKey = keyof FilterButtonsClasses;
+
+/**
+ * Filter Buttons Options (fields of the "Chart" tab in the widget editor).
+ *
+ * <pre>
+ *      Plugin ID         : ic3
+ *      Widget/Template ID: FilterButtons
+ * </pre>
+ *
+ * @see WidgetTemplateChartOptions
+ */
+export interface FilterButtonsChartOptions extends FilterTidyTableChartOptions {
+
+    /**
+     * Variant.
+     *
+     * Allows for selecting a set of preset options. Note that a variant is possibly overriding defined options.
+     */
+    variant: "text" | "outlined" | "contained" | string;
+
+    /**
+     * Size.
+     */
+    size: "small" | "medium" | "large";
+
+    /**
+     * Grouped.
+     *
+     * When grouped, the buttons are rendered horizontally or vertically similarly to a toolbar.
+     */
+    group?: boolean;
+
+    /**
+     * Layout (Grouped).
+     */
+    layout?: "horizontal" | "vertical";
+
+    /**
+     * Grid Column Count
+     *
+     * The buttons will be displayed on a grid. This field sets the number of columns of the grid.
+     * Not relevant if the buttons are 'Grouped'.
+     */
+    columns?: number;
+
+}
+
+

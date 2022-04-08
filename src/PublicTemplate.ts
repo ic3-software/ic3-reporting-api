@@ -1,11 +1,13 @@
-import { ITidyTable } from "./PublicTidyTable";
-import { ITidyTableInteraction } from "./PublicTidyTableInteractions";
-import { IWidgetPublicContext } from "./PublicContext";
-import { FormFieldDef, FormFieldObject, FormFields, IFormColumnChooserFieldDef } from "./PublicTemplateForm";
-import { IWidgetVariantManager } from "./IWidgetVariantManager";
-import { ITidyColumn } from "./PublicTidyColumn";
-import { ReactElement } from "react";
-import { Theme } from "@mui/material/styles";
+import {ITidyTable} from "./PublicTidyTable";
+import {ITidyTableInteraction} from "./PublicTidyTableInteractions";
+import {IWidgetPublicContext} from "./PublicContext";
+import {FormFieldObject, FormFields, IFormColumnChooserFieldDef} from "./PublicTemplateForm";
+import {IWidgetVariantManager} from "./IWidgetVariantManager";
+import {ITidyColumn} from "./PublicTidyColumn";
+import {ReactElement} from "react";
+import {Theme} from "@mui/material/styles";
+import {WidgetTemplateChartOptions, WidgetTemplateIDs} from "./PublicTemplates";
+import {ChartTemplateDataMapping} from "./PublicTidyTableTypes";
 
 type ChartTemplateWidgetProps = any;
 
@@ -82,17 +84,17 @@ export interface IWidgetTemplateMdxBuilderMapping {
     mdxAxis: Readonly<IWidgetTemplateMdxBuilderAxisProps[]>;
 
     /**
-     * The generated Mdx is for a filter (the cell values are not of interest)
+     * The generated MDX is for a filter (the cell values are not of interest).
      */
     mdxIsForFilter?: true;
 
     /**
-     * the cell values are not needed
+     * The cell values are not needed
      */
     withoutCellValues?: true;
 
     /**
-     * an MDX query if the builder is empty
+     * An MDX query if the builder is empty.
      */
     mdxQueryIfEmpty?: boolean;
 }
@@ -137,11 +139,26 @@ export interface IPublicJsChartTemplate<T extends FormFieldObject> {
  * @see IPublicReactChartTemplate
  * @see FormFieldObject
  */
-export interface IPublicWidgetReactTemplateDefinition<T extends FormFieldObject> extends IPublicCommonWidgetTemplateDefinition {
+export interface IPublicWidgetReactTemplateDefinition<OPTIONS extends FormFieldObject> extends IPublicCommonWidgetTemplateDefinition<OPTIONS> {
 
-    jsCode: (context: IWidgetPublicContext) => IPublicReactChartTemplate<T>;
+    /**
+     * Actual widget rendering logic.
+     */
+    jsCode: (context: IWidgetPublicContext) => IPublicReactChartTemplate<OPTIONS>;
 
     reactComponent: true;
+
+    /**
+     * Only the widget template meta information is required when starting the application.
+     *
+     * This method gives the opportunity for a widget template to load (Webpack) its actual jsCode logic when required.
+     * For example, AmCharts 4 widgets are loading the AmCharts 4 actual JS libraries once their rendering is actually
+     * required.
+     *
+     * @param definitionW a resolved wrapped widget (extending widget).
+     */
+    resolveDefinition?: (definitionW?: IPublicWidgetTemplateDefinition<any>) => Promise<IPublicWidgetTemplateDefinition<OPTIONS>>;
+
 }
 
 /**
@@ -150,28 +167,32 @@ export interface IPublicWidgetReactTemplateDefinition<T extends FormFieldObject>
  * @see IPublicJsChartTemplate
  * @see FormFieldObject
  */
-export interface IPublicWidgetJsTemplateDefinition<T extends FormFieldObject> extends IPublicCommonWidgetTemplateDefinition {
+export interface IPublicWidgetJsTemplateDefinition<OPTIONS extends FormFieldObject> extends IPublicCommonWidgetTemplateDefinition<OPTIONS> {
 
-    jsCode: (context: IWidgetPublicContext, container: HTMLDivElement) => IPublicJsChartTemplate<T>;
+    /**
+     * Actual widget rendering logic.
+     */
+    jsCode: (context: IWidgetPublicContext, container: HTMLDivElement) => IPublicJsChartTemplate<OPTIONS>;
 
     reactComponent?: false;
-}
 
+    /**
+     * Only the widget template meta information is required when starting the application.
+     *
+     * This method gives the opportunity for a widget template to load (Webpack) its actual jsCode logic when required.
+     * For example, AmCharts 4 widgets are loading the AmCharts 4 actual JS libraries once their rendering is actually
+     * required.
+     *
+     * @param definitionW a resolved wrapped widget (extending widget).
+     */
+    resolveDefinition?: (definitionW?: IPublicWidgetTemplateDefinition<any>) => Promise<IPublicWidgetTemplateDefinition<OPTIONS>>;
 
-/**
- * List of special selection granularities (column selectors)
- */
-
-export enum SelectionGranularityOptions {
-    PivotTableTopHeader = 'ic3pivotTableTopHeader',
-    PivotTableLeftHeader = 'ic3pivotTableLeftHeader',
-    PivotTableCell = 'ic3pivotTableCell',
 }
 
 /**
  * Definition - static - of a widget template
  */
-interface IPublicCommonWidgetTemplateDefinition {
+interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject> {
 
     /**
      * Determine the widget icon in the widget infos.
@@ -195,6 +216,11 @@ interface IPublicCommonWidgetTemplateDefinition {
      * Internal usage: while investigating lazy registration (setup upon registration).
      */
     debug?: string;
+
+    /**
+     * Internal usage: the wrapped pluginId.templateId (setup upon registration).
+     */
+    wrapped?: string;
 
     /**
      * Internal usage: pluginId.templateId (setup upon registration).
@@ -336,26 +362,43 @@ interface IPublicCommonWidgetTemplateDefinition {
     eventRoles?: ITemplateEventActionDef;
 
     selection?: {
+
         /**
-         * The list of columns that can be part of the selection. The end-user can then select the actual
-         * columns from the Interaction/Selection configuration (see Selection Granularity).
+         * If defined, default selection role(s)
          */
-        allowedColumns: (column: ITidyColumn) => boolean;
+        defaultRoles?: string[];
 
-        optionValues?: undefined;
+        /**
+         * If defined, returns the roles available
+         *
+         */
+        allowedRoles?: (table: ITidyTable | undefined) => string[];
 
-    } | {
-        allowedColumns?: undefined;
-
-        optionValues?: SelectionGranularityOptions[];
+        /**
+         * The list of columns that can be part of the selection granularity. The user can select from the roles
+         * of the MDX query if there are 2 or more roles.
+         */
+        allowedColumns?: (column: ITidyColumn, table: ITidyTable) => boolean;
     }
 
     mdxBuilderSettings?: IWidgetTemplateMdxBuilderMapping;
 
     /**
+     * Setup how to get default mappings from the table and options for this widget. If undefined, it uses the default
+     * fallback logic.
+     */
+    defaultMapping?: (data: IWidgetTemplateTidyOptions<OPTIONS>) => ChartTemplateDataMapping;
+
+    /**
      * The meta information required for editing the widget options.
      */
-    chartOptionsMeta?: FormFieldDef[] | FormFields<FormFieldObject>;
+    chartOptionsMeta?: FormFields<OPTIONS>;
+
+    /**
+     * An optional hook that allows for modifying the chart options passed as parameter.
+     * Used when extending existing widget definition.
+     */
+    hookChartOptions?: (options: any) => any;
 
     /**
      * When registering a variant add the following field editor meta:
@@ -378,7 +421,16 @@ interface IPublicCommonWidgetTemplateDefinition {
      */
     reactComponent?: boolean;
 
-    resolveDefinition?: (library: IResolveDefinitionLibrary) => Promise<IPublicWidgetTemplateDefinition<any>>;
+    /**
+     * Only the widget template meta information is required when starting the application.
+     *
+     * This method gives the opportunity for a widget template to load (Webpack) its actual jsCode logic when required.
+     * For example, AmCharts 4 widgets are loading the AmCharts 4 actual JS libraries once their rendering is actually
+     * required.
+     *
+     * @param definitionW a resolved wrapped widget (extending widget).
+     */
+    resolveDefinition?: (definitionW?: IPublicWidgetTemplateDefinition<any>) => Promise<IPublicWidgetTemplateDefinition<OPTIONS>>;
 
     /**
      * When defining new widgets using amCharts 4, this method registers the icCube license.
@@ -389,6 +441,11 @@ interface IPublicCommonWidgetTemplateDefinition {
      * When opening "Use Global Filter" option on Interaction tab
      */
     enableUseGlobalFilter?: boolean;
+
+    /**
+     *  Returns true if the widget fires a global event at initialization (start)
+     */
+    firesGlobalEventAtStart?: (options: OPTIONS | undefined, templateDef: IPublicWidgetTemplateDefinition<OPTIONS>) => boolean
 }
 
 /**
@@ -403,15 +460,6 @@ export enum WidgetTemplateDefinitionType {
     Misc = "misc",
 }
 
-
-export interface IChartVisualizationInput {
-
-    table: ITidyTable;
-    inter: ITidyTableInteraction;
-
-    options: { [key: string]: any };
-}
-
 export interface IWidgetTemplateTidyData {
 
     table: ITidyTable;
@@ -419,6 +467,10 @@ export interface IWidgetTemplateTidyData {
 
 }
 
+export interface IWidgetTemplateTidyOptions<T extends FormFieldObject> {
+    table: ITidyTable;
+    options: T;
+}
 
 export interface IChartVisualizationTypedInput<T extends FormFieldObject> {
 
@@ -451,7 +503,7 @@ export enum TemplateEventActionNames {
  * Definition of the actions supported by a template
  *
  *
- * ( e.g publish: 'onClick'  )
+ * ( e.g., publish: 'onClick'  )
  */
 export interface ITemplateEventActionDef {
 
@@ -482,8 +534,21 @@ export interface ITemplateEventActionDef {
 
 }
 
-export interface IResolveDefinitionLibrary {
+export interface IWrappedWidgetTemplateDefinition<WIDGET extends WidgetTemplateIDs> {
 
-    wrapTemplateDefinition(id: string): Promise<IPublicWidgetTemplateDefinition<any>>;
+    /**
+     * Some free text used while registering the wrapper (e.g., error purpose).
+     */
+    readonly registrationInfo: string;
+
+    /**
+     * e.g., ic3.Table
+     */
+    readonly wrappedWidgetTemplateId: WIDGET;
+
+    /**
+     * A function generating the widget template definition based on the wrapped widget template definition.
+     */
+    readonly wrapper: (wrapped: IPublicWidgetTemplateDefinition<WidgetTemplateChartOptions[WIDGET]>) => IPublicWidgetTemplateDefinition<FormFieldObject>;
 
 }

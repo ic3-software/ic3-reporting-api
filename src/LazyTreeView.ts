@@ -101,6 +101,8 @@ export interface ILazyTreeViewLoader {
  */
 export interface LazyTreeViewProps {
 
+    logId: string;
+
     lazyLoader: ILazyTreeViewLoader;
 
     allowEmptySelection?: boolean;
@@ -145,9 +147,14 @@ export interface LazyTreeViewProps {
     setSelected?: (nodeIdx: string[]) => void;
 
     /**
-     * Controlled mode for expanded
+     * Controlled mode for expanded or initial expanded if not controlled
      */
     expanded?: string[];
+
+    /**
+     * Controlled mode for expanded
+     */
+    setExpanded?: (nodeIdx: string[]) => void;
 
     /**
      * The level depth of initially open nodes ( 0 first level )

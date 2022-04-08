@@ -1,11 +1,13 @@
 import {
     AxisCoordinate,
+    ChartTemplateDataMapping,
     IAmCharts4Data,
     IAmCharts4DataTreeMap,
     ITotalRowValues,
     SortingType,
     TidyColumnIndex,
     TidyColumnsType,
+    TidyTableColumnIdentifier,
     TidyTableColumnSelector
 } from "./PublicTidyTableTypes";
 import {
@@ -18,7 +20,6 @@ import {
     ITidyUnknownColumn
 } from "./PublicTidyColumn";
 import {TidyTree} from "./PublicTidyTree";
-import {SelectionGranularityOptions} from "./PublicTemplate";
 import {TidyHistogramOptions} from "./PublicTidyHistogram";
 import {IPublicContext} from "./PublicContext";
 
@@ -63,6 +64,8 @@ export interface ITidyTable {
      * Get the query uid
      */
     getQueryUid(): number;
+
+    isSameDimensionality(other: ITidyTable): boolean;
 
     asPivotTableForExcel(nullValue: any): ITidyColumn[];
 
@@ -128,26 +131,33 @@ export interface ITidyTable {
     getColumnByAlias(alias: string): ITidyColumn;
 
     /**
+     * @see {getOptionalColumnByRole}
+     * @param role mapping name
+     * @returns list of columns with the role 'role'.
+     */
+    getColumnsByRole(role: string): ITidyColumn[];
+
+    /**
      * @see {getColumnByAlias}
      */
     getOptionalColumnByAlias(alias: string): ITidyColumn | undefined;
 
     /**
+     * @see {getColumnByAlias}
+     */
+    getOptionalColumnsByAlias(alias: string): ITidyColumn[] | undefined;
+
+    /**
      * Get the coordinate of the column using the alias for the mapping
      * @param alias the name of the mapping
      */
-    getOptionalColumnCoordinateByAlias(alias: string): TidyTableColumnSelector | undefined;
+    getOptionalColumnCoordinateByAlias(alias: string): TidyTableColumnIdentifier | undefined;
 
     /**
-     * @param granularityOption , if valid a SelectionGranularityOptions
+     * Get columns using a selector
+     * @param selector selector object
      */
-    getOptionalColumnBySelectionGranularity(granularityOption: string | SelectionGranularityOptions): ITidyColumn[] | undefined;
-
-    /**
-     * Get column(s) using a selector
-     * @param selector coordinate to the column or property.
-     */
-    getColumnBySelector(selector?: TidyTableColumnSelector): ITidyColumn[] | undefined;
+    getColumnsBySelector(selector: TidyTableColumnSelector | TidyTableColumnSelector[]): ITidyColumn[];
 
     /**
      * Get a column using the coordinate of an axis.
@@ -280,19 +290,20 @@ export interface ITidyTable {
     buildTidyTree(treeColumns: ITidyColumn[], rootLabel?: string, expandHierarchicalColumn?: boolean): TidyTree;
 
     /**
-     * Construct list of tidy tables
+     * Group the table by some of its columns
      * @param columns groupIdx and groupRows for each unique value in this(ese) column(s)
+     * @param useMdxUniqueName If true, use MDX-unique names to construct groups. Default = use column values.
      * @returns an map with indexes for each group.
      */
-    groupBy(columns: ITidyColumn[]): number[][];
+    groupBy(columns: ITidyColumn[], useMdxUniqueName?: boolean): number[][];
 
     /**
-     * Pivot a tidy table from wide to long format. See https://pandas.pydata.org/docs/reference/api/pandas.melt.html.
+     * Pivot a tidy table from wide to long format. See pivot longer in the documentation.
      * @param columns columns to melt.
-     * @param namesCaption name of the column to which the variable name are melted.
-     * @param valuesCaption name of the column to which the values are melted.
+     * @param variableName name of the column to which the variable name are melted.
+     * @param valuesName name of the column to which the values are melted.
      */
-    melt(columns: ITidyColumn[], namesCaption?: string, valuesCaption?: string): void;
+    melt(columns: ITidyColumn[], variableName?: string, valuesName?: string): void;
 
     /**
      * Pivot a tidy table from long to wide format
@@ -358,7 +369,8 @@ export interface ITidyTable {
      * @param level this column expands the axis so that widgets can plot level-like charts using guides. This expansion
      * follows the patters axis-label[level-label].
      */
-    toAmcharts4Data<F extends string>(category: ITidyColumn, value: Record<F, ITidyColumn | undefined>, group?: ITidyColumn, level?: ITidyColumn): IAmCharts4Data[];
+    toAmcharts4Data<F extends string>(category: ITidyColumn, value: Record<F, ITidyColumn | undefined>,
+                                      group?: ITidyColumn | ITidyColumn[], level?: ITidyColumn): IAmCharts4Data[];
 
     /**
      * Creates a data object for the Amcharts treemap
@@ -538,7 +550,7 @@ export interface ITidyTable {
      */
     toHistogramBucketColumn(context: IPublicContext, valueCol: ITidyBaseColumnReadonly<number | null>, options: TidyHistogramOptions): ITidyColumn;
 
-    addTotalRows(totals: Map<number, ITotalRowValues>): void;
+    addTotalRows(totals: Map<number, ITotalRowValues[]>): void;
 
     /**
      * Get a column by its role as defined in the mdxBuilderSettings.
@@ -556,6 +568,18 @@ export interface ITidyTable {
     hasMdxChildren(nodeInfo: MdxNodeIdentifier): boolean;
 
     isLeaf(nodeInfo: MdxNodeIdentifier): any;
+
+    /**
+     * Sort the tidy table pivot style
+     */
+    sortLikePivotTable(sortingColumn: ITidyColumn, type: SortingType, rowIds: number[]): void;
+
+    /**
+     * The tidy table internally keeps track how columns are mapped to roles. If you apply a transformation
+     * in the widget template, you can update the mapping after whith this function.
+     * @param mapping new mapping = {old mapping , ...mapping}
+     */
+    updateMapping(mapping: ChartTemplateDataMapping): void;
 }
 
 

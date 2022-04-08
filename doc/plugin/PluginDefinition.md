@@ -2,8 +2,11 @@
 
 The plugin definition (`IPluginDefinition`) acts as the entry point of your plugin.
 
-This is where the plugin ID is defined and where the widgets, the data transformations, etc... defined in the plugin are
-registered to the icCube Dashboards application. This is done using the `makePlugin` function:
+This is where the plugin ID is defined and where the widgets, the data transformations, etc. defined in the plugin are
+registered to the icCube Dashboards application. Note that a plugin definition can **filter** the list of available
+widgets based on their widget IDs.
+
+A plugin definition is created using the `makePlugin` function:
 
 ```typescript
 const PluginDefinition = ApiUtils.makePlugin({
@@ -28,6 +31,10 @@ const PluginDefinition = ApiUtils.makePlugin({
 
     registerTidyTableTransformations(manager: ITidyTableTransformationManager) {
         // ...
+    },
+
+    acceptWidget(id: WidgetTemplateIDs | string, widget: IPublicWidgetTemplateDefinition<FormFieldObject>): boolean {
+        // ...  
     },
 
 });

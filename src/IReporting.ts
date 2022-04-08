@@ -103,7 +103,7 @@ export interface IReporting {
     /**
      * @param options
      * @param pushToHistory    defaulted to true
-     * @param keepGlobalFilter defaulted to true
+     * @param keepGlobalFilter defaulted to false
      */
     openReport(options: IOpenReportOptions, pushToHistory?: boolean, keepGlobalFilter?: boolean): void;
 

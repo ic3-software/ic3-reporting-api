@@ -4,6 +4,9 @@ import {IWidgetManager} from "./IWidgetManager";
 import {ITidyTableTransformationManager} from "./ITidyTableTransformationManager";
 import {IWidgetDefaultsManager} from "./IWidgetDefaultsManager";
 import {Theme} from "@mui/material/styles";
+import {WidgetTemplateIDs} from "./PublicTemplates";
+import {FormFieldObject} from "./PublicTemplateForm";
+import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 
 export interface IPluginDefinition {
 
@@ -29,5 +32,12 @@ export interface IPluginDefinition {
     registerTidyTableTransformations?: (manager: ITidyTableTransformationManager) => void;
 
     registerWidgetDefaults?: (theme: Theme, manager: IWidgetDefaultsManager) => void;
+
+    /**
+     * Allows for selecting the available widgets.
+     *
+     * @param id pluginId.widgetId (e.g., ic3.Table)
+     */
+    acceptWidget?: (id: WidgetTemplateIDs | string, widget: IPublicWidgetTemplateDefinition<FormFieldObject>) => boolean;
 
 }

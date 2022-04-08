@@ -16,13 +16,16 @@ import {WidgetBoxContentMessageClassKey} from "./theme/ThemeWidgetBoxContentMess
 import {ReactElement} from "react";
 import {TypographyStyleOptions} from "@mui/material/styles/createTypography";
 import {Property} from "csstype";
-import {FilterButtonsClassKey, FilterButtonsProps} from "./theme/ThemeFilterButtons";
-import {FilterSliderClassKey, FilterSliderProps} from "./theme/ThemeFilterSlider";
-import {GoogleMapMarkerProps} from "./theme/ThemeGoogleMapMarker";
+import {FilterButtonsChartOptions, FilterButtonsClassKey} from "./theme/ThemeFilterButtons";
+import {FilterSliderChartOptions, FilterSliderClassKey} from "./theme/ThemeFilterSlider";
+import {GoogleMarkerVariantChartOptions} from "./theme/ThemeGoogleMarker";
 import {IPublicContext} from "./PublicContext";
 import {TableClassKey, TableProps} from "./theme/ThemeTable";
 import {PivotTableClassKey, PivotTableProps} from "./theme/ThemePivotTable";
 import {Components} from "@mui/material/styles/components";
+import {FilterPanelClassesKey} from "./theme/ThemeFilterPanel";
+import {FilterCheckboxRadioChartOptions, FilterCheckboxRadioClassKey} from "./theme/ThemeFilterCheckboxRadio";
+import {ReportAppLeftPanelClassKey} from "./theme/ThemeReportAppLeftPanel";
 
 export interface INoSchemaRendererOptions {
 
@@ -261,8 +264,8 @@ export interface ic3TypographyOptions {
 }
 
 export enum TableRowHeightOptions {
-    standard = 'standard',
-    compact = 'compact',
+    standard = "standard",
+    compact = "compact",
 }
 
 export interface ic3Theme {
@@ -470,20 +473,24 @@ interface ic3BaseComponents {
     ErrorRenderer?: {
         styleOverrides?: ComponentsOverrides["ErrorRenderer"];
     }
-    // FilterCheckbox: {
-    //     styleOverrides?: ComponentsOverrides["FilterCheckbox"];
-    //     variants?: ComponentsVariants["FilterCheckbox"];
-    // }
+    FilterCheckbox?: {
+        styleOverrides?: ComponentsOverrides["FilterCheckbox"];
+        variants?: ComponentsVariants["FilterCheckbox"];
+    }
     FilterButtons?: {
         styleOverrides?: ComponentsOverrides["FilterButtons"];
         variants?: ComponentsVariants["FilterButtons"];
+    }
+    FilterPanel?: {
+        variants?: ComponentsVariants['FilterPanel'];
+        styleOverrides?: ComponentsOverrides["FilterPanel"];
     }
     FilterSlider?: {
         styleOverrides?: ComponentsOverrides["FilterSlider"];
         variants?: ComponentsVariants["FilterSlider"];
     }
-    GoogleMapMarker?: {
-        variants?: ComponentsVariants['GoogleMapMarker'];
+    GoogleMarker?: {
+        variants?: ComponentsVariants['GoogleMarker'];
     }
     HtmlBox?: {
         styleOverrides?: ComponentsOverrides["HtmlBox"];
@@ -501,6 +508,9 @@ interface ic3BaseComponents {
     }
     ReportAppBar?: {
         styleOverrides?: ComponentsOverrides["ReportAppBar"];
+    }
+    ReportAppLeftPanel?: {
+        styleOverrides?: ComponentsOverrides["ReportAppLeftPanel"];
     }
     ReportAppMenu?: {
         styleOverrides?: ComponentsOverrides["ReportAppMenu"];
@@ -604,24 +614,27 @@ declare module '@mui/material/styles/overrides' {
 
         ErrorRenderer: ErrorRendererClassKey;
 
-        // FilterCheckbox: FilterCheckboxClassKey;
+        FilterCheckbox: FilterCheckboxRadioClassKey;
         FilterButtons: FilterButtonsClassKey;
+        FilterPanel: FilterPanelClassesKey;
         FilterSlider: FilterSliderClassKey;
 
         HtmlBox: HtmlBoxClassKey;
-
         Layout: LayoutClassKey;
+
         LayoutPage: LayoutPageClassKey;
 
         PivotTable: PivotTableClassKey;
-
         ReportAppBar: ReportAppBarClassKey;
+
         ReportAppMenu: ReportAppMenuClassKey;
 
         Table: TableClassKey;
-
         WidgetBox: WidgetBoxClassKey;
+
         WidgetBoxContentMessage: WidgetBoxContentMessageClassKey;
+
+        ReportAppLeftPanel: ReportAppLeftPanelClassKey;
 
     }
 
@@ -631,11 +644,15 @@ declare module '@mui/material/styles/props' {
 
     interface ComponentsPropsList {
 
-        FilterButtons: FilterButtonsProps;
+        FilterCheckbox: FilterCheckboxRadioChartOptions;
 
-        FilterSlider: FilterSliderProps;
+        FilterButtons: FilterButtonsChartOptions;
 
-        GoogleMapMarker: GoogleMapMarkerProps;
+        FilterPanel: Record<never, any>;
+
+        FilterSlider: FilterSliderChartOptions;
+
+        GoogleMarker: GoogleMarkerVariantChartOptions;
 
         HtmlBox: HtmlBoxProps;
 

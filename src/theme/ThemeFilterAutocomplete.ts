@@ -1,25 +1,5 @@
-import {FormFieldObject} from "../PublicTemplateForm";
 import autocompleteClasses from "@mui/material/Autocomplete/autocompleteClasses";
-
-export interface FilterAutocompleteProps extends FormFieldObject {
-
-    /**
-     * Predefined variants , "filled", "outlined" + custome ones
-     */
-    variant: string;
-
-    /**
-     * Size of the chips
-     */
-    size: 'small' | 'medium';
-
-    /**
-     * The maximum number of chips that will be visible when not focused. Set -1 to disable the limit.
-     */
-    limitTags: number;
-
-}
-
+import {FilterTidyTableChartOptions} from "./ThemeFilter";
 
 export class FilterAutocompleteClasses {
 
@@ -40,5 +20,39 @@ export class FilterAutocompleteClasses {
 
 }
 
-
 export declare type FilterAutocompleteClassesKey = keyof FilterAutocompleteClasses;
+
+/**
+ * Filter Autocomplete (aka. Dropdown) Options (fields of the "Chart" tab in the widget editor).
+ *
+ * <pre>
+ *      Plugin ID         : ic3
+ *      Widget/Template ID: FilterAutocomplete
+ * </pre>
+ *
+ * @see WidgetTemplateChartOptions
+ */
+export interface FilterAutocompleteChartOptions extends FilterTidyTableChartOptions {
+
+    /**
+     * Variant.
+     *
+     * Allows for selecting a set of preset options. Note that a variant is possibly overriding defined options.
+     */
+    variant: string;
+
+    /**
+     * Size.
+     *
+     * Rendered items size.
+     */
+    size: "small" | "medium";
+
+    /**
+     * Limit Items.
+     *
+     * Maximum number of items that will be visible when not focused. Set -1 to disable the limit.
+     */
+    limitTags: number;
+
+}

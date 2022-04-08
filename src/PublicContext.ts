@@ -51,6 +51,7 @@ export interface IPublicContext {
      */
     localizeTransformationCaption(template: ITidyTableTransformation<any>): { info: string, description?: string };
 
+    localizeFormField(pluginId: string, widgetTemplateId: string, name: string, ...args: any[]): [string, string | undefined];
 
     /**
      * A bunch of mathematical functions related to the tidy table.

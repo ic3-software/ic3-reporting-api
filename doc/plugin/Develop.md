@@ -4,16 +4,16 @@ All working plugin examples comes with a `package.json` file containing the `sta
 
     npm run start
 
-is starting a Webpack dev. server that is hosting the plugin at `localhost:400x`. Check the README.md for the actual
-port number (`4000`, `4001`, etc...).
+Running it starts a Webpack development server that is hosting the plugin at `localhost:400x`. Check the README.md for the actual
+port number (`4000`, `4001`, etc.).
 
 This plugin is actually exposing a Webpack module that can be loaded (using the Webpack Module Federation)
 by a running instance of icCube Dashboards application.
 
 #### icCube Dashboards Server Configuration
 
-For developing that plugin, you need a local icCube server where the Dashboards application has been
-[installed](./Install.md) and ensure it is configured to load the plugin just started. For that purpose,
+For developing that plugin, you need a local icCube server where the Dashboard application has been
+[installed](./Install.md) and you need to ensure it is configured to load the plugin. For that purpose,
 the `ic3report-config.js` file should contain the following (replacing `MyPluginJS` and the port `4000`
 with the actual name and the actual port number: check the README.md file in the plugin project):
 

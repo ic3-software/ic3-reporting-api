@@ -1,73 +1,5 @@
-import {FormFieldObject} from "../PublicTemplateForm";
 import {TreeFireEventMode} from "../PublicTidyTableInteractions";
-
-export type FilterFireEventMode = TreeFireEventMode.ALL_SELECTED | TreeFireEventMode.COMPACT_ON_PARENT;
-
-export interface FilterTreeOptions extends FormFieldObject {
-    /**
-     * variants (if any)
-     */
-    variant?: string;
-
-    /**
-     * size
-     */
-    size: 'small' | 'medium';
-
-    /**
-     * add control icons for the tree item buttons
-     */
-    useControlIcons?: boolean;
-
-    /**
-     * Depth of the opened tree items at start
-     */
-    startOpenDepth: number,
-
-
-    /**
-     * On user item click, selects/unselects all children as well
-     */
-    cascadeSelection: boolean,
-
-    /**
-     * When firing an event, do not fire children if the parent is selected (i.e. the filter is used as an MDX filter)
-     */
-    fireMode: FilterFireEventMode,
-
-    /**
-     * Search feature to the tree
-     *  if tree, adds an input field on top
-     *  if autocomplete, uses the autocomplete to filter the tree
-     */
-    addSearch: boolean,
-
-    /**
-     *
-     */
-    searchPlaceholder?: string;
-
-    /**
-     * Switches the filter to an autocomplete with a collapsible tree
-     */
-    autoComplete: boolean;
-
-
-    /**
-     * Autocomplete predefined variants , "filled", "outlined" + custome ones
-     */
-    autoCompleteVariant: string;
-
-    /**
-     * Autocomplete size of buttons
-     */
-    autoCompleteSize?: 'small' | 'medium';
-
-    /**
-     * Autocomplete, the maximum number of tags that will be visible when not focused. Set -1 to disable the limit.
-     */
-    autoCompleteLimitTags: number;
-}
+import {FilterTidyTableChartOptions} from "./ThemeFilter";
 
 export class FilterTreeClasses {
 
@@ -92,5 +24,105 @@ export class FilterTreeClasses {
 
 }
 
-
 export declare type FilterTreeClassKey = keyof FilterTreeClasses;
+
+export type FilterFireEventMode =
+    TreeFireEventMode.ALL_SELECTED |
+    TreeFireEventMode.COMPACT_ON_PARENT
+    ;
+
+/**
+ * Filter Tree Options (fields of the "Chart" tab in the widget editor).
+ *
+ * <pre>
+ *      Plugin ID         : ic3
+ *      Widget/Template ID: FilterTree
+ * </pre>
+ *
+ * @see WidgetTemplateChartOptions
+ */
+export interface FilterTreeChartOptions extends FilterTidyTableChartOptions {
+
+    /**
+     * Variant.
+     *
+     * Allows for selecting a set of preset options. Note that a variant is possibly overriding defined options.
+     */
+    variant?: string;
+
+    /**
+     * Size.
+     */
+    size: "small" | "medium";
+
+    /**
+     * Use Control Icons.
+     *
+     * Display a checkbox/radiobutton to the left of each item.
+     */
+    useControlIcons?: boolean;
+
+    /**
+     * Expand/Collapse Depth.
+     *
+     * Number of levels initially expanded.
+     */
+    startOpenDepth: number,
+
+
+    /**
+     * Cascade Selection.
+     *
+     * Select all children as well. Does not apply if single selection.
+     */
+    cascadeSelection: boolean,
+
+    /**
+     * Fire Mode.
+     *
+     * When firing an event, do not fire children if the parent is selected (i.e. the filter is used as an MDX filter).
+     *
+     * Does not apply if single selection.
+     */
+    fireMode: FilterFireEventMode,
+
+    /**
+     * Add Search.
+     *
+     * Add a search bar above the tree.
+     */
+    addSearch: boolean,
+
+    /**
+     * Search Placeholder.
+     *
+     * Text displayed when the search bar is empty.
+     */
+    searchPlaceholder?: string;
+
+    /**
+     * Dropdown (aka. Autocomplete).
+     *
+     * The tree is displayed as a dropdown.
+     */
+    autoComplete: boolean;
+
+    /**
+     * Variant.
+     */
+    autoCompleteVariant: string;
+
+    /**
+     * Size (Dropdown/Autocomplete).
+     *
+     * Rendered items size.
+     */
+    autoCompleteSize?: 'small' | 'medium';
+
+    /**
+     * Limit Items (Dropdown/Autocomplete).
+     *
+     * Autocomplete, the maximum number of tags that will be visible when not focused. Set -1 to disable the limit.
+     */
+    autoCompleteLimitTags: number;
+}

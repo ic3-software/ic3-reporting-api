@@ -3,7 +3,7 @@
  */
 
 import {TidyHistogramBucketType} from "./PublicTidyHistogram";
-import {ITidyColumnAddValueInsert} from "./PublicTidyColumn";
+import {ITidyColumn, ITidyColumnAddValueInsert} from "./PublicTidyColumn";
 import {MdxNodeIdentifier} from "./PublicTidyTable";
 
 export enum TidyColumnsType {
@@ -89,12 +89,11 @@ export enum ITidyColumnsSource {
 }
 
 /**
- * Defines a mapping that maps columns to the coordinate system of the chart.
- *
- * The key represents the internal name for the mapping (is converted to lowercase).
- * undefined --> the editor sets names to undefined upon removing of a mapping.
+ * Defines a mapping that maps columns to the coordinate system of the widget.
+ * The key represents the internal lowercase-name for the mapping, e.g., axis, group, rows, columns.
+ * Note that a mapping can have multiple columns, for example, on the Rows.
  */
-export type ChartTemplateDataMapping = Record<string, TidyTableColumnSelector | undefined>
+export type ChartTemplateDataMapping = Record<string, ITidyColumn[] | undefined>;
 
 /**
  * Defines an index from column tag (name, mapping, role, etc..) to the name or index of the column in the table.
@@ -112,7 +111,7 @@ export enum TidyTableMappingColumnSelectorOptions {
 
 }
 
-export type TidyTableColumnSelector = {
+export interface TidyTableColumnIdentifier {
     /**
      * Search column by name
      */
@@ -122,7 +121,15 @@ export type TidyTableColumnSelector = {
      * If we want a property, the name of the column's property.
      */
     property?: string;
-} | TidyTableMappingColumnSelectorOptions;
+}
+
+export type TidyTableColumnSelector = TidyTableColumnIdentifier | TidyTableMappingColumnSelectorOptions;
+
+export type IFormFieldGranularityItem =
+// For selecting columns from the tidy table
+    TidyTableColumnIdentifier
+    // For selecting mapping/roles in a chart
+    | string;
 
 /**
  * Coordinate of an MDX member
@@ -311,6 +318,13 @@ export enum SelectionBehaviour {
     SELECT_ALL = "SELECT_ALL",
 
     /**
+     * Easy to guess
+     */
+    SELECT_FIRST = "SELECT_FIRST",
+
+    SELECT_LAST = "SELECT_LAST",
+
+    /**
      * Select no items in the filter and clear the event.
      */
     SELECT_NONE = "SELECT_NONE",
@@ -334,7 +348,7 @@ export enum SelectionBehaviour {
 export enum SortingType {
     ASCENDING = 'ASCENDING',
     DESCENDING = 'DESCENDING',
-    KEEP_ORDER="KEEP_ORDER"
+    KEEP_ORDER = "KEEP_ORDER"
 }
 
 export interface HistogramBucket {
@@ -403,6 +417,9 @@ export interface ConvertToTypeParseSettings {
     listSeparator?: string;
 }
 
+/**
+ * Interface for adding a single row to a tidy table
+ */
 export interface ITotalRowValues {
 
     /**
@@ -415,4 +432,16 @@ export interface ITotalRowValues {
      */
     totalTexts: Record<string, ITidyColumnAddValueInsert>;
 
+}
+
+/**
+ * If we have (date)times available, then
+ * YES -> always use them
+ * NO -> never use them
+ * AUTO -> use them if the level is a date or datetime (in MDX, these are levels of type DAY, HOUR, MINUTE, SECOND).
+ */
+export enum UseDatetimeAxis {
+    YES = "YES",
+    NO = "NO",
+    AUTO = "AUTO"
 }

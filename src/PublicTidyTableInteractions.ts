@@ -41,7 +41,7 @@ export interface ITidyTableInteractionSelection {
     /**
      * Sets the selection at the creation of the widget
      */
-    initializeSelection(): void;
+    initializeSelection(isRangeSelection?: boolean): void;
 
     /**
      * Returns true if the selection if empty. Returns false otherwise.
@@ -55,6 +55,13 @@ export interface ITidyTableInteractionSelection {
      * @param rowIdx the index of the row
      */
     isSelected(rowIdx: number): boolean;
+
+    /**
+     * For the sankey diagram, a row is selected if connecting nodes are in the selection.
+     * @param rowIdx the index of the row
+     * @param column selection should be in this column
+     */
+    isSelectedSankey(rowIdx: number, column: ITidyColumn): boolean;
 
     /**
      *
@@ -220,6 +227,12 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
     handleRowHit(rowIdx: number, event: TidyEvent | undefined): void;
 
     /**
+     * Handles a row hit for the sankey diagram. The sankey differs from normal selection because it makes a tuple,
+     * not a set.
+     */
+    handleRowHitSankey(rowIdx: number, column: ITidyColumn, event: TidyEvent | undefined): void;
+
+    /**
      * Collapsed / Expand
      */
 
@@ -242,7 +255,7 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      */
     isLoading(column: ITidyColumn, rowIdx: number): boolean;
 
-    setSelectionColumns(columns: ITidyColumn[]): void;
+    setSelectionColumns(columns: ITidyColumn[]| ((oldColumns: ITidyColumn[]) => ITidyColumn[])): void;
 
     /**
      * Change the default drilldown column.
@@ -266,5 +279,10 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
     getCompactedSelectionNames(): string[] | undefined;
 
     isSelectable(col: ITidyColumn): boolean;
+
+    getSelectedRows(): number[];
+
+    // Sort the selection by column-values order if multiple are selected? Tree -> true
+    setSortSelectionToColumnOrder(value: boolean): void;
 }
 

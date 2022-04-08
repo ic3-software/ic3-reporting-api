@@ -5,7 +5,7 @@ an extension of Material-UI theme with additional settings.
 
 Themes let you apply a consistent look and feel to your dashboards. It allows you to customize design aspects to meet
 the specific needs and give a consistent look through all dashboards. A theme allows for specifying the typographies,
-colors, components styles, variants, etc...
+colors, components styles, variants, etc.
 
 ### Typography
 
@@ -48,7 +48,7 @@ theme.palette.ic3 = {
         myGreenColor: "#98de72",
     },
 
-},
+};
 ```
 
 ### Components
@@ -92,13 +92,20 @@ theme.components.WidgetBox = {
         }
     ],
     styleOverrides: {}
-},
+};
 ```
 
 After definition, the `Rounded` variant will be available in the dropdown of the Widget Editor (Box tab).
 
 For additional information check [ic3-demo-plugin-theme](https://github.com/ic3-software/ic3-demo-plugin-theme)
 in GitHub.
+
+### Widget Options: Default Values
+
+A theme is able to (re)define the default values of the widget options visible in the widget editor. For example, tables
+could be defaulted to `compact` layout mode.
+
+Refer to this [page](./ThemeWidgetDefaults.md) for more details.
 
 ### Defining a new Theme
 
@@ -112,5 +119,6 @@ Javascript/Typescript objects and can hold primitive types as well as function.
 
 Looking for inspiration? You can check
 [Material UI Theme Builder](https://next.material-ui.com/customization/theming#theme-builder)
-and [Mui Treasury site](https://mui-treasury.com/),  
+and [Mui Treasury site](https://mui-treasury.com/),
 
+_

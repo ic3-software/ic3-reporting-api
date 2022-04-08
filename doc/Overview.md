@@ -2,7 +2,7 @@
 
 The icCube Dashboards API allows for:
 
-- developing new themes, widgets (charts, maps, etc...), data transformations, etc...
+- developing new themes, widgets (charts, maps, etc.), data transformations, etc.
 - embedding icCube Dashboards into a Web application.
 
 ### Plugin Dev. Kit

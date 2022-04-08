@@ -296,9 +296,12 @@ export interface ITidyBaseColumnReadonly<T> {
     /**
      * Apply a function to the groups of unique values in this column
      *
-     * @return a map with the string value and the row indices in the group.
+     * @param useMdxUniqueName If true, use MDX-unique names to construct groups. Default = use column values.
+     *
+     * @return a map with getRowIdentifier for the group -> row indices in the group.
+     *
      */
-    groupBy(): Map<string, number[]>;
+    groupBy(useMdxUniqueName?: boolean): Map<string, number[]>;
 
     /**
      * Same as reIndex but creating a new column leaving this column untouched.
@@ -313,6 +316,8 @@ export interface ITidyBaseColumnReadonly<T> {
  * Base interface for nullable column.
  */
 export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
+
+    isSameDimensionality(other: ITidyBaseColumn<any>): boolean;
 
     getErrors(): (TidyCellError | undefined)[];
 
@@ -517,6 +522,12 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     setCaption(caption: string): void;
 
     /**
+     * Returns true if and only if the column has a caption different from the default. The default caption is the
+     * columns name.
+     */
+    hasCaption(): boolean;
+
+    /**
      * Convert the column to another type. This modifies the values to be of that type.
      *
      * If type is datetime, then the settings contain the date locale (default='en_US') and
@@ -550,11 +561,12 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     apply<P>(fun: (value: T, index: number) => P, newType?: AllowedColumnType<P>): void;
 
     /**
-     * Inserts are sorted according to the insertion indices.
+     * Insert values at a row index.
+     * Structure: Map: row idx -> values to insert
      *
      * e.g., add totals.
      */
-    insertValues(inserts: Map<number, ITidyColumnAddValue>): void;
+    insertValues(inserts: Map<number, ITidyColumnAddValue[]>): void;
 
     /**
      * Repeat the values in the column.
@@ -710,6 +722,17 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * Cell decoration
      */
     setCellDecoration(decoration: PublicTidyColumnCellDecoration): void;
+
+    /**
+     * Returns true if and only if the column represents the underlying MDX structure.
+     * Always false for non-mdx columns.
+     */
+    isMdxStructureIntact(): boolean;
+}
+
+export interface PublicTidyColumnCellDecorationRenderedOptions {
+    cellWidth?: number;
+    cellHeight: number;
 }
 
 export type PublicTidyColumnCellDecoration = Partial<{
@@ -718,7 +741,7 @@ export type PublicTidyColumnCellDecoration = Partial<{
 
     appliesToCell: (rowIdx: number) => boolean;
 
-    rendered: (rowIdx: number, sizing?: { width: number, height: number }) => React.ReactElement;
+    rendered: (rowIdx: number, options?: PublicTidyColumnCellDecorationRenderedOptions) => React.ReactElement;
 
     cssStyles: (rowIdx: number) => Record<string, any> | undefined;
 }>;

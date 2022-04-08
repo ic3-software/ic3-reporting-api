@@ -15,11 +15,49 @@ export enum TidyHistogramBucketType {
 }
 
 export interface TidyHistogramOptions extends FormFieldObject {
+
+    /**
+     * Bucket Mode.
+     *
+     * Automatically create buckets or define them yourself.
+     */
     binType: "automatic" | "userDefined"
+
+    /**
+     * Bucket Count.
+     *
+     * The number of buckets to auto generate.
+     */
     numberOfBins: number;
+
+    /**
+     * Custom Buckets.
+     *
+     * A list of objects `{from,to,name}`. Each object describes the range `from < x <= to`. No `from` or `to`
+     * means that the range is unbounded on that side.
+     */
     customBins: string;
+
+    /**
+     * Sort Buckets.
+     *
+     * Sort the buckets in this order. The sort uses the `from` of each bucket.
+     */
     sortBins: SortingType;
+
+    /**
+     * Bucket Name Format.
+     *
+     * How to format the names for the bucket. If there is a name in the user defined specification,
+     * then the bucket takes that name.
+     */
     bucketFormat: TidyHistogramBucketFormat;
+
+    /**
+     * Bucket Type.
+     *
+     * Which side of the bucket is closed?
+     */
     intervalType: TidyHistogramBucketType;
 }
 

@@ -17,7 +17,7 @@ This example is creating a new theme.
 
 ### Getting Started
 
-Each example is following the same project skeleton.
+Each example follows the same project skeleton.
 
 Clone the Git repository of the example.
 
@@ -39,8 +39,8 @@ A JetBrains IntelliJ project is available for a quick start.
 Before starting hacking the code we advise searching and replacing the plugin name by the actual name you'd like to give
 to your plugin. Refer to the `README` file of each example for more details.
 
-Keep that name simple (i.e., ASCII letter without any space, separator, etc...) as it will be used as a folder name
-(once deployed into an icCube server), Webpack module name, localization id, etc... That name must be unique across all
+Keep that name simple (i.e., ASCII letter without any space, separator, etc.) as it will be used as a folder name
+(once deployed into an icCube server), Webpack module name, localization ID, etc. That name must be unique across all
 the plugins loaded into an icCube server.
 
 ### Develop

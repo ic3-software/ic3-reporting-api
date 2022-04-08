@@ -31,8 +31,7 @@ This method is then deciding which rows are being added (or removed) to (from) t
 one-to-one mapping. Indeed, looking at the table above, we have to decide what is actually being selected: a `Country`
 or a `Year`?
 
-This is controlled by the selection columns as defined in the `Selection Granularity` of the editor
-`Interactions/Selection` options.
+This is controlled by the selection columns as defined in _Interaction_ > _Selection_ > _Selection Granularity_.
 
 If the user has decided to use the `Country`, then clicking on the first row will end up with the following selection:
 

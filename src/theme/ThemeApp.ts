@@ -1,41 +1,40 @@
-export interface AppClasses {
-
+export class AppClasses {
     /**
      * Style applied to
      */
-    appRoot: string;
+    static readonly appTopMenu: string = "App-topMenu";
     /**
      * Style applied to
      */
-    topMenu: string;
+    static readonly appToolbar: string = "App-toolbar";
+    /**
+     * Dashboard in viewer mode
+     */
+    static readonly appAppPayload: string = "App-appPayload";
     /**
      * Style applied to
      */
-    toolbar: string;
+    static readonly appAppError: string = "App-appError";
     /**
      * Style applied to
      */
-    appPayload: string;
+    static readonly appAppBar: string = "App-appBar";
     /**
      * Style applied to
      */
-    appError: string;
+    static readonly appAppLeftFilter: string = "App-appLeftFilter";
     /**
      * Style applied to
      */
-    appBar: string;
-    /**
-     * Style applied to
-     */
-    appPayloadRoot: string;
+    static readonly appAppPayloadRoot: string = "App-appPayloadRoot";
     /**
      * Style applied to the root div containing the edited dashboard pages.
      */
-    dashboardRoot: string;
+    static readonly appDashboardRoot: string = "App-dashboardRoot";
     /**
      * Style applied to
      */
-    zoomWidgetRoot: string;
+    static readonly appZoomWidgetRoot: string = "App-zoomWidgetRoot";
 }
 
 export declare type AppClassKey = keyof AppClasses;
