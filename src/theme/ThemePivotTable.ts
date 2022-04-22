@@ -75,11 +75,19 @@ export interface PivotTableChartOptions extends BaseTableChartOptions {
     cellValue?: TidyTableColumnSelector;
 
     /**
-     * Corner Text.
+     * Left Header Names (CSV).
      *
-     * The text to display in the top left corner.
+     * Names of the columns in the left header. A comma separated list of values
+     * ($h for the hierarchy name, $l for the level name). The last value repeat itsef.
      */
     cornerText?: string;
+
+    /**
+     * Merge Left Header.
+     *
+     * Use a single cell int the top left corner of the table.
+     */
+    mergeLeftHeader: boolean;
 
     /**
      * Wrap Top Header.

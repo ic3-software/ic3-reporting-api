@@ -34,7 +34,7 @@ The `ic3params` parameters allows for passing report parameters as URL encoded J
 As an example the following is passing the `China` value to the `country` parameter:
 
 <pre>
-&ic3params=[{"channelName":"country","value":{"caption":"China","name":"China","uniqueName":"[China]"}]
+&ic3params=[{"channelName":"country","value":{"caption":"China","name":"China","uniqueName":"[Geography].[Geography].[Country].&[CN]"}]
     <i>the above ic3params parameter has not been encoded for the sake of clarity</i>
 </pre>
 
@@ -43,7 +43,7 @@ Should you need to send more than one value, you can use an array of values.
 As an example the following is passing both the `China` and the `Japan` values to the `country` parameter:
 
 <pre>
-&ic3params=[{"channelName":"country","value":[{"caption":"China","name":"China","uniqueName":"[China]"},{"caption":"Japan","name":"Japan","uniqueName":"[Japan]"}]}]
+&ic3params=[{"channelName":"country","value":[{"caption":"China","name":"China","uniqueName":"[Geography].[Geography].[Country].&[CN]"},{"caption":"Japan","name":"Japan","uniqueName":"[Geography].[Geography].[Country].&[JP]"}]}]
     <i>the above ic3params parameter has not been encoded for the sake of clarity</i>
 </pre>
 

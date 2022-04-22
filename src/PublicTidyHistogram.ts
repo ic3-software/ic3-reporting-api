@@ -59,6 +59,12 @@ export interface TidyHistogramOptions extends FormFieldObject {
      * Which side of the bucket is closed?
      */
     intervalType: TidyHistogramBucketType;
+
+    /**
+     * Include row ids of the rows that are in the bucket. Added in the table as a column with array values. E.g.,
+     * value [0,4,5] means rows 0, 4 and 5 are in the bucket.
+     */
+    includeRowIds?: boolean;
 }
 
 export const TidyHistogramMetaOptions = (group?: string, hideSort = false): FormFields<TidyHistogramOptions> => {
@@ -114,9 +120,14 @@ export const TidyHistogramMetaOptions = (group?: string, hideSort = false): Form
                 optionValues: Object.values(TidyHistogramBucketType),
                 optionName: "TidyHistogramBucketType"
             }
+        },
+        "includeRowIds": {
+            fieldType: 'boolean',
+            visibility: false,
         }
     }
 }
 
 export const TidyHistogramBucketColName = "bucket";
 export const TidyHistogramCountColName = "count";
+export const TidyHistogramRowIdsName = "rowIds";

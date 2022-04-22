@@ -33,8 +33,7 @@ export interface IPublicJsChartTemplate<T extends FormFieldObject> {
 
 The instance of `IPublicJsChartTemplate` will be re-used between different calls of the `jsCode` method. Indeed, a
 widget is being re-rendered while editing it (e.g., new options being applied, new query result available) as well as
-when reacting to end-user interactions (e.g., filter being applied, click row of a table updating its selection, etc.)
-.
+when reacting to end-user interactions (e.g., filter being applied, click row of a table updating its selection, etc.).
 
 For additional and up-to-date information check in GitHub the working example
 [ic3-demo-plugin-js](https://github.com/ic3-software/ic3-demo-plugin-js).

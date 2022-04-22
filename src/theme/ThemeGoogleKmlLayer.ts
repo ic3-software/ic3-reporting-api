@@ -8,7 +8,7 @@ import {TidyTableColumnSelector} from "../PublicTidyTableTypes";
  *
  * <pre>
  *      Plugin ID         : ic3
- *      Widget/Template ID: GoogleKmlMap
+ *      Widget/Template ID: GoogleKmlLayer
  * </pre>
  *
  * @see WidgetTemplateChartOptions

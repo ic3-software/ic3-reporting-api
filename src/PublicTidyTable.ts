@@ -539,6 +539,7 @@ export interface ITidyTable {
 
     /**
      * Transform the table to a table where each row is a bucket in the histogram for that group.
+     * Returns a new tidy table. Function does not mutate old tidy table and its columns.
      *
      * @see TidyHistogramBucketColName
      * @see TidyHistogramCountColName

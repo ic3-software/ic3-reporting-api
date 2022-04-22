@@ -101,24 +101,34 @@ export interface IReporting {
     getVersion(): ReportingVersion;
 
     /**
-     * @param options
+     * @param options          path, ...
      * @param pushToHistory    defaulted to true
      * @param keepGlobalFilter defaulted to false
+     *
+     * @see IOpenReportOptions#onDefinition
      */
     openReport(options: IOpenReportOptions, pushToHistory?: boolean, keepGlobalFilter?: boolean): void;
 
     /**
-     * @param options
+     * @param options          path, ...
      * @param pushToHistory    defaulted to true
+     *
+     * @see IOpenReportOptions#onDefinition
      */
     openReportApp(options: IOpenReportAppOptions, pushToHistory?: boolean): void;
 
+    /**
+     * Publish a widget event to the dashboard.
+     */
     fireEvent(eventName: string, value: IEventContent | null): void;
 
+    /**
+     * Subscribe to a widget event.
+     */
     onEvent(eventName: string, callback: (value: IEventContent | null) => void): void;
 
     /**
-     * e.g., print-report
+     * Publish a application notification (e.g., print-report).
      */
     fireAppNotification(notification: AppNotification): void;
 

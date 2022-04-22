@@ -401,6 +401,8 @@ export interface HistogramOptions {
      * Default = true.
      */
     includeEndPoints: boolean;
+
+
 }
 
 export enum InterpolationType {

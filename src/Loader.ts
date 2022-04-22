@@ -1,11 +1,30 @@
 import {IReporting} from "./IReporting";
 
+
+export type AppType =
+    "console" /* shell for accessing the following applications */ |
+    "viewer" /* report viewer */ |
+    "editor" /* report editor */ |
+    "admin" /* report administration */ |
+    "appEditor" /* report application (i.e. lists of reports) editor */;
+
+
 export interface IDashboardsLoaderFrameParams {
 
     /**
      * An unique ID (DOM) that is identifying the icCube dashboards instance.
      */
     containerId: string;
+
+    /**
+     * Optional CSS class of the created iFrame.
+     */
+    className?: string;
+
+    /**
+     * Optional CSS inline styling of the created iFrame.
+     */
+    style?: Partial<CSSStyleDeclaration>;
 
     onReady: (ic3: IReporting) => void;
 
@@ -15,7 +34,7 @@ export interface IDashboardsLoaderFrameParams {
 
 export function DashboardsLoaderFrame(params: IDashboardsLoaderFrameParams) {
 
-    const {containerId, onReady, url} = params;
+    const {containerId, className, style, onReady, url} = params;
 
     const containerELT = document.getElementById(containerId);
 
@@ -45,10 +64,18 @@ export function DashboardsLoaderFrame(params: IDashboardsLoaderFrameParams) {
 
     const iFrame = document.createElement('iframe');
 
+    className && (iFrame.className = className);
+
     iFrame.width = "100%";
     iFrame.height = "100%";
 
-    iFrame.style.border = "0px none";
+    if (style) {
+        for (const property in style) {
+            (iFrame.style as any)[property] = style[property];
+        }
+    } else {
+        iFrame.style.border = "0px none";
+    }
 
     const sep = url.indexOf("?") === -1 ? "?" : "&";
     const src = url + sep + "ic3callback=ic3loader." + containerId;
@@ -60,4 +87,3 @@ export function DashboardsLoaderFrame(params: IDashboardsLoaderFrameParams) {
     containerELT.appendChild(iFrame);
 
 }
-
