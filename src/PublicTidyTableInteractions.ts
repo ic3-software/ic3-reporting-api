@@ -1,4 +1,4 @@
-import {SelectionBehaviour} from "./PublicTidyTableTypes";
+import {SelectionBehaviour, WidgetTidySelectionOptions} from "./PublicTidyTableTypes";
 import {ITidyBaseColumn, ITidyColumn} from "./PublicTidyColumn";
 import {ILazyTreeViewLoader} from "./LazyTreeView";
 import {PublicIcEvent} from "./IcEvent";
@@ -36,6 +36,8 @@ export enum TidyPivotTableLikeNodeStatus {
 
 export type TidyEvent = MouseEvent | TouchEvent;
 
+export type IWidgetInteractionMode = "drilldown" | "selection";
+
 export interface ITidyTableInteractionSelection {
 
     /**
@@ -55,6 +57,18 @@ export interface ITidyTableInteractionSelection {
      * @param rowIdx the index of the row
      */
     isSelected(rowIdx: number): boolean;
+
+    /**
+     * Returns true if and only if the column is selected.
+     * @param colIdx
+     */
+    isColumnSelected(colIdx: number): boolean;
+
+    /**
+     * Returns true if and only if the cell is selected.
+     * @param rowIdx
+     */
+    isCellSelected(rowIdx: number, colIdx: number): boolean;
 
     /**
      * For the sankey diagram, a row is selected if connecting nodes are in the selection.
@@ -85,26 +99,43 @@ export interface ITidyTableInteractionSelection {
      */
     applySelectionToNewColumn<T>(selectedItemValue: T, notSelectedItemValue: T, noSelectionValue?: T): ITidyBaseColumn<T>;
 
+    /**
+     * Handles the row click event for the selection
+     * @param rowIdx index of row clicked
+     * @param event the mouse event of the click
+     */
+    handleClickSelection(rowIdx: number, event?: TidyEvent): void;
 
     /**
      * Handles the click event for the selection on a given column.
      *
      * If the columns is not part of the selection columns of the widget nothing will happen
      *
-     * @param column column that is in the selection columns
-     * @param rowIdx index of row clicked
+     * @param column column index of the tidy table
      * @param event the mouse event of the click
      */
-    handleColumnSelection(column: ITidyColumn, rowIdx: number, event?: TidyEvent): void;
-
-    getColorOnSelection(theme: Theme, color: string | undefined, rowIdx: number): string | undefined;
+    handleColumnSelection(colIdx: number, event?: TidyEvent): void;
 
     /**
-     * Handles the click event for the selection
-     * @param rowIdx index of row clicked
+     * Handles the click event for the selection of a given cell
+     *
+     * If the columns is not part of the selection columns of the widget nothing will happen
+     *
+     * @param rowIdx row index of clicked cell in the tidy table
+     * @param colIdx column index of clicked cell in the tidy table
      * @param event the mouse event of the click
      */
-    handleClickSelection(rowIdx: number, event?: TidyEvent): void;
+    handleCellSelection(rowIdx: number, colIdx: number, event?: TidyEvent): void;
+
+    /**
+     * Get the interaction mode:
+     * undefined = no interactions in the widget,
+     * selection = perform selection interaction,
+     * drilldown = perform drilldown interaction.
+     */
+    getInteractionMode(): IWidgetInteractionMode | undefined;
+
+    getColorOnSelection(theme: Theme, color: string | undefined, rowIdx: number): string | undefined;
 
     /**
      * Select multiple rows at once
@@ -208,11 +239,6 @@ export interface ITidyTableInteractionEvent {
      * register a callback that will be called each time an event is send to the channel bound to the actionName
      */
     onNotification(actionName: string, callback: (event: any) => void): void;
-
-    /**
-     * Should the interactions be based on rowIds or on row values? Default = true = rowIds.
-     */
-    useHitRowIdxInSelection(value: boolean): void;
 }
 
 export interface ITidyTableInteraction extends ITidyTableInteractionSelection, ITidyTableInteractionEvent, ITidyTableDrilldown {
@@ -222,9 +248,30 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      *
      * The column(s) for the selection or the drilldown are based on the widget options/settings
      *
-     * This does not fire any event...for now
+     * This does not fire any event. To fire an event, use fireEvent.
+     *
+     * @see fireEvent
      */
     handleRowHit(rowIdx: number, event: TidyEvent | undefined): void;
+
+    /**
+     * Handles a cell click in the tidy table.
+     * @param rowIdx row index of the cell
+     * @param colIdx column index of the cell
+     * @param event mouse/touch event
+     *
+     * @see handleRowHit
+     */
+    handleCellHit(rowIdx: number, colIdx: number, event: TidyEvent | undefined): void;
+
+    /**
+     * Handles a column click in the tidy table.
+     * @param colIdx index of clicked column in the tidy table
+     * @param event mouse/touch event
+     *
+     * @see handleRowHit
+     */
+    handleColumnHit(colIdx: number, event: TidyEvent | undefined):void;
 
     /**
      * Handles a row hit for the sankey diagram. The sankey differs from normal selection because it makes a tuple,
@@ -233,10 +280,14 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
     handleRowHitSankey(rowIdx: number, column: ITidyColumn, event: TidyEvent | undefined): void;
 
     /**
-     * Collapsed / Expand
+     * Collapsed / Expand on a column row (i.e. it's a tree)
      */
+    toggleCollapse(column: ITidyColumn, rowIdx: number): void;
 
-    toggleSeriesPoint(column: ITidyColumn, rowIdx: number): void;
+    /**
+     * returns the collapse/expand state that has not yet been set by the end user (i.e. first time, on drilldowns..)
+     */
+    setCollapseUnsetFunction(collapseUnsetFunction?: (nodeInfo: MdxNodeIdentifier) => boolean): void;
 
     /**
      * Map a function to the visible rows only. Used in tree structures with expanded or collapsed items.
@@ -255,7 +306,7 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      */
     isLoading(column: ITidyColumn, rowIdx: number): boolean;
 
-    setSelectionColumns(columns: ITidyColumn[]| ((oldColumns: ITidyColumn[]) => ITidyColumn[])): void;
+    setSelectionColumns(columns: ITidyColumn[] | ((oldColumns: ITidyColumn[]) => ITidyColumn[])): void;
 
     /**
      * Change the default drilldown column.
@@ -284,5 +335,10 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
 
     // Sort the selection by column-values order if multiple are selected? Tree -> true
     setSortSelectionToColumnOrder(value: boolean): void;
+
+    /**
+     * Returns the widgets selection options.
+     */
+    getWidgetSelectionOptions(): WidgetTidySelectionOptions;
 }
 

@@ -1,14 +1,16 @@
 ## Widget Template
 
-A new widget is defined and added to a plugin using a widget template definition that describes the widget
+You can add a custom widget to the reporting with a widget template definition. It describes the widget
 using meta information and implements the actual rendering and behavior logic in Javascript/Typescript:
 
     export type IPublicWidgetTemplateDefinition<T extends FormFieldObject> =
         IPublicWidgetReactTemplateDefinition<T> | IPublicWidgetJsTemplateDefinition<T>;
 
+Please refer to this [file](./WidgetTemplateDefinition.md) for more details about the widget template definition.
+
 ### Javascript vs React Widgets
 
-The icCube Dashboards is written in React. Two kind of widget template implementations are available:
+The icCube Dashboards is written in React. Two kinds of widget template implementations are available:
 
 - [Javascript](./JavascriptTemplate.md): implementing a new widget using plain Javascript/Typescript.
 - [React](./ReactTemplate.md): implementing a new widget using React.
@@ -39,7 +41,7 @@ method:
 
     resolveDefinition?: (definitionW?: IPublicWidgetTemplateDefinition<any>) => Promise<IPublicWidgetTemplateDefinition<OPTIONS>>;
 
-For up-to-date and detailed information, the source code of the following demo plugin contain several new widgets using
+For up-to-date and detailed information, the source code of the following demo plugin contains several new widgets using
 this mechanism:
 
 - [ic3-demo-plugin-js](https://github.com/ic3-software/ic3-demo-plugin-js).

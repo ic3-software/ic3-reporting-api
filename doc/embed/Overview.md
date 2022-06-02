@@ -9,7 +9,7 @@ The dev. kit source code is available on GitHub [here](https://github.com/ic3-so
 
 ### Working Examples
 
-### [ic3-demo-embedded-iframe-react](https://github.com/ic3-software/ic3-demo-embedded-iframe-react)
+### [ic3-demo-embedded-react](https://github.com/ic3-software/ic3-demo-embedded-react)
 
 This example is embedding/driving an icCube Dashboards instance using React and Material-UI (Typescript).
 

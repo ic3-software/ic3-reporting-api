@@ -129,8 +129,8 @@ export type FormFields<T extends FormFieldObject> = {
         Required<T>[key] extends FormFieldObject ? Omit<IFormEmbeddedFieldDef<Required<T>[key]>, 'fieldPath'> :
             Required<T>[key] extends IPaletteDef ? Omit<IFormPaletteEditorFieldDef, 'fieldPath'> :
                 Required<T>[key] extends IColorDef ? Omit<IFormColorEditorFieldDef, 'fieldPath'> :
-                    Required<T>[key] extends TidyTableColumnSelector[] ? Omit<IFormColumnChooserFieldDef, 'fieldPath'> :
-                        Required<T>[key] extends TidyTableColumnSelector ? Omit<IFormColumnChooserFieldDef, 'fieldPath'> :
+                    Required<T>[key] extends TidyTableColumnSelector[] ? Omit<IFormColumnChooserMultipleFieldDef, 'fieldPath'> :
+                        Required<T>[key] extends TidyTableColumnSelector ? Omit<IFormColumnChooserSingleFieldDef, 'fieldPath'> :
                             Required<T>[key] extends IFormEventMappingArrayFieldDefType ? Omit<IFormEventMappingArrayFieldDef, 'fieldPath'> :
                                 Required<T>[key] extends Hook<any> ? Omit<IFormHookFieldDef<any>, 'fieldPath'> :
                                     Required<T>[key] extends boolean ? Omit<IFormBooleanFieldDef, 'fieldPath'> :
@@ -153,10 +153,10 @@ export type FormFields<T extends FormFieldObject> = {
                                                 | Omit<IFormMarkdownFieldDef, 'fieldPath'>
                                                 | Omit<IFormOptionFieldReportPathDef, 'fieldPath'> :
 
-                                                Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
-                                                    | Omit<IFormGroupsFieldDef, 'fieldPath'> :
+                                            Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
+                                                | Omit<IFormGroupsFieldDef, 'fieldPath'> :
 
-                                                    never /* type not supported */
+                                                never /* type not supported */
         )
 };
 
@@ -308,6 +308,10 @@ export type FormFieldType =
      * @see IFormTidyTableTextRowExprFieldDef
      */
     "tidyTableTextRowExpr" |
+    /**
+     * @see IFormUrlFieldDef
+     */
+    "url" |
     /**
      * @see IFormWidgetVariantFieldDef
      */
@@ -638,14 +642,11 @@ export interface IFormGranularitySelectionFieldDef extends IFormFieldDef<IFormFi
 
     fieldType: "granularityChooser",
 
-    editorConf?: {
-
-        allowedRoles?: (table: ITidyTable | undefined) => string[];
-
-        /**
-         * User can select from these columns. Undefined = no columns to select.
+    editorConf: {
+        /*
+         * User can select from these items.
          */
-        allowedColumns?: (column: ITidyColumn, table: ITidyTable) => boolean;
+        options: (table: ITidyTable) => IFormFieldGranularityItem[];
     }
 
 }
@@ -719,6 +720,10 @@ export interface IFormJsFieldDef extends IFormFieldDef<string> {
 
     fieldType: "js",
 
+    editorConf?: {
+        helpMdFile: string;
+        doNotCompleteEventNames?: true;
+    }
 }
 
 /**
@@ -907,7 +912,7 @@ export interface IFormReportPermaLinkFieldDef extends IFormFieldDef<string> {
  */
 export interface IFormStringFieldDef extends IFormFieldDef<string> {
 
-    fieldType: "string",
+    fieldType: "string" | "url",
 
     editorConf?: {
 
@@ -920,6 +925,7 @@ export interface IFormStringFieldDef extends IFormFieldDef<string> {
     }
 
 }
+
 
 /**
  * An HTML (markdown) text expression containing tidy table value accessor (e.g., Donut's center text).

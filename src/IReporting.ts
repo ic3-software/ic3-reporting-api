@@ -101,9 +101,9 @@ export interface IReporting {
     getVersion(): ReportingVersion;
 
     /**
-     * @param options          path, ...
-     * @param pushToHistory    defaulted to true
-     * @param keepGlobalFilter defaulted to false
+     * @param options            path, ...
+     * @param pushToHistory      defaulted to true
+     * @param keepGlobalFilter   defaulted to true. Apply the global filter to the newly opened report.
      *
      * @see IOpenReportOptions#onDefinition
      */

@@ -3,14 +3,13 @@ import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {IWidgetLayoutDefinition} from "./PublicLayout";
 import {IThemeWidgetDefaults} from "./IThemeManager";
 import {AlertDialogClassKey} from "./theme/ThemeAlertDialog";
-import {AppClassKey} from "./theme/ThemeApp";
+import {AppClassKey, AppDivProps} from "./theme/ThemeApp";
 import {DrilldownUserSelectMenuClassKey} from "./theme/ThemeDrilldownUserSelectMenu";
 import {ErrorRendererClassKey} from "./theme/ThemeErrorRenderer";
 import {HtmlBoxClassKey, HtmlBoxProps} from "./theme/ThemeHtmlBox";
 import {LayoutClassKey} from "./theme/ThemeLayout";
 import {LayoutPageClassKey} from "./theme/ThemeLayoutPage";
 import {ReportAppBarClassKey} from "./theme/ThemeReportAppBar";
-import {ReportAppMenuClassKey} from "./theme/ThemeReportAppMenu";
 import {WidgetBoxClassKey} from "./theme/ThemeWidgetBox";
 import {WidgetBoxContentMessageClassKey} from "./theme/ThemeWidgetBoxContentMessage";
 import {ReactElement} from "react";
@@ -26,6 +25,11 @@ import {Components} from "@mui/material/styles/components";
 import {FilterPanelClassesKey} from "./theme/ThemeFilterPanel";
 import {FilterCheckboxRadioChartOptions, FilterCheckboxRadioClassKey} from "./theme/ThemeFilterCheckboxRadio";
 import {ReportAppLeftPanelClassKey} from "./theme/ThemeReportAppLeftPanel";
+import {FilterTreeChartOptions, FilterTreeClassKey} from "./theme/ThemeFilterTree";
+import {DatePickerChartOptions, DatePickerClassKey} from "./theme/ThemeDatePicker";
+import {FilterAutocompleteChartOptions, FilterAutocompleteClassesKey} from "./theme/ThemeFilterAutocomplete";
+import {AppMenuIconProps, ThemeAppMenuIconClassKey} from "./theme/ThemeAppMenuIcon";
+import {QueryBuilderNodeProps, ThemeQueryBuilderNodeClassKey} from "./theme/ThemeQueryBuilderNode";
 
 export interface INoSchemaRendererOptions {
 
@@ -120,6 +124,11 @@ export type ThemeFormattersOptions = {
 }
 
 export interface ic3Palette {
+
+    /**
+     * The color for the page background (can be overridden at layout level).
+     */
+    pageBackgroundColor: Property.Color;
 
     /**
      * The color for a selected item
@@ -225,6 +234,8 @@ interface MandatorySingleColors {
 }
 
 export interface ic3PaletteOptions {
+
+    pageBackgroundColor: Property.Color;
 
     selected?: Property.Color;
     selectedText?: Property.Color;
@@ -372,6 +383,31 @@ export interface ic3Theme {
 
     noSchemaRenderer?: (context: IPublicContext, options: INoSchemaRendererOptions) => ReactElement;
 
+    /**
+     * Theme settings for the editor (application & report).
+     */
+    editor: {
+        /**
+         * Editor logo. Defaults to icCubes logo.
+         */
+        logo: string;
+
+        /**
+         * Alt text for the logo image. Default = icCube.
+         */
+        logoAlt: string;
+
+        /**
+         * Top - Offset of dashboard page to the editor. Default 25.
+         */
+        viewPortOffsetTop: number;
+
+        /**
+         * Left - Offset of dashboard page to the editor. Default 25.
+         */
+        viewPortOffsetLeft: number;
+    }
+
 }
 
 export interface ic3ThemeOptions {
@@ -410,7 +446,7 @@ export interface ic3ThemeOptions {
         userMenuFilter?: (options: string[], templateDef?: IPublicWidgetTemplateDefinition<any>) => string[];
     }
 
-    widgetBox: {
+    widgetBox?: {
         contentOffset: {
             top: number;
             left: number;
@@ -426,7 +462,7 @@ export interface ic3ThemeOptions {
     /**
      * The first defined layout is used as the default one.
      */
-    layouts: IWidgetLayoutDefinition[];
+    layouts?: IWidgetLayoutDefinition[];
 
     /**
      * Styling for the sparklines in the sparkline transformation and the KPI card
@@ -456,6 +492,31 @@ export interface ic3ThemeOptions {
     }
 
     noSchemaRenderer?: (context: IPublicContext, options: INoSchemaRendererOptions) => ReactElement;
+
+    /**
+     * Theme settings for the editor (application & report).
+     */
+    editor?: {
+        /**
+         * Editor logo. Defaults to icCubes logo.
+         */
+        logo?: string;
+
+        /**
+         * Alt text for the logo image. Default = icCube.
+         */
+        logoAlt?: string;
+
+        /**
+         * Top - Offset of dashboard page to the editor. Default 25.
+         */
+        viewPortOffsetTop?: number;
+
+        /**
+         * Left - Offset of dashboard page to the editor. Default 25.
+         */
+        viewPortOffsetLeft?: number;
+    }
 }
 
 
@@ -489,6 +550,18 @@ interface ic3BaseComponents {
         styleOverrides?: ComponentsOverrides["FilterSlider"];
         variants?: ComponentsVariants["FilterSlider"];
     }
+    FilterTree?: {
+        styleOverrides?: ComponentsOverrides["FilterTree"];
+        variants?: ComponentsVariants["FilterTree"];
+    }
+    FilterDatePicker?: {
+        styleOverrides?: ComponentsOverrides["FilterDatePicker"];
+        variants?: ComponentsVariants["FilterDatePicker"];
+    }
+    FilterAutocomplete?: {
+        styleOverrides?: ComponentsOverrides["FilterAutocomplete"];
+        variants?: ComponentsVariants["FilterAutocomplete"];
+    }
     GoogleMarker?: {
         variants?: ComponentsVariants['GoogleMarker'];
     }
@@ -512,9 +585,6 @@ interface ic3BaseComponents {
     ReportAppLeftPanel?: {
         styleOverrides?: ComponentsOverrides["ReportAppLeftPanel"];
     }
-    ReportAppMenu?: {
-        styleOverrides?: ComponentsOverrides["ReportAppMenu"];
-    }
     Table?: {
         variants?: ComponentsVariants['Table'];
         styleOverrides?: ComponentsOverrides["Table"];
@@ -525,6 +595,12 @@ interface ic3BaseComponents {
     }
     WidgetBoxContentMessage?: {
         styleOverrides?: ComponentsOverrides["WidgetBoxContentMessage"];
+    }
+    AppMenuIcon?: {
+        styleOverrides?: ComponentsOverrides["AppMenuIcon"];
+    }
+    QueryBuilderNode?: {
+        styleOverrides?: ComponentsOverrides["QueryBuilderNode"]
     }
 }
 
@@ -548,11 +624,59 @@ declare module "@mui/material/styles/createPalette" {
 
         ic3: ic3Palette;
 
+        mdx: {
+            annotation: string;
+            comment: string;
+            definitionKeyword: string;
+            keyword: string;
+            labelName: string;
+            number: string;
+            operator: string;
+            propertyName: string;
+            separator: string;
+            string: string;
+            variableName: string;
+            dimension: string;
+            hierarchy: string;
+            level: string;
+            member: string;
+            measureGroup: string;
+            measureFolder: string;
+            measure: string;
+            set: string;
+            calcMeasure: string;
+            event: string;
+        }
+
     }
 
     interface PaletteOptions {
 
         ic3?: ic3PaletteOptions;
+
+        mdx?: {
+            annotation?: string;
+            comment?: string;
+            definitionKeyword?: string;
+            keyword?: string;
+            labelName?: string;
+            number?: string;
+            operator?: string;
+            propertyName?: string;
+            separator?: string;
+            string?: string;
+            variableName?: string;
+            dimension?: string;
+            hierarchy?: string;
+            level?: string;
+            member?: string;
+            measureGroup?: string;
+            measureFolder?: string;
+            measure?: string;
+            set?: string;
+            calcMeasure?: string;
+            event?: string;
+        }
 
     }
 }
@@ -618,6 +742,9 @@ declare module '@mui/material/styles/overrides' {
         FilterButtons: FilterButtonsClassKey;
         FilterPanel: FilterPanelClassesKey;
         FilterSlider: FilterSliderClassKey;
+        FilterTree: FilterTreeClassKey;
+        FilterDatePicker: DatePickerClassKey;
+        FilterAutocomplete: FilterAutocompleteClassesKey;
 
         HtmlBox: HtmlBoxClassKey;
         Layout: LayoutClassKey;
@@ -625,16 +752,18 @@ declare module '@mui/material/styles/overrides' {
         LayoutPage: LayoutPageClassKey;
 
         PivotTable: PivotTableClassKey;
+        Table: TableClassKey;
+
         ReportAppBar: ReportAppBarClassKey;
 
-        ReportAppMenu: ReportAppMenuClassKey;
-
-        Table: TableClassKey;
         WidgetBox: WidgetBoxClassKey;
-
         WidgetBoxContentMessage: WidgetBoxContentMessageClassKey;
 
         ReportAppLeftPanel: ReportAppLeftPanelClassKey;
+
+        AppMenuIcon: ThemeAppMenuIconClassKey;
+
+        QueryBuilderNode: ThemeQueryBuilderNodeClassKey;
 
     }
 
@@ -645,22 +774,27 @@ declare module '@mui/material/styles/props' {
     interface ComponentsPropsList {
 
         FilterCheckbox: FilterCheckboxRadioChartOptions;
-
         FilterButtons: FilterButtonsChartOptions;
-
         FilterPanel: Record<never, any>;
-
         FilterSlider: FilterSliderChartOptions;
-
-        GoogleMarker: GoogleMarkerVariantChartOptions;
+        FilterTree: FilterTreeChartOptions;
+        FilterDatePicker: DatePickerChartOptions;
+        FilterAutocomplete: FilterAutocompleteChartOptions;
 
         HtmlBox: HtmlBoxProps;
 
         PivotTable: PivotTableProps;
-
         Table: TableProps;
 
         WidgetBox: Record<never, any>;
+
+        GoogleMarker: GoogleMarkerVariantChartOptions;
+
+        AppMenuIconStyled: AppMenuIconProps;
+
+        App: AppDivProps;
+
+        QueryBuilderNode: QueryBuilderNodeProps;
     }
 
 }

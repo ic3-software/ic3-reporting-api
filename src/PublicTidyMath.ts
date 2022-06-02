@@ -1,27 +1,39 @@
 import {ITidyBaseColumnReadonly} from "./PublicTidyColumn";
 import {HistogramData, HistogramOptions} from "./PublicTidyTableTypes";
 
+/**
+ * Utility class for doing maths in columns
+ *
+ *
+ * As a general rule, functions will return NaN once a value of the column is Nan
+ */
 export interface ITidyMath {
+
+    /**
+     * For each not null column value (numbers including Nan or Infinity)
+     *
+     * @param callback true to stop the for each
+     */
+    forEachNotNull(column: ITidyBaseColumnReadonly<number | null> | ITidyBaseColumnReadonly<number | null>[], callback: (value: number) => void): void;
+
     /**
      * Sum of all values in the column.
      */
-    sum(column: ITidyBaseColumnReadonly<number | null>): number | null;
+    sum(column: ITidyBaseColumnReadonly<number | null> | ITidyBaseColumnReadonly<number | null>[]): number | null;
 
     /**
      * Get the extreme value of the column. Null values are skipped.
      * @param column
-     * @returns the minimum value of the column. Returns undefined if the column has no values or if the column contains
-     * a NaN-value.
+     * @returns the minimum value of the column. Returns undefined if the column has no values.
      */
-    min<T>(column: ITidyBaseColumnReadonly<T>): T | undefined;
+    min<T>(column: ITidyBaseColumnReadonly<T> | ITidyBaseColumnReadonly<T | null>[]): T | undefined;
 
     /**
      * Get the extreme value of the column. Null values are skipped.
      * @param column
-     * @returns the maximum value of the column. Returns undefined if the column has no values or if the column contains
-     * a NaN-value.
+     * @returns the maximum value of the column. Returns undefined if the column has no values.
      */
-    max<T>(column: ITidyBaseColumnReadonly<T>): T | undefined;
+    max<T>(column: ITidyBaseColumnReadonly<T> | ITidyBaseColumnReadonly<T | null>[]): T | undefined;
 
     /**
      * Get the maximum of the absolute values of the column.
@@ -29,7 +41,7 @@ export interface ITidyMath {
      * @returns If x_1, x_2, ..., x_n are the columns values, then it returns max(|x_1|, ..., |x_n|). Null values are
      * skipped.
      */
-    absoluteMax(column: ITidyBaseColumnReadonly<number | null>): number | undefined;
+    absoluteMax(column: ITidyBaseColumnReadonly<number | null> | ITidyBaseColumnReadonly<number | null>[]): number | undefined;
 
     /**
      * Sum all values matching the lowest depth level of axis column
@@ -39,37 +51,33 @@ export interface ITidyMath {
     /**
      * Estimate the population mean of the column, skipping null values.
      *
-     * @returns the mean of the numeric column. Returns undefined if the column has no values or if the column contains
-     * a NaN-value.
+     * @returns the mean of the numeric column. Returns undefined if the column has no values.
      */
-    mean(column: ITidyBaseColumnReadonly<number | null>): number | undefined;
+    mean(column: ITidyBaseColumnReadonly<number | null> | ITidyBaseColumnReadonly<number | null>[]): number | undefined;
 
     /**
      * Estimate the population variance of the column. Null values are skipped.
      * @param column
-     * @returns the variance of the column. Returns undefined if the column has no values or if the column contains a
-     * NaN-value.
+     * @returns the variance of the column. Returns undefined if the column has no values
      */
-    variance(column: ITidyBaseColumnReadonly<number | null>): number | undefined;
+    variance(column: ITidyBaseColumnReadonly<number | null> | ITidyBaseColumnReadonly<number | null>[]): number | undefined;
 
     /**
      * Estimate the population standard deviation of the column. Null values are skipped.
      * @param column
-     * @returns the standard deviation of the column. Returns undefined if the column has no values or if the column
-     * contains a NaN-value.
+     * @returns the standard deviation of the column. Returns undefined if the column has no values
      */
-    standardDeviation(column: ITidyBaseColumnReadonly<number | null>): number | undefined;
+    standardDeviation(column: ITidyBaseColumnReadonly<number | null> | ITidyBaseColumnReadonly<number | null>[]): number | undefined;
 
     /**
      * Return the number of non-null values in the column.
      */
-    count(column: ITidyBaseColumnReadonly<any>): number;
+    count(column: ITidyBaseColumnReadonly<any> | ITidyBaseColumnReadonly<any>[]): number;
 
     /**
      * Calculate the median of the column. Null-values are ignored.
      * @param column
-     * @returns the median of the numeric column. Returns undefined if the column has no values or if the column contains
-     * a NaN-value.
+     * @returns the median of the numeric column. Returns undefined if the column has no values
      */
     median(column: ITidyBaseColumnReadonly<number | null>): number | undefined;
 

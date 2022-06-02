@@ -3,11 +3,10 @@ import {ITidyTableInteraction} from "./PublicTidyTableInteractions";
 import {IWidgetPublicContext} from "./PublicContext";
 import {FormFieldObject, FormFields, IFormColumnChooserFieldDef} from "./PublicTemplateForm";
 import {IWidgetVariantManager} from "./IWidgetVariantManager";
-import {ITidyColumn} from "./PublicTidyColumn";
 import {ReactElement} from "react";
 import {Theme} from "@mui/material/styles";
 import {WidgetTemplateChartOptions, WidgetTemplateIDs} from "./PublicTemplates";
-import {ChartTemplateDataMapping} from "./PublicTidyTableTypes";
+import {ChartTemplateDataMapping, IFormFieldGranularityItem} from "./PublicTidyTableTypes";
 
 type ChartTemplateWidgetProps = any;
 
@@ -362,30 +361,23 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
     eventRoles?: ITemplateEventActionDef;
 
     selection?: {
+        /**
+         * The default selection granularity.
+         */
+        defaultGranularityItems?: IFormFieldGranularityItem[];
 
         /**
-         * If defined, default selection role(s)
+         * The list of columns/roles that can be part of the selection granularity. The granularity editor shows
+         * when there are 2 or more roles.
          */
-        defaultRoles?: string[];
-
-        /**
-         * If defined, returns the roles available
-         *
-         */
-        allowedRoles?: (table: ITidyTable | undefined) => string[];
-
-        /**
-         * The list of columns that can be part of the selection granularity. The user can select from the roles
-         * of the MDX query if there are 2 or more roles.
-         */
-        allowedColumns?: (column: ITidyColumn, table: ITidyTable) => boolean;
+        granularityItems?: (table: ITidyTable) => IFormFieldGranularityItem[];
     }
 
     mdxBuilderSettings?: IWidgetTemplateMdxBuilderMapping;
 
     /**
-     * Setup how to get default mappings from the table and options for this widget. If undefined, it uses the default
-     * fallback logic.
+     * Setup how to get default mappings from the table and options for this widget.
+     * If undefined, it uses the default fallback logic.
      */
     defaultMapping?: (data: IWidgetTemplateTidyOptions<OPTIONS>) => ChartTemplateDataMapping;
 

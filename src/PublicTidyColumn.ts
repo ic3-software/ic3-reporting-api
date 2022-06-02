@@ -1,10 +1,10 @@
 import {
     AxisCoordinate,
     ConvertToTypeParseSettings,
-    EntityItem,
+    EntityItem, GroupRowIndices,
     IMdxAxisSeriesInfo,
+    ITidyColumnIndex,
     ITidyColumnsSource,
-    ITidyTableSelection,
     MdxInfo,
     MdxMemberCoordinates,
     TidyCellError,
@@ -16,6 +16,7 @@ import {ReactElement} from "react";
 import {ThemeTextFormatter} from "./PublicTheme";
 import {Property} from "csstype";
 import {AppNotification} from "./INotification";
+import {MdxNodeIdentifier} from "./PublicTidyTable";
 
 export interface ITidyColumnTypedValue {
 
@@ -47,6 +48,11 @@ export interface ITidyColumnAddValueCopyRow {
  * Properties with a special meaning
  */
 export enum ITidyColumnNamedProperties {
+
+    /**
+     * The value of a cell.
+     */
+    mdxCellValue = "value",
 
     /**
      * The formatted value of a cell. For example, 5003 in euros is formatted as €5,003
@@ -122,6 +128,11 @@ export enum ITidyColumnNamedProperties {
      * Show this when hovering over the cell (or the visualisation representing the cell)
      */
     tooltip = "tooltip",
+
+    /**
+     * Name for datetime properties for levels of type Year, Month, Day, Hour, etc..
+     */
+    datetime = "datetime",
 }
 
 export const CharacterTidyColumnProperties = new Set<string>([
@@ -296,12 +307,12 @@ export interface ITidyBaseColumnReadonly<T> {
     /**
      * Apply a function to the groups of unique values in this column
      *
-     * @param useMdxUniqueName If true, use MDX-unique names to construct groups. Default = use column values.
+     * @param useMdx If true, use MDX-unique names to construct groups. If false, use the columns values.
+     * Default = false.
      *
-     * @return a map with getRowIdentifier for the group -> row indices in the group.
-     *
+     * @returns a map with indexes for each group. Key -> row indeces
      */
-    groupBy(useMdxUniqueName?: boolean): Map<string, number[]>;
+    groupBy(useMdx?: boolean): Map<string, GroupRowIndices>;
 
     /**
      * Same as reIndex but creating a new column leaving this column untouched.
@@ -418,6 +429,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * Return the properties of a column for a given cell index.
      *
      * @param idx row index of cell.
+     * @deprecated
      */
     getPropertiesAt(idx: number): Record<string, any>;
 
@@ -432,6 +444,13 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * Create and return the entity item at position idx for generating events.
      */
     getEntityItem(idx: number): EntityItem | undefined;
+
+    /**
+     * Get the entity item for the column. Used in column selection.
+     * Returns empty array if there are no entityItems.
+     * @param hierarchyIndeces only include these hierarchies for generating the EntityItem
+     */
+    getColumnEntityItem(hierarchyIndeces?: number[]): EntityItem[];
 
     /**
      * Get the index of the parent. Returns -1 if the parent is the root.
@@ -474,6 +493,13 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * Returns the MDX info at a row index.
      */
     getMdxInfo(idx: number): MdxInfo | undefined;
+
+    /**
+     * Returns the key from the model. Values with the same key are the same in the underlying model. Rows
+     * with the same value but with a different key, are treated as different values.
+     * @param rowIdx
+     */
+    getUid(rowIdx: number): string;
 
     /**
      * Get extra information of the MDX axis used for this column, if available.
@@ -674,13 +700,6 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     getSelectionRowIdentifier(idx: number): string;
 
     /**
-     * @param sel  the selection columns
-     * @param colIdx  if multiple columns, the colIdx in the selectionColumn for the lookup
-     * @param startIdx  if defined, start lookup at this position
-     */
-    findRowIdxForSelection(sel: ITidyTableSelection, colIdx?: number, startIdx?: number): number | undefined;
-
-    /**
      * Returns the row index of the first occurrence where the values of this column equals value.
      * Returns undefined if it did not find the value.
      *
@@ -724,10 +743,14 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     setCellDecoration(decoration: PublicTidyColumnCellDecoration): void;
 
     /**
-     * Returns true if and only if the column represents the underlying MDX structure.
-     * Always false for non-mdx columns.
+     * Return the index of the column.
      */
-    isMdxStructureIntact(): boolean;
+    getIndex(): ITidyColumnIndex[];
+
+    /**
+     * undefined if it's not an Mdx member column
+     */
+    getQueryNodeIdentifier(idx: number): MdxNodeIdentifier | undefined;
 }
 
 export interface PublicTidyColumnCellDecorationRenderedOptions {
@@ -735,16 +758,44 @@ export interface PublicTidyColumnCellDecorationRenderedOptions {
     cellHeight: number;
 }
 
-export type PublicTidyColumnCellDecoration = Partial<{
+export interface BaseTidyColumnCellDecoration {
 
-    handlesCellsOnError: boolean;
+    handlesCellsOnError?: boolean;
 
-    appliesToCell: (rowIdx: number) => boolean;
+    appliesToCell?: (rowIdx: number) => boolean;
 
-    rendered: (rowIdx: number, options?: PublicTidyColumnCellDecorationRenderedOptions) => React.ReactElement;
+    /**
+     *
+     * If an object is returned the underlying code uses emotion css function to convert to a className so you can do className like css
+     *
+     * {
+     *      fontSize: "0.7rem",
+     *      ':hover': {
+     *        fontSize: "1.4rem",
+     *      }
+     * }
+     *
+     */
+    cssStyles?: (rowIdx: number) => Record<string, any> | undefined;
+}
 
-    cssStyles: (rowIdx: number) => Record<string, any> | undefined;
-}>;
+export interface ReactTidyColumnCellDecoration extends BaseTidyColumnCellDecoration {
+
+    stringRenderer?: false;
+
+    renderer?: (rowIdx: number, options?: PublicTidyColumnCellDecorationRenderedOptions) => React.ReactElement;
+
+}
+
+export interface HtmlTidyColumnCellDecoration extends BaseTidyColumnCellDecoration {
+
+    stringRenderer: true;
+
+    renderer: (rowIdx: number, options?: PublicTidyColumnCellDecorationRenderedOptions) => string;
+
+}
+
+export type PublicTidyColumnCellDecoration = ReactTidyColumnCellDecoration | HtmlTidyColumnCellDecoration;
 
 export type ITidyColumn = ITidyBaseColumn<any>;
 export type ITidyUnknownColumn = ITidyBaseColumn<unknown | null>;

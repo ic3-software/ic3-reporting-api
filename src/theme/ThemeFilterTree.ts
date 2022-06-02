@@ -1,7 +1,8 @@
 import {TreeFireEventMode} from "../PublicTidyTableInteractions";
 import {FilterTidyTableChartOptions} from "./ThemeFilter";
+import {LazyTreeClasses} from "./ThemeLazyTreeClasses";
 
-export class FilterTreeClasses {
+export class FilterTreeClasses extends LazyTreeClasses {
 
     /**
      * Style applied to the root element.
@@ -11,15 +12,16 @@ export class FilterTreeClasses {
     /**
      *  Style applied to the tree item without control icons
      */
-    static simpleItemLabel: "TreeFilter-simpleItemLabel";
+    static simpleItemLabel: "Ic3-TreeFilter-simpleItemLabel";
 
     /**
      *  Style applied to the tree item witht control icons
      */
-    static itemLabelWithIcons: "TreeFilter-itemLabelWithIcons";
+    static itemLabelWithIcons: "Ic3-TreeFilter-itemLabelWithIcons";
 
     /**
-     * On top you've all classes of LazyTreeItemClasses, lazyTreeClasses and Ic3GlobalClasses
+     * + Ic3GlobalClasses
+     * + Mui TreeView class names
      */
 
 }

@@ -1,40 +1,59 @@
+
 export class AppClasses {
     /**
      * Style applied to
      */
-    static readonly appTopMenu: string = "App-topMenu";
+    static readonly app: string = "ic3App";
     /**
      * Style applied to
      */
-    static readonly appToolbar: string = "App-toolbar";
+    static readonly topMenu: string = "ic3App-topMenu";
+    /**
+     * Style applied to
+     */
+    static readonly toolbar: string = "ic3App-toolbar";
     /**
      * Dashboard in viewer mode
      */
-    static readonly appAppPayload: string = "App-appPayload";
+    static readonly payload: string = "ic3App-payload";
     /**
      * Style applied to
      */
-    static readonly appAppError: string = "App-appError";
+    static readonly error: string = "ic3App-error";
     /**
      * Style applied to
      */
-    static readonly appAppBar: string = "App-appBar";
+    static readonly bar: string = "ic3App-bar";
     /**
      * Style applied to
      */
-    static readonly appAppLeftFilter: string = "App-appLeftFilter";
-    /**
-     * Style applied to
-     */
-    static readonly appAppPayloadRoot: string = "App-appPayloadRoot";
+    static readonly leftFilter: string = "ic3App-leftFilter";
     /**
      * Style applied to the root div containing the edited dashboard pages.
      */
-    static readonly appDashboardRoot: string = "App-dashboardRoot";
+    static readonly dashboard: string = "ic3App-dashboard";
     /**
      * Style applied to
      */
-    static readonly appZoomWidgetRoot: string = "App-zoomWidgetRoot";
+    static readonly zoomWidget: string = "ic3App-zoomWidget";
 }
 
 export declare type AppClassKey = keyof AppClasses;
+
+export interface AppDivProps {
+    topBarOptions: TopBarOptions;
+    leftBarOptions: LeftBarOptions;
+    viewer: boolean;
+    opacity?: string;
+}
+
+export enum TopBarOptions {
+    None,
+    Standard,
+}
+
+export enum LeftBarOptions {
+    None,
+    Standard,
+    Filter,
+}

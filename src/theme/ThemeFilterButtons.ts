@@ -5,7 +5,7 @@ export class FilterButtonsClasses {
     /**
      * Style applied to the root element.
      */
-    static readonly root = "root";
+    static readonly container = "FilterButtons-container";
 
     /**
      *  Style applied to the mui button elements.

@@ -5,6 +5,7 @@
 import {TidyHistogramBucketType} from "./PublicTidyHistogram";
 import {ITidyColumn, ITidyColumnAddValueInsert} from "./PublicTidyColumn";
 import {MdxNodeIdentifier} from "./PublicTidyTable";
+import {SelectionMode} from "./PublicTidyTableInteractions";
 
 export enum TidyColumnsType {
     /**
@@ -125,11 +126,40 @@ export interface TidyTableColumnIdentifier {
 
 export type TidyTableColumnSelector = TidyTableColumnIdentifier | TidyTableMappingColumnSelectorOptions;
 
-export type IFormFieldGranularityItem =
-// For selecting columns from the tidy table
-    TidyTableColumnIdentifier
-    // For selecting mapping/roles in a chart
-    | string;
+export type IFormFieldGranularityItem = IFormFieldGranularityItemColumn | IFormFieldGranularityItemRole
+    | IFormFieldGranularityItemHierarchy;
+
+export interface IFormFieldGranularityItemColumn {
+    type: "column";
+
+    /**
+     * For selecting columns from the tidy table
+     */
+    name: string;
+}
+
+export interface IFormFieldGranularityItemRole {
+    type: "role";
+
+    /**
+     * For selecting mapping/roles in a chart
+     */
+    role: string;
+}
+
+export interface IFormFieldGranularityItemHierarchy {
+    type: "hierarchy";
+
+    /**
+     * Show in editor.
+     */
+    caption: string;
+
+    /**
+     * Hierarchy for entity items in columns
+     */
+    hierarchyIdx: number;
+}
 
 /**
  * Coordinate of an MDX member
@@ -147,8 +177,9 @@ export interface MdxMemberCoordinates {
 
     /**
      * index of the member in the tuple. E.g. AF in (AF, 2009) has index 0 and 2009 has index 1.
+     * undefined means use the whole tuple.
      */
-    hierIdx: number;
+    hierIdx?: number;
 }
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
@@ -271,7 +302,6 @@ export interface EntityItem {
     empty?: boolean;
 
     tupleUNames?: string[];
-    tidyIdxHint?: number;
 }
 
 export interface TidyCellError {
@@ -290,20 +320,14 @@ export interface TidyCellError {
  */
 export interface ITidyTableSelection {
     /**
-     * If the Table changes this rowIdx might not longer be valid
-     * It's the clicked/hit row
+     * Object storing the selection coordinates.
      */
-    hitRowIdx: number,
+    // selection: ITidyTableRowSelection | ITidyTableColumnSelection | ITidyTableCellSelection;
 
     /**
-     * A list of unique names that identify the selection
+     * Fired event value. Arrays are combined into a single event.
      */
-    rowIdentifier: string | string[];
-
-    /**
-     * A list with the columns names (for info)
-     */
-    columnNames: string | string[];
+    items: EntityItem[];
 }
 
 export enum SelectionBehaviour {
@@ -447,3 +471,66 @@ export enum UseDatetimeAxis {
     NO = "NO",
     AUTO = "AUTO"
 }
+
+export interface ITidyColumnIndex {
+    /**
+     * Name of index
+     */
+    name: string;
+
+    /**
+     * Display label for index
+     */
+    label: string;
+
+    /**
+     * Unique name of mdx member
+     */
+    mdxUniqueName?: string;
+
+    /**
+     * Level of mdx member
+     */
+    mdxLevel?: string;
+}
+
+export interface WidgetTidySelectionOptions {
+    /**
+     * If true, the widget responds to selection events.
+     */
+    isSelectionActive: boolean;
+
+    /**
+     * User can set the selection mode in the interaction-settings.
+     */
+    selectionMode: SelectionMode;
+
+    /**
+     * These columns are considered in the selection.
+     */
+    selectionGranularity?: IFormFieldGranularityItem[];
+
+    /**
+     * Behaviour when all items in the filter are selected.
+     */
+    selectionAllBehaviour?: SelectionBehaviour;
+
+    /**
+     * Behaviour when the selection is empty, e.g. when no items are selected.
+     */
+    selectionEmptyBehaviour?: SelectionBehaviour;
+
+    /**
+     * List with items in the initial selection.
+     */
+    initSelectionUserDefined?: string[];
+
+    /**
+     * Column with items in the initial selection. The column has a truthy value for items that are in the initial
+     * selection.
+     */
+    initSelectionColumn?: TidyTableColumnSelector;
+}
+
+// Array with first value always defined. Groups consist of at least one index row.
+export type GroupRowIndices = [number, ...number[]];

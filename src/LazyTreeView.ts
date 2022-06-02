@@ -26,52 +26,6 @@ export interface LazyTreeItemClasses {
     label: string;
 }
 
-export interface LazyTreeClasses {
-    /** Styles applied to the search toolbar element */
-    toolbar: string;
-
-    /** Styles applied to the search search input element */
-    input: string;
-
-    /** Styles applied to the select filter button (on) */
-    button: string;
-
-    /** Styles applied to the select filter button (on) */
-    buttonFilterSelectedOn: string;
-
-    /** Styles applied to the select filter button (off) */
-    buttonFilterSelectedOff: string;
-
-    /** Styles applied to the TreeRoot element */
-    treeRoot: string;
-
-
-}
-
-/**
- * Global classes
- */
-export interface Ic3GlobalClasses {
-    singleSelection: string,
-    multipleSelection: string,
-}
-
-export const ic3GlobalClasses: Ic3GlobalClasses = {
-    singleSelection: 'Ic3-SingleSelection',
-    multipleSelection: 'Ic3-MultipleSelection',
-}
-
-
-export const lazyTreeClasses: LazyTreeClasses = {
-    toolbar: 'Ic3-LazyTreeView-toolbar',
-    input: 'Ic3-LazyTreeView-toolbar-input',
-    button: 'Ic3-LazyTreeView-toolbar-button',
-    buttonFilterSelectedOn: 'Ic3-LazyTreeView-toolbar-buttonOn',
-    buttonFilterSelectedOff: 'Ic3-LazyTreeView-toolbar-buttonOff',
-    treeRoot: 'Ic3-LazyTreeView-treeRoot',
-}
-
-
 export interface ILazyTreeViewLoader {
 
     /**

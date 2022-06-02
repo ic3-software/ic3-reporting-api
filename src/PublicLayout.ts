@@ -1,4 +1,5 @@
 import {PaperOrientation, PaperSizeUnits} from "./ITypes";
+import {Property} from "csstype";
 
 type CSSProperties = any;
 
@@ -149,7 +150,11 @@ export interface IWidgetLayoutDefinition {
     pageOrientation: PaperOrientation;
 
     pageMargin: IPageMargin;
-    pageBackgroundColor: string;
+
+    /**
+     * Use the one defined from the theme (ic3 palette) when not defined here.
+     */
+    pageBackgroundColor?: Property.Color;
 
     /**
      * Widgets are zoomed so that their bounding box fits the horizontal page area.

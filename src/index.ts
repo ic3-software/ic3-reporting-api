@@ -6,6 +6,7 @@ export * from "./IPluginDefinition";
 export * from "./IRemotePluginName";
 export * from "./IReporting";
 export * from "./IThemeManager";
+export * from "./PublicAmchartsData";
 export * from "./ITidyTableTransformation"
 export * from "./ITidyTableTransformationManager"
 export * from "./ITypes"
@@ -47,6 +48,7 @@ export * from "./theme/ThemeFilterCheckboxRadio";
 export * from "./theme/ThemeFilterPanel";
 export * from "./theme/ThemeFilterSlider";
 export * from "./theme/ThemeFilterTree";
+export * from "./theme/ThemeGlobal";
 export * from "./theme/ThemeGoogle";
 export * from "./theme/ThemeGoogleHeatMap";
 export * from "./theme/ThemeGoogleKmlLayer";
@@ -57,11 +59,11 @@ export * from "./theme/ThemeKpiBox";
 export * from "./theme/ThemeKpiCard";
 export * from "./theme/ThemeLayout";
 export * from "./theme/ThemeLayoutPage";
+export * from "./theme/ThemeLazyTreeClasses";
 export * from "./theme/ThemeMarkdownText";
 export * from "./theme/ThemePivotTable";
 export * from "./theme/ThemeRepetitionWidget";
 export * from "./theme/ThemeReportAppBar";
-export * from "./theme/ThemeReportAppMenu";
 export * from "./theme/ThemeTable";
 export * from "./theme/ThemeReportAppLeftPanel";
 export * from "./theme/ThemeWidgetBox";

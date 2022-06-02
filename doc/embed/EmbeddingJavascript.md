@@ -10,7 +10,7 @@ This integration allows for a two ways communication between the host applicatio
 - listen to events from a dashboard,
 - etc.
 
-The source code of a running [example](https://github.com/ic3-software/ic3-demo-embedded-iframe-react)
+The source code of a running [example](https://github.com/ic3-software/ic3-demo-embedded-react)
 is available for more (up to date) details.
 
 ### Loading icCube

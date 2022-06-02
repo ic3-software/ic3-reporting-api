@@ -1,34 +1,30 @@
 import {ITidyBaseColumn, ITidyColumn} from "./PublicTidyColumn";
+import {GroupRowIndices} from "./PublicTidyTableTypes";
 
 /**
- * a tree node that with origin in a TidyColumn
+ * A tree node that with origin in a TidyColumn
  */
 export interface TidyTreeNode {
 
     /**
-     * the column the tree node was generated from
+     * The column the tree node was generated from
      */
     originalColumn?: ITidyColumn;
 
     /**
-     * the rows that the node is created from
+     * The rows that the node is created from. Undefined if and only if the node is the root node.
      */
-    rowIds: number[];
+    rowIds?: GroupRowIndices;
 
     /**
-     * the label/value of this node
+     * The label/value of this node
      */
-    nodeLabel: any;
+    nodeLabel: string;
 
     /**
-     * children of this tree
+     * Children of this tree
      */
     children: TidyTreeNode[];
-
-    /**
-     * True if and only if the node is the root node
-     */
-    isRoot: boolean;
 }
 
 type ArrayReducer<T> = (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T;
@@ -43,7 +39,7 @@ type ArrayReducer<T> = (previousValue: T, currentValue: T, currentIndex: number,
  * Yearly Budget | Car Payment
  *
  * converts to <nodeLabel> <rowIds>:
- * root [0,1,2]
+ * root (undefined)
  *  |
  *  --- Monthly Budget [0,1]
  *  |     |
@@ -62,20 +58,21 @@ export class TidyTree {
 
     constructor(root?: TidyTreeNode) {
         this.root = {
-            rowIds: [],
             nodeLabel: 'root',
             children: [],
-            isRoot: true,
             ...root
         };
     }
 
     /**
      * A unique id for each node of the tree
-     * returns levelDepth + "--" + node.nodeLabel
+     * returns levelDepth + "--" + node.nodeLabel, or "root" for the root node.
      */
     static getUniqueId(node: TidyTreeNode, levelDepth: number): string {
-        return levelDepth + "--" + node.nodeLabel + "--" + node.rowIds[0];
+        if (node.rowIds == null) {
+            return "root";
+        }
+        return levelDepth + "--" + node.nodeLabel + "--" + (node.rowIds[0]);
     }
 
     /**
@@ -108,12 +105,12 @@ export class TidyTree {
      * aggrfn is sum by default
      */
     getNodeValue<T>(node: TidyTreeNode, measure: ITidyBaseColumn<T>, aggrfn?: ArrayReducer<T>): T {
+        const aggregateValues = aggrfn ?? sumAggregation;
+        if (node.rowIds == null) {
+            return [...measure.getValues()].reduce(aggregateValues);
+        }
         if (node.originalColumn?.isHierarchy()) {
             return measure.getValue(node.rowIds[0]);
-        }
-        const aggregateValues = aggrfn ?? sumAggregation;
-        if (node.isRoot) {
-            return [...measure.getValues()].reduce(aggregateValues);
         }
         const values = node.rowIds.map(i => measure.getValue(i));
         return values.reduce(aggregateValues);

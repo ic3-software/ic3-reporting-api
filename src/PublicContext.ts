@@ -3,7 +3,7 @@ import {ITidyTable} from "./PublicTidyTable";
 import {ITidyTableTransformation} from "./ITidyTableTransformation";
 import {Theme} from "@mui/material/styles";
 import {ThemeTextFormatter} from "./PublicTheme";
-import {ITidyColumn} from "./PublicTidyColumn";
+import {ITidyColumn, ITidyNumericColumn} from "./PublicTidyColumn";
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {ITidyMath} from "./PublicTidyMath";
 
@@ -17,7 +17,7 @@ export enum IContentMessageType { info, error}
 export interface IPublicContext {
 
     /**
-     * React
+     * React, returns true when loaded
      */
     useGoogleMapHook(): boolean | Error;
 
@@ -134,8 +134,6 @@ export interface IWidgetPublicContext extends IPublicContext {
 
     isPrintingMode(): boolean;
 
-    getGoogleMapRenderedDelayMS(): number;
-
     logInfoWidget(component: string, message: string): void;
 
     renderWidgetContentMessage(type: IContentMessageType, message: string): any;
@@ -215,6 +213,47 @@ export interface IWidgetPublicContext extends IPublicContext {
      * Redux -> set in Redux value in widgetOwnProps[fieldName]
      */
     setReduxOwnProps(fieldName: string, value: any): void;
+
+
+    /**
+     * Google map
+     */
+
+    /**
+     * React only, like an use function
+     *
+     * Loads Google map library with the API key as set
+     *
+     * return
+     *          true when the google map is ready (lib loaded)
+     *          error when
+     */
+    reactUseGoogleMap(): boolean | Error;
+
+    /**
+     * React only, like an use function
+     *
+     * reactUseGoogleMap() + rendered the map into the div referenced by ref with mapOptions
+     *
+     * @param mapOptions google.maps.MapOptions
+     * @param ref ref React.RefObject<HTMLDivElement>
+     *
+     * return
+     *          undefined if loading
+     *          {map} google.maps.Map instance when loaded
+     *          {error} if loaded on error
+     */
+    reactUseGoogleMapPlus(mapOptions: any, ref: any): undefined | { map?: any; error?: Error };
+
+    /**
+     * Returns latitude and longitude with the same logic as for internal maps
+     *
+     *
+     */
+    getMapCoordinates(table: ITidyTable): [ITidyNumericColumn, ITidyNumericColumn] | [];
+
+    getGoogleMapRenderedDelayMS(): number;
+
 }
 
 export interface IWidgetEditorPublicContext {

@@ -1,84 +1,95 @@
 export class WidgetBoxClasses {
 
     /**
+     * Root Styles applied to the widgetBox
+     */
+    static readonly root: string = "ic3WidgetBox";
+
+
+    /**
      * Root Styles applied to the widgetBox root element for a 'standard' widget -> &.className !
      */
-    static readonly standard: string = "WidgetBox-standard";
+    static readonly standard: string = "ic3WidgetBox-standard";
 
     /**
      * Root Styles applied to the widgetBox root element for a 'embedded' widget (the widget is inside another widget)
      */
-    static readonly embedded: string = "WidgetBox-embedded";
+    static readonly embedded: string = "ic3WidgetBox-embedded";
 
     /**
      * Root Styles applied to the widgetBox root element for a 'zoomed' widget
      */
-    static readonly zoom: string = "WidgetBox-zoom";
+    static readonly zoom: string = "ic3WidgetBox-zoom";
 
     /**
      * Root Styles applied to the widgetBox root element for a 'no decoration' widget (template definition setting, no borders ...)
      */
-    static readonly noDecoration: string = "WidgetBox-noDecoration";
+    static readonly noDecoration: string = "ic3WidgetBox-noDecoration";
 
     /**
      * Styles applied to the widgetBox container element
      */
-    static readonly container: string = "WidgetBox-container";
+    static readonly container: string = "ic3WidgetBox-container";
 
     /**
      * Styles applied to the template JS content
      */
-    static readonly templateJSContent: string = "WidgetBox-TemplateJS-content";
+    static readonly templateJSContent: string = "ic3WidgetBox-TemplateJS-content";
 
     /**
      * Styles applied to the template React content
      */
-    static readonly templateReactContent: string = "WidgetBox-TemplateReact-content";
+    static readonly templateReactContent: string = "ic3WidgetBox-TemplateReact-content";
 
     /**
      * Styles applied to the widgetBox content element (the widget without header and user menu)
      */
-    static readonly content: string = "WidgetBox-content";
+    static readonly content: string = "ic3WidgetBox-content";
 
     /**
      * Styles applied to child of content (above)
      */
-    static readonly contentRoot: string = "WidgetBox-content-root";
+    static readonly contentRoot: string = "ic3WidgetBox-content-root";
 
     /**
      * Styles applied to the widgetBox user menu element (the icons for the user menu)
      */
-    static readonly userMenu: string = "WidgetBox-userMenu";
+    static readonly userMenu: string = "ic3WidgetBox-userMenu";
 
     /**
      * Styles applied to the widgetBox header element
      */
-    static readonly header: string = "WidgetBox-header";
+    static readonly header: string = "ic3WidgetBox-header";
 
     /**
      * Styles applied to the widgetBox header Title element
      */
-    static readonly headerTitle: string = "WidgetBox-headerTitle";
+    static readonly headerTitle: string = "ic3WidgetBox-headerTitle";
 
     /**
      * Root Styles applied to the widgetBox root element when the box is with header
      */
-    static readonly withHeader: string = "WidgetBox-withHeader";
+    static readonly withHeader: string = "ic3WidgetBox-withHeader";
 
     /**
      * Root Styles applied to the widgetBox root element when the box is without header
      */
-    static readonly withoutHeader: string = "WidgetBox-withoutHeader";
+    static readonly withoutHeader: string = "ic3WidgetBox-withoutHeader";
 
     /**
      * Styles applied to the widgetBox user menu element when the userMenu is open
      */
-    static readonly userMenuOpen: string = "WidgetBox-userMenuOpen";
+    static readonly userMenuOpen: string = "ic3WidgetBox-userMenuOpen";
 
     /**
      * Styles applied to the widgetBox user menu element when the userMenu id closed
      */
-    static readonly userMenuClosed: string = "WidgetBox-userMenuClosed";
+    static readonly userMenuClosed: string = "ic3WidgetBox-userMenuClosed";
+
+    /**
+     * attribute for the root div containing the widgetId
+     */
+    static readonly widgetIdAttribute: string = "data-widget-id";
 }
 
 export declare type WidgetBoxClassKey = keyof WidgetBoxClasses;

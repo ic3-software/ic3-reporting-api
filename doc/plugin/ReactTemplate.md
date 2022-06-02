@@ -1,7 +1,6 @@
 ## React Widget Template
 
-A React [widget template](./WidgetTemplate.md) is defining a new widget implemented using React. Note that Material-UI
-can be used and shared (Webpack Module Federation) with icCube dashboards application itself.
+A React [widget template](./WidgetTemplate.md) defines a new widget implemention using React. You can use Material-UI in the widget definition, because the icCube dashboards application already loads it. You can share and load the library using Webpack Module Federation.
 
 On top of the common meta definition this kind of template is responsible to implement the `jsCode` method:
 
@@ -14,7 +13,7 @@ export interface IPublicWidgetReactTemplateDefinition<T extends FormFieldObject>
 }
 ```
 
-method returning an instance of `IPublicReactChartTemplate`:
+`jsCode` returns an instance of `IPublicReactChartTemplate`:
 
 ```typescript
 export interface IPublicReactChartTemplate<T extends FormFieldObject> {
@@ -32,6 +31,8 @@ export interface IPublicReactChartTemplate<T extends FormFieldObject> {
 The React element will be re-rendered while editing it (e.g., new options being applied, new query result available)
 as well as when reacting to end-user interactions (e.g., filter being applied, click row of a table updating its
 selection, etc.).
+
+Please refer to this [file](./WidgetTemplateDefinition.md) for more details about the widget template definition.
 
 For additional and up-to-date information check in GitHub the working example
 [ic3-demo-plugin-react](https://github.com/ic3-software/ic3-demo-plugin-react).

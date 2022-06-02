@@ -341,7 +341,7 @@ export interface Am4SimpleCategoryAxisOptions extends FormFieldObject {
      *
      * The title of the vertical axis.
      */
-    xAxisTitleText: string;
+    xAxisTitleText?: string;
 
     /**
      * Label Spacing.
@@ -696,6 +696,20 @@ export interface Am4TreeMapSeriesOptions extends FormFieldObject, IStrokeStylePr
     labelExpression: string;
 
     /**
+     * Label Type.
+     *
+     * Render the label as text or as HTML.
+     */
+    labelType: "html" | "text";
+
+    /**
+     * Label Overflow.
+     *
+     * Choice of behavior when the label is larger than the max width.
+     */
+    labelOverflow?: OverflowType;
+
+    /**
      * Tooltips.
      *
      * Expression for the tooltip when hovering a tree item.
@@ -712,7 +726,7 @@ export interface Am4TreeMapSeriesOptions extends FormFieldObject, IStrokeStylePr
      *
      * The algorithm used to divide the area into squares based on their values.
      */
-    layoutAlgorithm: string;
+    layoutAlgorithm: "binaryTree" | "dice" | "slice" | "sliceDice" | "squarify";
 }
 
 export interface Am4GeoSeriesOptions extends FormFieldObject {
@@ -1087,7 +1101,7 @@ export interface Am4CategoryDateAxisOptions extends FormFieldObject {
      *
      * The title of the vertical axis
      */
-    xAxisTitleText: string;
+    xAxisTitleText?: string;
 
     /**
      * Label Spacing.
@@ -1277,7 +1291,7 @@ export interface Am4LineSeriesOptions extends FormFieldObject, IStrokeStylePrope
      *
      * A column with values for the stacked area chart.
      */
-    lineValue: TidyTableColumnSelector;
+    lineValue: TidyTableColumnSelector[];
 
     /**
      * Shape.
@@ -1360,7 +1374,7 @@ export interface Am4ColumnSeriesOptions extends FormFieldObject, IStrokeStylePro
      *
      * A column with values for the stacked column series.
      */
-    columnValue: TidyTableColumnSelector;
+    columnValue: TidyTableColumnSelector[];
 
     /**
      * Tooltip.

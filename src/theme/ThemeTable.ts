@@ -1,5 +1,4 @@
 import {BaseTableChartOptions} from "./ThemeBaseTable";
-import {TidyTableColumnSelector} from "../PublicTidyTableTypes";
 
 /**
  * List of classNames available
@@ -202,21 +201,6 @@ export interface TableChartOptions extends BaseTableChartOptions {
      * Name of a variant. Note that a variant is possibly overriding defined options.
      */
     variant?: string;
-
-    /**
-     * Cell Value.
-     *
-     * If 'Axe(1) as Column' is active, defines the column containing the measures for the cells.
-     */
-    cellValue?: TidyTableColumnSelector;
-
-    /**
-     * Axis(1) as Column.
-     *
-     * If active and the MDX query has 3 axis or more, the second MDX axis (ON ROWS or ON 1)
-     * is used as the table column(s).
-     */
-    useMdxSecondAxisAsTableColumn: boolean;
 
     /**
      * Footer.

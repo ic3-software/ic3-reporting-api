@@ -55,10 +55,8 @@ export type IThemeWidgetVariant = {
 export interface IThemeManager {
 
     /**
-     *
      * The theme decorator allows to setup the Theme.components and Theme.ic3 using the theme
      * created from its partial options (e.g., using palette, typography, spacing, etc...)
-     *
      */
     registerTheme(themeOptions: any, themeDecorator?: (theme: any) => ic3Components, baseTheme?: EmbeddedThemeNames): void;
 

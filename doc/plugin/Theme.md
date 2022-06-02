@@ -67,28 +67,28 @@ theme.components.WidgetBox = {
         {
             props: {variant: "Rounded"},
             style: {
-                "&.WidgetBox-standard, &.WidgetBox-embedded": {
+                [`&.${WidgetBoxClasses.standard}, &.${WidgetBoxClasses.embedded}`]: {
                     boxShadow: "4px 8px " + theme.palette.grey.A400,
                     borderRadius: "10px",
                     border: 'solid 1px ' + theme.palette.grey.A400,
                 },
-                "& .WidgetBox-header": {
+                [`& .${WidgetBoxClasses.header}`]: {
                     justifyContent: "center",
                     height: '40px',
                     borderColor: theme.palette.grey.A700
                 },
-                "& .WidgetBox-headerTitle": {
+                [`& .${WidgetBoxClasses.headerTitle}`]: {
                     ...theme.typography.h6,
                     lineHeight: '40px',
                 },
-                "& .WidgetBox-userMenu": {
+                [`& .${WidgetBoxClasses.userMenu}`]: {
                     height: '40px',
                 },
                 // hide/show box hover over the box
-                "& .WidgetBox-userMenuClosed": {
+                [`& .${WidgetBoxClasses.userMenuClosed}`]: {
                     opacity: 0,
                 },
-                "&:hover .WidgetBox-userMenuClosed": {
+                [`&:hover .${WidgetBoxClasses.userMenuClosed}`]: {
                     opacity: 1,
                 }
             },

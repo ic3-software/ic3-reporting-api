@@ -41,8 +41,8 @@ and package this font in the kit using its CSS definitions as following.
 
 ```json
     "css-loader": "6.7.1",
-    "postcss": "8.4.12",
-    "postcss-loader": "6.2.1",
+    "postcss": "8.4.14",
+    "postcss-loader": "7.0.0",
     "style-loader": "3.3.1",
 ```
 

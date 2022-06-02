@@ -1,5 +1,4 @@
 import {BaseTableChartOptions} from "./ThemeBaseTable";
-import {TidyTableColumnSelector} from "../PublicTidyTableTypes";
 
 export class PivotTableClasses {
 
@@ -68,11 +67,6 @@ export interface PivotTableChartOptions extends BaseTableChartOptions {
      * Name of a variant. Note that a variant is possibly overriding defined options.
      */
     variant?: string;
-
-    /**
-     * Cell Value. Defines the column containing the measures for the cells.
-     */
-    cellValue?: TidyTableColumnSelector;
 
     /**
      * Left Header Names (CSV).

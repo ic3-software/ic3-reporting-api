@@ -22,11 +22,6 @@ export class FilterPanelClasses {
     static readonly contentDiv: string = "FilterPanel-content";
 
     /**
-     * Div containing the filters
-     */
-    static readonly filterStack: string = "FilterPanel-filterStack";
-
-    /**
      * Main filter div
      */
     static readonly filterItemDiv: string = "FilterPanel-filterItem";
@@ -35,6 +30,11 @@ export class FilterPanelClasses {
      * Classname for the TextField component
      */
     static readonly inputField: string = "FilterPanel-filterInputfield";
+
+    /**
+     * Classname for the field label
+     */
+    static readonly fieldName: string = "FilterPanel-fieldName";
 
 }
 
@@ -97,5 +97,17 @@ export interface FilterPanelChartOptions extends FormFieldObject {
      * Easily change by clicking 'Set Default Filters' in the user menu of the widget header.
      */
     initialFilterConfig?: string;
+
+    /**
+     * If true, grow filter in row direction. If false, grow in column direction.
+     */
+    filterLayoutHorizontal?: boolean;
+
+    /**
+     * If defined, the filter panel only shows items where this measure is not NULL. This means, for example, that
+     * if there is a filter item setting Continent to Asia, then other filters, e.g., country, only show countries
+     * with continent Asia.
+     */
+    measureMdx?: string;
 }
 

@@ -1,6 +1,20 @@
 import {SelectionBehaviour, TidyTableColumnSelector} from "../PublicTidyTableTypes";
 import {FormFieldObject} from "../PublicTemplateForm";
 
+export class DatePickerClasses {
+
+    /**
+     * Style applied to the root element.
+     */
+    static readonly root = "root";
+
+    /**
+     * + Mui DatePicker and/or DateRangePicker classes
+     */
+}
+
+export declare type DatePickerClassKey = keyof DatePickerClasses;
+
 /**
  * Date Picker Options (fields of the "Chart" tab in the widget editor).
  *

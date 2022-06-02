@@ -1,9 +1,9 @@
 ## Javascript Widget Template
 
-A Javascript [widget template](./WidgetTemplate.md) is defining a new widget implemented using plain
+A Javascript [widget template](./WidgetTemplate.md) defines a new widget implemention using plain
 Javascript/Typescript. That is, it does not require React.
 
-On top of the common meta definition this kind of template is responsible to implement the `jsCode` method:
+On top of the common meta definition, this kind of template is responsible to implement the `jsCode` method:
 
 ```typescript
 export interface IPublicWidgetJsTemplateDefinition<T extends FormFieldObject> extends IPublicCommonWidgetTemplateDefinition {
@@ -14,7 +14,7 @@ export interface IPublicWidgetJsTemplateDefinition<T extends FormFieldObject> ex
 }
 ```
 
-method returning an instance of `IPublicJsChartTemplate`:
+The `jsCode` method returns an instance of `IPublicJsChartTemplate`:
 
 ```typescript
 export interface IPublicJsChartTemplate<T extends FormFieldObject> {
@@ -34,6 +34,8 @@ export interface IPublicJsChartTemplate<T extends FormFieldObject> {
 The instance of `IPublicJsChartTemplate` will be re-used between different calls of the `jsCode` method. Indeed, a
 widget is being re-rendered while editing it (e.g., new options being applied, new query result available) as well as
 when reacting to end-user interactions (e.g., filter being applied, click row of a table updating its selection, etc.).
+
+Please refer to this [file](./WidgetTemplateDefinition.md) for more details about the widget template definition.
 
 For additional and up-to-date information check in GitHub the working example
 [ic3-demo-plugin-js](https://github.com/ic3-software/ic3-demo-plugin-js).
