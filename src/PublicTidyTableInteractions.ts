@@ -60,9 +60,10 @@ export interface ITidyTableInteractionSelection {
 
     /**
      * Returns true if and only if the column is selected.
-     * @param colIdx
+     * @param colIdx index of the column in the tidy table.
+     * @param hierIdx optional. Use to check if the hierarchy index is selected. Leave undefined to check the column.
      */
-    isColumnSelected(colIdx: number): boolean;
+    isColumnSelected(colIdx: number, hierIdx?: number): boolean;
 
     /**
      * Returns true if and only if the cell is selected.
@@ -76,14 +77,6 @@ export interface ITidyTableInteractionSelection {
      * @param column selection should be in this column
      */
     isSelectedSankey(rowIdx: number, column: ITidyColumn): boolean;
-
-    /**
-     *
-     * @param column
-     * @param rowIdx the index of the row
-     */
-    isColumnRowSelected(column: ITidyBaseColumn<any>, rowIdx: number): boolean | undefined;
-
 
     /**
      * map function on selected rows
@@ -109,7 +102,7 @@ export interface ITidyTableInteractionSelection {
     /**
      * Handles the click event for the selection on a given column.
      *
-     * If the columns is not part of the selection columns of the widget nothing will happen
+     * If the column is not part of the selection columns of the widget nothing will happen
      *
      * @param column column index of the tidy table
      * @param event the mouse event of the click
@@ -329,7 +322,12 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
 
     getCompactedSelectionNames(): string[] | undefined;
 
+    /**
+     * Returns true if the column is used for the row selection.
+     */
     isSelectable(col: ITidyColumn): boolean;
+
+    isHierarchyIdxSelectable(hierIndex: number): boolean;
 
     getSelectedRows(): number[];
 

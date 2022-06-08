@@ -127,7 +127,7 @@ export interface TidyTableColumnIdentifier {
 export type TidyTableColumnSelector = TidyTableColumnIdentifier | TidyTableMappingColumnSelectorOptions;
 
 export type IFormFieldGranularityItem = IFormFieldGranularityItemColumn | IFormFieldGranularityItemRole
-    | IFormFieldGranularityItemHierarchy;
+    | IFormFieldGranularityItemHierarchy | IFormFieldGranularityColumns;
 
 export interface IFormFieldGranularityItemColumn {
     type: "column";
@@ -147,6 +147,9 @@ export interface IFormFieldGranularityItemRole {
     role: string;
 }
 
+/**
+ * Only include columns info from this hierarchy in the selection.
+ */
 export interface IFormFieldGranularityItemHierarchy {
     type: "hierarchy";
 
@@ -159,6 +162,13 @@ export interface IFormFieldGranularityItemHierarchy {
      * Hierarchy for entity items in columns
      */
     hierarchyIdx: number;
+}
+
+/**
+ * When selected, include all column info in the selection.
+ */
+export interface IFormFieldGranularityColumns {
+    type: "all_columns";
 }
 
 /**
@@ -319,11 +329,6 @@ export interface TidyCellError {
  * scenario a coordinate might not longer match any rowIdx
  */
 export interface ITidyTableSelection {
-    /**
-     * Object storing the selection coordinates.
-     */
-    // selection: ITidyTableRowSelection | ITidyTableColumnSelection | ITidyTableCellSelection;
-
     /**
      * Fired event value. Arrays are combined into a single event.
      */

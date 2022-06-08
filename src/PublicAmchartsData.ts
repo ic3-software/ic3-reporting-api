@@ -27,16 +27,14 @@ export class PublicAmchartsData {
     private readonly onAxis: ITidyColumn;
     private readonly onLevel: ITidyColumn | undefined;
     private readonly onGroup: ITidyColumn | undefined;
-    private readonly onColor: ITidyColumn | undefined;
     private readonly table: ITidyTable;
 
     constructor(table: ITidyTable, onValues: ISeriesValues[], onAxis: ITidyColumn, onGroup?: ITidyColumn,
-                onLevel?: ITidyColumn, onColor?: ITidyColorColumn) {
+                onLevel?: ITidyColumn) {
         this.onValues = onValues;
         this.onAxis = onAxis;
         this.onGroup = onGroup;
         this.onLevel = onLevel;
-        this.onColor = onColor;
         this.table = table;
     }
 
@@ -143,10 +141,6 @@ export class PublicAmchartsData {
 
     getGroup(): ITidyColumn | undefined {
         return this.onGroup;
-    }
-
-    getColor(): ITidyColorColumn | undefined {
-        return this.onColor;
     }
 
     /**

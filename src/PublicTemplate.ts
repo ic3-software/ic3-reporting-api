@@ -7,6 +7,48 @@ import {ReactElement} from "react";
 import {Theme} from "@mui/material/styles";
 import {WidgetTemplateChartOptions, WidgetTemplateIDs} from "./PublicTemplates";
 import {ChartTemplateDataMapping, IFormFieldGranularityItem} from "./PublicTidyTableTypes";
+import {ResizingConstraintOptions} from "./theme/ThemeWidgetBox";
+
+export interface IRectanglePosition {
+    top: number;
+    left: number;
+}
+
+export interface IRectangleSize {
+    height: number;
+    width: number;
+}
+
+export interface IRectangle extends IRectanglePosition, IRectangleSize {
+}
+
+export interface IWidgetLayoutData {
+
+    /**
+     * Keep box header settings for additional (i.e., generated) pages.
+     */
+    keepBoxHeader: boolean;
+
+    /**
+     * Keep box header settings for additional (i.e., generated) pages.
+     */
+    keepTableHeader: boolean;
+
+    startRow: number;
+    endRow: number;
+
+}
+
+export interface IWidgetLayoutInfo extends IRectangle {
+
+    pageNb: number;
+
+    positionOrder: number;
+
+    data?: IWidgetLayoutData;
+
+    resizingConstraint?: ResizingConstraintOptions;
+}
 
 type ChartTemplateWidgetProps = any;
 
@@ -126,7 +168,9 @@ export interface IPublicJsChartTemplate<T extends FormFieldObject> {
      * @param options the options (possibly edited and/or from the theme) of this widget
      * @param header aka. widget title
      */
-    renderJS: (data: IWidgetTemplateTidyData, options: T, header: string, props: ChartTemplateWidgetProps) => void;
+    renderJS: (data: IWidgetTemplateTidyData, options: T, header: string) => void;
+
+    renderOnResizeJS?: (data: IWidgetTemplateTidyData, options: T, header: string, info: IWidgetLayoutInfo) => void;
 
     dispose: () => void;
 
