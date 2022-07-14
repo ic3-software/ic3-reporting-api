@@ -144,7 +144,8 @@ export interface Am4LabelOptions extends FormFieldObject {
     /**
      * Text.
      *
-     * The text displayed in the center of the chart
+     * The text displayed in the center of the chart.
+     * Use a single space to show no text and disable the label.
      */
     labelText: string;
 
@@ -1089,6 +1090,13 @@ export interface Am4CategoryDateAxisOptions extends FormFieldObject {
      * Does not work with a date axis.
      */
     xAxisLabelTooltipText: string;
+
+    /**
+     * The date format for the labels that show when the user hovers over the chart with a chart cursor.
+     * Leave undefined to use the axis-date format.
+     * Read more about the format codes here: https://www.amcharts.com/docs/v4/concepts/formatters/formatting-date-time/#Format_codes
+     */
+    xAxisLabelTooltipDateFormat?: string;
 
     /**
      * Title Text.

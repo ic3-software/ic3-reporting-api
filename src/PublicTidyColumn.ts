@@ -537,7 +537,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     setName(name: string): void;
 
     /**
-     * Set the number formatter of the column, calculating and adding the 'formattedValue' property.
+     * Set the number/date formatter of the column, calculating and adding the 'formattedValue' property.
      */
     setNumberFormat(format: ThemeTextFormatter | undefined): void;
 
@@ -643,8 +643,15 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     /**
      * Set the formatted values. Use this if you have the formatted values pre-calculated
      * or a function to calculate the formatted values.
+     * @param caption the caption for the added property
      */
-    setFormattedValues(formattedValues: (string | null)[] | ((value: T | undefined) => string)): void;
+    setFormattedValues(formattedValues: (string | null)[] | ((value: T | undefined) => string), caption?: string): void;
+
+    /**
+     * Set the colors for the column.
+     * @param caption the caption for the added property
+     */
+    setColors(colors: (Property.Color | null)[], caption?: string): void;
 
     /**
      * Return a new column with transformed values.

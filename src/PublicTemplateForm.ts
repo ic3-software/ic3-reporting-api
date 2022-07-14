@@ -153,10 +153,10 @@ export type FormFields<T extends FormFieldObject> = {
                                                 | Omit<IFormMarkdownFieldDef, 'fieldPath'>
                                                 | Omit<IFormOptionFieldReportPathDef, 'fieldPath'> :
 
-                                            Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
-                                                | Omit<IFormGroupsFieldDef, 'fieldPath'> :
+                                                Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
+                                                    | Omit<IFormGroupsFieldDef, 'fieldPath'> :
 
-                                                never /* type not supported */
+                                                    never /* type not supported */
         )
 };
 
@@ -395,7 +395,16 @@ export function isTidyTableExprScale(type: FormFieldType) {
  */
 export enum AutocompleteNoOptionsText {
     NO_OPTIONS = "NO_OPTIONS",
+    NO_COLUMNS = "NO_COLUMNS",
     NO_QUERY_RESULT = "NO_QUERY_RESULT",
+    QUERY_HAS_ERROR = "QUERY_HAS_ERROR",
+}
+
+/**
+ * Show an action button below the options
+ */
+export enum AutocompleteActions {
+    ADD_COLOR = "ADD_COLOR"
 }
 
 export type CodeMirrorMode =
@@ -485,6 +494,11 @@ export interface IFormAutocompleteFieldDef<OPTION> extends IFormFieldDef<OPTION>
 
         noOptionsText?: AutocompleteNoOptionsText;
 
+        /**
+         * Show an action button below the options
+         */
+        action?: AutocompleteActions;
+
         renderInput?: (params: AutocompleteRenderInputParams) => React.ReactNode;
 
         renderOption?: (
@@ -533,7 +547,10 @@ export interface IFormColorEditorFieldDef extends IFormFieldDef<IColorDef> {
  */
 export type IFormColumnChooserFieldDef = IFormColumnChooserSingleFieldDef | IFormColumnChooserMultipleFieldDef;
 
-interface IFormColumnChooserSingleFieldDef extends IFormFieldDef<TidyTableColumnSelector> {
+export type IFormColumnChooserSingleFieldDef = IFormColumnChooserBaseDef<TidyTableColumnSelector>;
+export type IFormColumnChooserMultipleFieldDef = IFormColumnChooserBaseDef<TidyTableColumnSelector[]>;
+
+interface IFormColumnChooserBaseDef<T extends TidyTableColumnSelector | TidyTableColumnSelector[]> extends IFormFieldDef<T> {
 
     fieldType: "columnsChooser",
 
@@ -542,7 +559,7 @@ interface IFormColumnChooserSingleFieldDef extends IFormFieldDef<TidyTableColumn
         /**
          * The user can select multiple columns / selectors
          */
-        multiple?: false;
+        multiple?: boolean;
 
         /**
          * The user can select the same column more than once
@@ -552,7 +569,7 @@ interface IFormColumnChooserSingleFieldDef extends IFormFieldDef<TidyTableColumn
         /**
          * Only columns of this/these type(s) are allowed.
          */
-        allowedTypes?: TidyColumnsType[] | ((column: ITidyColumn) => boolean);
+        allowedTypes?: TidyColumnsType[];
 
         /**
          * The user can select properties of columns
@@ -565,67 +582,27 @@ interface IFormColumnChooserSingleFieldDef extends IFormFieldDef<TidyTableColumn
         includeSelectors?: boolean;
 
         /**
-         * Fallback to a column that has a type that is allowed. Note, properties of columns are not considered.
+         * The user can select columns based on their role
+         */
+        includeRoles?: boolean;
+
+        /**
+         * Search the table for a default column.
          *
-         * It finds the column to fallback on by
-         * 1. role equal to fieldPath and type is allowed,
-         * 2. role equal to editorConfig.alias and type is allowed,
-         * 3. type is allowed.
+         * Set to true to use the default fallback logic:
          *
-         * Already mapped columns are skipped.
-         */
-        fallback?: boolean;
-
-        /**
-         * In the expression editor, use the alias to reference the column. Use the alias in table.getColumnByAlias(...).
-         */
-        alias?: string;
-    }
-
-}
-
-interface IFormColumnChooserMultipleFieldDef extends IFormFieldDef<TidyTableColumnSelector[]> {
-
-    fieldType: "columnsChooser",
-
-    editorConf?: {
-
-        /**
-         * The user can select multiple columns / selectors
-         */
-        multiple: true;
-
-        /**
-         * The user can select the same column more than once
-         */
-        allowDuplicate?: boolean;
-
-        /**
-         * Only columns of this/these type(s) are allowed.
-         */
-        allowedTypes?: TidyColumnsType[] | ((column: ITidyColumn) => boolean);
-
-        /**
-         * The user can select properties of columns
-         */
-        includeProperties?: boolean;
-
-        /**
-         * The user can choose a selector, see TidyTableMappingColumnSelectorOptions
-         */
-        includeSelectors?: boolean;
-
-        /**
-         * Fallback to a column that has a type that is allowed. Note, properties of columns are not considered.
+         *      Fallback to a column that has a type that is allowed. Note, properties of columns are not considered.
          *
-         * It finds the column to fallback on by
-         * 1. role equal to fieldPath and type is allowed,
-         * 2. role equal to editorConfig.alias and type is allowed,
-         * 3. type is allowed.
+         *      It finds the column to fallback on by
+         *      1. role equal to fieldPath and type is allowed,
+         *      2. role equal to editorConfig.alias and type is allowed,
+         *      3. type is allowed.
          *
-         * Already mapped columns are skipped.
+         *      Already mapped columns are skipped.
+         *
+         * You can also use your own fallback logic.
          */
-        fallback?: boolean;
+        fallback?: boolean | ((table: ITidyTable) => ITidyColumn[] | undefined);
 
         /**
          * In the expression editor, use the alias to reference the column. Use the alias in table.getColumnByAlias(...).

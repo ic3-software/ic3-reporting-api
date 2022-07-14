@@ -55,6 +55,13 @@ export interface IOpenReportOptions {
     path: string;
 
     /**
+     * When opening a report in viewer mode (i.e., /viewer URL) icCube is checking that the default schema
+     * is being authorized and generates an error. When opening a report from a host application and changing
+     * the default schema on the fly, you might want to disable that check.
+     */
+    disableDefaultSchemaAuthCheck?: boolean;
+
+    /**
      * Optional JSON object (i.e., constant / filter default value).
      */
     params?: IReportParam[];

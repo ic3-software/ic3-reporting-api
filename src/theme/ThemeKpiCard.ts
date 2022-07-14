@@ -8,6 +8,47 @@ import {
     TargetTextPosition
 } from "../ITypes";
 
+export class KpiCardClasses {
+
+    public static kpiValuesRoot = "KpiValuesRoot";
+
+    public static sparkChartRoot = "KpiSparkChartRoot";
+
+    public static kpiValueTitle = "KpiValueNameText";
+
+    public static kpiValueText = "KpiValueText";
+
+    public static kpiCompareTextRoot = "KpiCompareTextRoot";
+
+    public static kpiCompareTextRootEmpty = "KpiEmptyCompareTextEmpty";
+
+    public static comparePercentageText = "ComparePercentageText";
+
+    public static compareTargetText = "compareTargetText";
+
+    public static comparePercentZero = "ComparePercentZero";
+
+    public static comparePercentUp = "ComparePercentUp";
+
+    public static comparePercentDown = "ComparePercentDown";
+
+}
+
+export declare type KpiCardClassKey = keyof KpiCardClasses;
+
+export interface KpiCardProps {
+
+    /**
+     * Variant defined in the theme. If the theme has variants, then the user can select one.
+     */
+    variant?: string;
+
+    sparklinePosition: SparklinePosition;
+
+    targetPosition: TargetTextPosition;
+
+}
+
 /**
  * KPI Card Options (fields of the "Chart" tab in the widget editor).
  *
@@ -18,7 +59,12 @@ import {
  *
  * @see WidgetTemplateChartOptions
  */
-export interface KpiCartChartOptions extends FormFieldObject {
+export interface KpiCartChartOptions extends SparkChartOptionsMeta {
+
+    /**
+     * Variant defined in the theme. If the theme has variants, then the user can select one.
+     */
+    variant?: string;
 
     /**
      * Value.
@@ -92,6 +138,15 @@ export interface KpiCartChartOptions extends FormFieldObject {
     iconSet: TargetTextIconSet;
 
     /**
+     * Position.
+     *
+     * Where to display the sparkline.
+     */
+    sparklinePosition: SparklinePosition;
+}
+
+export interface SparkChartOptionsMeta extends FormFieldObject {
+    /**
      * Sparkline Type.
      */
     sparkChartType: SparkChartType;
@@ -111,11 +166,12 @@ export interface KpiCartChartOptions extends FormFieldObject {
     sparklineHasArea: boolean;
 
     /**
-     * Position.
-     *
-     * Where to display the sparkline.
+     * Radius of the columns rounded corners.
      */
-    sparklinePosition: SparklinePosition;
+    columnSparkCornerRadius: number;
 
+    /**
+     * Space between columns.
+     */
+    columnSparkColumnSpacing: number;
 }
-

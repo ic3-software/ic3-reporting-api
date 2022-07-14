@@ -22,7 +22,7 @@ import {IPublicContext} from "./PublicContext";
 import {TableClassKey, TableProps} from "./theme/ThemeTable";
 import {PivotTableClassKey, PivotTableProps} from "./theme/ThemePivotTable";
 import {Components} from "@mui/material/styles/components";
-import {FilterPanelClassesKey} from "./theme/ThemeFilterPanel";
+import {FilterPanelClassesKey, FilterPanelProps} from "./theme/ThemeFilterPanel";
 import {FilterCheckboxRadioChartOptions, FilterCheckboxRadioClassKey} from "./theme/ThemeFilterCheckboxRadio";
 import {ReportAppLeftPanelClassKey} from "./theme/ThemeReportAppLeftPanel";
 import {FilterTreeChartOptions, FilterTreeClassKey} from "./theme/ThemeFilterTree";
@@ -30,6 +30,7 @@ import {DatePickerChartOptions, DatePickerClassKey} from "./theme/ThemeDatePicke
 import {FilterAutocompleteChartOptions, FilterAutocompleteClassesKey} from "./theme/ThemeFilterAutocomplete";
 import {AppMenuIconProps, ThemeAppMenuIconClassKey} from "./theme/ThemeAppMenuIcon";
 import {QueryBuilderNodeProps, ThemeQueryBuilderNodeClassKey} from "./theme/ThemeQueryBuilderNode";
+import {KpiCardClassKey, KpiCardProps} from "./theme/ThemeKpiCard";
 
 export interface INoSchemaRendererOptions {
 
@@ -71,6 +72,11 @@ export type ThemeTextFormattersOptions = Record<string, ThemeTextFormatter> & {
 };
 
 type Amcharts4ThemeDateFormatter = {
+    /**
+     * Amcharts date formatter.
+     * Read more about the format codes here: https://www.amcharts.com/docs/v4/concepts/formatters/formatting-date-time/#Format_codes
+     * Read more about how these settings are used here: https://www.amcharts.com/docs/v4/concepts/axes/date-axis/#Setting_date_formats
+     */
     dateFormatter: {
         millisecond: {
             dateFormat: string;
@@ -165,6 +171,11 @@ export interface ic3Palette {
     reportAppMenu: string;
 
     /**
+     * List of named colors for ic3 applications ( MDX IDE, Admin ... )
+     */
+    appColors?: { 'default'?: Property.Color } & Record<string, Property.Color>;
+
+    /**
      * Darkens a color for an onhover effect
      *
      * If null or undefined, returns onHover color
@@ -249,10 +260,9 @@ export interface ic3PaletteOptions {
     chartPalettes?: { 'default': Property.Color[] } & Record<string, Property.Color[]>;
     chartSingleColors?: Partial<MandatorySingleColors> & Record<string, Property.Color>;
 
-    /**
-     * Report Application Menu
-     */
     reportAppMenu?: Property.Color;
+
+    appColors?: { 'default'?: Property.Color } & Record<string, Property.Color>
 
     onHover?: (color: Property.Color) => Property.Color;
 
@@ -569,6 +579,10 @@ interface ic3BaseComponents {
         styleOverrides?: ComponentsOverrides["HtmlBox"];
         variants?: ComponentsVariants["HtmlBox"];
     }
+    KpiCard?: {
+        styleOverrides?: ComponentsOverrides["KpiCard"];
+        variants?: ComponentsVariants["KpiCard"];
+    }
     Layout?: {
         styleOverrides?: ComponentsOverrides["Layout"];
     }
@@ -747,6 +761,7 @@ declare module '@mui/material/styles/overrides' {
         FilterAutocomplete: FilterAutocompleteClassesKey;
 
         HtmlBox: HtmlBoxClassKey;
+        KpiCard: KpiCardClassKey;
         Layout: LayoutClassKey;
 
         LayoutPage: LayoutPageClassKey;
@@ -775,13 +790,14 @@ declare module '@mui/material/styles/props' {
 
         FilterCheckbox: FilterCheckboxRadioChartOptions;
         FilterButtons: FilterButtonsChartOptions;
-        FilterPanel: Record<never, any>;
+        FilterPanel: FilterPanelProps;
         FilterSlider: FilterSliderChartOptions;
         FilterTree: FilterTreeChartOptions;
         FilterDatePicker: DatePickerChartOptions;
         FilterAutocomplete: FilterAutocompleteChartOptions;
 
         HtmlBox: HtmlBoxProps;
+        KpiCard: KpiCardProps;
 
         PivotTable: PivotTableProps;
         Table: TableProps;

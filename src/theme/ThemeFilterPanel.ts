@@ -4,38 +4,105 @@ export class FilterPanelClasses {
     /**
      * Main content div
      */
-    static readonly mainDiv: string = "FilterPanel-root";
+    static readonly mainDiv = "FilterPanel-root";
 
     /**
      * Div containing the loading spinner and text
      */
-    static readonly loadingDiv: string = "FilterPanel-loading";
+    static readonly loadingDiv = "FilterPanel-loading";
 
     /**
-     * Header div with buttons and help icon
+     * Div with add filter and remove all filters buttons
      */
-    static readonly headerDiv: string = "FilterPanel-header";
+    static readonly headerDiv = "FilterPanel-header";
+
+    /**
+     * Div containing the 'Filters' text and the help icon button
+     */
+    static readonly titleDiv = "FilterPanel-title";
+
+    /**
+     * Div containing the 'Filters' text
+     */
+    static readonly titleDivText = "FilterPanel-title-text";
+
+    /**
+     * Div containing the add and remove all buttons
+     */
+    static readonly headerDivButtons = "FilterPanel-header-buttons";
+
+    /**
+     * Add button
+     */
+    static readonly headerDivAddButton = "FilterPanel-HeaderDivAddButton";
+
+    /**
+     * Remove all button
+     */
+    static readonly headerDivRemoveAllButton = "FilterPanel-HeaderDivRemoveAllButton";
+
+    /**
+     * Div of the content root. Used for animation purposes.
+     */
+    static readonly contentDivRoot = "FilterPanel-content-root";
 
     /**
      * Div with the stack of filter items
      */
-    static readonly contentDiv: string = "FilterPanel-content";
+    static readonly contentDiv = "FilterPanel-content";
+
+    /**
+     * Div with no filters defined text
+     */
+    static readonly contentNoFilters = "FilterPanel-NoFilters";
 
     /**
      * Main filter div
      */
-    static readonly filterItemDiv: string = "FilterPanel-filterItem";
+    static readonly filterItemDiv = "FilterPanel-filterItem";
+
+    /**
+     * Main filter div
+     */
+    static readonly filterItemDivHeader = "FilterPanel-filterItemHeader";
+
+    static readonly filterItemClearButton = "FilterPanel-ItemClearButton";
+
+    static readonly filterItemRemoveButton = "FilterPanel-ItemRemoveButton";
 
     /**
      * Classname for the TextField component
      */
-    static readonly inputField: string = "FilterPanel-filterInputfield";
+    static readonly inputField = "FilterPanel-filterInputfield";
+
+    /**
+     * A div with the displayed values for the value selector in preview mode
+     */
+    static readonly inputFieldPreviewValues = "FilterPanel-PreviewValue";
 
     /**
      * Classname for the field label
      */
-    static readonly fieldName: string = "FilterPanel-fieldName";
+    static readonly fieldName = "FilterPanel-fieldName";
 
+    /**
+     * Div with selectable items for filters with few items
+     */
+    static readonly selectableContent = "FilterPanel-selectableContent";
+
+}
+
+export interface FilterPanelProps {
+
+    /**
+     * Variant defined in the theme. If the theme has variants, then the user can select one.
+     */
+    variant?: string;
+
+    /**
+     * If true, grow filter in row direction. If false, grow in column direction.
+     */
+    filterLayoutHorizontal?: boolean;
 }
 
 export declare type FilterPanelClassesKey = keyof FilterPanelClasses;
@@ -109,5 +176,16 @@ export interface FilterPanelChartOptions extends FormFieldObject {
      * with continent Asia.
      */
     measureMdx?: string;
+
+    /**
+     * Name template for the fields with properties. Use 'levelName' and 'propertyName' as placeholders.
+     */
+    propertyFieldNameTemplate: string;
+
+    /**
+     * Use the simple selection filter if and only if `useSimpleFilterCutoff` is not null and the level
+     * has <= `useSimpleFilterCutoff` members.
+     */
+    useSimpleFilterCutoff?: number;
 }
 

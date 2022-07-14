@@ -29,6 +29,8 @@ export interface IPublicContext {
 
     getNumberFormatter(format: ThemeTextFormatter): (value: any | undefined) => string;
 
+    getDateFormatter(format: ThemeTextFormatter): (value: any | undefined) => string;
+
     /**
      * translate the content of a report (the title of widgets, content of some widgets...). This does use another file
      *

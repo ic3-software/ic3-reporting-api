@@ -17,6 +17,7 @@ export class FilterAutocompleteClasses {
      */
     static readonly muiAutocomplete = autocompleteClasses.root;
 
+    static readonly action = "MuiAutocomplete-action"
 
 }
 

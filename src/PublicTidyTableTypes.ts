@@ -52,7 +52,7 @@ export enum TidyColumnsType {
     MIXED = 'mixed',
 
     /**
-     * The column type is not known because there is no data
+     * The column type is not known
      */
     UNKNOWN = 'unknown',
 
@@ -124,7 +124,14 @@ export interface TidyTableColumnIdentifier {
     property?: string;
 }
 
-export type TidyTableColumnSelector = TidyTableColumnIdentifier | TidyTableMappingColumnSelectorOptions;
+export interface TidyTableRoleSelector {
+    /**
+     * Search columns by role
+     */
+    role: string;
+}
+
+export type TidyTableColumnSelector = TidyTableColumnIdentifier | TidyTableMappingColumnSelectorOptions | TidyTableRoleSelector;
 
 export type IFormFieldGranularityItem = IFormFieldGranularityItemColumn | IFormFieldGranularityItemRole
     | IFormFieldGranularityItemHierarchy | IFormFieldGranularityColumns;

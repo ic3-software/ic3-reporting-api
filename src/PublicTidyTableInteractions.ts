@@ -136,6 +136,12 @@ export interface ITidyTableInteractionSelection {
     handleMultipleRowSelection(rowIds: number[]): void;
 
     /**
+     * Perform a row-selection click on multiple rows at the same time. Has similair CTRL functionality as
+     * handleClickSelection(...). SHIFT is not supported.
+     */
+    handleMultipleRowSelectionClick(rowIds: number[], event?: TidyEvent): void;
+
+    /**
      * Clear the selection and fire an empty event value. Note, this resets the
      * selection to the initial selection.
      */
@@ -264,7 +270,7 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      *
      * @see handleRowHit
      */
-    handleColumnHit(colIdx: number, event: TidyEvent | undefined):void;
+    handleColumnHit(colIdx: number, event: TidyEvent | undefined): void;
 
     /**
      * Handles a row hit for the sankey diagram. The sankey differs from normal selection because it makes a tuple,

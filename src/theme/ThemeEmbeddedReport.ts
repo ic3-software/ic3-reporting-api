@@ -26,4 +26,9 @@ export interface EmbeddedReportChartOptions extends FormFieldObject {
      */
     "@params"?: IFormEventMappingArrayFieldDefType;
 
+    inheritSchemaName: boolean;
+    inheritCubeName: boolean;
+
+    inheritDisableDefaultSchemaAuthCheck: boolean;
+
 }
