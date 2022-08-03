@@ -537,7 +537,10 @@ export interface ITidyTable {
      */
     addColumnIndex(index: TidyColumnIndex): void;
 
-    getQueryLimit(): number | undefined;
+    /**
+     * The limit used when lazy search is enabled.
+     */
+    getLazySearchLimit(): number | undefined;
 
     isTotalRow(rowIdx: number): boolean;
 
@@ -591,6 +594,11 @@ export interface ITidyTable {
      * Utility class for doing maths on columns
      */
     getMath(): ITidyMath;
+
+    /**
+     * Returns true if and only if the table is truncated by the server (too many rows otherwise).
+     */
+    reachedMaxTidyRowCount(): boolean;
 
 }
 

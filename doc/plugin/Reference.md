@@ -71,4 +71,10 @@ could be defaulted to `compact` layout mode.
 
 Refer to this [page](./ThemeWidgetDefaults.md) for more details.
 
+### Editor Theme
+
+The theme used to render the editor application as opposed to the dashboards.
+
+Refer to this [page](./EditorTheme.md) for more information.
+
 _

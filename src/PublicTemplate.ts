@@ -8,6 +8,7 @@ import {Theme} from "@mui/material/styles";
 import {WidgetTemplateChartOptions, WidgetTemplateIDs} from "./PublicTemplates";
 import {ChartTemplateDataMapping, IFormFieldGranularityItem} from "./PublicTidyTableTypes";
 import {ResizingConstraintOptions} from "./theme/ThemeWidgetBox";
+import {QueryType} from "./ITypes";
 
 export interface IRectanglePosition {
     top: number;
@@ -86,9 +87,9 @@ export interface IWidgetTemplateMdxBuilderAxisProps {
     disableNonEmpty?: true;
 
     /**
-     * For filters add lazy load feature to the axis
+     * For filters add lazy load feature to the axis.
      */
-    addLazyLoad?: true;
+    withLazySearch?: true;
 
     /**
      * Allow only a single member
@@ -481,7 +482,23 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
     /**
      *  Returns true if the widget fires a global event at initialization (start)
      */
-    firesGlobalEventAtStart?: (options: OPTIONS | undefined, templateDef: IPublicWidgetTemplateDefinition<OPTIONS>) => boolean
+    firesGlobalEventAtStart?: (options: OPTIONS | undefined, templateDef: IPublicWidgetTemplateDefinition<OPTIONS>) => boolean;
+
+    /**
+     * Limit on the rows of the tidy result to be sure that the browser does not crash during rendering.
+     * Leave to undefined or set to -1 to have no limit.
+     *
+     * Note: can be overridden via Dashboards options (ic3report-config.js).
+     */
+    maxTidyRowCount?: number,
+
+    /**
+     * List of supported types of query.
+     *
+     * Defaults: all of them.
+     */
+    withQueryTypes?: QueryType[];
+
 }
 
 /**

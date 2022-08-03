@@ -88,6 +88,13 @@ export interface BaseTableChartOptions extends FormFieldObject {
     columnSortable: string;
 
     /**
+     * Column Ordering (CSV).
+     *
+     * A list of boolean values: 'true', 'false'. The last value repeats itself.
+     */
+    columnOrdering: string;
+
+    /**
      * Pinnable (CSV).
      *
      * Display the pin options. A list of boolean values: 'true', 'false'. The last value repeats itself.

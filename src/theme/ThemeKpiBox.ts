@@ -1,6 +1,5 @@
 import {FormFieldObject} from "../PublicTemplateForm";
 import {HtmlBoxVariant} from "./ThemeHtmlBox";
-import {TidyTableColumnSelector} from "../PublicTidyTableTypes";
 
 /**
  * KPI Box Options (fields of the "Chart" tab in the widget editor).
@@ -36,20 +35,6 @@ export interface KpiBoxChartOptions extends FormFieldObject {
      * Expression that returns a markdown text. Evaluated once after row's markdown.
      */
     postMarkdown?: string;
-
-    /**
-     * Column.
-     *
-     * Default column for the expression and the background color.
-     */
-    column?: TidyTableColumnSelector;
-
-    /**
-     * Background Color.
-     *
-     * Use the column color to set the background color.
-     */
-    backgroundColorFromQuery: boolean;
 
 }
 

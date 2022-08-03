@@ -43,6 +43,7 @@ interface IWidgetTemplateChartOptions {
     "ic3.EmbeddedReport": EmbeddedReportChartOptions,
 
     "ic3.FilterAutocomplete": FilterAutocompleteChartOptions,
+    "ic3.FilterAutocompleteLazy": FilterAutocompleteChartOptions,
     "ic3.FilterButtons": FilterButtonsChartOptions,
     "ic3.FilterCheckboxRadio": FilterCheckboxRadioChartOptions,
     "ic3.FilterPanel": FilterPanelChartOptions,

@@ -307,7 +307,7 @@ export interface IMdxAxisSeriesInfo {
 export interface EntityItem {
 
     uniqueName: string;
-    key?: string;
+    key?: any;
 
     name: string;
     caption: string;

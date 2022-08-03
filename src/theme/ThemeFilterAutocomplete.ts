@@ -56,4 +56,12 @@ export interface FilterAutocompleteChartOptions extends FilterTidyTableChartOpti
      */
     limitTags: number;
 
+
+    /**
+     * Limit Chips.
+     *
+     * Maximum number of chips that will be visible
+     */
+    limitChips: number;
+
 }

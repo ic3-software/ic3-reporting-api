@@ -23,6 +23,11 @@ export interface PublicIcEvent {
     readonly mdx: string;
 
     /**
+     * If available the key of the MDX member
+     */
+    readonly key?: any | any[];
+
+    /**
      * These two strings together define an unique id for a widget in a report
      */
     sourceNid?: string;

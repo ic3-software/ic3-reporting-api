@@ -9,7 +9,9 @@ export type AppNotificationType =
     "save-state-to-localstorage" |
     "restore-state-from-localstorage" |
     "save-ownprops-to-localstorage" |
-    "restore-ownprops-from-localstorage"
+    "restore-ownprops-from-localstorage" |
+    "save-reportwidgets-ownprops-to-localstorage" |
+    "restore-reportwidgets-ownprops-from-localstorage"
     ;
 
 export interface IAppNotification {
@@ -102,6 +104,18 @@ export interface RestoreOwnPropsFromLocalStorageNotification extends IAppNotific
 
 }
 
+export interface SaveWidgetOwnPropsToLocalStorageNotification extends IAppNotification {
+
+    readonly type: "save-reportwidgets-ownprops-to-localstorage";
+
+}
+
+export interface RestoreWidgetOwnPropsFromLocalStorageNotification extends IAppNotification {
+
+    readonly type: "restore-reportwidgets-ownprops-from-localstorage";
+
+}
+
 export type AppNotification =
     AppEditReportNotification |
     AppPrintReportDialogNotification |
@@ -111,5 +125,7 @@ export type AppNotification =
     SaveStateToLocalStorageNotification |
     RestoreStateFromLocalStorageNotification |
     SaveOwnPropsToLocalStorageNotification |
+    RestoreWidgetOwnPropsFromLocalStorageNotification |
+    SaveWidgetOwnPropsToLocalStorageNotification |
     RestoreOwnPropsFromLocalStorageNotification
     ;

@@ -60,4 +60,10 @@ export interface IThemeManager {
      */
     registerTheme(themeOptions: any, themeDecorator?: (theme: any) => ic3Components, baseTheme?: EmbeddedThemeNames): void;
 
+    /**
+     * Register editor themes. Change the editor theme in ic3report-config.js by setting defaultEditorThemeId to a
+     * themeId from a theme using this method.
+     */
+    registerEditorTheme(themeOptions: any, themeDecorator?: (theme: any) => ic3Components): void;
+
 }

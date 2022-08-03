@@ -422,7 +422,15 @@ export interface ic3Theme {
 
 export interface ic3ThemeOptions {
 
+    /**
+     * For editor theme, the id to use in your app-local/ic3report-config.js:
+     *
+     * <pre>
+     *     options.defaultEditorThemeId = ...
+     * </pre>
+     */
     id: string;
+
     caption: string;
 
     cssClass?: string;
@@ -508,22 +516,30 @@ export interface ic3ThemeOptions {
      */
     editor?: {
         /**
-         * Editor logo. Defaults to icCubes logo.
+         * Editor logo.
+         *
+         * Default: icCube logo.
          */
         logo?: string;
 
         /**
-         * Alt text for the logo image. Default = icCube.
+         * Alt text for the logo image.
+         *
+         * Default: "icCube".
          */
         logoAlt?: string;
 
         /**
-         * Top - Offset of dashboard page to the editor. Default 25.
+         * Top offset of the edited dashboard page in the editor.
+         *
+         * Default: 25.
          */
         viewPortOffsetTop?: number;
 
         /**
-         * Left - Offset of dashboard page to the editor. Default 25.
+         * Left offset of the edited dashboard page in the editor.
+         *
+         * Default: 25.
          */
         viewPortOffsetLeft?: number;
     }

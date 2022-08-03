@@ -29,3 +29,12 @@ export enum SparklinePosition {
     RIGHT_OF_VALUE = "RIGHT_OF_VALUE"
 }
 
+export enum QueryType {
+    MDX = "mdx",
+    SQL = 'sql',
+    EMBEDDED = 'embedded',
+    HTTP_CSV = "HTTP_CSV"
+}
+
+
+

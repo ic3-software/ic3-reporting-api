@@ -1,4 +1,4 @@
-import {SelectionBehaviour, WidgetTidySelectionOptions} from "./PublicTidyTableTypes";
+import {EntityItem, ITidyTableSelection, SelectionBehaviour, WidgetTidySelectionOptions} from "./PublicTidyTableTypes";
 import {ITidyBaseColumn, ITidyColumn} from "./PublicTidyColumn";
 import {ILazyTreeViewLoader} from "./LazyTreeView";
 import {PublicIcEvent} from "./IcEvent";
@@ -41,9 +41,14 @@ export type IWidgetInteractionMode = "drilldown" | "selection";
 export interface ITidyTableInteractionSelection {
 
     /**
-     * Sets the selection at the creation of the widget
+     * Sets the selection at the creation of the widget.
      */
     initializeSelection(isRangeSelection?: boolean): void;
+
+    /**
+     * Sets the selection at the creation of the widget: autocomplete-lazy.
+     */
+    initializeLazySelection(items?: EntityItem[]): void;
 
     /**
      * Returns true if the selection if empty. Returns false otherwise.
@@ -335,6 +340,10 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
 
     isHierarchyIdxSelectable(hierIndex: number): boolean;
 
+    /**
+     * Returns the rows of the items currently in the selection. Note, the item must be present in the current tidy
+     * table.
+     */
     getSelectedRows(): number[];
 
     // Sort the selection by column-values order if multiple are selected? Tree -> true
@@ -344,5 +353,15 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      * Returns the widgets selection options.
      */
     getWidgetSelectionOptions(): WidgetTidySelectionOptions;
+
+    /**
+     * Returns the selection in the interaction object.
+     */
+    getSelectedItems(): ITidyTableSelection[];
+
+    /**
+     * Add an item to the interactions selection.
+     */
+    setSelection(items: ITidyTableSelection | ITidyTableSelection[]): void;
 }
 
