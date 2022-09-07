@@ -31,6 +31,12 @@ export interface ITidyTableTransformation<OPTIONS extends FormFieldObject> {
     qualifiedId?: string;
 
     /**
+     * Widgets from these templates can use the transformation. Leave undefined for all widgets.
+     * E.g., ic3.Table for the table widget.
+     */
+    allowedByWidgetTemplate?: string[];
+
+    /**
      * Return the description to show below the transformation in the 'TRANSFORMATION' tab of the editor
      * @param context used for accessing localization functions
      * @param options user-set options for the transformation

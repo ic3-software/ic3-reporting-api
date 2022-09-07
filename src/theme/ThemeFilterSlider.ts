@@ -10,17 +10,29 @@ export class FilterSliderClasses {
     /**
      *  Style applied to the mui slider element.
      */
-    static readonly slider = "FilterSlider-slider";
+    static readonly slider = "ic3FilterSlider-slider";
 
     /**
      *  Style applied to the tooltip element.
      */
-    static readonly tooltip = "FilterSlider-tooltip"
+    static readonly tooltip = "ic3FilterSlider-tooltip"
 
     /**
      * Slot for MuiSlider component
      */
     static readonly muiSlider = "";
+
+    /**
+     * Slot for Selection Label (below the slider)
+     */
+    static readonly selectionLabel = "ic3FilterSlider-SelectionLabel";
+
+    /**
+     * root modifiers for horizontal or vertical slider
+     */
+    static readonly horizontal = "ic3FilterSlider-Horizontal";
+    static readonly vertical = "ic3FilterSlider-Vertical";
+
 
 }
 
@@ -31,7 +43,7 @@ export enum FilterSliderRenderingType {
     MARKS = "MARKS",
     TOOLTIPS = "TOOLTIPS",
     MARKS_WITH_TOOLTIPS = "MARKS_WITH_TOOLTIPS",
-
+    NONE = "NONE",
 }
 
 /**
@@ -74,4 +86,18 @@ export interface FilterSliderChartOptions extends FilterTidyTableChartOptions {
      * Left/right (or top/down) margins of the slider.
      */
     margin: number;
+
+    /**
+     * Mark Each
+     *
+     * When active, adds a label for each nt step to the mark (1 for each step)
+     */
+    markLabelEach: number;
+
+    /**
+     * Selection Label.
+     *
+     * An optional label under the slider with selection information
+     */
+    selectionLabel?: string;
 }

@@ -4,91 +4,91 @@ export class FilterPanelClasses {
     /**
      * Main content div
      */
-    static readonly mainDiv = "FilterPanel-root";
+    static readonly mainDiv = "ic3FilterPanel-root";
 
     /**
      * Div containing the loading spinner and text
      */
-    static readonly loadingDiv = "FilterPanel-loading";
+    static readonly loadingDiv = "ic3FilterPanel-loading";
 
     /**
      * Div with add filter and remove all filters buttons
      */
-    static readonly headerDiv = "FilterPanel-header";
+    static readonly headerDiv = "ic3FilterPanel-header";
 
     /**
      * Div containing the 'Filters' text and the help icon button
      */
-    static readonly titleDiv = "FilterPanel-title";
+    static readonly titleDiv = "ic3FilterPanel-title";
 
     /**
      * Div containing the 'Filters' text
      */
-    static readonly titleDivText = "FilterPanel-title-text";
+    static readonly titleDivText = "ic3FilterPanel-title-text";
 
     /**
      * Div containing the add and remove all buttons
      */
-    static readonly headerDivButtons = "FilterPanel-header-buttons";
+    static readonly headerDivButtons = "ic3FilterPanel-header-buttons";
 
     /**
      * Add button
      */
-    static readonly headerDivAddButton = "FilterPanel-HeaderDivAddButton";
+    static readonly headerDivAddButton = "ic3FilterPanel-HeaderDivAddButton";
 
     /**
      * Remove all button
      */
-    static readonly headerDivRemoveAllButton = "FilterPanel-HeaderDivRemoveAllButton";
+    static readonly headerDivRemoveAllButton = "ic3FilterPanel-HeaderDivRemoveAllButton";
 
     /**
      * Div of the content root. Used for animation purposes.
      */
-    static readonly contentDivRoot = "FilterPanel-content-root";
+    static readonly contentDivRoot = "ic3FilterPanel-content-root";
 
     /**
      * Div with the stack of filter items
      */
-    static readonly contentDiv = "FilterPanel-content";
+    static readonly contentDiv = "ic3FilterPanel-content";
 
     /**
      * Div with no filters defined text
      */
-    static readonly contentNoFilters = "FilterPanel-NoFilters";
+    static readonly contentNoFilters = "ic3FilterPanel-NoFilters";
 
     /**
      * Main filter div
      */
-    static readonly filterItemDiv = "FilterPanel-filterItem";
+    static readonly filterItemDiv = "ic3FilterPanel-filterItem";
 
     /**
      * Main filter div
      */
-    static readonly filterItemDivHeader = "FilterPanel-filterItemHeader";
+    static readonly filterItemDivHeader = "ic3FilterPanel-filterItemHeader";
 
-    static readonly filterItemClearButton = "FilterPanel-ItemClearButton";
+    static readonly filterItemClearButton = "ic3FilterPanel-ItemClearButton";
 
-    static readonly filterItemRemoveButton = "FilterPanel-ItemRemoveButton";
+    static readonly filterItemRemoveButton = "ic3FilterPanel-ItemRemoveButton";
 
     /**
      * Classname for the TextField component
      */
-    static readonly inputField = "FilterPanel-filterInputfield";
+    static readonly inputField = "ic3FilterPanel-filterInputfield";
 
     /**
      * A div with the displayed values for the value selector in preview mode
      */
-    static readonly inputFieldPreviewValues = "FilterPanel-PreviewValue";
+    static readonly inputFieldPreviewValues = "ic3FilterPanel-PreviewValue";
 
     /**
      * Classname for the field label
      */
-    static readonly fieldName = "FilterPanel-fieldName";
+    static readonly fieldName = "ic3FilterPanel-fieldName";
 
     /**
      * Div with selectable items for filters with few items
      */
-    static readonly selectableContent = "FilterPanel-selectableContent";
+    static readonly selectableContent = "ic3FilterPanel-selectableContent";
 
 }
 

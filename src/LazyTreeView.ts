@@ -31,15 +31,27 @@ export interface ILazyTreeViewLoader {
     /**
      * This will build the tree with react children
      */
-    mapTree<T extends ReactElement>(expanded: (index: number) => boolean, factory: (index: number) => T, filter?: (info: MdxInfo) => boolean): T[];
+    mapTree<T>(expanded: (index: number) => boolean, factory: (index: number, isCollapsed: boolean) => T, filter?: (info: MdxInfo) => boolean): T[];
 
+    /**
+     * Returns true if and only if the node has children that are to be lazilly loaded.
+     */
     hasLazyChildren(index: number): boolean;
+
+    /**
+     * Returns true if and only if the node has children in the already loaded data.
+     */
+    hasChildren(index: number): boolean;
 
     getColumnLevelDepth(index: number): number;
 
     lazyLoadChildren(index: number): void | number;
 
     getNodeIdAndCaption(index: number): [string, string];
+
+    getNodeId(index: number): string;
+
+    getItemCount(): number;
 
     setCallbackOnChange(callback: () => void): void;
 
@@ -91,9 +103,9 @@ export interface LazyTreeViewProps {
     disableSelection?: boolean;
 
     /**
-     * if undefined, the selection state is managed by the lazy tree as well
+     * the selection state is managed by the lazy tree as well
      */
-    selected?: string[];
+    selected: string[];
 
     /**
      * Controlled mode for selection
@@ -128,4 +140,11 @@ export interface LazyTreeViewProps {
      * @param label current label. Use this label as text because the filtering is highlighted.
      */
     getTreeItemLabel?: (rowIndex: number, label: string | ReactElement) => string | ReactElement;
+
+    /**
+     * If undefined, width and height are calculated automatically.
+     */
+    width?: number;
+    height?: number;
+
 }

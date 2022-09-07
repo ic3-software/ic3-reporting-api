@@ -261,7 +261,7 @@ export type ITidyRow = any[];
 export interface MdxInfo {
 
     uniqueName: string;
-    key: string;
+    key: any;
 
     name: string;
     caption: string;
@@ -273,7 +273,7 @@ export interface MdxInfo {
     levelCaption?: string;
 
     /**
-     * Relative: starts at 0.
+     * Relative: starts at 0 + visual depths for ragged dimension.
      */
     levelDepthR: number;
 
@@ -283,6 +283,27 @@ export interface MdxInfo {
     tupleIndex: number;
 
 }
+
+export type MdxLevelType =
+    "date" |
+    "time"
+    ;
+
+export type MdxLevelSubType =
+    "YEAR" |
+    "HALF_YEAR" |
+    "QUARTER" |
+    "MONTH" |
+    "WEEK" |
+    "DAY" |
+    "DAY_MONTH" |
+    "DAY_YEAR" |
+    "HOUR" |
+    "HALF_HOUR" |
+    "QUARTER_HOUR" |
+    "MINUTE" |
+    "SECOND"
+    ;
 
 export interface IMdxAxisSeriesInfo {
 
@@ -294,6 +315,10 @@ export interface IMdxAxisSeriesInfo {
      * A single level name is being specified in the guts for all the axis values.
      */
     levelUN?: string;
+    levelName?: string;
+    levelCaption?: string;
+    levelType?: MdxLevelType;
+    levelSubType?: MdxLevelSubType;
 
     /**
      * The unique name of the default member of the dimension.
@@ -449,6 +474,12 @@ export enum InterpolationType {
     LAB = 'lab'
 }
 
+export enum InterpolationAppliedTo {
+    COLUMNS = "COLUMNS",
+    ROWS = "ROWS",
+    TABLE = "TABLE"
+}
+
 export interface ConvertToTypeParseSettings {
     locale?: string;
     dateFormat?: string;
@@ -542,6 +573,12 @@ export interface WidgetTidySelectionOptions {
      * selection.
      */
     initSelectionColumn?: TidyTableColumnSelector;
+
+
+    /**
+     * Initialize selection on new query
+     */
+    initSelectionOnNewQuery?: boolean;
 }
 
 // Array with first value always defined. Groups consist of at least one index row.

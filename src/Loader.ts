@@ -18,6 +18,11 @@ export interface IDashboardsLoaderFrameParams {
     containerId: string;
 
     /**
+     * E.g., useful when using custom headers from the host application.
+     */
+    frameId: string;
+
+    /**
      * Optional CSS class of the created iFrame.
      */
     className?: string;
@@ -38,7 +43,7 @@ export interface IDashboardsLoaderFrameParams {
  */
 export function DashboardsLoaderFrame(params: IDashboardsLoaderFrameParams) {
 
-    const {containerId, className, style, onReady, url} = params;
+    const {containerId, frameId, className, style, onReady, url} = params;
 
     const containerELT = document.getElementById(containerId);
 
@@ -46,9 +51,9 @@ export function DashboardsLoaderFrame(params: IDashboardsLoaderFrameParams) {
         throw new Error("[ic3loader] (iFrame) missing container [" + containerId + "]")
     }
 
-    console.log("[ic3loader] (iFrame) icCube URL : " + url);
-    console.log("[ic3loader] (iFrame)  container : " + containerId);
-    console.log("[ic3loader] (iFrame)   callback : " + onReady);
+    console.log("[Loader] (iFrame) icCube URL : " + url);
+    console.log("[Loader] (iFrame)  container : " + containerId);
+    console.log("[Loader] (iFrame)   callback : " + onReady);
 
     const wnd = (window as any);
 
@@ -56,7 +61,7 @@ export function DashboardsLoaderFrame(params: IDashboardsLoaderFrameParams) {
 
     wnd.ic3loader[containerId] = (ic3: IReporting) => {
 
-        console.log("[ic3loader] (iFrame)      ready : ", ic3);
+        console.log("[Loader] (iFrame)      ready : ", ic3);
 
         delete wnd.ic3loader[containerId];
         onReady && onReady(ic3);
@@ -68,6 +73,7 @@ export function DashboardsLoaderFrame(params: IDashboardsLoaderFrameParams) {
 
     const iFrame = document.createElement('iframe');
 
+    frameId && (iFrame.id = frameId);
     className && (iFrame.className = className);
 
     iFrame.width = "100%";
@@ -86,9 +92,28 @@ export function DashboardsLoaderFrame(params: IDashboardsLoaderFrameParams) {
 
     iFrame.setAttribute("src", src);
 
-    console.log("[ic3loader] (iFrame)     iFrame : " + src);
+    console.log("[Loader] (iFrame)     iFrame : " + src);
 
     containerELT.appendChild(iFrame);
+
+}
+
+export interface IDashboardsLoaderParams {
+
+    /**
+     * Whether or not icCube is going to request custom HTTP headers from the host application.
+     * The value is passed back to the message sent to the host.
+     */
+    customHeaders?: string;
+
+    /**
+     * A (possibly empty) string saying icCube is requiring some configuration.
+     * The string itself is identifying how to configure the behavior (e.g., removing logout, ...).
+     * An empty string means default embedded configuration.
+     */
+    configuration?: string;
+
+    urlSuffix?: string;
 
 }
 
@@ -153,6 +178,19 @@ export class DashboardsLoaderDivContext {
      */
     private readonly publicPath = "/icCube/report/app/";
 
+    /**
+     * Whether or not icCube is going to request custom HTTP headers from the host application.
+     * The value is passed back to the message sent to the host.
+     */
+    private readonly customHeaders?: string;
+
+    /**
+     * A (possibly empty) string saying icCube is requiring some configuration.
+     * The string itself is identifying how to configure the behavior (e.g., removing logout, ...).
+     * An empty string means default embedded configuration.
+     */
+    private readonly configuration?: string;
+
     private readonly mainJsUrl: string;
 
     private buildVersion = "";
@@ -160,10 +198,27 @@ export class DashboardsLoaderDivContext {
 
     private libLoader: Promise<unknown> | undefined;
 
-    constructor(suffix?: string) {
+    constructor(options?: string | IDashboardsLoaderParams) {
 
-        !suffix && (suffix = "");
+        let suffix = "";
+        let customHeaders;
+        let configuration;
 
+        if (typeof options === "string") {
+
+            suffix = options;
+
+        } else if (options) {
+
+            customHeaders = options.customHeaders;
+            configuration = options.configuration;
+
+            suffix = options.urlSuffix || suffix;
+
+        }
+
+        this.customHeaders = customHeaders;
+        this.configuration = configuration;
         this.indexHtmlUrl += suffix;
         this.mainJsUrl = this.publicPath + "main.js" + suffix;
 
@@ -230,7 +285,7 @@ export class DashboardsLoaderDivContext {
 
                         const timeDiff = Math.round(performance.now() - start);
 
-                        console.log("[ic3-dashboards-context] loadLibsAndInitialize completed in " + timeDiff + " ms.");
+                        console.log("[Loader] (div) loadLibsAndInitialize completed in " + timeDiff + " ms.");
 
                         resolve(reporting)
                     },
@@ -266,20 +321,20 @@ export class DashboardsLoaderDivContext {
 
                 }).then(indexHtml => {
 
-                    // CSRF code
+                    // CSRF code.
+                    //
+                    // The server might have been configured with csrfOff=true meaning we should not fail here.
+                    // Plus that token value is more or less sent (not clear in the server code). So let's use
+                    // the value we get (anyway an error will be generated later => guess it's fine).
                     {
-                        const token = DashboardsLoaderDivContext.extractMatch(indexHtml, DashboardsLoaderDivContext.crfCodeRE, "Internal Error (user not authenticated?)");
-                        if (token.includes("ic3-CSRF-Token")) {
-                            throw new Error("Internal Error (token not replaced in [" + this.indexHtmlUrl + "] )");
-                        }
-
-                        wnd['ic3_CSRF_token'] = token;
+                        const token = DashboardsLoaderDivContext.extractMatch(indexHtml, DashboardsLoaderDivContext.crfCodeRE);
+                        token && (wnd['ic3_CSRF_token'] = token);
                     }
 
                     // Webpack entry point (main.js) cache busting key
                     let cacheKey = "";
                     if (!this.mainJsUrl.includes("?")) {
-                        cacheKey = "?" + DashboardsLoaderDivContext.extractMatch(indexHtml, DashboardsLoaderDivContext.mainJsCacheKeyRE, "Internal Error (main.js version missing)");
+                        cacheKey = "?" + DashboardsLoaderDivContext.extractMatch(indexHtml, DashboardsLoaderDivContext.mainJsCacheKeyRE, "Internal Error: missing main.js");
                     }
 
                     // Build information
@@ -289,16 +344,21 @@ export class DashboardsLoaderDivContext {
                     const scriptUrl = this.mainJsUrl + cacheKey;
 
                     // Load Webpack entry point: main.js
-                    console.log("[ic3-dashboards-context] start loading library [version:" + this.buildVersion + "] [build:" + this.buildTimestamp + "]");
+                    console.log("[Loader] (div) start loading library [version:" + this.buildVersion + "] [build:" + this.buildTimestamp + "]");
 
-                    wnd["__ic3__webpack_public_path__"] = this.publicPath;
                     wnd["__ic3_div_embedded__"] = true;
+                    wnd["__ic3_div_webpack_public_path__"] = this.publicPath;
+                    wnd["__ic3_div_custom_headers__"] = this.customHeaders;
+                    wnd["__ic3_div_configuration__"] = this.configuration;
+
+                    wnd["__ic3_embedded__"] = true /* embedding a previous version */;
+                    wnd["__ic3__webpack_public_path__"] = this.publicPath /* embedding a previous version */;
 
                     return DashboardsLoaderDivContext.loadScript(scriptUrl).catch(reason => Promise.reject("Error loading main.js script : " + scriptUrl))
 
                 }).then(() => {
 
-                    console.log("[ic3-dashboards-context] main.js loaded in " + Math.round(performance.now() - start) + " ms");
+                    console.log("[Loader] (div) main.js loaded in " + Math.round(performance.now() - start) + " ms");
 
                     let count = 0;
 
@@ -312,14 +372,14 @@ export class DashboardsLoaderDivContext {
 
                                 const timeDiff = Math.round(performance.now() - start);
 
-                                console.log("[ic3-dashboards-context] scripts ready in " + timeDiff + " ms");
+                                console.log("[Loader] (div) scripts ready in " + timeDiff + " ms");
 
                                 resolve(wnd["__ic3_div_embedded_starter__"]);
 
                             } else {
 
                                 if (count++ === 4) {
-                                    console.log("[ic3-dashboards-context] scripts : waiting for icCube initialized");
+                                    console.log("[Loader] (div) scripts : waiting for icCube initialized");
                                     count = 0;
                                 }
 

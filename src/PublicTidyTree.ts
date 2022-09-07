@@ -1,4 +1,4 @@
-import {ITidyBaseColumn, ITidyColumn} from "./PublicTidyColumn";
+import {ITidyColumn, ITidyNumericColumn} from "./PublicTidyColumn";
 import {GroupRowIndices} from "./PublicTidyTableTypes";
 
 /**
@@ -26,8 +26,6 @@ export interface TidyTreeNode {
      */
     children: TidyTreeNode[];
 }
-
-type ArrayReducer<T> = (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T;
 
 /**
  * A tree structure that was generated from a TidyTable.
@@ -104,20 +102,19 @@ export class TidyTree {
      * aggregates all children measures values on parents using aggregation function recursively
      * aggrfn is sum by default
      */
-    getNodeValue<T>(node: TidyTreeNode, measure: ITidyBaseColumn<T>, aggrfn?: ArrayReducer<T>): T {
-        const aggregateValues = aggrfn ?? sumAggregation;
+    getNodeValue(node: TidyTreeNode, measure: ITidyNumericColumn): number | null {
         if (node.rowIds == null) {
-            return [...measure.getValues()].reduce(aggregateValues);
+            return [...measure.getValues()].reduce(sumAggregation);
         }
         if (node.originalColumn?.isHierarchy()) {
             return measure.getValue(node.rowIds[0]);
         }
         const values = node.rowIds.map(i => measure.getValue(i));
-        return values.reduce(aggregateValues);
+        return values.reduce(sumAggregation);
     }
 }
 
-function sumAggregation(a: any, b: any) {
+function sumAggregation(a: number | null, b: number | null) {
     if (a == null)
         return b;
     if (b == null)

@@ -109,9 +109,12 @@ export class PublicAmchartsData {
         if (group != null) {
             const index = group.groupBy(true);
             if (firstGroupOnly) {
-                const groupIdx = index.values().next().value;
-                const groupKey = group.getUid(groupIdx[0]);
-                forEachSeries(groupKey, groupIdx);
+                const groupIdx = index.values().next();
+                if (!groupIdx.done) {
+                    const firstIndex = groupIdx.value[0];
+                    const groupKey = group.getUid(firstIndex);
+                    forEachSeries(groupKey, groupIdx.value);
+                }
             } else {
                 index.forEach(groupIdx => {
                     const groupKey = group.getUid(groupIdx[0]);

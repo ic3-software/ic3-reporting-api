@@ -1,7 +1,7 @@
 ## icCube Dashboards API: Javascript Integration
 
-The Javascript API allows for loading the icCube Dashboards within an iFrame and then drive the Dashboard application
-via the `IReporting` instance sent back icCube via a callback.
+The Javascript API allows for loading the icCube Dashboards within an `iframe` or a `div` and then drive the
+Dashboards application via the `IReporting` instance sent back icCube via a callback.
 
 This integration allows for a two ways communication between the host application and the icCube Dashboards:
 
@@ -13,13 +13,13 @@ This integration allows for a two ways communication between the host applicatio
 The source code of a running [example](https://github.com/ic3-software/ic3-demo-embedded-react)
 is available for more (up to date) details.
 
-### Loading icCube
+### Loading icCube (iframe)
 
-You can use the `DashboardsLoaderFrame()` function to load an icCube Dashboards within an iFrame. Once loaded the icCube
-Dashboards application is passing back an instance of `IReporting` to be able to open and manipulate dashboards.
+You can use the `DashboardsLoaderFrame()` function to load an icCube Dashboards within an `iframe`. Once loaded the
+icCube Dashboards application is passing back an instance of `IReporting` to be able to open and manipulate dashboards.
 
 The source code of this simple function is freely available so feel free to modify it according to your needs if
-required. It basically creates an `iFrame` and set it `src` attribute to open the icCube Dashboards
+required. It basically creates an `iframe` and set it `src` attribute to open the icCube Dashboards
 (via the `url` passed as parameter) and add the parameter `ic3callback` to request icCube to pass back an instance
 of `IReporting` using a callback registered in the global object `window.ic3loader`.
 
@@ -43,6 +43,23 @@ const url = "/icCube/report/viewer?ic3demo=";
 // ...
 <DashboardsFrame containerId={"ic3dashboards"} onReady={ic3ready} url={url}/>
 ```
+
+**Configuration:** the specified console URL might contain some parameters related to the way the application is being
+configured.
+Please refer to this [page](./EmbeddingConfiguration.md) for more details.
+
+### Loading icCube (div)
+
+You can use the `DashboardsLoaderDivContext` class to load the icCube Dashboards in the host application.
+This class allows for pre-loading icCube as soon as the host application is ready. Similarly to the `iframe`
+approach, an instance of `IReporting` is passed back to the host application.
+
+Please refer to the source code of a running [example](https://github.com/ic3-software/ic3-demo-embedded-react)
+for more details about this context usage and configuration.
+
+**Configuration:** while loading icCube several parameters related to the way the application is being configured can be
+specified.
+Please refer to this [page](./EmbeddingConfiguration.md) for more details.
 
 ### Open Report
 
@@ -117,7 +134,7 @@ in the source code of the live example as mentioned earlier.
 
 #### Listen to Events from icCube Dashboards
 
-The `IReportin.onEvent()` allows for listening events fired in the opened dashboard and to for example keep the host
+The `IReporting.onEvent()` allows for listening events fired in the opened dashboard and to for example keep the host
 application synchronized with the dashboard.
 
 You can check the `Dashboard2wayFilterSync.tsx` in the source code of the live example as mentioned earlier.

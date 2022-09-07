@@ -1,7 +1,8 @@
 import {
     AxisCoordinate,
     ConvertToTypeParseSettings,
-    EntityItem, GroupRowIndices,
+    EntityItem,
+    GroupRowIndices,
     IMdxAxisSeriesInfo,
     ITidyColumnIndex,
     ITidyColumnsSource,
@@ -12,7 +13,6 @@ import {
     TidyColumnsType,
 } from "./PublicTidyTableTypes";
 import {TidyActionEvent} from "./IcEvent";
-import {ReactElement} from "react";
 import {ThemeTextFormatter} from "./PublicTheme";
 import {Property} from "csstype";
 import {AppNotification} from "./INotification";
@@ -467,6 +467,11 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     getDescendants(index: number): number[];
 
     /**
+     * Returns true if and only if the node in the hierarchy has children.
+     */
+    hasChildren(index: number): boolean;
+
+    /**
      * Return the siblings of the node in the hierarchy at the index.
      * Including the node itself.
      * @param index
@@ -683,7 +688,12 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      */
     mapVisibleRows<P>(expanded: (rowIdx: number) => boolean, fun: (index: number) => P): P[];
 
-    mapTreeVisibleRows<P extends ReactElement>(expanded: (rowIdx: number) => boolean, fun: (index: number) => P, filter?: (info: MdxInfo) => boolean): P[];
+    /**
+     * Apply a function to all visible nodes in the column. A nodes' children are visible if expanded evaluates to
+     * true for that node.
+     * @param filter Possibly filter the nodes.
+     */
+    mapTreeVisibleRows<P>(expanded: (rowIdx: number) => boolean, fun: (index: number, isCollapsed: boolean) => P, filter?: (info: MdxInfo) => boolean): P[];
 
     /**
      * Set a property on the column. If the property already exists, it is overwritten.
@@ -806,7 +816,7 @@ export interface HtmlTidyColumnCellDecoration extends BaseTidyColumnCellDecorati
 export type PublicTidyColumnCellDecoration = ReactTidyColumnCellDecoration | HtmlTidyColumnCellDecoration;
 
 export type ITidyColumn = ITidyBaseColumn<any>;
-export type ITidyUnknownColumn = ITidyBaseColumn<unknown | null>;
+export type ITidyUnknownColumn = ITidyBaseColumn<unknown>;
 export type ITidyNullColumn = ITidyBaseColumn<null>;
 export type ITidyNumericColumn = ITidyBaseColumn<number | null>;
 export type ITidyCharacterColumn = ITidyBaseColumn<string | null>;
@@ -858,6 +868,11 @@ export const TidyTableTextExprColumnMetas: TidyTableExprColumnMeta[] = [
     {caption: "percent", method: "percent", argRow: true},
 
     {caption: "caption", method: "getCaption"},
+
+    {caption: "mdxName", method: "mdxName", argRow: true},
+    {caption: "mdxCaption", method: "mdxName", argRow: true},
+    {caption: "mdxUniqueName", method: "mdxUniqueName", argRow: true},
+    {caption: "mdxKey", method: "mdxKey", argRow: true},
 
 ];
 

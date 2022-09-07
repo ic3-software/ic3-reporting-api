@@ -835,6 +835,11 @@ export interface Am4GeoSeriesOptions extends FormFieldObject {
 export interface Am4SecondValueAxisOptions extends FormFieldObject {
 
     /**
+     * The combo chart can enable/disable the second value axis.
+     */
+    secondValueAxis: boolean;
+
+    /**
      * Title Text.
      *
      * The title of the vertical axis.

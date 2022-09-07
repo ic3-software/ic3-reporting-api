@@ -6,6 +6,7 @@ import {ThemeTextFormatter} from "./PublicTheme";
 import {ITidyColumn, ITidyNumericColumn} from "./PublicTidyColumn";
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {ITidyMath} from "./PublicTidyMath";
+import {ILogger} from "./Logger";
 
 export enum WidgetRenderLayoutStatus {
     RENDERING = "RENDERING",
@@ -15,6 +16,8 @@ export enum WidgetRenderLayoutStatus {
 export enum IContentMessageType { info, error}
 
 export interface IPublicContext {
+
+    logger(): ILogger;
 
     /**
      * React, returns true when loaded
@@ -67,7 +70,7 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      */
-    createTableRowTextExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): ((rowIdx: number) => string) | undefined;
+    createTableRowTextExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => string) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -76,7 +79,7 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      */
-    createTableTextExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): (() => string) | undefined;
+    createTableTextExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined): (() => string) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -85,7 +88,7 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      */
-    createTableRowMarkdownExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): ((rowIdx: number) => string) | undefined;
+    createTableRowMarkdownExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => string) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -103,14 +106,14 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      */
-    createTableRowNumericExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): ((rowIdx: number) => number | undefined) | undefined;
+    createTableRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined,selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => number | undefined) | undefined;
 
     /**
      * same as  createTableRowNumericExpr but returning a string
      */
-    createTableRowNumericStringExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): ((rowIdx: number) => string | undefined) | undefined;
+    createTableRowNumericStringExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined,selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => string | undefined) | undefined;
 
-    createTableScaleRowNumericExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): ((rowIdx: number) => number | undefined) | undefined;
+    createTableScaleRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined,selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => number | undefined) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -119,7 +122,7 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      */
-    createTableNumericExpr(field: string, table: ITidyTable, defaultColumn: ITidyColumn | undefined, expression: string | undefined): (() => number | undefined) | undefined;
+    createTableNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined,selectedColumns: ITidyColumn[] | undefined): (() => number | undefined) | undefined;
 
 
 }
@@ -130,13 +133,11 @@ export interface IWidgetPublicContext extends IPublicContext {
 
     getWidgetId(): string;
 
+    getWidgetPageNb(): number;
+
     getTemplateId(): string;
 
-    getWidgetPageId(): string;
-
     isPrintingMode(): boolean;
-
-    logInfoWidget(component: string, message: string): void;
 
     renderWidgetContentMessage(type: IContentMessageType, message: string): any;
 

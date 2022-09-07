@@ -19,7 +19,7 @@ export class RemoteContainerUtils {
 
         url = url + (url.indexOf("?") === -1 ? "?" : "&") + "t=" + tenant + new Date().getTime() /* cache busting */;
 
-        console.log("[RemotePlugin] Setup Remote Plugin (load-script) [" + url + "]");
+        console.log("[Plugin] setup remote plugin (load-script) [" + url + "]");
 
         const element = document.createElement("script");
 

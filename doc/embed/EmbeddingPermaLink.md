@@ -1,6 +1,6 @@
 ## icCube Dashboards API: Permalink
 
-This is the simplest way to embed an icCube dashboard. The host application can set up an iFrame using as `src`
+This is the simplest way to embed an icCube dashboard. The host application can set up an `iframe` using as `src`
 the permalink of that dashboard to open that dashboard.
 
 ### Dashboard Permalink
@@ -16,7 +16,7 @@ http://localhost:8282/icCube/report/viewer?ic3report=shared:/Failure Analysis/Da
     <i>the above ic3report parameter has not been encoded for the sake of clarity</i>
 </pre>
 
-#### ic3locale
+#### URL Parameter: ic3locale
 
 The `ic3locale` parameter can be appended to the permalink URL to override the user's locale. This parameter follows the
 Java locale syntax. For example the following URL is opening the report using the US english locale independently of the
@@ -27,7 +27,7 @@ http://localhost:8282/icCube/report/viewer?ic3report=shared:/Failure Analysis/Da
     <i>the above ic3report parameter has not been encoded for the sake of clarity</i>
 </pre>
 
-#### parameters
+#### URL Parameter: ic3params
 
 The `ic3params` parameters allows for passing report parameters as URL encoded JSON objects.
 
@@ -48,5 +48,10 @@ As an example the following is passing both the `China` and the `Japan` values t
 </pre>
 
 You might refer to this [page](./EmbeddingJavascript.md#open-report) for more details about report parameters.
+
+#### URL Parameter: Configuration
+
+The specified console URL might contain additional parameters related to the way the application is being configured.
+Please refer to this [page](./EmbeddingConfiguration.md) for more details.
 
 _

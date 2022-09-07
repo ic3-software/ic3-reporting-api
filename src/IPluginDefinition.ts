@@ -7,6 +7,7 @@ import {Theme} from "@mui/material/styles";
 import {WidgetTemplateIDs} from "./PublicTemplates";
 import {FormFieldObject} from "./PublicTemplateForm";
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
+import {ILogger} from "./Logger";
 
 export interface IPluginDefinition {
 
@@ -21,17 +22,17 @@ export interface IPluginDefinition {
     /**
      * When defining new widgets using amCharts 4, this method registers the icCube license.
      */
-    registerAmCharts4?: (callback: (am4core: any) => void) => void;
+    registerAmCharts4?: (logger: ILogger, callback: (am4core: any) => void) => void;
 
-    registerLocalization?: (manager: ILocalizationManager) => void;
+    registerLocalization?: (logger: ILogger, manager: ILocalizationManager) => void;
 
-    registerThemes?: (manager: IThemeManager) => void;
+    registerThemes?: (logger: ILogger, manager: IThemeManager) => void;
 
-    registerWidgets?: (manager: IWidgetManager) => void;
+    registerWidgets?: (logger: ILogger, manager: IWidgetManager) => void;
 
-    registerTidyTableTransformations?: (manager: ITidyTableTransformationManager) => void;
+    registerTidyTableTransformations?: (logger: ILogger, manager: ITidyTableTransformationManager) => void;
 
-    registerWidgetDefaults?: (theme: Theme, manager: IWidgetDefaultsManager) => void;
+    registerWidgetDefaults?: (logger: ILogger, theme: Theme, manager: IWidgetDefaultsManager) => void;
 
     /**
      * Allows for selecting the available widgets.

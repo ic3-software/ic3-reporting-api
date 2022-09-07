@@ -27,7 +27,7 @@ export type HtmlBoxVariant =
      */
     "widgetHelp" |
     /**
-     * Used for data tooltips in the charts
+     * Used for help tooltip & tooltip in table
      */
     "tooltip" |
     /**

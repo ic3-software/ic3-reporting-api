@@ -915,7 +915,23 @@ export interface IFormTidyTableHtmlExprFieldDef extends IFormFieldDef<string> {
     fieldType: "tidyTableHtmlExpr",
 
     editorConf?: {
-        defaultColumn?: boolean,
+        /**
+         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
+         * expression when evaluating in the dialog editor.
+         */
+        userSelectsCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _currentColumn in the expression.
+         * The default current column comes from the first dependsOn option.
+         */
+        useCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _selectedColumns in the expression.
+         * The default selected columns come from the second dependsOn option.
+         */
+        useSelectedColumns?: boolean,
     },
 
 }
@@ -931,10 +947,26 @@ export interface IFormTidyTableHtmlRowExprFieldDef extends IFormFieldDef<string>
     fieldType: "tidyTableHtmlRowExpr",
 
     editorConf?: {
-        defaultColumn?: boolean,
+        /**
+         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
+         * expression when evaluating in the dialog editor.
+         */
+        userSelectsCurrentColumn?: boolean,
 
         /**
-         * Default = available columns + roles. Set here to override.
+         * If true, user can use _currentColumn in the expression.
+         * The default current column comes from the first dependsOn option.
+         */
+        useCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _selectedColumns in the expression.
+         * The default selected columns come from the second dependsOn option.
+         */
+        useSelectedColumns?: boolean,
+
+        /**
+         * Set here to override the available columns and roles in the completion meta.
          */
         completionMeta?: string[];
     },
@@ -952,7 +984,23 @@ export interface IFormTidyTableNumericExprFieldDef extends IFormFieldDef<string>
     fieldType: "tidyTableNumericExpr",
 
     editorConf?: {
-        defaultColumn?: boolean,
+        /**
+         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
+         * expression when evaluating in the dialog editor.
+         */
+        userSelectsCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _currentColumn in the expression.
+         * The default current column comes from the first dependsOn option.
+         */
+        useCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _selectedColumns in the expression.
+         * The default selected columns come from the second dependsOn option.
+         */
+        useSelectedColumns?: boolean,
     },
 
 }
@@ -968,7 +1016,23 @@ export interface IFormTidyTableStringRowExprFieldDef extends IFormFieldDef<strin
     fieldType: "tidyTableStringRowExpr",
 
     editorConf?: {
-        defaultColumn?: boolean,
+        /**
+         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
+         * expression when evaluating in the dialog editor.
+         */
+        userSelectsCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _currentColumn in the expression.
+         * The default current column comes from the first dependsOn option.
+         */
+        useCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _selectedColumns in the expression.
+         * The default selected columns come from the second dependsOn option.
+         */
+        useSelectedColumns?: boolean,
     },
 
 }
@@ -984,7 +1048,23 @@ export interface IFormTidyTableColorRowExprFieldDef extends IFormFieldDef<string
     fieldType: "tidyTableColorRowExpr",
 
     editorConf?: {
-        defaultColumn?: boolean,
+        /**
+         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
+         * expression when evaluating in the dialog editor.
+         */
+        userSelectsCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _currentColumn in the expression.
+         * The default current column comes from the first dependsOn option.
+         */
+        useCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _selectedColumns in the expression.
+         * The default selected columns come from the second dependsOn option.
+         */
+        useSelectedColumns?: boolean,
     },
 
 }
@@ -1000,7 +1080,23 @@ export interface IFormTidyTableNumericRowExprFieldDef extends IFormFieldDef<stri
     fieldType: "tidyTableNumericRowExpr",
 
     editorConf?: {
-        defaultColumn?: boolean,
+        /**
+         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
+         * expression when evaluating in the dialog editor.
+         */
+        userSelectsCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _currentColumn in the expression.
+         * The default current column comes from the first dependsOn option.
+         */
+        useCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _selectedColumns in the expression.
+         * The default selected columns come from the second dependsOn option.
+         */
+        useSelectedColumns?: boolean,
     },
 
 }
@@ -1016,7 +1112,23 @@ export interface IFormTidyTableScaleRowExprFieldDef extends IFormFieldDef<string
     fieldType: "tidyTableScaleRowExpr",
 
     editorConf: {
-        defaultColumn: true,
+        /**
+         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
+         * expression when evaluating in the dialog editor.
+         */
+        userSelectsCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _currentColumn in the expression.
+         * The default current column comes from the first dependsOn option.
+         */
+        useCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _selectedColumns in the expression.
+         * The default selected columns come from the second dependsOn option.
+         */
+        useSelectedColumns?: boolean,
     },
 
 }
@@ -1032,7 +1144,23 @@ export interface IFormTidyTableTextExprFieldDef extends IFormFieldDef<string> {
     fieldType: "tidyTableTextExpr",
 
     editorConf?: {
-        defaultColumn?: boolean,
+        /**
+         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
+         * expression when evaluating in the dialog editor.
+         */
+        userSelectsCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _currentColumn in the expression.
+         * The default current column comes from the first dependsOn option.
+         */
+        useCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _selectedColumns in the expression.
+         * The default selected columns come from the second dependsOn option.
+         */
+        useSelectedColumns?: boolean,
     },
 
 }
@@ -1048,7 +1176,23 @@ export interface IFormTidyTableTextRowExprFieldDef extends IFormFieldDef<string>
     fieldType: "tidyTableTextRowExpr",
 
     editorConf?: {
-        defaultColumn?: boolean,
+        /**
+         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
+         * expression when evaluating in the dialog editor.
+         */
+        userSelectsCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _currentColumn in the expression.
+         * The default current column comes from the first dependsOn option.
+         */
+        useCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _selectedColumns in the expression.
+         * The default selected columns come from the second dependsOn option.
+         */
+        useSelectedColumns?: boolean,
     },
 
 }

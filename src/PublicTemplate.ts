@@ -9,6 +9,7 @@ import {WidgetTemplateChartOptions, WidgetTemplateIDs} from "./PublicTemplates";
 import {ChartTemplateDataMapping, IFormFieldGranularityItem} from "./PublicTidyTableTypes";
 import {ResizingConstraintOptions} from "./theme/ThemeWidgetBox";
 import {QueryType} from "./ITypes";
+import {ILogger} from "./Logger";
 
 export interface IRectanglePosition {
     top: number;
@@ -472,7 +473,7 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
     /**
      * When defining new widgets using amCharts 4, this method registers the icCube license.
      */
-    registerAmCharts4?: (callback: (am4core: any) => void) => void;
+    registerAmCharts4?: (logger: ILogger, callback: (am4core: any) => void) => void;
 
     /**
      * When opening "Use Global Filter" option on Interaction tab

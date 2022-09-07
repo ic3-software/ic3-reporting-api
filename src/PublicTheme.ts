@@ -287,6 +287,7 @@ export interface ic3TypographyOptions {
 export enum TableRowHeightOptions {
     standard = "standard",
     compact = "compact",
+    small = "small"
 }
 
 export interface ic3Theme {

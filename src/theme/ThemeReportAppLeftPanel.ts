@@ -1,12 +1,12 @@
 export class ReportAppLeftPanelClasses {
 
-    static readonly reportAppLeftPanelMenu = "ReportAppLeftPanel-menu";
+    static readonly reportAppLeftPanelMenu = "ic3ReportAppLeftPanel-menu";
 
-    static readonly reportAppLeftPanelIcon = "ReportAppLeftPanel-icon";
+    static readonly reportAppLeftPanelIcon = "ic3ReportAppLeftPanel-icon";
 
-    static readonly reportAppLeftPanelTitle = "ReportAppLeftPanel-title";
+    static readonly reportAppLeftPanelTitle = "ic3ReportAppLeftPanel-title";
 
-    static readonly reportAppLeftPanelFilter = "ReportAppLeftPanel-filter";
+    static readonly reportAppLeftPanelFilter = "ic3ReportAppLeftPanel-filter";
 
 }
 

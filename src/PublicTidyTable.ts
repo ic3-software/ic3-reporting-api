@@ -575,7 +575,7 @@ export interface ITidyTable {
 
     hasMdxChildren(nodeInfo: MdxNodeIdentifier): boolean;
 
-    isLeaf(nodeInfo: MdxNodeIdentifier): any;
+    isLeaf(nodeInfo: MdxNodeIdentifier): boolean;
 
     /**
      * Sort the tidy table pivot style

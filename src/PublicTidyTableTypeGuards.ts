@@ -1,5 +1,6 @@
 import {
     TidyTableColumnIdentifier,
+    TidyTableColumnSelector,
     TidyTableMappingColumnSelectorOptions,
     TidyTableRoleSelector
 } from "./PublicTidyTableTypes";
@@ -15,4 +16,11 @@ export function isTidyTableColumnIdentifier(v: unknown): v is TidyTableColumnIde
 
 export function isTidyTableRoleSelector(v: unknown): v is TidyTableRoleSelector {
     return typeof v === "object" && v != null && typeof v["role"] === "string";
+}
+
+export function isTidyTableColumnSelector(v: unknown): v is TidyTableColumnSelector {
+    return isTidyTableMappingColumnSelectorOptions(v)
+        || isTidyTableColumnIdentifier(v)
+        || isTidyTableRoleSelector(v)
+        ;
 }

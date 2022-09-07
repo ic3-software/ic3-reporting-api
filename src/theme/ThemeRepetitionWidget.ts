@@ -56,5 +56,12 @@ export interface RepetitionWidgetChartOptions extends FormFieldObject {
      */
     bottomPadding?: number;
 
+    /**
+     * Disable Inner widget Resizing
+     *
+     * If disabled, the inner widgets will not resize on a change of the page size (keeping original size).
+     */
+    disableWidgetResizing?: boolean;
+
 }
 
