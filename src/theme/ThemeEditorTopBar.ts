@@ -2,32 +2,42 @@ export class EditorAppTopBarClasses {
     /**
      * Style applied to
      */
-    static readonly app: string = "ic3EditorTopBar";
+    static readonly root: string = "ic3EditorTopBar-root";
     /**
      * Style applied to
      */
-    static readonly logo: string = "ic3App-logo";
-    /**
-     * Style applied to
-     */
-    static readonly title: string = "ic3App-title";
-    /**
-     * Style applied to
-     */
-    static readonly topLeftBar: string = "ic3App-topLeftBar";
+    static readonly logo: string = "ic3EditorTopBar-logo";
 
     /**
      * Style applied to
      */
-    static readonly topRightBar: string = "ic3App-topRightBar";
+    static readonly divider: string = "ic3EditorTopBar-divider";
+
     /**
      * Style applied to
      */
-    static readonly leftSpacer: string = "ic3App-leftSpacer";
+    static readonly title: string = "ic3EditorTopBar-title";
     /**
      * Style applied to
      */
-    static readonly menuButton: string = "ic3App-menuButton";
+    static readonly topLeftBar: string = "ic3EditorTopBar-topLeftBar";
+
+    /**
+     * Style applied to
+     */
+    static readonly topRightBar: string = "ic3EditorTopBar-topRightBar";
+    /**
+     * Style applied to
+     */
+    static readonly leftSpacer: string = "ic3EditorTopBar-leftSpacer";
+    /**
+     * Style applied to
+     */
+    static readonly fileButtonsSpacer: string = "ic3EditorTopBar-fileButtonsSpacer";
+    /**
+     * Style applied to
+     */
+    static readonly menuButton: string = "ic3EditorTopBar-menuButton";
 }
 
 export declare type EditorAppTopBarClassKey = keyof EditorAppTopBarClasses;

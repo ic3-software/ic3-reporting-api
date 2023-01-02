@@ -5,17 +5,17 @@ export class FilterButtonsClasses {
     /**
      * Style applied to the root element.
      */
-    static readonly container = "FilterButtons-container";
+    static readonly container = "ic3FilterButtons-container";
 
     /**
      *  Style applied to the mui button elements.
      */
-    static readonly button = "FilterSlider-button";
+    static readonly button = "ic3FilterSlider-button";
 
     /**
      *  Style applied to the mui group element (if present).
      */
-    static readonly group = "FilterSlider-group";
+    static readonly group = "ic3FilterSlider-group";
 
     /**
      * Slot for MuiButton component(s)

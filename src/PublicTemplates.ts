@@ -35,6 +35,7 @@ import {
     AmCharts4TreemapOptions,
     GeoMapChartOptions
 } from "./theme/ThemeAmCharts4";
+import {PrintButtonChartOptions} from "./theme/ThemePrintButton";
 
 interface IWidgetTemplateChartOptions {
 
@@ -60,6 +61,8 @@ interface IWidgetTemplateChartOptions {
     "ic3.KpiCard": KpiCartChartOptions,
 
     "ic3.MarkdownText": MarkdownTextChartOptions,
+
+    "ic3.PrintButton": PrintButtonChartOptions,
 
     "ic3.PivotTable": PivotTableChartOptions,
 

@@ -4,7 +4,6 @@ import {IWidgetLayoutDefinition} from "./PublicLayout";
 import {IThemeWidgetDefaults} from "./IThemeManager";
 import {AlertDialogClassKey} from "./theme/ThemeAlertDialog";
 import {AppClassKey, AppDivProps} from "./theme/ThemeApp";
-import {DrilldownUserSelectMenuClassKey} from "./theme/ThemeDrilldownUserSelectMenu";
 import {ErrorRendererClassKey} from "./theme/ThemeErrorRenderer";
 import {HtmlBoxClassKey, HtmlBoxProps} from "./theme/ThemeHtmlBox";
 import {LayoutClassKey} from "./theme/ThemeLayout";
@@ -12,6 +11,7 @@ import {LayoutPageClassKey} from "./theme/ThemeLayoutPage";
 import {ReportAppBarClassKey} from "./theme/ThemeReportAppBar";
 import {WidgetBoxClassKey} from "./theme/ThemeWidgetBox";
 import {WidgetBoxContentMessageClassKey} from "./theme/ThemeWidgetBoxContentMessage";
+import * as React from "react";
 import {ReactElement} from "react";
 import {TypographyStyleOptions} from "@mui/material/styles/createTypography";
 import {Property} from "csstype";
@@ -28,9 +28,12 @@ import {ReportAppLeftPanelClassKey} from "./theme/ThemeReportAppLeftPanel";
 import {FilterTreeChartOptions, FilterTreeClassKey} from "./theme/ThemeFilterTree";
 import {DatePickerChartOptions, DatePickerClassKey} from "./theme/ThemeDatePicker";
 import {FilterAutocompleteChartOptions, FilterAutocompleteClassesKey} from "./theme/ThemeFilterAutocomplete";
-import {AppMenuIconProps, ThemeAppMenuIconClassKey} from "./theme/ThemeAppMenuIcon";
-import {QueryBuilderNodeProps, ThemeQueryBuilderNodeClassKey} from "./theme/ThemeQueryBuilderNode";
+import {AppMenuIconClassKey, AppMenuIconProps} from "./theme/ThemeAppMenuIcon";
+import {QueryBuilderNodeClassKey, QueryBuilderNodeProps} from "./theme/ThemeQueryBuilderNode";
 import {KpiCardClassKey, KpiCardProps} from "./theme/ThemeKpiCard";
+import {ListCounterClassKey} from "./theme/ThemeListCounter";
+import {LazyTreeClassesClassKey} from "./theme/ThemeLazyTreeClasses";
+import {PrintButtonChartOptions, PrintButtonClassKey} from "./theme/ThemePrintButton";
 
 export interface INoSchemaRendererOptions {
 
@@ -181,6 +184,31 @@ export interface ic3Palette {
      * If null or undefined, returns onHover color
      */
     onHover: (color?: Property.Color | undefined | null) => Property.Color;
+
+    mdx: {
+        annotation: string;
+        comment: string;
+        definitionKeyword: string;
+        keyword: string;
+        labelName: string;
+        number: string;
+        operator: string;
+        propertyName: string;
+        separator: string;
+        string: string;
+        variableName: string;
+        dimension: string;
+        hierarchy: string;
+        level: string;
+        member: string;
+        measureGroup: string;
+        measureFolder: string;
+        measure: string;
+        set: string;
+        calcMeasure: string;
+        event: string;
+        hierarchyFolder: string;
+    }
 }
 
 interface MandatorySingleColors {
@@ -266,6 +294,8 @@ export interface ic3PaletteOptions {
 
     onHover?: (color: Property.Color) => Property.Color;
 
+    mdx?:  Partial<ic3Palette['mdx']>;
+
 }
 
 
@@ -297,7 +327,7 @@ export interface ic3Theme {
 
     cssClass: string;
 
-    loadFonts?: (continuation: () => void) => void;
+    waitForFonts?: () => Promise<any>;
 
     formatter: ThemeFormatters;
 
@@ -306,17 +336,55 @@ export interface ic3Theme {
      */
     icons: {
         none: (className: string) => ReactElement | string;
-        // tree icons
+
+        // MDX tree icons
         expanded: (className: string) => ReactElement | string;
         collapse: (className: string) => ReactElement | string;
         loading: (className: string) => ReactElement | string;
+
         // sorting icons
         sort: (className: string) => ReactElement | string;
         sortAsc: (className: string) => ReactElement | string;
         sortDesc: (className: string) => ReactElement | string;
+
+        // Datepicker calender icons
+        datePickerIcon?: React.ElementType;
+
+        // Widget header icons
+        menuIcon: JSX.Element;
+        statusWaiting: JSX.Element;
+        statusWaitingResult: JSX.Element;
+        statusRendering: JSX.Element;
+        statusDone: JSX.Element;
+        queryError: JSX.Element;
+        queryWarning: JSX.Element;
+        helpIcon: JSX.Element;
+        closeQueryIcon: JSX.Element;  // Icon for user to close the query (if it's running long)
+        interactionModeSelection: JSX.Element;
+        interactionModeDrilldown: JSX.Element;
+
+        // Autocomplete / dropdown filter
+        autocompleteClearIcon: JSX.Element | undefined;
+        autocompletePopupIcon: JSX.Element | undefined;
+
+        // Tree
+        nodeOpened: JSX.Element;
+        nodeClosed: JSX.Element;
+
+        // Radio / check boxes
+        checkBoxUnselected: React.ReactNode | undefined;
+        checkBoxSelected: React.ReactNode | undefined;
+        checkIndeterminate: React.ReactNode | undefined;
+        radioUnselected: React.ReactNode | undefined;
+        radioSelected: React.ReactNode | undefined;
+
     };
 
     table: Record<TableRowHeightOptions, { rowHeight: number; headerRowHeight: number }>;
+
+    treeFilter: {
+        itemHeight: number;
+    }
 
     googleMap: {
         options?: google.maps.MapOptions;
@@ -436,25 +504,28 @@ export interface ic3ThemeOptions {
 
     cssClass?: string;
 
-    loadFonts?: (continuation: () => void) => void;
+    /**
+     * The recommended setup is to use document.fonts.ready here and put document.fonts.load(...) for all your added
+     * fonts in the theme definition .ts file.
+     */
+    waitForFonts?: () => Promise<any>;
 
     formatter?: ThemeFormattersOptions;
 
-    icons?: {
-        // tree items
-        expanded?: (className: string) => ReactElement | string;
-        collapse?: (className: string) => ReactElement | string;
-        loading?: (className: string) => ReactElement | string;
-        // sorting icons
-        sort?: (className: string) => ReactElement | string;
-        sortAsc?: (className: string) => ReactElement | string;
-        sortDesc?: (className: string) => ReactElement | string;
-    }
+    icons?: Partial<ic3Theme['icons']>;
 
     table?: Record<TableRowHeightOptions, Partial<{
         rowHeight: number;
         headerRowHeight: number,
     }>>;
+
+    treeFilter?: {
+        /**
+         * Define the height for an item in the tree. This cannot be done using css, because the tree is virtualized and
+         * requires a fixed height setting.
+         */
+        itemHeight?: number;
+    }
 
     googleMap?: {
         options?: google.maps.MapOptions;
@@ -555,9 +626,6 @@ interface ic3BaseComponents {
     App?: {
         styleOverrides?: ComponentsOverrides["App"];
     }
-    DrilldownUserSelectMenu?: {
-        styleOverrides?: ComponentsOverrides["DrilldownUserSelectMenu"];
-    }
     ErrorRenderer?: {
         styleOverrides?: ComponentsOverrides["ErrorRenderer"];
     }
@@ -569,13 +637,25 @@ interface ic3BaseComponents {
         styleOverrides?: ComponentsOverrides["FilterButtons"];
         variants?: ComponentsVariants["FilterButtons"];
     }
+    LazyTreeViewStyled?: {
+        styleOverrides?: ComponentsOverrides["LazyTreeViewStyled"];
+        variants?: ComponentsVariants["LazyTreeViewStyled"];
+    }
     FilterPanel?: {
         variants?: ComponentsVariants['FilterPanel'];
         styleOverrides?: ComponentsOverrides["FilterPanel"];
     }
+    SingleFilterPanel?: {
+        variants?: ComponentsVariants['SingleFilterPanel'];
+        styleOverrides?: ComponentsOverrides["SingleFilterPanel"];
+    }
     FilterSlider?: {
         styleOverrides?: ComponentsOverrides["FilterSlider"];
         variants?: ComponentsVariants["FilterSlider"];
+    }
+    ListCounter?: {
+        styleOverrides?: ComponentsOverrides["ListCounter"];
+        variants?: ComponentsVariants["ListCounter"];
     }
     FilterTree?: {
         styleOverrides?: ComponentsOverrides["FilterTree"];
@@ -633,6 +713,10 @@ interface ic3BaseComponents {
     QueryBuilderNode?: {
         styleOverrides?: ComponentsOverrides["QueryBuilderNode"]
     }
+    PrintButton?: {
+        styleOverrides?: ComponentsOverrides["PrintButton"];
+        variants?: ComponentsVariants["PrintButton"];
+    }
 }
 
 /**
@@ -655,59 +739,11 @@ declare module "@mui/material/styles/createPalette" {
 
         ic3: ic3Palette;
 
-        mdx: {
-            annotation: string;
-            comment: string;
-            definitionKeyword: string;
-            keyword: string;
-            labelName: string;
-            number: string;
-            operator: string;
-            propertyName: string;
-            separator: string;
-            string: string;
-            variableName: string;
-            dimension: string;
-            hierarchy: string;
-            level: string;
-            member: string;
-            measureGroup: string;
-            measureFolder: string;
-            measure: string;
-            set: string;
-            calcMeasure: string;
-            event: string;
-        }
-
     }
 
     interface PaletteOptions {
 
         ic3?: ic3PaletteOptions;
-
-        mdx?: {
-            annotation?: string;
-            comment?: string;
-            definitionKeyword?: string;
-            keyword?: string;
-            labelName?: string;
-            number?: string;
-            operator?: string;
-            propertyName?: string;
-            separator?: string;
-            string?: string;
-            variableName?: string;
-            dimension?: string;
-            hierarchy?: string;
-            level?: string;
-            member?: string;
-            measureGroup?: string;
-            measureFolder?: string;
-            measure?: string;
-            set?: string;
-            calcMeasure?: string;
-            event?: string;
-        }
 
     }
 }
@@ -765,14 +801,15 @@ declare module '@mui/material/styles/overrides' {
         AlertDialog: AlertDialogClassKey;
         App: AppClassKey;
 
-        DrilldownUserSelectMenu: DrilldownUserSelectMenuClassKey;
-
         ErrorRenderer: ErrorRendererClassKey;
 
         FilterCheckbox: FilterCheckboxRadioClassKey;
         FilterButtons: FilterButtonsClassKey;
+        LazyTreeViewStyled: LazyTreeClassesClassKey;
         FilterPanel: FilterPanelClassesKey;
+        SingleFilterPanel: FilterPanelClassesKey;
         FilterSlider: FilterSliderClassKey;
+        ListCounter: ListCounterClassKey;
         FilterTree: FilterTreeClassKey;
         FilterDatePicker: DatePickerClassKey;
         FilterAutocomplete: FilterAutocompleteClassesKey;
@@ -793,9 +830,11 @@ declare module '@mui/material/styles/overrides' {
 
         ReportAppLeftPanel: ReportAppLeftPanelClassKey;
 
-        AppMenuIcon: ThemeAppMenuIconClassKey;
+        AppMenuIcon: AppMenuIconClassKey;
 
-        QueryBuilderNode: ThemeQueryBuilderNodeClassKey;
+        QueryBuilderNode: QueryBuilderNodeClassKey;
+
+        PrintButton: PrintButtonClassKey;
 
     }
 
@@ -807,8 +846,11 @@ declare module '@mui/material/styles/props' {
 
         FilterCheckbox: FilterCheckboxRadioChartOptions;
         FilterButtons: FilterButtonsChartOptions;
+        LazyTreeViewStyled: Record<never, any>;
         FilterPanel: FilterPanelProps;
+        SingleFilterPanel: Record<never, any>;
         FilterSlider: FilterSliderChartOptions;
+        ListCounter: Record<never, any>;
         FilterTree: FilterTreeChartOptions;
         FilterDatePicker: DatePickerChartOptions;
         FilterAutocomplete: FilterAutocompleteChartOptions;
@@ -828,6 +870,8 @@ declare module '@mui/material/styles/props' {
         App: AppDivProps;
 
         QueryBuilderNode: QueryBuilderNodeProps;
+
+        PrintButton: PrintButtonChartOptions;
     }
 
 }

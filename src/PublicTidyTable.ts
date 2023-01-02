@@ -1,6 +1,7 @@
 import {
     AxisCoordinate,
-    ChartTemplateDataMapping, GroupRowIndices,
+    ChartTemplateDataMapping,
+    GroupRowIndices,
     IAmCharts4Data,
     IAmCharts4DataTreeMap,
     ITotalRowValues,
@@ -132,6 +133,14 @@ export interface ITidyTable {
      * @param alias mapping name
      */
     getColumnByAlias(alias: string): ITidyColumn;
+
+    /**
+     * Returns multiple columns. For example, in the line chart, this function returns all the columns mapped in the
+     * values option.
+     * @see getColumnByAlias
+     * @param alias
+     */
+    getColumnsByAlias(alias: string): ITidyColumn[];
 
     /**
      * @see {getOptionalColumnByRole}
@@ -473,6 +482,7 @@ export interface ITidyTable {
      */
     reIndex(index: number[]): void;
 
+
     /**
      * Delete a column from the table (if it exists).
      * @param column
@@ -496,6 +506,15 @@ export interface ITidyTable {
     createColumn<T>(name: string, values: T[], type?: AllowedColumnType<T>): ITidyBaseColumn<T>;
 
     createTable(): ITidyTable;
+
+    /**
+     * Returns a new table with the original columns and rows filtered and in a new order
+     *
+     * cols : [2,1,4]  -> 3 columns in a new order
+     * rowIdx:[55,2,3,5] -> 4 rows in a new order
+     */
+    createFilteredTable(colIdx: number[] | undefined, rowIdx: number[] | undefined): ITidyTable;
+
 
     /**
      * Print the table as a markdown table (e.g., used for internal documentation).
@@ -600,6 +619,17 @@ export interface ITidyTable {
      */
     reachedMaxTidyRowCount(): boolean;
 
+    /**
+     * Some MDX queries return headers that have a hierarchy. This function returns the number of header rows.
+     * For example, the table below has two headers.
+     *
+     *     2020 |         | 2021      |
+     *     car  | bike    | car       | bike
+     *   -------------------------------------
+     *     40   | 50      | 55        | 35
+     *
+     */
+    getTopHeaderHierarchyCount(): number;
 }
 
 

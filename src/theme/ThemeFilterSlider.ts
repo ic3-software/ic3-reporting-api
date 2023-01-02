@@ -1,11 +1,12 @@
 import {FilterTidyTableChartOptions} from "./ThemeFilter";
 
+// TOM : needs clarification
 export class FilterSliderClasses {
 
     /**
      * Style applied to the root element.
      */
-    static readonly root = "root";
+    static readonly root = "ic3FilterSlider-root";
 
     /**
      *  Style applied to the mui slider element.

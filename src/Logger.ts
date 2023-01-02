@@ -23,6 +23,7 @@ export type LoggerComponent =
     "LayoutRender" |
     "Loader" |
     "Localization" |
+    "Operation" |
     "Other" |
     "PivotTable" |
     "PivotTablePagingView" |

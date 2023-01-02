@@ -1,6 +1,13 @@
-import {EntityItem, MdxInfo} from "./PublicTidyTableTypes";
-import {ReactElement} from "react";
-import {SelectionMode} from "./PublicTidyTableInteractions";
+import {EntityItem, MdxInfo, TreeRowPropsTreeData} from "./PublicTidyTableTypes";
+import React, {ReactElement} from "react";
+
+export type ScrollDirection = "forward" | "backward";
+
+export interface ListOnScrollProps {
+    scrollDirection: ScrollDirection;
+    scrollOffset: number;
+    scrollUpdateWasRequested: boolean;
+}
 
 /**
  * A copy of MUI TreeItemClasses
@@ -71,8 +78,6 @@ export interface LazyTreeViewProps {
 
     lazyLoader: ILazyTreeViewLoader;
 
-    allowEmptySelection?: boolean;
-
     /**
      *
      */
@@ -110,7 +115,7 @@ export interface LazyTreeViewProps {
     /**
      * Controlled mode for selection
      */
-    setSelected?: (nodeIdx: string[]) => void;
+    setSelected?: (event: React.MouseEvent, treeNode: TreeRowPropsTreeData) => void;
 
     /**
      * Controlled mode for expanded or initial expanded if not controlled
@@ -125,9 +130,7 @@ export interface LazyTreeViewProps {
     /**
      * The level depth of initially open nodes ( 0 first level )
      */
-    openDepthLevel?: number,
-
-    selectionMode: SelectionMode
+    openDepthLevel?: number;
 
     /**
      * Material-UI tree item classes Partial<TreeItemClasses>
@@ -146,5 +149,20 @@ export interface LazyTreeViewProps {
      */
     width?: number;
     height?: number;
+
+    /**
+     * Height of an item in the tree. Defaults to 38.
+     */
+    itemSize?: number;
+
+    /**
+     * @See react-window List
+     */
+    initialScrollOffset?: number | undefined;
+
+    /**
+     * @See react-window List
+     */
+    onScroll?: ((props: ListOnScrollProps) => any) | undefined;
 
 }

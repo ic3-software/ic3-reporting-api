@@ -1,10 +1,17 @@
-export interface LayoutClasses {
+export class LayoutClasses {
 
     /**
-     * Style applied to the root element containing the dashboard pages.
+     * When dragging a box, to keep the cursor on move
      */
-    widgetPages: string;
+    static widgetBoxDragActiveClass = "ic3SelectedBoxDragActive";
+
+    static widgetSelector = "ic3WidgetSelected";
+
+    static widgetBoxSelected = "ic3WidgetBoxSelected";
+
+    static widgetBoxSelectedEx = "ic3WidgetBoxSelectedEx";
 
 }
 
 export declare type LayoutClassKey = keyof LayoutClasses;
+

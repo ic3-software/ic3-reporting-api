@@ -1,5 +1,5 @@
 import ReportingVersion from "./ReportingVersion";
-import {AppNotification} from "./INotification";
+import {AppNotification, IAppNotificationCallback, IAppNotificationToken} from "./INotification";
 
 export interface IReportDefinition {
 
@@ -45,6 +45,15 @@ export interface IReportParam {
     value: IEventContent;
 }
 
+export interface IOpenGadgetOptions {
+
+    /**
+     * Full path of the gadget (e.g., shared:/marc/my-gadget).
+     */
+    path: string;
+
+}
+
 export interface IOpenReportOptions {
 
     embedded?: boolean;
@@ -83,7 +92,7 @@ export interface IOpenReportOptions {
 export interface IOpenReportAppOptions {
 
     /**
-     * Full path of the report app. (e.g., shared:/my-report).
+     * Full path of the report app. (e.g., shared:/my-app).
      */
     path: string;
 
@@ -100,12 +109,60 @@ export interface IOpenReportAppOptions {
     onError?: (error: any) => boolean;
 }
 
+export interface IPathInfo {
+
+    name: string;
+    path: string;
+
+}
+
+export interface IRootPaths {
+
+    shared?: IPathInfo;
+    home?: IPathInfo;
+    users?: IPathInfo;
+
+}
+
+export interface IPath {
+
+    folder: boolean;
+
+    name: string;
+    path: string;
+
+}
+
+export interface IPathsCallback {
+
+    onSuccess: (paths: IPath[]) => void;
+
+    onError: (error: any) => void;
+
+}
+
 /**
  * An instance of icCube reporting application.
  */
 export interface IReporting {
 
     getVersion(): ReportingVersion;
+
+    /**
+     * The root paths for accessing dashboards, dashboards applications
+     * according to the security profile of the user.
+     */
+    getRootPaths(): IRootPaths;
+
+    /**
+     * Asynchronous retrieval of dashboards paths.
+     */
+    getDashboardPaths(path: string, callback: IPathsCallback): void;
+
+    /**
+     * Asynchronous retrieval of dashboard applications paths.
+     */
+    getDashboardApplicationPaths(path: string, callback: IPathsCallback): void;
 
     /**
      * @param options            path, ...
@@ -135,8 +192,19 @@ export interface IReporting {
     onEvent(eventName: string, callback: (value: IEventContent | null) => void): void;
 
     /**
-     * Publish a application notification (e.g., print-report).
+     * Publish an application notification (e.g., print-report).
+     *
+     * Note that a single 'print' notification can be active in the application.
+     *
+     * @param callback currently used to monitor a 'print' notification.
      */
-    fireAppNotification(notification: AppNotification): void;
+    fireAppNotification(notification: AppNotification, callback?: IAppNotificationCallback): void;
+
+    /**
+     * Attempt to cancel an ongoing application notification (e.g., print).
+     *
+     * @param token as returned via the 'onSuccess' method in the 'fireAppNotification' callback.
+     */
+    cancelAppNotification(token: IAppNotificationToken): void;
 
 }

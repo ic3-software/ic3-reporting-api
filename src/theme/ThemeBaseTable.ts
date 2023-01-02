@@ -115,4 +115,8 @@ export interface BaseTableChartOptions extends FormFieldObject {
      */
     columnFilterable: string;
 
+    /**
+     * When exporting to excel, flag use the filtered and sorted version or the orignal table
+     */
+    exportOriginalTable: boolean;
 }

@@ -18,3 +18,5 @@ export class LazyTreeClasses {
     /** Styles applied to the TreeRoot element */
     static readonly treeRoot = 'ic3LazyTreeView-treeRoot';
 }
+
+export declare type LazyTreeClassesClassKey = keyof LazyTreeClasses;

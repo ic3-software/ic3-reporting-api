@@ -5,25 +5,24 @@ export class FilterCheckBoxRadioClasses {
     /**
      * Style applied to the root element.
      */
-    static readonly root = "root";
+    static readonly root = "ic3FilterCheckboxRadio-root";
 
 
     /**
      *  Style container for a single Radio or Checkbox
      */
-    static readonly radioCheckBoxContainer = "FilterCheckboxRadio-container";
+    static readonly radioCheckBoxContainer = "ic3FilterCheckboxRadio-container";
 
 
     /**
      *  root element class decoration when the items are radio components  (single selection)
      */
-    static readonly radioFlag = "FilterCheckboxRadio-Radio";
+    static readonly radioFlag = "ic3FilterCheckboxRadio-Radio";
 
     /**
      *  root element class decoration when the items are checkbox components (multiple selection)
      */
-    static readonly checkboxFlag = "FilterCheckboxRadio-Checkbox";
-
+    static readonly checkboxFlag = "ic3FilterCheckboxRadio-Checkbox";
 
 }
 

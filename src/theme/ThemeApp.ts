@@ -3,7 +3,7 @@ export class AppClasses {
     /**
      * Style applied to
      */
-    static readonly app: string = "ic3App";
+    static readonly root: string = "ic3App-root";
     /**
      * Style applied to
      */
@@ -45,6 +45,7 @@ export interface AppDivProps {
     leftBarOptions: LeftBarOptions;
     viewer: boolean;
     opacity?: string;
+    editorActive: boolean;
 }
 
 export enum TopBarOptions {

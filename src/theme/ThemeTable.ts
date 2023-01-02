@@ -246,4 +246,9 @@ export interface TableChartOptions extends BaseTableChartOptions {
      */
     rowsPerPageOptions: string;
 
+    /**
+     * Use column header groups.
+     */
+    useColumnGrouping: boolean;
+
 }

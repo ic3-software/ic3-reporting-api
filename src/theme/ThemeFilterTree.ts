@@ -7,17 +7,17 @@ export class FilterTreeClasses extends LazyTreeClasses {
     /**
      * Style applied to the root element.
      */
-    static readonly root = "root";
+    static readonly root = "ic3TreeFilter-root";
 
     /**
      *  Style applied to the tree item without control icons
      */
-    static simpleItemLabel: "Ic3-TreeFilter-simpleItemLabel";
+    static simpleItemLabel: "ic3TreeFilter-simpleItemLabel";
 
     /**
      *  Style applied to the tree item witht control icons
      */
-    static itemLabelWithIcons: "Ic3-TreeFilter-itemLabelWithIcons";
+    static itemLabelWithIcons: "ic3TreeFilter-itemLabelWithIcons";
 
     /**
      * + Ic3GlobalClasses
@@ -122,9 +122,9 @@ export interface FilterTreeChartOptions extends FilterTidyTableChartOptions {
     autoCompleteSize?: 'small' | 'medium';
 
     /**
-     * Limit Items (Dropdown/Autocomplete).
+     * Limit Chips.
      *
-     * Autocomplete, the maximum number of tags that will be visible when not focused. Set -1 to disable the limit.
+     * Maximum number of chips that will be visible
      */
-    autoCompleteLimitTags: number;
+    autoCompleteLimitChips: number;
 }

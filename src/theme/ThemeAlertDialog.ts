@@ -1,14 +1,18 @@
-export interface AlertDialogClasses {
+export class AlertDialogClasses {
 
     /**
      * Style applied to
      */
-    alertDialogRoot: string;
+    static root = "ic3AlertDialog-root";
 
     /**
      * Style applied to
      */
-    formRoot: string;
+    static formRoot = "ic3AlertDialog-formRoot";
+
+    static message = "ic3AlertDialog-message";
+
+    static warning = "ic3AlertDialog-warning";
 
 }
 

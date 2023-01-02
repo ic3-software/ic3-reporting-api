@@ -52,8 +52,6 @@ export interface IWidgetLayoutInfo extends IRectangle {
     resizingConstraint?: ResizingConstraintOptions;
 }
 
-type ChartTemplateWidgetProps = any;
-
 export type IPublicWidgetTemplateDefinition<T extends FormFieldObject> =
     IPublicWidgetReactTemplateDefinition<T> | IPublicWidgetJsTemplateDefinition<T>;
 
@@ -132,9 +130,14 @@ export interface IWidgetTemplateMdxBuilderMapping {
     mdxIsForFilter?: true;
 
     /**
-     * The cell values are not needed
+     * The cell values are not needed.
      */
     withoutCellValues?: true;
+
+    /**
+     * The cell values are not needed if there is a single axis in the query.
+     */
+    withoutCellValuesSingleAxis?: true;
 
     /**
      * An MDX query if the builder is empty.
@@ -154,7 +157,7 @@ export interface IPublicReactChartTemplate<T extends FormFieldObject> {
      * @param options the options (possibly edited and/or from the theme) of this widget
      * @param header aka. widget title
      */
-    reactElement: (data: IWidgetTemplateTidyData, options: T, header: string, props: ChartTemplateWidgetProps) => ReactElement;
+    reactElement: (data: IWidgetTemplateTidyData, options: T, header: string) => ReactElement;
 
 }
 
@@ -424,6 +427,8 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
     /**
      * Setup how to get default mappings from the table and options for this widget.
      * If undefined, it uses the default fallback logic.
+     *
+     * Note, the mapping keys must be in lower case.
      */
     defaultMapping?: (data: IWidgetTemplateTidyOptions<OPTIONS>) => ChartTemplateDataMapping;
 

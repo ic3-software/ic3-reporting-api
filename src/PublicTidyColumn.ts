@@ -321,12 +321,21 @@ export interface ITidyBaseColumnReadonly<T> {
      */
     reIndexN(index: number[]): ITidyBaseColumn<T>;
 
+    /**
+     * Returns the color of this columns header.
+     */
+    getHeaderColor(): string | undefined;
+
 }
 
 /**
  * Base interface for nullable column.
  */
 export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
+    /**
+     * Set the color for the columns header
+     */
+    setHeaderColor(color: string | undefined): void;
 
     isSameDimensionality(other: ITidyBaseColumn<any>): boolean;
 
@@ -369,6 +378,11 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * @param idx the position to return the value of.
      */
     getExcelCell(idx: number): ITidyColumnXlsxCell | undefined;
+
+    /**
+     * Returns excel format, best effort
+     */
+    getExcelFormat(): string | undefined;
 
     /**
      * Returns the type for Material-UI Table/Grid
@@ -470,6 +484,11 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * Returns true if and only if the node in the hierarchy has children.
      */
     hasChildren(index: number): boolean;
+
+    /**
+     * Returns the children of the node at index.
+     */
+    getChildren(index: number): number[];
 
     /**
      * Return the siblings of the node in the hierarchy at the index.
@@ -676,9 +695,10 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     mapAxisOrRows<K>(callbackfn: (rowIdx: number, column: ITidyBaseColumn<T>) => K): K[];
 
     /**
-     * @param callbackfn  if the return value is undefined do not map the row
+     * @param callbackFn  if the return value of callbackFn is undefined, then it is not included in the returned array.
+     * @param forceMapAllRows if true, also include values returned by callbackFn that are undefined.
      */
-    mapAllRows<P>(callbackfn: (index: number, column: ITidyBaseColumn<T>) => P | undefined, forceMapAllRows?: boolean): P[];
+    mapAllRows<P>(callbackFn: (index: number, column: ITidyBaseColumn<T>) => P | undefined, forceMapAllRows?: boolean): P[];
 
     /**
      * Map the rows that are visible given a hierarchical axis and an array of boolean values
@@ -693,7 +713,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * true for that node.
      * @param filter Possibly filter the nodes.
      */
-    mapTreeVisibleRows<P>(expanded: (rowIdx: number) => boolean, fun: (index: number, isCollapsed: boolean) => P, filter?: (info: MdxInfo) => boolean): P[];
+    mapTreeVisibleRows<P>(expanded: (rowIdx: number) => boolean, fun: (rowIdx: number, isCollapsed: boolean) => P, filter?: (info: MdxInfo) => boolean): P[];
 
     /**
      * Set a property on the column. If the property already exists, it is overwritten.
@@ -738,7 +758,8 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     toFlatColumns(nullValue: any): ITidyUnknownColumn[];
 
     /**
-     * Returns the tree-path for the node, including the node itself.
+     * Returns the tree-path for the node, including the node itself. The path starts at the node at rowIdx and contains
+     * its parents.
      * @param rowIdx column index of the node.
      */
     getNodePath(rowIdx: number): number[];
@@ -762,6 +783,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
 
     /**
      * Return the index of the column.
+     * @see tidyTable.
      */
     getIndex(): ITidyColumnIndex[];
 

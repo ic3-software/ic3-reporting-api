@@ -4,6 +4,7 @@ import {ILazyTreeViewLoader} from "./LazyTreeView";
 import {PublicIcEvent} from "./IcEvent";
 import {Theme} from "@mui/material/styles";
 import {MdxNodeIdentifier} from "./PublicTidyTable";
+import {AppNotification} from "./INotification";
 
 export enum SelectionMode {
     /**
@@ -363,5 +364,10 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      * Add an item to the interactions selection.
      */
     setSelection(items: ITidyTableSelection | ITidyTableSelection[]): void;
+
+    /**
+     * Use for publishing app notifications, e.g., print the report.
+     */
+    publishAppNotification(notification: AppNotification): void;
 }
 

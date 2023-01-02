@@ -48,7 +48,7 @@ export interface AppPrintReportNotificationPayload {
     fileName?: string;
 
     paperSizeName?: PaperSizeName;
-    layout?: PaperOrientation;
+    paperOrientation?: PaperOrientation;
 
 }
 
@@ -129,3 +129,21 @@ export type AppNotification =
     SaveWidgetOwnPropsToLocalStorageNotification |
     RestoreOwnPropsFromLocalStorageNotification
     ;
+
+export interface IAppNotificationToken {
+
+    type: AppNotificationType;
+
+    uid: number;
+
+}
+
+export interface IAppNotificationCallback {
+
+    onStarted: (token: IAppNotificationToken) => void;
+
+    onSuccess: (token: IAppNotificationToken) => void;
+
+    onError: (token: IAppNotificationToken, error: any) => void;
+
+}

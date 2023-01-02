@@ -1,12 +1,13 @@
 import {SelectionBehaviour, TidyTableColumnSelector} from "../PublicTidyTableTypes";
 import {FormFieldObject} from "../PublicTemplateForm";
 
+// TOM : needs clarification
 export class DatePickerClasses {
 
     /**
      * Style applied to the root element.
      */
-    static readonly root = "root";
+    static readonly root = "ic3DatePicker-root";
 
     /**
      * + Mui DatePicker and/or DateRangePicker classes
@@ -33,6 +34,11 @@ export interface DatePickerChartOptions extends FormFieldObject {
      * Display this text when the datepicker is empty.
      */
     helperText?: string;
+
+    /**
+     * Text to show when the filter is empty.
+     */
+    placeholderText? : string;
 
     /**
      * Input Date Format.
@@ -108,6 +114,11 @@ export interface DatePickerChartOptions extends FormFieldObject {
      * Placeholder value for the end of the range. The widget shows this when the end of the range is empty.
      */
     helperEndText?: string;
+
+    /**
+     * Text to show when the second date picker is empty.
+     */
+    placeholderTextEnd? : string;
 
     /**
      * Range Picker: Center Text.

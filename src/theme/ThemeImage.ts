@@ -19,5 +19,16 @@ export interface ImageChartOptions extends FormFieldObject {
      */
     urlToImage: string;
 
+    /**
+     * Resize the image, read more here, https://www.w3schools.com/css/css3_object-fit.asp.
+     */
+    resizeImage: ImageResizingOptions;
 }
 
+export enum ImageResizingOptions {
+    NONE = "none",
+    FILL = "fill",
+    CONTAIN = "contain",
+    COVER = "cover",
+    SCALE_DOWN = "scale-down"
+}

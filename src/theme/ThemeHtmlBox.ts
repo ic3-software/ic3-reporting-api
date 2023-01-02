@@ -1,12 +1,12 @@
 import {IWidgetPublicContext} from "../PublicContext";
 
-export interface HtmlBoxClasses {
+// TOM : needs clarification
+export class HtmlBoxClasses {
 
     /**
      * Style applied to the root element.
      */
-    root: string;
-
+    public static root = "ic3HtmlBox-root";
 }
 
 export declare type HtmlBoxClassKey = keyof HtmlBoxClasses;

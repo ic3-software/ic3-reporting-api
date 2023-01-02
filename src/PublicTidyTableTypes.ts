@@ -131,7 +131,10 @@ export interface TidyTableRoleSelector {
     role: string;
 }
 
-export type TidyTableColumnSelector = TidyTableColumnIdentifier | TidyTableMappingColumnSelectorOptions | TidyTableRoleSelector;
+export type TidyTableColumnSelector =
+    TidyTableColumnIdentifier
+    | TidyTableMappingColumnSelectorOptions
+    | TidyTableRoleSelector;
 
 export type IFormFieldGranularityItem = IFormFieldGranularityItemColumn | IFormFieldGranularityItemRole
     | IFormFieldGranularityItemHierarchy | IFormFieldGranularityColumns;
@@ -230,30 +233,52 @@ export interface MdxRepetitionInfo {
 export type TidyColumnCoordinateUniqueName = MdxNodeIdentifier['uid'];
 
 export enum IAmcharts4DataKey {
+
     /**
-     * The value of the axis. The value is a date if the user mapped a date column and the row number string if the
-     * user mapped a character column. Use an adapter on the category axis to get the actual value of the label.
+     * Data key for the date/string value of the axis.
      */
     AXIS = "axis",
 
     /**
-     * Tag for the rows in the result
+     * Data key for the tidy-row number.
      */
     ROW = "row",
 
     /**
-     * When there are no groups or levels in the data, this name is used.
+     * Data key for accessing the value of a dataItem. Used when there are no groups or levels in the data.
      */
     NULL = "_"
+
 }
 
 /**
  * Objects that have this type are used in chart.data in amCharts.
  */
-export type IAmCharts4Data = Record<string, any>;
+export interface IAmCharts4Data {
 
-export interface IAmCharts4DataTreeMap extends IAmCharts4Data {
-    children: IAmCharts4Data[];
+    /**
+     * The date/string value of the axis.
+     */
+    axis: Date | string;
+
+    /**
+     * The row number of the axis. Uses first row if multiple rows are in the dataItem for the axis.
+     */
+    row: number;
+
+    /**
+     * Other values for the series
+     */
+    [key: string]: any;
+
+}
+
+export interface IAmCharts4DataTreeMap {
+    children: {
+        [key: string]: any;
+    }[];
+
+    [key: string]: any;
 }
 
 export type ITidyRow = any[];
@@ -262,12 +287,17 @@ export interface MdxInfo {
 
     uniqueName: string;
     key: any;
+    keyS: string | undefined;
 
     name: string;
     caption: string;
 
     isAll?: boolean;
     pun?: string;
+
+    /**
+     * Children count
+     */
     cc?: number;
 
     levelCaption?: string;
@@ -276,6 +306,16 @@ export interface MdxInfo {
      * Relative: starts at 0 + visual depths for ragged dimension.
      */
     levelDepthR: number;
+
+    /**
+     * Actual MDX level depth
+     */
+    levelDepth: number;
+
+    /**
+     * hierUN
+     */
+    hierUN: string;
 
     /**
      * Index on the MDX axis of the tuple the member belongs to.
@@ -517,7 +557,7 @@ export enum UseDatetimeAxis {
 
 export interface ITidyColumnIndex {
     /**
-     * Name of index
+     * Name of the node in the index
      */
     name: string;
 
@@ -583,3 +623,11 @@ export interface WidgetTidySelectionOptions {
 
 // Array with first value always defined. Groups consist of at least one index row.
 export type GroupRowIndices = [number, ...number[]];
+
+export interface TreeRowPropsTreeData {
+    rowIndex: number;
+    nodeId: string;
+    isCollapsed: boolean;
+    hasChildren: boolean;
+    isSelected: boolean;
+}

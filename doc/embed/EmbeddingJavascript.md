@@ -55,7 +55,9 @@ This class allows for pre-loading icCube as soon as the host application is read
 approach, an instance of `IReporting` is passed back to the host application.
 
 Please refer to the source code of a running [example](https://github.com/ic3-software/ic3-demo-embedded-react)
-for more details about this context usage and configuration.
+for more details about this context usage and configuration. The source code of the `DashboardsLoaderDivContext`
+class is available [here](https://github.com/ic3-software/ic3-reporting-api/blob/main/src/Loader.ts) for up-to-date
+information.
 
 **Configuration:** while loading icCube several parameters related to the way the application is being configured can be
 specified.

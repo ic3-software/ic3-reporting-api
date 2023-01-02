@@ -10,27 +10,29 @@ import {
 
 export class KpiCardClasses {
 
-    public static kpiValuesRoot = "ic3KpiValuesRoot";
+    public static root = "ic3KpiCard-root";
 
-    public static sparkChartRoot = "ic3KpiSparkChartRoot";
+    public static valuesContent = "ic3KpiCard-valuesContent";
 
-    public static kpiValueTitle = "ic3KpiValueNameText";
+    public static chartContent = "ic3KpiCard-chartContent";
 
-    public static kpiValueText = "ic3KpiValueText";
+    public static valueTitle = "ic3KpiCard-valueTitle";
 
-    public static kpiCompareTextRoot = "ic3KpiCompareTextRoot";
+    public static valueText = "ic3KpiCard-valueText";
 
-    public static kpiCompareTextRootEmpty = "ic3KpiEmptyCompareTextEmpty";
+    public static kpiCompareTextRoot = "ic3KpiCard-compareTextRoot";
 
-    public static comparePercentageText = "ic3ComparePercentageText";
+    public static kpiCompareTextRootEmpty = "ic3KpiCard-emptyCompareTextEmpty";
 
-    public static compareTargetText = "ic3compareTargetText";
+    public static comparePercentageText = "ic3KpiCard-comparePercentageText";
 
-    public static comparePercentZero = "ic3ComparePercentZero";
+    public static compareTargetText = "ic3KpiCard-compareTargetText";
 
-    public static comparePercentUp = "ic3ComparePercentUp";
+    public static comparePercentZero = "ic3KpiCard-comparePercentZero";
 
-    public static comparePercentDown = "ic3ComparePercentDown";
+    public static comparePercentUp = "ic3KpiCard-comparePercentUp";
+
+    public static comparePercentDown = "ic3KpiCard-comparePercentDown";
 
 }
 

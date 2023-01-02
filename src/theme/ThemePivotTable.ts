@@ -6,6 +6,8 @@ export class PivotTableClasses {
 
     static readonly cell = "ic3-pt-cell";
 
+    static readonly totalRow = "ic3-pt-row.ic3-totalRow";
+
     static readonly leftHeaderCell = "ic3-pt-col.lh";
 
     static readonly leftHeaderTitle = "ic3-pt-col.lh .ic3-pt-header-label";

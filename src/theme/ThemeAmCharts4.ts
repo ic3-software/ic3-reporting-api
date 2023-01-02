@@ -26,9 +26,27 @@ export enum GeoMapChartUnMatchedRegionStrategy {
     EXCLUDE_FROM_MAP = 'EXCLUDE_FROM_MAP',
 }
 
+export enum Amcharts4LineSmoothMethod {
+    NONE = "none",
+    TENSION = "tension",  // See https://www.amcharts.com/docs/v4/chart-types/xy-chart/#Smoothed_lines
+    MONOTONE_X = "monotoneX",  // See https://www.amcharts.com/docs/v4/chart-types/xy-chart/#Alternate_smoothing_algorithm
+    MONOTONE_Y = "monotoneY"  // See https://www.amcharts.com/docs/v4/chart-types/xy-chart/#Alternate_smoothing_algorithm
+}
+
 export interface IStrokeStyleProperties extends FormFieldObject {
+    /**
+     * Stroke color of the border.
+     */
     itemStrokeFill?: string;
+
+    /**
+     * Width of the border.
+     */
     itemStrokeWidth: number;
+
+    /**
+     * Opacity of the border.
+     */
     itemStrokeOpacity: number;
 }
 
@@ -392,6 +410,15 @@ export interface Am4SimpleCategoryAxisOptions extends FormFieldObject {
      * The start index and the end index seperated by a comma.
      */
     xAxisInitialZoom?: string;
+
+    /**
+     * In-place processing of the amCharts 4 category/date axis instance.
+     *
+     * <pre>
+     *     ( value: CategoryAxis | DateAxis ) => void;
+     * </pre>
+     */
+    xAxisPostRenderHook?: Hook<any>;
 }
 
 export interface Am4ValueAxisOptions extends FormFieldObject {
@@ -471,6 +498,20 @@ export interface Am4ValueAxisOptions extends FormFieldObject {
      * The start value and the end value seperated by a comma.
      */
     yAxisInitialZoom?: string;
+
+    /**
+     * Show the grid lines perpendicular to the value axis.
+     */
+    yAxisShowGridLines: boolean;
+
+    /**
+     * In-place processing of the amCharts 4 category/date axis instance.
+     *
+     * <pre>
+     *     ( value: ValueAxis ) => void;
+     * </pre>
+     */
+    yAxisPostRenderHook?: Hook<any>;
 }
 
 export interface Am4SimpleColumnSeriesOptions extends FormFieldObject, IStrokeStyleProperties {
@@ -690,11 +731,14 @@ export interface Am4TreeMapSeriesOptions extends FormFieldObject, IStrokeStylePr
     treemapColor?: TidyTableColumnSelector;
 
     /**
-     * Labels.
-     *
-     * Expression for the labels on the tree items.
+     * Labels when labelType is 'html'. Expression for the labels on the tree items.
      */
-    labelExpression: string;
+    labelExpressionHTML: string;
+
+    /**
+     * Labels when labelType is 'text'. Expression for the labels on the tree items.
+     */
+    labelExpressionText: string;
 
     /**
      * Label Type.
@@ -735,7 +779,7 @@ export interface Am4GeoSeriesOptions extends FormFieldObject {
     /**
      * Region.
      *
-     * Column with map codes, [ISO-2 codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)
+     * Column with [ISO-2 codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)
      * (e.g., US, CH, GB, FR). Note that provinces, regions, departments are available as well (e.g., FR-30).
      */
     region: TidyTableColumnSelector;
@@ -835,11 +879,6 @@ export interface Am4GeoSeriesOptions extends FormFieldObject {
 export interface Am4SecondValueAxisOptions extends FormFieldObject {
 
     /**
-     * The combo chart can enable/disable the second value axis.
-     */
-    secondValueAxis: boolean;
-
-    /**
      * Title Text.
      *
      * The title of the vertical axis.
@@ -907,6 +946,15 @@ export interface Am4SecondValueAxisOptions extends FormFieldObject {
      * The start value and the end value seperated by a comma.
      */
     yAxisSecondInitialZoom?: string;
+
+    /**
+     * In-place processing of the amCharts 4 category/date axis instance.
+     *
+     * <pre>
+     *     ( value: ValueAxis ) => void;
+     * </pre>
+     */
+    yAxisSecondPostRenderHook?: Hook<any>;
 }
 
 export interface Am4BubbleSeriesOptions extends FormFieldObject, IStrokeStyleProperties {
@@ -1178,6 +1226,20 @@ export interface Am4CategoryDateAxisOptions extends FormFieldObject {
      * The start index and the end index seperated by a comma.
      */
     xAxisInitialZoom?: string;
+
+    /**
+     * Show the grid lines perpendicular to the category axis.
+     */
+    xAxisShowGridLines: boolean;
+
+    /**
+     * In-place processing of the amCharts 4 category/date axis instance.
+     *
+     * <pre>
+     *     ( value: CategoryAxis | DateAxis ) => void;
+     * </pre>
+     */
+    xAxisPostRenderHook?: Hook<any>;
 }
 
 export interface Am4ValueAxisRangeOptions extends FormFieldObject {
@@ -1352,6 +1414,33 @@ export interface Am4LineSeriesOptions extends FormFieldObject, IStrokeStylePrope
      * A column with colors for the line and bullets in the chart.
      */
     lineSeriesColor?: TidyTableColumnSelector;
+
+    /**
+     * If true, connect the lines over empty data points.
+     */
+    connectLineSeries: boolean;
+
+    smoothLineMethod: Amcharts4LineSmoothMethod;
+
+    /**
+     * Smooth the line chart. The tension is a value between 0 (no tension) and 1 (maximum tension).
+     */
+    smoothLineTensionX: number;
+    smoothLineTensionY: number;
+}
+
+export interface Am4ComboSeriesOptions extends Am4LineSeriesOptions, Am4ColumnSeriesOptions {
+
+    /**
+     * Draw the line-series in this axis. Defaults to "left".
+     */
+    lineSeriesDrawOnAxis: "left" | "right";
+
+    /**
+     * Draw the column-series in this axis. Defaults to "right".
+     */
+    columnSeriesDrawOnAxis: "left" | "right";
+
 }
 
 export interface Am4ColumnSeriesOptions extends FormFieldObject, IStrokeStyleProperties {
@@ -1416,6 +1505,40 @@ export interface Am4ColumnSeriesOptions extends FormFieldObject, IStrokeStylePro
      * A column with colors for the columns in the chart.
      */
     columnSeriesColor?: TidyTableColumnSelector;
+}
+
+export interface Am4DivergentBarSeriesOptions extends FormFieldObject, IStrokeStyleProperties {
+
+    /**
+     * Values for the series on the left
+     */
+    leftValue: TidyTableColumnSelector;
+
+    /**
+     * Values for the series on the right
+     */
+    rightValue: TidyTableColumnSelector;
+
+    /**
+     * Tooltip.
+     *
+     * Show this text when hovering the column in the chart.
+     */
+    chartCursorTooltipColumn: string;
+
+    /**
+     * Legend Text.
+     *
+     * The name of the column series in the legend.
+     */
+    legendColumnSeriesLabel?: string;
+
+    /**
+     * Show Value in Legend.
+     *
+     * Display values in the legend when the user moves the cursor over the chart.
+     */
+    legendColumnSeriesShowValue: boolean;
 }
 
 export interface Am4TrendLineOptions extends FormFieldObject {
@@ -1521,6 +1644,15 @@ export interface Am4ChartOptions extends FormFieldObject {
      */
     postRenderHook?: Hook<any>;
 
+    /**
+     * Called after the chart is created.
+     *
+     * <pre>
+     *     ( chart: amcharts4.Chart ) => void;
+     * </pre>
+     */
+    onChartCreatedHook?: Hook<any>;
+
 }
 
 /**
@@ -1609,8 +1741,7 @@ export type AmCharts4ComboChartOptions =
     & Am4CategoryDateAxisOptions
     & Am4ValueAxisOptions
     & Am4SecondValueAxisOptions
-    & Am4LineSeriesOptions
-    & Am4ColumnSeriesOptions
+    & Am4ComboSeriesOptions
     & Am4LegendOptions
     & Am4ChartCursorOptions
     & Am4ScrollbarOptions
@@ -1648,6 +1779,21 @@ export type AmCharts4RegularBarChartOptions =
     & Am4ValueLabelOptions
     & Am4ChartCursorOptions
     & Am4TrendLineOptions
+    & Am4ScrollbarOptions
+    & Am4ValueAxisRangeOptions
+    & Am4ChartOptions
+    ;
+
+/**
+ * The corresponding AmCharts 4 chart class is XYChart.
+ */
+export type AmCharts4DivergentBarChartOptions =
+    & Am4CategoryDateAxisOptions
+    & Am4ValueAxisOptions
+    & Am4DivergentBarSeriesOptions
+    & Am4LegendOptions
+    & Am4ValueLabelOptions
+    & Am4ChartCursorOptions
     & Am4ScrollbarOptions
     & Am4ValueAxisRangeOptions
     & Am4ChartOptions

@@ -7,10 +7,16 @@ import {ITidyColumn, ITidyNumericColumn} from "./PublicTidyColumn";
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {ITidyMath} from "./PublicTidyMath";
 import {ILogger} from "./Logger";
+import {AppNotification} from "./INotification";
 
 export enum WidgetRenderLayoutStatus {
     RENDERING = "RENDERING",
     RENDERED = "RENDERED",
+}
+
+export enum WidgetWarningSeverity {
+    WARNING,
+    ERROR
 }
 
 export enum IContentMessageType { info, error}
@@ -106,14 +112,14 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      */
-    createTableRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined,selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => number | undefined) | undefined;
+    createTableRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => number | undefined) | undefined;
 
     /**
      * same as  createTableRowNumericExpr but returning a string
      */
-    createTableRowNumericStringExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined,selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => string | undefined) | undefined;
+    createTableRowNumericStringExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => string | undefined) | undefined;
 
-    createTableScaleRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined,selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => number | undefined) | undefined;
+    createTableScaleRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => number | undefined) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -122,7 +128,7 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      */
-    createTableNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined,selectedColumns: ITidyColumn[] | undefined): (() => number | undefined) | undefined;
+    createTableNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): (() => number | undefined) | undefined;
 
 
 }
@@ -192,6 +198,11 @@ export interface IWidgetPublicContext extends IPublicContext {
     fireMdxEvent(actionName: string, value: string, mdx: string): void;
 
     /**
+     * Used for publishing app notifications (e.g., print the report).
+     */
+    fireAppNotification(notification: AppNotification): void;
+
+    /**
      * Cypress testing purpose, after a rendering of the chart
      */
     incrementWidgetContentRendering(): void;
@@ -205,7 +216,15 @@ export interface IWidgetPublicContext extends IPublicContext {
      *
      * Note it's NOT the initial value but value if undefined
      */
-    useReduxOwnPropsState<T>(fieldName: string, valueIfUndefined?: T): [T, (newValue: T) => void];
+    useReduxOwnPropsState<T>(fieldName: string, valueIfUndefined?: T): [T, (newValue: T | undefined) => void];
+
+    /**
+     * doExport callback is called on each exportToExcel from the userMenu of the widget
+     *
+     * if the callback returns a tidyTable, this table will be exported
+     * if undefined is returned no further action
+     */
+    onExportToExcel(doExport: (fileName: string | undefined) => ITidyTable | undefined): void;
 
     /**
      * React -> useSelector on widgetOwnProps[fieldName]
@@ -256,6 +275,17 @@ export interface IWidgetPublicContext extends IPublicContext {
     getMapCoordinates(table: ITidyTable): [ITidyNumericColumn, ITidyNumericColumn] | [];
 
     getGoogleMapRenderedDelayMS(): number;
+
+    /**
+     * Displays an warning icon in the widget header showing the warning when the user hovers the icon.
+     * Be sure to clear all warnings before rendering using {@see widgetClearWarnings}
+     */
+    addWidgetWarning(warning: string, severity?: WidgetWarningSeverity): void;
+
+    /**
+     * Clear the warnings in the widget.
+     */
+    widgetClearWarnings(): void;
 
 }
 

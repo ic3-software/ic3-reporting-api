@@ -1,10 +1,11 @@
-export class ThemeAppMenuIconClasses {
 
-    static readonly root = "root";
+export class AppMenuIconClasses {
+
+    static readonly root = "ic3AppMenuIcon-root";
 
 }
 
-export declare type ThemeAppMenuIconClassKey = keyof ThemeAppMenuIconClasses;
+export declare type AppMenuIconClassKey = keyof AppMenuIconClasses;
 
 export interface AppMenuIconProps {
     iconColor: string;

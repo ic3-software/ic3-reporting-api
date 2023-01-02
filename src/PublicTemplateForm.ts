@@ -2,7 +2,12 @@ import {IWidgetEditorPublicContext} from "./PublicContext";
 import {ITidyColumn} from "./PublicTidyColumn";
 import * as React from "react";
 import {AutocompleteRenderInputParams, AutocompleteRenderOptionState} from "@mui/material/Autocomplete/Autocomplete";
-import {IFormFieldGranularityItem, TidyColumnsType, TidyTableColumnSelector} from "./PublicTidyTableTypes";
+import {
+    ChartTemplateDataMapping,
+    IFormFieldGranularityItem,
+    TidyColumnsType,
+    TidyTableColumnSelector
+} from "./PublicTidyTableTypes";
 import {ITidyTable} from "./PublicTidyTable";
 
 export type Hook<T> = {
@@ -77,6 +82,8 @@ export interface IFormFieldDef<DEFAULT_VALUE_TYPE> {
      */
     dependsOn?: string | string[];
 
+    dependsOnReset?: true;
+
     /**
      * When defined a function that returns the visibility of the field according to the dependsOn value.
      */
@@ -132,31 +139,33 @@ export type FormFields<T extends FormFieldObject> = {
                     Required<T>[key] extends TidyTableColumnSelector[] ? Omit<IFormColumnChooserMultipleFieldDef, 'fieldPath'> :
                         Required<T>[key] extends TidyTableColumnSelector ? Omit<IFormColumnChooserSingleFieldDef, 'fieldPath'> :
                             Required<T>[key] extends IFormEventMappingArrayFieldDefType ? Omit<IFormEventMappingArrayFieldDef, 'fieldPath'> :
-                                Required<T>[key] extends Hook<any> ? Omit<IFormHookFieldDef<any>, 'fieldPath'> :
-                                    Required<T>[key] extends boolean ? Omit<IFormBooleanFieldDef, 'fieldPath'> :
-                                        Required<T>[key] extends number ? Omit<IFormNumberFieldDef, 'fieldPath'> :
-                                            Required<T>[key] extends string ? Omit<IFormOptionFieldSingleDef, 'fieldPath'>
-                                                | Omit<IFormStringFieldDef, 'fieldPath'>
-                                                | Omit<IFormFormatterPickerFieldDef, 'fieldPath'>
-                                                | Omit<IFormWidgetVariantFieldDef, 'fieldPath'>
-                                                | Omit<IFormTidyTableTextExprFieldDef, 'fieldPath'>
-                                                | Omit<IFormTidyTableTextRowExprFieldDef, 'fieldPath'>
-                                                | Omit<IFormTidyTableHtmlRowExprFieldDef, 'fieldPath'>
-                                                | Omit<IFormTidyTableHtmlExprFieldDef, 'fieldPath'>
-                                                | Omit<IFormTidyTableNumericExprFieldDef, 'fieldPath'>
-                                                | Omit<IFormTidyTableNumericRowExprFieldDef, 'fieldPath'>
-                                                | Omit<IFormTidyTableColorRowExprFieldDef, 'fieldPath'>
-                                                | Omit<IFormTidyTableStringRowExprFieldDef, 'fieldPath'>
-                                                | Omit<IFormTidyTableScaleRowExprFieldDef, 'fieldPath'>
-                                                | Omit<IFormJsFieldDef, 'fieldPath'>
-                                                | Omit<IFormJsonFieldDef, 'fieldPath'>
-                                                | Omit<IFormMarkdownFieldDef, 'fieldPath'>
-                                                | Omit<IFormOptionFieldReportPathDef, 'fieldPath'> :
+                                Required<T>[key] extends IFormEventArrayFieldDefType ? Omit<IFormEventArrayFieldDef, 'fieldPath'> :
+                                    Required<T>[key] extends Hook<any> ? Omit<IFormHookFieldDef<any>, 'fieldPath'> :
+                                        Required<T>[key] extends boolean ? Omit<IFormBooleanFieldDef, 'fieldPath'> :
+                                            Required<T>[key] extends number ? Omit<IFormNumberFieldDef, 'fieldPath'> :
+                                                Required<T>[key] extends number ? Omit<IFormMaskFieldDef, 'fieldPath'> :
+                                                    Required<T>[key] extends string ? Omit<IFormOptionFieldSingleDef, 'fieldPath'>
+                                                        | Omit<IFormStringFieldDef, 'fieldPath'>
+                                                        | Omit<IFormFormatterPickerFieldDef, 'fieldPath'>
+                                                        | Omit<IFormWidgetVariantFieldDef, 'fieldPath'>
+                                                        | Omit<IFormTidyTableTextExprFieldDef, 'fieldPath'>
+                                                        | Omit<IFormTidyTableTextRowExprFieldDef, 'fieldPath'>
+                                                        | Omit<IFormTidyTableHtmlRowExprFieldDef, 'fieldPath'>
+                                                        | Omit<IFormTidyTableHtmlExprFieldDef, 'fieldPath'>
+                                                        | Omit<IFormTidyTableNumericExprFieldDef, 'fieldPath'>
+                                                        | Omit<IFormTidyTableNumericRowExprFieldDef, 'fieldPath'>
+                                                        | Omit<IFormTidyTableColorRowExprFieldDef, 'fieldPath'>
+                                                        | Omit<IFormTidyTableStringRowExprFieldDef, 'fieldPath'>
+                                                        | Omit<IFormTidyTableScaleRowExprFieldDef, 'fieldPath'>
+                                                        | Omit<IFormJsFieldDef, 'fieldPath'>
+                                                        | Omit<IFormJsonFieldDef, 'fieldPath'>
+                                                        | Omit<IFormMarkdownFieldDef, 'fieldPath'>
+                                                        | Omit<IFormOptionFieldReportPathDef, 'fieldPath'> :
 
-                                                Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
-                                                    | Omit<IFormGroupsFieldDef, 'fieldPath'> :
+                                                        Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
+                                                            | Omit<IFormGroupsFieldDef, 'fieldPath'> :
 
-                                                    never /* type not supported */
+                                                            never /* type not supported */
         )
 };
 
@@ -200,6 +209,8 @@ export type FormFieldType =
      * @see IFormArrayStringRecordsFieldDef
      */
     "eventMappingArray" |
+
+    "eventArray" |
     /**
      * @see IFormEmbeddedFieldDef
      */
@@ -240,6 +251,10 @@ export type FormFieldType =
      * @see IFormMarkdownFieldDef
      */
     "markdown" |
+    /**
+     * @see IFormMaskFieldDef
+     */
+    "mask" |
     /**
      * @see IFormMdxFieldDef
      */
@@ -364,27 +379,25 @@ export function isTidyTableExprRow(type: FormFieldType): boolean {
         ;
 }
 
-export function isTidyTableExprText(type: FormFieldType) {
-    return type === "tidyTableHtmlExpr"
-        || type === "tidyTableHtmlRowExpr"
-        || type === "tidyTableTextExpr"
+export function isTidyTableExprText(type: FormFieldType): type is "tidyTableTextExpr" | "tidyTableTextRowExpr" {
+    return type === "tidyTableTextExpr"
         || type === "tidyTableTextRowExpr"
         ;
 }
 
-export function isTidyTableExprTextHtml(type: FormFieldType) {
+export function isTidyTableExprTextHtml(type: FormFieldType): type is "tidyTableHtmlExpr" | "tidyTableHtmlRowExpr" {
     return type === "tidyTableHtmlExpr"
         || type === "tidyTableHtmlRowExpr"
         ;
 }
 
-export function isTidyTableExprNumeric(type: FormFieldType) {
+export function isTidyTableExprNumeric(type: FormFieldType): type is "tidyTableNumericExpr" | "tidyTableNumericRowExpr" {
     return type === "tidyTableNumericExpr"
         || type === "tidyTableNumericRowExpr"
         ;
 }
 
-export function isTidyTableExprScale(type: FormFieldType) {
+export function isTidyTableExprScale(type: FormFieldType): type is "tidyTableScaleRowExpr" {
     return type === "tidyTableScaleRowExpr"
         ;
 }
@@ -417,19 +430,6 @@ export type CodeMirrorMode =
     "md" |
     FormFieldTidyTableExprType
     ;
-
-export function isCodeMirrorModeExpr(mode: CodeMirrorMode) {
-    return mode === "tidyTableHtmlExpr"
-        || mode === "tidyTableHtmlRowExpr"
-        || mode === "tidyTableTextExpr"
-        || mode === "tidyTableTextRowExpr"
-        || mode === "tidyTableNumericExpr"
-        || mode === "tidyTableNumericRowExpr"
-        || mode === "tidyTableScaleRowExpr"
-        || mode === "tidyTableStringRowExpr"
-        || mode === "tidyTableColorRowExpr"
-        ;
-}
 
 export type FormFieldDialogEditorModelType =
     "unknown" |
@@ -600,9 +600,11 @@ interface IFormColumnChooserBaseDef<T extends TidyTableColumnSelector | TidyTabl
          *
          *      Already mapped columns are skipped.
          *
-         * You can also use your own fallback logic.
+         * You can also use your own fallback logic. The currentMapping is the object used when building the mapping
+         * from the options meta. It contains the mapped options from metas defined before this meta. Note, the order
+         * is important here.
          */
-        fallback?: boolean | ((table: ITidyTable) => ITidyColumn[] | undefined);
+        fallback?: boolean | ((table: ITidyTable, currentMapping: ChartTemplateDataMapping) => ITidyColumn[] | undefined);
 
         /**
          * In the expression editor, use the alias to reference the column. Use the alias in table.getColumnByAlias(...).
@@ -663,6 +665,19 @@ export interface IFormEventMappingArrayFieldDef extends IFormFieldDef<IFormEvent
 
     fieldType: "eventMappingArray",
 
+}
+
+/**
+ * @see FormFieldDef
+ */
+
+export type IFormEventArrayFieldDefType = { event: string }[];
+
+export interface IFormEventArrayFieldDef extends IFormFieldDef<IFormEventArrayFieldDefType> {
+
+    fieldType: "eventArray",
+
+    arrayField: string;
 }
 
 /**
@@ -771,6 +786,19 @@ export interface IFormNumberFieldDef extends IFormFieldDef<number> {
 }
 
 /**
+ * @see FormFieldDef
+ */
+export interface IFormMaskFieldDef extends IFormFieldDef<number> {
+
+    fieldType: "mask",
+
+    editorConf: {
+        items: [number, string][];
+        name: string;
+    }
+}
+
+/**
  * A string that is chosen from the list of available values (aka. options).
  *
  * Typically used to edit an "enum" where the user can select the value from a list of "localized" options.
@@ -806,6 +834,12 @@ export interface IFormOptionFieldMultipleDef extends IFormFieldDef<string[]> {
         optionName?: string;
 
         getCaption?: (id: string) => string;
+
+        /**
+         * Use the first option available if the current value is not in the available options.
+         * It resets to null if there are no available options.
+         */
+        useFirstIfOptionNotFound?: boolean;
     }
 }
 
@@ -831,6 +865,12 @@ export interface IFormOptionFieldSingleDef extends IFormFieldDef<string> {
         optionName?: string;
 
         getCaption?: (id: string) => string;
+
+        /**
+         * Use the first option available if the current value is not in the available options.
+         * It resets to null if there are no available options.
+         */
+        useFirstIfOptionNotFound?: boolean;
     }
 
 }
@@ -1228,11 +1268,13 @@ export type FormFieldDef =
     IFormColumnChooserFieldDef |
     IFormColumnSelectionFieldDef |
     IFormConstantsFieldDef |
+    IFormEventArrayFieldDef |
     IFormEventMappingArrayFieldDef |
     IFormFileUploaderFieldDef |
     IFormGroupsFieldDef |
     IFormJsFieldDef |
     IFormMarkdownFieldDef |
+    IFormMaskFieldDef |
     IFormMdxFieldDef |
     IFormNumberFieldDef |
     IFormOptionFieldDef |

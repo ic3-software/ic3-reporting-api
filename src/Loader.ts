@@ -7,7 +7,9 @@ export type AppType =
     "viewer" /* report viewer */ |
     "editor" /* report editor */ |
     "admin" /* report administration */ |
-    "appEditor" /* report application (i.e. lists of reports) editor */;
+    "appEditor" /* report application (i.e. lists of reports) editor */ |
+    "gadgetEditor" /* gadget editor */ |
+    "mdxConsole" /* [internal] used by the Server UI */;
 
 
 export interface IDashboardsLoaderFrameParams {
@@ -48,7 +50,7 @@ export function DashboardsLoaderFrame(params: IDashboardsLoaderFrameParams) {
     const containerELT = document.getElementById(containerId);
 
     if (!containerELT) {
-        throw new Error("[ic3loader] (iFrame) missing container [" + containerId + "]")
+        throw new Error("[Loader] (iFrame) missing container [" + containerId + "]")
     }
 
     console.log("[Loader] (iFrame) icCube URL : " + url);
@@ -113,6 +115,64 @@ export interface IDashboardsLoaderParams {
      */
     configuration?: string;
 
+    /**
+     * An optional URL giving the actual location of the icCube server (e.g., https://dev.icCube.com).
+     * All other URLs will be inferred from it.
+     */
+    urlHome?: string;
+
+    /**
+     * The URL path of the icCube index.html containing the Webpack main entry point (i.e., main.js).
+     *
+     * ($urlHome)/icCube/report/console  (e.g., https://dev.icCube.com/icCube/report/console).
+     */
+    urlAppIndexHtml?: string;
+
+    /**
+     * The URL path where icCube Webpack files are located:
+     * <pre>
+     *      /icCube/report
+     *          app                  -- public path
+     *              index.html
+     *              main.js
+     *              chunks
+     *              ...
+     *          plugins              -- e.g., amCharts
+     *              ...
+     * </pre>
+     *
+     * ($urlHome)/icCube/report/app/  (e.g., https://dev.icCube.com/icCube/report/app/).
+     */
+    urlAppPublicPath?: string;
+
+    /**
+     * ($urlHome)/icCube/report/console  (e.g., https://dev.icCube.com/icCube/report/console).
+     */
+    urlApp?: string;
+
+    /**
+     * ($urlHome)/icCube/report/ic3-reporting/app-local  (e.g., https://dev.icCube.com/icCube/report/ic3-reporting/app-local).
+     */
+    urlAppLocal?: string;
+
+    /**
+     * ($urlHome)/icCube/report/ic3-reporting/doc  (e.g., https://dev.icCube.com/icCube/report/ic3-reporting/doc).
+     */
+    urlAppDoc?: string;
+
+    /**
+     * Optional extra. documentation path  (e.g., https://dev.icCube.com/icCube/report/ic3-reporting/app-local/doc).
+     */
+    urlAppDocEx?: string;
+
+    /**
+     * ($urlHome)/icCube/gvi  (e.g., https://dev.icCube.com/icCube/gvi).
+     */
+    urlAppDataSource?: string;
+
+    /**
+     * ?ic3demo=
+     */
     urlSuffix?: string;
 
 }
@@ -159,26 +219,6 @@ export class DashboardsLoaderDivContext {
     private static readonly buildTimestampRE = /ic3_build_timestamp = "(.*)"/
 
     /**
-     * The URL path of the icCube index.html containing the Webpack main entry point (i.e., main.js).
-     */
-    private readonly indexHtmlUrl = "/icCube/report/console";
-
-    /**
-     * The URL path where icCube Webpack files are located:
-     *
-     * /icCube/report
-     *      app                  -- public path
-     *          index.html
-     *          main.js
-     *          chunks
-     *          ...
-     *      plugins              -- e.g., amCharts
-     *          ...
-     *
-     */
-    private readonly publicPath = "/icCube/report/app/";
-
-    /**
      * Whether or not icCube is going to request custom HTTP headers from the host application.
      * The value is passed back to the message sent to the host.
      */
@@ -191,7 +231,56 @@ export class DashboardsLoaderDivContext {
      */
     private readonly configuration?: string;
 
-    private readonly mainJsUrl: string;
+    /**
+     * The URL path of the icCube index.html containing the Webpack main entry point (i.e., main.js).
+     *
+     * ($urlHome)/icCube/report/console  (e.g., https://dev.icCube.com/icCube/report/console).
+     */
+    private readonly urlAppIndexHtml: string;
+
+    /**
+     * The URL path where icCube Webpack files are located:
+     * <pre>
+     *      /icCube/report
+     *          app                  -- public path
+     *              index.html
+     *              main.js
+     *              chunks
+     *              ...
+     *          plugins              -- e.g., amCharts
+     *              ...
+     * </pre>
+     *
+     * ($urlHome)/icCube/report/app  (e.g., https://dev.icCube.com/icCube/report/app).
+     */
+    private readonly urlAppPublicPath: string;
+
+    private readonly urlAppMainJS: string;
+
+    /**
+     * ($urlHome)/icCube/report/console  (e.g., https://dev.icCube.com/icCube/report/console).
+     */
+    private readonly urlApp?: string;
+
+    /**
+     * ($urlHome)/icCube/report/ic3-reporting/app-local  (e.g., https://dev.icCube.com/icCube/report/ic3-reporting/app-local).
+     */
+    private readonly urlAppLocal?: string;
+
+    /**
+     * ($urlHome)/icCube/report/ic3-reporting/doc  (e.g., https://dev.icCube.com/icCube/report/ic3-reporting/doc).
+     */
+    private readonly urlAppDoc?: string;
+
+    /**
+     * Optional extra. documentation path  (e.g., https://dev.icCube.com/icCube/report/ic3-reporting/app-local/doc).
+     */
+    private readonly urlAppDocEx?: string;
+
+    /**
+     * ($urlHome)/icCube/gvi  (e.g., https://dev.icCube.com/icCube/gvi).
+     */
+    private readonly urlAppDataSource?: string;
 
     private buildVersion = "";
     private buildTimestamp = "";
@@ -200,27 +289,37 @@ export class DashboardsLoaderDivContext {
 
     constructor(options?: string | IDashboardsLoaderParams) {
 
-        let suffix = "";
-        let customHeaders;
-        let configuration;
+        const opts = ((typeof options === "string") ? {urlSuffix: options} : options) ?? {};
 
-        if (typeof options === "string") {
+        this.customHeaders = opts.customHeaders;
+        this.configuration = opts.configuration;
 
-            suffix = options;
+        const suffix = opts.urlSuffix ?? "";
 
-        } else if (options) {
-
-            customHeaders = options.customHeaders;
-            configuration = options.configuration;
-
-            suffix = options.urlSuffix || suffix;
-
+        const home = function (p: string) {
+            return opts.urlHome ? (opts.urlHome + p) : undefined;
         }
 
-        this.customHeaders = customHeaders;
-        this.configuration = configuration;
-        this.indexHtmlUrl += suffix;
-        this.mainJsUrl = this.publicPath + "main.js" + suffix;
+        this.urlAppIndexHtml = (opts.urlAppIndexHtml ?? ((opts.urlHome ?? "") + "/icCube/report/console")) + suffix;
+        this.urlAppPublicPath = opts.urlAppPublicPath ?? ((opts.urlHome ?? "") + "/icCube/report/app/");
+        this.urlAppMainJS = this.urlAppPublicPath + "main.js" + suffix;
+
+        this.urlApp = opts.urlApp ?? home("/icCube/report/console");
+        this.urlAppLocal = opts.urlAppLocal ?? home("/icCube/report/ic3-reporting/app-local");
+        this.urlAppDoc = opts.urlAppDoc ?? home("/icCube/report/ic3-reporting/doc");
+        this.urlAppDocEx = opts.urlAppDocEx;
+        this.urlAppDataSource = opts.urlAppDataSource ?? home("/icCube/gvi");
+
+        console.log("[Loader] (div)           suffix :" + opts.urlSuffix);
+        console.log("[Loader] (div)             home :" + opts.urlHome);
+        console.log("[Loader] (div)  urlAppIndexHtml :" + this.urlAppIndexHtml);
+        console.log("[Loader] (div) urlAppPublicPath :" + this.urlAppPublicPath);
+        console.log("[Loader] (div)     urlAppMainJS :" + this.urlAppMainJS);
+        console.log("[Loader] (div)           urlApp :" + this.urlApp);
+        console.log("[Loader] (div)      urlAppLocal :" + this.urlAppLocal);
+        console.log("[Loader] (div)        urlAppDoc :" + this.urlAppDoc);
+        console.log("[Loader] (div)      urlAppDocEx :" + this.urlAppDocEx);
+        console.log("[Loader] (div) urlAppDataSource :" + this.urlAppDataSource);
 
         // Start loading all required initial libraries (in the background).
         this.libLoader = this.loadLibs();
@@ -310,7 +409,7 @@ export class DashboardsLoaderDivContext {
             const wnd = window as any;
             const start = performance.now();
 
-            this.libLoader = fetch(this.indexHtmlUrl, {cache: 'no-cache'})
+            this.libLoader = fetch(this.urlAppIndexHtml, {cache: 'no-cache'})
                 .then(response => {
 
                     if (!response.ok) {
@@ -320,6 +419,10 @@ export class DashboardsLoaderDivContext {
                     return response.text();
 
                 }).then(indexHtml => {
+
+                    if (indexHtml.indexOf("ic3-reporting-application") === -1) {
+                        throw new Error("[Loader] unexpected content in index.html (possibly not logged?)");
+                    }
 
                     // CSRF code.
                     //
@@ -332,29 +435,35 @@ export class DashboardsLoaderDivContext {
                     }
 
                     // Webpack entry point (main.js) cache busting key
-                    let cacheKey = "";
-                    if (!this.mainJsUrl.includes("?")) {
-                        cacheKey = "?" + DashboardsLoaderDivContext.extractMatch(indexHtml, DashboardsLoaderDivContext.mainJsCacheKeyRE, "Internal Error: missing main.js");
-                    }
+                    const cacheKey = DashboardsLoaderDivContext.extractMatch(indexHtml, DashboardsLoaderDivContext.mainJsCacheKeyRE, "[Loader] missing main.js cache key from index.html");
 
                     // Build information
                     this.buildVersion = DashboardsLoaderDivContext.extractMatch(indexHtml, DashboardsLoaderDivContext.buildVersionRE)
                     this.buildTimestamp = DashboardsLoaderDivContext.extractMatch(indexHtml, DashboardsLoaderDivContext.buildTimestampRE)
 
-                    const scriptUrl = this.mainJsUrl + cacheKey;
+                    const scriptUrl = this.urlAppMainJS + (!this.urlAppMainJS.includes("?") ? "?" : "&") + cacheKey;
 
                     // Load Webpack entry point: main.js
                     console.log("[Loader] (div) start loading library [version:" + this.buildVersion + "] [build:" + this.buildTimestamp + "]");
 
                     wnd["__ic3_div_embedded__"] = true;
-                    wnd["__ic3_div_webpack_public_path__"] = this.publicPath;
+                    wnd["__ic3_div_webpack_public_path__"] = this.urlAppPublicPath;
                     wnd["__ic3_div_custom_headers__"] = this.customHeaders;
                     wnd["__ic3_div_configuration__"] = this.configuration;
 
-                    wnd["__ic3_embedded__"] = true /* embedding a previous version */;
-                    wnd["__ic3__webpack_public_path__"] = this.publicPath /* embedding a previous version */;
+                    wnd["__ic3_div_app_path__"] = this.urlApp;
+                    wnd["__ic3_div_app_local_path__"] = this.urlAppLocal;
+                    wnd["__ic3_div_app_doc_path__"] = this.urlAppDoc;
+                    wnd["__ic3_div_app_doc_ex_path__"] = this.urlAppDocEx;
+                    wnd["__ic3_div_app_datasource_path__"] = this.urlAppDataSource;
 
-                    return DashboardsLoaderDivContext.loadScript(scriptUrl).catch(reason => Promise.reject("Error loading main.js script : " + scriptUrl))
+                    {
+                        // embedding a previous version
+                        wnd["__ic3_embedded__"] = true;
+                        wnd["__ic3__webpack_public_path__"] = this.urlAppPublicPath;
+                    }
+
+                    return DashboardsLoaderDivContext.loadScript(scriptUrl).catch(reason => Promise.reject("[Loader] error while loading the main.js script : " + scriptUrl))
 
                 }).then(() => {
 

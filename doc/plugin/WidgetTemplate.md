@@ -46,6 +46,39 @@ this mechanism:
 
 - [ic3-demo-plugin-js](https://github.com/ic3-software/ic3-demo-plugin-js).
 
+### Documentation/Help
+
+You can add some documentation/help that will be available in the editor via the (?) icon. The framework is
+searching in the server `Docs` for an MD file located either in the `ic3-reporting/app-local/doc` folder or in the
+official documentation folder (i.e., `ic3-reporting/doc`).
+
+The name of the file is built from the widget template as following:
+
+    "widgets." + pluginId + "." + templateType + "." + templateId
+
+So, let's say you've created a custom table widget named `SimpleTable` in your plugin named `MyPluginJS` and register
+this widget into the `chart` section, then the MD filename would be:
+
+    widgets.MyPluginJS.chart.SimpleTable.md
+
+This name is then translated into a path:
+
+    widgets/MyPluginJS/chart/SimpleTable.md
+
+And it is searched first in `ic3-reporting/app-local` using first the user's locale and then English:
+
+    /icCube/report/ic3-reporting/app-local/doc/
+        fr/widgets/MyPluginJS/chart/SimpleTable.md
+        en/widgets/MyPluginJS/chart/SimpleTable.md
+
+Eventually, it is searched in the `ic3-reporting/doc` folder for the English locale only:
+
+    /icCube/report/ic3-reporting/doc/
+        en/widgets/MyPluginJS/chart/SimpleTable.md
+
+But, adding your documentation to the `ic3-reporting/doc` folder is not recommended as this directory will be
+overwritten on each installation of a new version of the reporting application.
+
 ### Reference
 
 For additional and up-to-date information, check in GitHub the Dashboards API documented source code

@@ -57,7 +57,7 @@ export interface IOnNewEventJsContext {
     /**
      * Returns the widget jQuery object
      *
-     * Using JQuery might conflit with React's state.
+     * Using JQuery might conflict with React's state.
      * Use with care as you will modify the DOM directly.
      */
     getWidget$(widgetId: string): any;

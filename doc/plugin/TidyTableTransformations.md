@@ -1,4 +1,4 @@
-## Adding a custom transformation
+## Adding a Custom Transformation
 
 You can add your own custom transformations in a plugin.
 
@@ -104,5 +104,38 @@ const PluginDefinition = ApiUtils.makePlugin({
 
 });
 ```
+
+#### Documentation/Help
+
+You can add some documentation/help that will be available in the editor via the (?) icon. The framework is
+searching in the server `Docs` for an MD file located either in the `ic3-reporting/app-local/doc` folder or in the
+official documentation folder (i.e., `ic3-reporting/doc`).
+
+The name of the file is built from the transformation as following:
+
+    "tidyTable.transformations." pluginId + "." + transformationId
+
+So, let's say you've created a custom transformation named `TransfRendererCustom` in your plugin named `MyPluginJS`
+then the MD filename would be:
+
+    tidyTable.transformations.MyPluginJS.TransfRendererCustom.md
+
+This name is then translated into a path:
+
+    tidyTable/transformations/MyPluginJS/TransfRendererCustom.md
+
+And it is searched first in `ic3-reporting/app-local` using first the user's locale and then English:
+
+    /icCube/report/ic3-reporting/app-local/doc/
+        fr/tidyTable/transformations/MyPluginJS/TransfRendererCustom.md
+        en/tidyTable/transformations/MyPluginJS/TransfRendererCustom.md
+
+Eventually, it is searched in the `ic3-reporting/doc` folder for the English locale only:
+
+    /icCube/report/ic3-reporting/doc/
+        en/tidyTable/transformations/MyPluginJS/TransfRendererCustom.md
+
+But, adding your documentation to the `ic3-reporting/doc` folder is not recommended as this directory will be
+overwritten on each installation of a new version of the reporting application.
 
 _

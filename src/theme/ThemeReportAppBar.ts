@@ -1,16 +1,22 @@
 /**
  * A dashboard application (i.e., list of dashboard, global filters...).
  */
-export interface ReportAppBarClasses {
+export class ReportAppBarClasses {
 
     /**
      * Style applied to
      */
-    appBarRoot: string;
+    static root = "ic3AppBar-root";
     /**
      * Style applied to
      */
-    appBarTitle: string;
+    static title = "ic3AppBar-title";
+
+    static titleC = "ic3AppBar-titleC";
+
+    static globalFilter = "ic3AppBar-globalFilter";
+
+    static globalFilterPanel = "ic3AppBar-globalFilterPanel";
 
 }
 

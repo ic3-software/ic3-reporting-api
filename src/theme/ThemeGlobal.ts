@@ -1,7 +1,7 @@
 export class Ic3GlobalClasses {
 
-    static readonly singleSelection = 'Ic3-SingleSelection';
+    static readonly singleSelection = 'ic3-SingleSelection';
 
-    static readonly multipleSelection = 'Ic3-MultipleSelection';
+    static readonly multipleSelection = 'ic3-MultipleSelection';
 }
 

@@ -24,3 +24,17 @@ export function isTidyTableColumnSelector(v: unknown): v is TidyTableColumnSelec
         || isTidyTableRoleSelector(v)
         ;
 }
+
+export function isTidyTableColumnsChooser(columnChooserValue: unknown): columnChooserValue is (TidyTableColumnSelector | TidyTableColumnSelector[]) {
+    // Type guarding
+    if (Array.isArray(columnChooserValue)) {
+        if (columnChooserValue.every(v => isTidyTableColumnSelector(v))) {
+            return true;
+        }
+    } else {
+        if (isTidyTableColumnSelector(columnChooserValue)) {
+            return true;
+        }
+    }
+    return false;
+}

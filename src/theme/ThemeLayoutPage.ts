@@ -1,25 +1,27 @@
-export interface LayoutPageClasses {
+export class LayoutPageClasses {
+
+    static root = "ic3LayoutPage-root";
 
     /**
      * Style applied to the root element containing the dashboard pages.
      */
-    widgetPage: string;
+    static widgetPage = "ic3LayoutPage-widgetPage";
     /**
      * Style applied to
      */
-    widgetPageMargin: string;
+    static widgetPageMargin = "ic3LayoutPage-widgetPageMargin";
     /**
      * Style applied to
      */
-    widgetPageGrid: string;
+    static widgetPageGrid = "ic3LayoutPage-widgetPageGrid";
     /**
      * Style applied to
      */
-    widgetPageWidgets: string;
+    static widgetPageWidgets = "ic3LayoutPage-widgetPageWidgets";
     /**
      * Style applied to the page on hover.
      */
-    widgetPagePH: string;
+    static widgetPagePH = "ic3LayoutPage-widgetPagePH";
 
 }
 
