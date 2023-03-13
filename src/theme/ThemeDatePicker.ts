@@ -151,3 +151,7 @@ export interface DatePickerChartOptions extends FormFieldObject {
     dates?: TidyTableColumnSelector;
 
 }
+
+export interface FilterDatePickerProps {
+
+}

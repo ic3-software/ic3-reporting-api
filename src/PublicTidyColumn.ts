@@ -24,6 +24,11 @@ export interface ITidyColumnTypedValue {
     fValue?: string;
     type: TidyColumnsType;
 
+    /**
+     * Insert this mdx value for this row. Leave undefined to set the mdx info of the row to undefined.
+     */
+    mdxInfo?: MdxInfo | null;
+
 }
 
 export type ITidyColumnAddValue = ITidyColumnAddValueInsert | ITidyColumnAddValueCopyRow;
@@ -702,7 +707,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
 
     /**
      * Map the rows that are visible given a hierarchical axis and an array of boolean values
-     * @param expanded an array indicating for each index if it is expanded or not. If it is collapsed, then all
+     * @param expanded a function indicating for each index if it is expanded or not. If it is collapsed, then all
      * children are not visible.
      * @param fun function to apply
      */
@@ -791,6 +796,12 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * undefined if it's not an Mdx member column
      */
     getQueryNodeIdentifier(idx: number): MdxNodeIdentifier | undefined;
+
+    /**
+     * Returns the group key at the row index for use with table.toAmcharts4Data.
+     */
+    getAmcharts4GroupKey(rowIdx: number): string;
+
 }
 
 export interface PublicTidyColumnCellDecorationRenderedOptions {
@@ -872,7 +883,16 @@ export interface TidyTableExprColumnMeta {
     caption: string;
 
     method: string;
+
+    /**
+     * If true, then modifier only available when eval mode is "row".
+     */
     argRow?: boolean;
+
+    /**
+     * If true, then modifier only available when the fieldMeta has allowTotalOfSelection set to true.
+     */
+    allowsSelectedTotal?: boolean;
 
 }
 
@@ -892,25 +912,10 @@ export const TidyTableTextExprColumnMetas: TidyTableExprColumnMeta[] = [
     {caption: "caption", method: "getCaption"},
 
     {caption: "mdxName", method: "mdxName", argRow: true},
-    {caption: "mdxCaption", method: "mdxName", argRow: true},
+    {caption: "mdxCaption", method: "mdxCaption", argRow: true},
     {caption: "mdxUniqueName", method: "mdxUniqueName", argRow: true},
     {caption: "mdxKey", method: "mdxKey", argRow: true},
 
-];
-
-export const TidyTableNumberExprColumnMetas: TidyTableExprColumnMeta[] = [
-
-    {caption: "total", method: "sum"},
-    {caption: "average", method: "mean"},
-    {caption: "median", method: "median"},
-    {caption: "min", method: "min"},
-    {caption: "max", method: "max"},
-    {caption: "variance", method: "variance"},
-    {caption: "standardDeviation", method: "standardDeviation"},
-    {caption: "count", method: "count"},
-
-    {caption: "percent", method: "percent", argRow: true},
-
-    // {caption: "caption", method: "getCaption"},
+    {caption: "totalSelectedOrTotal", method: "sumFiltered", allowsSelectedTotal: true}
 
 ];

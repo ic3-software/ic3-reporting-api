@@ -1,5 +1,6 @@
 import {ITidyBaseColumnReadonly} from "./PublicTidyColumn";
-import {HistogramData, HistogramOptions} from "./PublicTidyTableTypes";
+import {HistogramData, HistogramOptions, TidyRowFilter} from "./PublicTidyTableTypes";
+import {TrendLineType} from "./theme/ThemeAmCharts4";
 
 /**
  * Utility class for doing maths in columns
@@ -20,6 +21,11 @@ export interface ITidyMath {
      * Sum of all values in the column.
      */
     sum(column: ITidyBaseColumnReadonly<number | null> | ITidyBaseColumnReadonly<number | null>[]): number | null;
+
+    /**
+     * Sum of all values in the column where filter evaluates to true. Returns the sum if filter is undefined.
+     */
+    sumFiltered(column: ITidyBaseColumnReadonly<number | null>, filter: TidyRowFilter | undefined): number | null;
 
     /**
      * Get the extreme value of the column. Null values are skipped.
@@ -89,6 +95,8 @@ export interface ITidyMath {
      * @Returns an array of histogram buckets
      */
     hist(column: ITidyBaseColumnReadonly<number | null>, options: Partial<HistogramOptions>): HistogramData[];
+
+    trendLine(trendLine: TrendLineType, y: ITidyBaseColumnReadonly<number | null>, x: ITidyBaseColumnReadonly<number | null>): ((x: number) => number) | undefined;
 
     /**
      * Return a regression model with one predictor: y = a0 + a1*x + error

@@ -102,3 +102,12 @@ export interface FilterSliderChartOptions extends FilterTidyTableChartOptions {
      */
     selectionLabel?: string;
 }
+
+export interface FilterSliderProps {
+    variant?: string;
+    thumbColor?: string;
+    emptySelection: boolean;
+    isVertical?: boolean;
+    size?: 'small' | 'medium';
+    padding: number;
+}

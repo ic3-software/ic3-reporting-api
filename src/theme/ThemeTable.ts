@@ -16,6 +16,7 @@ export declare type TableClassKey = keyof TableClasses;
 export interface TableProps {
 
     variant?: string;
+    printing: boolean;
 }
 
 
@@ -222,13 +223,6 @@ export interface TableChartOptions extends BaseTableChartOptions {
      * Incompatible with 'Pagination'.
      */
     footerRowCount: boolean;
-
-    /**
-     * Add Selected Row Count.
-     *
-     * Incompatible with 'Pagination'.
-     */
-    footerSelectedRowCount: boolean;
 
     /**
      * Page Size.

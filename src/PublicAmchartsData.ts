@@ -16,6 +16,9 @@ export interface ISeriesValues {
     values: ITidyNumericColumn;
     colors?: ITidyColorColumn;
 
+    // Used to identify the parent series ID for trend columns.
+    parentSeriesId?: string;
+
 }
 
 /**
@@ -37,6 +40,13 @@ export class PublicAmchartsData {
         this.onGroup = onGroup;
         this.onLevel = onLevel;
         this.table = table;
+    }
+
+    static getSeriesId(seriesId: number, rowIdx?: number, group?: ITidyColumn): string {
+        if (group && rowIdx != null) {
+            return group.getAmcharts4GroupKey(rowIdx) + "." + String(seriesId);
+        }
+        return IAmcharts4DataKey.NULL + "." + String(seriesId);
     }
 
     /**
@@ -72,49 +82,29 @@ export class PublicAmchartsData {
     /**
      * Create, update and remove series in the chart.
      * @param itemControl map keeping track of current series in the chart.
-     * @param create create a new series if it is not in itemControl.
-     *  - seriesId: unique id of the series
-     *  - groupKey: key for the group by (if defined). If not defined, use _
-     *  - valueKey: series value datafield
-     *  - fillKey: series fill datafield
-     *  - sValue: the onValues part used
-     * @param update update a series.
-     *  - seriesId: unique id of the series
-     *  - groupKey: key for the group by (if defined). If not defined, use _
-     *  - series: the charts series to update
-     *  - sValue: the onValues part used
-     *  - groupRows: row indices of the group. Length >= 1.
-     * @param remove remove the series.
-     * @param typeFilter if defined, only call create, update and remove where typeFilter(type) returns true.
+     * @param seriesControl object controlling the adding/removing/updating of series.
      * @param firstGroupOnly only call the first group
      */
-    updateSeries<T>(
-        itemControl: Map<string, T>,
-        create: (seriesId: string, groupKey: string, valueKey: string, fillKey: string, sValue: ISeriesValues) => T,
-        update: (seriesId: string, groupKey: string, series: T, sValue: ISeriesValues, groupRows: GroupRowIndices) => void,
-        remove: (item: T) => void,
-        typeFilter?: (type: ISeriesValuesType) => boolean,
-        firstGroupOnly?: boolean
-    ): void {
+    updateSeries<T>(itemControl: Map<string, T>, seriesControl: IAmchartsSeriesControl<T>, firstGroupOnly?: boolean): void {
         const group = this.onGroup;
         const updated = new Set<string>();
 
         const forEachSeries = (groupKey: string, groupIdx: GroupRowIndices) => {
             this.onValues.forEach((onValue, idx) => {
 
-                if (typeFilter != null && !typeFilter(onValue.type)) {
+                if (seriesControl.typeFilter != null && !seriesControl.typeFilter(onValue.type)) {
                     return;
                 }
 
                 const seriesKey = groupKey + "." + String(idx);
                 let item = itemControl.get(seriesKey);
                 if (item == null) {
-                    const newItem = create(seriesKey, groupKey, seriesKey + "v", seriesKey + "c", onValue);
+                    const newItem = seriesControl.create(seriesKey, groupKey, seriesKey + "v", seriesKey + "c", onValue);
                     itemControl.set(seriesKey, newItem);
                     item = newItem;
                 }
 
-                update(seriesKey, groupKey, item, onValue, groupIdx);
+                seriesControl.update(seriesKey, groupKey, item, onValue, groupIdx);
                 updated.add(seriesKey);
 
             });
@@ -126,12 +116,12 @@ export class PublicAmchartsData {
                 const groupIdx = index.values().next();
                 if (!groupIdx.done) {
                     const firstIndex = groupIdx.value[0];
-                    const groupKey = group.getUid(firstIndex);
+                    const groupKey = group.getAmcharts4GroupKey(firstIndex);
                     forEachSeries(groupKey, groupIdx.value);
                 }
             } else {
                 index.forEach(groupIdx => {
-                    const groupKey = group.getUid(groupIdx[0]);
+                    const groupKey = group.getAmcharts4GroupKey(groupIdx[0]);
                     forEachSeries(groupKey, groupIdx);
                 });
             }
@@ -143,7 +133,7 @@ export class PublicAmchartsData {
         itemControl.forEach((item, key) => {
             if (!updated.has(key)) {
                 itemControl.delete(key);
-                remove(item);
+                seriesControl.remove(item);
             }
         });
     }
@@ -169,6 +159,26 @@ export class PublicAmchartsData {
     }
 
     /**
+     * Call a function on each series and it's column
+     * @param itemControl map keeping track of current series in the chart.
+     */
+    forEachSeries<T>(itemControl: Map<string, T>, callback: (col: ITidyNumericColumn, seriesId: string, series: T)=>void): void {
+
+        this.updateSeries(itemControl, {
+            create: () => {
+                throw Error("SNBH series cannot be created");
+            },
+            update: (seriesId, groupKey, series, sValue, groupRows) => {
+                callback(sValue.values, seriesId, series);
+            },
+            remove: () => {
+                throw Error("SNBH series cannot be removed");
+            },
+            typeFilter: type => type !== ISeriesValuesType.TREND
+        }, true);
+    }
+
+    /**
      * Returns the first item in the onValues argument of the constructor.
      */
     getFirstValue(): ITidyNumericColumn {
@@ -181,5 +191,43 @@ export class PublicAmchartsData {
     isMultiMeasure(): boolean {
         return this.onValues.filter(i => i.type !== ISeriesValuesType.TREND).length > 1;
     }
+
+}
+
+/**
+ * Controls when to add / remove / dispose / update series. This class exists because using chart.setSeries removes
+ * trend-series. This class handles the adding and removing of series and keeps the series in the order of the data.
+ */
+export interface IAmchartsSeriesControl<T> {
+
+    /**
+     * If defined, only call create, update and remove where typeFilter(type) returns true.
+     */
+    typeFilter?: (type: ISeriesValuesType) => boolean,
+
+    /**
+     * Create a new series if it is not in itemControl. Use 'add' to add it to the chart.
+     * @param seriesId unique id of the series
+     * @param groupKey key for the group by (if defined). If not defined, use _
+     * @param valueKey series value dataField
+     * @param fillKey series fill dataField
+     * @param sValue the onValues part used
+     */
+    create: (seriesId: string, groupKey: string, valueKey: string, fillKey: string, sValue: ISeriesValues) => T,
+
+    /**
+     * Update a series.
+     * @param seriesId unique id of the series
+     * @param groupKey key for the group by (if defined). If not defined, use _
+     * @param series the charts series to update
+     * @param sValue the onValues part used
+     * @param groupRows row indices of the group. Length >= 1.
+     */
+    update: (seriesId: string, groupKey: string, series: T, sValue: ISeriesValues, groupRows: GroupRowIndices) => void,
+
+    /**
+     * Destroy an item. Called when the item can be cleared from memory. E.g., dispose() on the series.
+     */
+    remove: (item: T) => void,
 
 }

@@ -1,23 +1,26 @@
-## icCube Dashboards API
+## icCube Dashboards Plugin Dev. Kit
 
-The icCube Dashboards API allows for:
+The icCube Dashboards application depends on plugins to add custom theme, widgets, data transformations, etc. A plugin
+is a Webpack module that is loaded by the Dashboards application at runtime using the **Webpack Module Federation**
+mechanism. Refer to this [page](./Develop.md) for more details.
 
-- developing new themes, widgets (charts, maps, etc.), data transformations, etc.
-- embedding icCube Dashboards into a Web application.
+The plugin dev. kit is available in Typescript.
 
-### Plugin Dev. Kit
+Even if the icCube Dashboards is written in React, you can write your plugin in plain Javascript/Typescript and use your
+favourite libraries. See the working example section below.
 
-The plugin dev. kit allows for developing new themes, new widgets (i.e., charts, maps, etc), new data transformations
-packaged as a plugin. Plugins can be deployed at runtime into an existing icCube Dashboards application for a complete
-customization.
+Note that Material-UI 5.x is required for accessing and developing a new theme.
 
-The dev. kit documentation is available [here](./plugin/Overview.md).
+### GitHub Project
 
-### Embedding icCube Dashboards
+The dev. kit source code is available on GitHub [here](https://github.com/ic3-software/ic3-reporting-api).
 
-The API allows for embedding the icCube Dashboards into an existing Web application. This API allows for a two ways
-communication between the host application and the icCube Dashboards.
+### Working Examples
 
-The API documentation is available [here](./embed/Overview.md).
+Several working examples with their source code are available. Refer to this [page](./Examples.md) for more details.
+
+### Reference Documentation
+
+Refer to this [page](./Reference.md) for a complete documentation of the plugin dev. kit.
 
 _

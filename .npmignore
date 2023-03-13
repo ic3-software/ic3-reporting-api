@@ -2,3 +2,4 @@ ic3-reporting-api.iml
 tsconfig.json
 src/
 doc/
+*.tgz

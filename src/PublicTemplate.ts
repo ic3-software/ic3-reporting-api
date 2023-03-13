@@ -342,6 +342,7 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
     withoutSelection?: boolean;
     withoutDrilldown?: boolean;
     withoutEvents?: boolean;
+
     withoutUserMenu?: boolean;
     withoutGlobalFilter?: boolean;
 
@@ -374,6 +375,9 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
      */
     withDrilldownPivotTableLikeAs?: boolean;
 
+    /**
+     * Extra options for in the widgets user menu when in viewer mode.
+     */
     userMenuOptions?: string[];
 
     /**
@@ -504,6 +508,12 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
      * Defaults: all of them.
      */
     withQueryTypes?: QueryType[];
+
+    /**
+     * Change the data to show when the user presses show-data from the widget menu.
+     * @param ownProps
+     */
+    getShowHideDataTable?: (table: ITidyTable | undefined, options: OPTIONS, ownProps: any) => ITidyTable | undefined;
 
 }
 

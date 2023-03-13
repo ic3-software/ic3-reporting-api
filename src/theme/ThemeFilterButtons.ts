@@ -72,4 +72,8 @@ export interface FilterButtonsChartOptions extends FilterTidyTableChartOptions {
 
 }
 
-
+export interface FilterButtonsProps {
+    printing: boolean;
+    variant?: string;
+    grouped: boolean;
+}

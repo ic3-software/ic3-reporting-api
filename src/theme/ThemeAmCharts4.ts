@@ -1,10 +1,12 @@
 import {FormFieldObject, Hook, IColorDef} from "../PublicTemplateForm";
 import {TidyTableColumnSelector, UseDatetimeAxis} from "../PublicTidyTableTypes";
 import {TidyHistogramOptions} from "../PublicTidyHistogram";
+import {PublicAmCharts4Base} from "../PublicAmCharts4Base";
 
 export enum AxisRangeType {
     LINE = "single_line",
-    RANGE = 'range'
+    RANGE = 'range',
+    LINE_PER_MEASURE = "LINE_PER_MEASURE"
 }
 
 export enum GeoMapChartProjection {
@@ -31,6 +33,14 @@ export enum Amcharts4LineSmoothMethod {
     TENSION = "tension",  // See https://www.amcharts.com/docs/v4/chart-types/xy-chart/#Smoothed_lines
     MONOTONE_X = "monotoneX",  // See https://www.amcharts.com/docs/v4/chart-types/xy-chart/#Alternate_smoothing_algorithm
     MONOTONE_Y = "monotoneY"  // See https://www.amcharts.com/docs/v4/chart-types/xy-chart/#Alternate_smoothing_algorithm
+}
+
+export enum TrendLineType {
+
+    MEAN = "MEAN",
+
+    OLS = "OLS"
+
 }
 
 export interface IStrokeStyleProperties extends FormFieldObject {
@@ -155,6 +165,11 @@ export interface Am4PieLabelOptions extends FormFieldObject {
      * Align the labels to the left and to the right of the chart.
      */
     sliceLabelsAlignLabels: boolean;
+
+    /**
+     * Hide labels below this threshold. Can be a number (e.g., 100) or a percentage (e.g., 5%).
+     */
+    sliceLabelsHideThreshold?: string;
 }
 
 export interface Am4LabelOptions extends FormFieldObject {
@@ -407,7 +422,8 @@ export interface Am4SimpleCategoryAxisOptions extends FormFieldObject {
     /**
      * Initial Zoom.
      *
-     * The start index and the end index seperated by a comma.
+     * The start index and the end index seperated by a comma. You can use negative values to get the index from the
+     * end of the axis. E.g., `-10,-1` zooms to the last 10 items.
      */
     xAxisInitialZoom?: string;
 
@@ -1223,7 +1239,8 @@ export interface Am4CategoryDateAxisOptions extends FormFieldObject {
     /**
      * Initial Zoom.
      *
-     * The start index and the end index seperated by a comma.
+     * The start index and the end index seperated by a comma. You can use negative values to get the index from the
+     * end of the axis. E.g., `-10,-1` zooms to the last 10 items.
      */
     xAxisInitialZoom?: string;
 
@@ -1301,7 +1318,7 @@ export interface Am4ValueAxisRangeOptions extends FormFieldObject {
      *
      * The color of the ranged fill / band or line.
      */
-    axisRangeColor: IColorDef;
+    axisRangeColor?: IColorDef;
 
     /**
      * Range Opacity.
@@ -1507,6 +1524,20 @@ export interface Am4ColumnSeriesOptions extends FormFieldObject, IStrokeStylePro
     columnSeriesColor?: TidyTableColumnSelector;
 }
 
+export interface Am4DivergentAxisLabelOptions extends FormFieldObject {
+
+    /**
+     * The text to show in the left label. Use a single space to not show the label.
+     */
+    leftLabelText: string;
+
+    /**
+     * The text to show in the right label. Use a single space to not show the label.
+     */
+    rightLabelText: string;
+
+}
+
 export interface Am4DivergentBarSeriesOptions extends FormFieldObject, IStrokeStyleProperties {
 
     /**
@@ -1542,6 +1573,9 @@ export interface Am4DivergentBarSeriesOptions extends FormFieldObject, IStrokeSt
 }
 
 export interface Am4TrendLineOptions extends FormFieldObject {
+
+    trendLineType: TrendLineType;
+
     /**
      * Trend Line
      */
@@ -1636,13 +1670,13 @@ export interface Am4ChartOptions extends FormFieldObject {
      * In-place processing of the amCharts 4 chart instance.
      *
      * <pre>
-     *     ( value: any ) => void;
+     *     ( value: PublicAmchartsBase<amcharts4.Chart, options> ) => void;
      *
      *          value.getChart() is returning an instance of amChart 4 class
      *          whose name is available in chart options below.
      * </pre>
      */
-    postRenderHook?: Hook<any>;
+    postRenderHook?: Hook<PublicAmCharts4Base<any, any>>;
 
     /**
      * Called after the chart is created.
@@ -1797,6 +1831,7 @@ export type AmCharts4DivergentBarChartOptions =
     & Am4ScrollbarOptions
     & Am4ValueAxisRangeOptions
     & Am4ChartOptions
+    & Am4DivergentAxisLabelOptions
     ;
 
 /**

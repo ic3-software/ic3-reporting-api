@@ -8,3 +8,7 @@ export class ListCounterClasses {
 }
 
 export declare type ListCounterClassKey = keyof ListCounterClasses;
+
+export interface ListCounterProps {
+
+}

@@ -1,8 +1,4 @@
-import {IWidgetPublicContext} from "../PublicContext";
-
-// TOM : needs clarification
 export class HtmlBoxClasses {
-
     /**
      * Style applied to the root element.
      */
@@ -36,12 +32,10 @@ export type HtmlBoxVariant =
     "dashboardTheme"
     ;
 
-export interface HtmlBoxProps {
+export interface StyledHtmlBoxProps {
 
-    context?: IWidgetPublicContext;
+    sizing?: boolean;
+    sizingW?: number;
 
     variant?: HtmlBoxVariant;
-
-    html: string;
-
 }

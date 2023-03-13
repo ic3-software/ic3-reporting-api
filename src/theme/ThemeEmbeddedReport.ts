@@ -26,9 +26,21 @@ export interface EmbeddedReportChartOptions extends FormFieldObject {
      */
     "@params"?: IFormEventMappingArrayFieldDefType;
 
+    "@eventsOut"?: IFormEventMappingArrayFieldDefType;
+
+    /**
+     * How to export the embedded report to excel.
+     */
+    exportToExcelMethod: ExportToExcelMethod,
+
     inheritSchemaName: boolean;
     inheritCubeName: boolean;
 
     inheritDisableDefaultSchemaAuthCheck: boolean;
 
+}
+
+export enum ExportToExcelMethod {
+    SHEET_PER_WIDGET = "SHEET_PER_WIDGET",
+    ONE_TABLE = "ONE_TABLE"
 }

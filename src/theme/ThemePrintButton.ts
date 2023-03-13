@@ -31,3 +31,9 @@ export interface PrintButtonChartOptions extends FormFieldObject {
     withDialog: boolean;
 
 }
+
+export interface StyledPrintButtonDivProps {
+
+    variant: "text" | "outlined" | "contained" | string;
+
+}

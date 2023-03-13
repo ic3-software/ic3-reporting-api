@@ -4,9 +4,9 @@ export * from "./ILocalizationManager";
 export * from "./INotification";
 export * from "./IPluginDefinition";
 export * from "./IRemotePluginName";
-export * from "./IReporting";
 export * from "./IThemeManager";
 export * from "./PublicAmchartsData";
+export * from "./PublicAmCharts4Base";
 export * from "./ITidyTableTransformation"
 export * from "./ITidyTableTransformationManager"
 export * from "./ITypes"
@@ -15,7 +15,6 @@ export * from "./IWidgetDefaultsManager";
 export * from "./IWidgetVariantManager";
 export * from "./IWidgetManager";
 export * from "./LazyTreeView";
-export * from "./Loader";
 export * from "./Logger";
 export * from "./PublicCommon";
 export * from "./PublicContext";

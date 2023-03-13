@@ -128,3 +128,9 @@ export interface FilterTreeChartOptions extends FilterTidyTableChartOptions {
      */
     autoCompleteLimitChips: number;
 }
+
+export interface FilterTreeProps {
+    printing: boolean;
+    variant?: string;
+    size: 'small' | 'medium';
+}

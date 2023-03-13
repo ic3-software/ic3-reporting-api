@@ -103,6 +103,27 @@ After definition, the `Rounded` variant will be available in the dropdown of the
 For additional information check [ic3-demo-plugin-theme](https://github.com/ic3-software/ic3-demo-plugin-theme)
 in GitHub.
 
+### Chart Variants
+
+You can also define variants for charts. For example, the code below defines a variant for the donut chart:
+```ts
+theme.components["amCharts4.AmCharts4DonutChart"]: {
+    variants: [
+        {
+            props: {variant: "pieChart"},
+            defaultProps: {
+                donutInnerRadius: 0,
+                labelText: ' '
+            }
+        }
+    ]
+}
+```
+
+Now, the user can select the `pieChart` variant. This changes the default options to hide the center text and set the inner radius to 0. This results in a pie-chart. 
+
+The [ic3-demo-plugin-theme](https://github.com/ic3-software/ic3-demo-plugin-theme) project on our GitHub page includes this example as well. 
+
 ### Widget Options: Default Values
 
 A theme is able to (re)define the default values of the widget options visible in the widget editor. For example,

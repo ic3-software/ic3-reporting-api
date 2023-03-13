@@ -1,39 +1,57 @@
-import {ComponentsOverrides, ComponentsVariants} from "@mui/material";
+import {ComponentsOverrides, ComponentsVariants, Interpolation, Theme} from "@mui/material";
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {IWidgetLayoutDefinition} from "./PublicLayout";
 import {IThemeWidgetDefaults} from "./IThemeManager";
 import {AlertDialogClassKey} from "./theme/ThemeAlertDialog";
 import {AppClassKey, AppDivProps} from "./theme/ThemeApp";
 import {ErrorRendererClassKey} from "./theme/ThemeErrorRenderer";
-import {HtmlBoxClassKey, HtmlBoxProps} from "./theme/ThemeHtmlBox";
+import {HtmlBoxClassKey, StyledHtmlBoxProps} from "./theme/ThemeHtmlBox";
 import {LayoutClassKey} from "./theme/ThemeLayout";
 import {LayoutPageClassKey} from "./theme/ThemeLayoutPage";
 import {ReportAppBarClassKey} from "./theme/ThemeReportAppBar";
-import {WidgetBoxClassKey} from "./theme/ThemeWidgetBox";
+import {WidgetBoxClassKey, WidgetBoxDivProps} from "./theme/ThemeWidgetBox";
 import {WidgetBoxContentMessageClassKey} from "./theme/ThemeWidgetBoxContentMessage";
 import * as React from "react";
 import {ReactElement} from "react";
 import {TypographyStyleOptions} from "@mui/material/styles/createTypography";
 import {Property} from "csstype";
-import {FilterButtonsChartOptions, FilterButtonsClassKey} from "./theme/ThemeFilterButtons";
-import {FilterSliderChartOptions, FilterSliderClassKey} from "./theme/ThemeFilterSlider";
+import {FilterButtonsClassKey, FilterButtonsProps} from "./theme/ThemeFilterButtons";
+import {FilterSliderClassKey, FilterSliderProps} from "./theme/ThemeFilterSlider";
 import {GoogleMarkerVariantChartOptions} from "./theme/ThemeGoogleMarker";
 import {IPublicContext} from "./PublicContext";
 import {TableClassKey, TableProps} from "./theme/ThemeTable";
 import {PivotTableClassKey, PivotTableProps} from "./theme/ThemePivotTable";
 import {Components} from "@mui/material/styles/components";
 import {FilterPanelClassesKey, FilterPanelProps} from "./theme/ThemeFilterPanel";
-import {FilterCheckboxRadioChartOptions, FilterCheckboxRadioClassKey} from "./theme/ThemeFilterCheckboxRadio";
+import {FilterCheckboxProps, FilterCheckboxRadioClassKey} from "./theme/ThemeFilterCheckboxRadio";
 import {ReportAppLeftPanelClassKey} from "./theme/ThemeReportAppLeftPanel";
-import {FilterTreeChartOptions, FilterTreeClassKey} from "./theme/ThemeFilterTree";
-import {DatePickerChartOptions, DatePickerClassKey} from "./theme/ThemeDatePicker";
-import {FilterAutocompleteChartOptions, FilterAutocompleteClassesKey} from "./theme/ThemeFilterAutocomplete";
+import {FilterTreeClassKey, FilterTreeProps} from "./theme/ThemeFilterTree";
+import {DatePickerClassKey, FilterDatePickerProps} from "./theme/ThemeDatePicker";
+import {FilterAutocompleteClassesKey, FilterAutocompleteProps} from "./theme/ThemeFilterAutocomplete";
 import {AppMenuIconClassKey, AppMenuIconProps} from "./theme/ThemeAppMenuIcon";
 import {QueryBuilderNodeClassKey, QueryBuilderNodeProps} from "./theme/ThemeQueryBuilderNode";
 import {KpiCardClassKey, KpiCardProps} from "./theme/ThemeKpiCard";
-import {ListCounterClassKey} from "./theme/ThemeListCounter";
-import {LazyTreeClassesClassKey} from "./theme/ThemeLazyTreeClasses";
-import {PrintButtonChartOptions, PrintButtonClassKey} from "./theme/ThemePrintButton";
+import {ListCounterClassKey, ListCounterProps} from "./theme/ThemeListCounter";
+import {LazyTreeClassesClassKey, LazyTreeProps} from "./theme/ThemeLazyTreeClasses";
+import {PrintButtonClassKey, StyledPrintButtonDivProps} from "./theme/ThemePrintButton";
+import {CodeMirrorClassesKey} from "./theme/ThemeCodeMirror";
+import {WidgetTemplateChartOptions} from "./PublicTemplates";
+import {WidgetFilteredByClassesKey} from "./theme/ThemeWidgetFilteredBy";
+
+export type Ic3ChartVariants = {
+    [Name in keyof WidgetTemplateChartOptions]?: Array<{
+        props: { variant: string };
+        /**
+         * Default props define the default options for the widget.
+         */
+        defaultProps: Partial<WidgetTemplateChartOptions[Name]>;
+    }>;
+};
+
+export type Ic3WidgetComponentVariants = Array<{
+    props: { variant: string };
+    style: Interpolation<{ theme: Theme }>;
+}>;
 
 export interface INoSchemaRendererOptions {
 
@@ -62,6 +80,26 @@ export type ThemeFormatters = {
     emptyCell: string;
 
     amCharts4: Amcharts4ThemeDateFormatter;
+
+    /**
+     * When using #a in a formatter, large values get divided and a letter gets added. Here, you can specify the number
+     * to divide by and which letter to add. E.g., 1.000 and 'k' divides numbers between 1.000 and 1.000.000 by a
+     * thousand and adds an 'k'.
+     */
+    bigNumberPrefixes?: {
+        number: number;
+        suffix: string;
+    }[];
+
+    /**
+     * When using #a in a formatter, small values get multiplied and a letter gets added. Here, you can specify the
+     * multiplier and the letter. For example, { "number": 1e-6, "suffix": "μ" }, multiplies numbers between 1e-6 and
+     * 1e-9 by 1e6 and adds the letter μ.
+     */
+    smallNumberPrefixes?: {
+        number: number;
+        suffix: string;
+    }[];
 
 }
 
@@ -118,18 +156,6 @@ type Amcharts4ThemeDateFormatter = {
 
 type DeepPartial<T> = {
     [P in keyof T]?: T[P] extends Record<string, unknown> ? DeepPartial<T[P]> : T[P];
-}
-
-type Amcharts4ThemeDateFormatterOptions = DeepPartial<Amcharts4ThemeDateFormatter>;
-
-export type ThemeFormattersOptions = {
-
-    text?: ThemeTextFormattersOptions,
-
-    emptyCell?: string;
-
-    amCharts4?: Amcharts4ThemeDateFormatterOptions;
-
 }
 
 export interface ic3Palette {
@@ -294,7 +320,7 @@ export interface ic3PaletteOptions {
 
     onHover?: (color: Property.Color) => Property.Color;
 
-    mdx?:  Partial<ic3Palette['mdx']>;
+    mdx?: Partial<ic3Palette['mdx']>;
 
 }
 
@@ -362,6 +388,7 @@ export interface ic3Theme {
         closeQueryIcon: JSX.Element;  // Icon for user to close the query (if it's running long)
         interactionModeSelection: JSX.Element;
         interactionModeDrilldown: JSX.Element;
+        widgetFilterActive: React.ReactNode | undefined;  // Shown in widget header when the widget is filtered.
 
         // Autocomplete / dropdown filter
         autocompleteClearIcon: JSX.Element | undefined;
@@ -510,7 +537,7 @@ export interface ic3ThemeOptions {
      */
     waitForFonts?: () => Promise<any>;
 
-    formatter?: ThemeFormattersOptions;
+    formatter?: DeepPartial<ThemeFormatters>;
 
     icons?: Partial<ic3Theme['icons']>;
 
@@ -614,7 +641,28 @@ export interface ic3ThemeOptions {
          * Default: 25.
          */
         viewPortOffsetLeft?: number;
-    }
+    },
+
+    amCharts4?: {
+        icons?: {
+            zoomOutButton?: {
+                /**
+                 * The radius of the corners
+                 * tl – Top-left corner
+                 * tr – Top-right corner
+                 * bl – Bottom-left corner
+                 * br – Bottom-right corner
+                 */
+                cornerRadius: [number, number, number, number];
+                fill: string;  // Color of the icon
+                stroke: string;  // Color of the stroke of the icon
+                strokeWidth: number;  // Width of the stroke
+                hoverColor: string;  // Color when hovering
+                downColor: string;  // Color when mouse down on the button
+            }
+        },
+    },
+
 }
 
 
@@ -644,10 +692,6 @@ interface ic3BaseComponents {
     FilterPanel?: {
         variants?: ComponentsVariants['FilterPanel'];
         styleOverrides?: ComponentsOverrides["FilterPanel"];
-    }
-    SingleFilterPanel?: {
-        variants?: ComponentsVariants['SingleFilterPanel'];
-        styleOverrides?: ComponentsOverrides["SingleFilterPanel"];
     }
     FilterSlider?: {
         styleOverrides?: ComponentsOverrides["FilterSlider"];
@@ -716,6 +760,60 @@ interface ic3BaseComponents {
     PrintButton?: {
         styleOverrides?: ComponentsOverrides["PrintButton"];
         variants?: ComponentsVariants["PrintButton"];
+    }
+    CodeMirror?: {
+        styleOverrides?: ComponentsOverrides["CodeMirror"];
+    }
+    WidgetBoxFilteredByTooltip?: {
+        styleOverrides?: ComponentsOverrides["WidgetBoxFilteredByTooltip"];
+    }
+    "amCharts4.AmCharts4BubbleChart"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4BubbleChart"]
+    }
+    "amCharts4.AmCharts4ComboChart"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4ComboChart"]
+    }
+    "amCharts4.AmCharts4RegularAreaChart"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4RegularAreaChart"]
+    }
+    "amCharts4.AmCharts4RegularBarChart"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4RegularBarChart"]
+    }
+    "amCharts4.AmCharts4RegularColumnChart"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4RegularColumnChart"]
+    }
+    "amCharts4.AmCharts4RegularLineChart"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4RegularLineChart"]
+    }
+    "amCharts4.AmCharts4ScatterPlot"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4ScatterPlot"]
+    }
+    "amCharts4.AmCharts4StackedAreaChart"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4StackedAreaChart"]
+    }
+    "amCharts4.AmCharts4StackedBarChart"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4StackedBarChart"]
+    }
+    "amCharts4.AmCharts4StackedColumnChart"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4StackedColumnChart"]
+    }
+    "amCharts4.AmCharts4DonutChart"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4DonutChart"]
+    }
+    "amCharts4.AmCharts4GaugeChart"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4GaugeChart"]
+    }
+    "amCharts4.AmCharts4Histogram"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4Histogram"]
+    }
+    "amCharts4.AmCharts4SankeyDiagram"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4SankeyDiagram"]
+    }
+    "amCharts4.AmCharts4TreeMap"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4TreeMap"]
+    }
+    "amCharts4.AmCharts4GeoMap"?: {
+        variants?: Ic3ChartVariants["amCharts4.AmCharts4GeoMap"]
     }
 }
 
@@ -807,7 +905,6 @@ declare module '@mui/material/styles/overrides' {
         FilterButtons: FilterButtonsClassKey;
         LazyTreeViewStyled: LazyTreeClassesClassKey;
         FilterPanel: FilterPanelClassesKey;
-        SingleFilterPanel: FilterPanelClassesKey;
         FilterSlider: FilterSliderClassKey;
         ListCounter: ListCounterClassKey;
         FilterTree: FilterTreeClassKey;
@@ -836,6 +933,10 @@ declare module '@mui/material/styles/overrides' {
 
         PrintButton: PrintButtonClassKey;
 
+        CodeMirror: CodeMirrorClassesKey;
+
+        WidgetBoxFilteredByTooltip: WidgetFilteredByClassesKey;
+
     }
 
 }
@@ -844,24 +945,23 @@ declare module '@mui/material/styles/props' {
 
     interface ComponentsPropsList {
 
-        FilterCheckbox: FilterCheckboxRadioChartOptions;
-        FilterButtons: FilterButtonsChartOptions;
-        LazyTreeViewStyled: Record<never, any>;
+        FilterCheckbox: FilterCheckboxProps;
+        FilterButtons: FilterButtonsProps;
+        LazyTreeViewStyled: LazyTreeProps;
         FilterPanel: FilterPanelProps;
-        SingleFilterPanel: Record<never, any>;
-        FilterSlider: FilterSliderChartOptions;
-        ListCounter: Record<never, any>;
-        FilterTree: FilterTreeChartOptions;
-        FilterDatePicker: DatePickerChartOptions;
-        FilterAutocomplete: FilterAutocompleteChartOptions;
+        FilterSlider: FilterSliderProps;
+        ListCounter: ListCounterProps;
+        FilterTree: FilterTreeProps;
+        FilterDatePicker: FilterDatePickerProps;
+        FilterAutocomplete: FilterAutocompleteProps;
 
-        HtmlBox: HtmlBoxProps;
+        HtmlBox: StyledHtmlBoxProps;
         KpiCard: KpiCardProps;
 
         PivotTable: PivotTableProps;
         Table: TableProps;
 
-        WidgetBox: Record<never, any>;
+        WidgetBox: WidgetBoxDivProps;
 
         GoogleMarker: GoogleMarkerVariantChartOptions;
 
@@ -871,7 +971,7 @@ declare module '@mui/material/styles/props' {
 
         QueryBuilderNode: QueryBuilderNodeProps;
 
-        PrintButton: PrintButtonChartOptions;
+        PrintButton: StyledPrintButtonDivProps;
     }
 
 }

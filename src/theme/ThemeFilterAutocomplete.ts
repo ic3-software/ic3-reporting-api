@@ -59,3 +59,5 @@ export interface FilterAutocompleteChartOptions extends FilterTidyTableChartOpti
     placeholderText?: string;
 
 }
+
+export type FilterAutocompleteProps = Pick<FilterAutocompleteChartOptions, 'variant' | 'size'> & { hideInput?: boolean };

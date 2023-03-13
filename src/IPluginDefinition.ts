@@ -32,6 +32,9 @@ export interface IPluginDefinition {
 
     registerTidyTableTransformations?: (logger: ILogger, manager: ITidyTableTransformationManager) => void;
 
+    /**
+     * Register widget defaults for all themes.
+     */
     registerWidgetDefaults?: (logger: ILogger, theme: Theme, manager: IWidgetDefaultsManager) => void;
 
     /**

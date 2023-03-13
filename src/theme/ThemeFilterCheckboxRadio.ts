@@ -60,3 +60,8 @@ export interface FilterCheckboxRadioChartOptions extends FilterTidyTableChartOpt
     columns?: number;
 
 }
+
+export interface FilterCheckboxProps {
+    variant?: string;
+    printing: boolean;
+}

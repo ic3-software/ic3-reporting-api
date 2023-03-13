@@ -166,3 +166,7 @@ export interface WidgetBoxOptions {
     rectangle: IWidgetRectangle;
 
 }
+
+export interface WidgetBoxDivProps {
+    variant: string;
+}

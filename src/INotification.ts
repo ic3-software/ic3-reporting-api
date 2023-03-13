@@ -6,6 +6,8 @@ export type AppNotificationType =
     "print-report" |
     "print-report-without-state" |
     "print-report-in-browser" |
+    "clear-selection-all-widgets" |
+    "initialize-selection-all-widgets" |
     "save-state-to-localstorage" |
     "restore-state-from-localstorage" |
     "save-ownprops-to-localstorage" |
@@ -116,6 +118,19 @@ export interface RestoreWidgetOwnPropsFromLocalStorageNotification extends IAppN
 
 }
 
+export interface ClearSelectionAllWidgetsNotification extends IAppNotification {
+
+    readonly type: "clear-selection-all-widgets";
+
+}
+
+export interface InitializeSelectionAllWidgetsNotification extends IAppNotification {
+
+    readonly type: "initialize-selection-all-widgets";
+
+}
+
+
 export type AppNotification =
     AppEditReportNotification |
     AppPrintReportDialogNotification |
@@ -127,7 +142,9 @@ export type AppNotification =
     SaveOwnPropsToLocalStorageNotification |
     RestoreWidgetOwnPropsFromLocalStorageNotification |
     SaveWidgetOwnPropsToLocalStorageNotification |
-    RestoreOwnPropsFromLocalStorageNotification
+    RestoreOwnPropsFromLocalStorageNotification |
+    InitializeSelectionAllWidgetsNotification |
+    ClearSelectionAllWidgetsNotification
     ;
 
 export interface IAppNotificationToken {

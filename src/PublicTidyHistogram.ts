@@ -10,8 +10,26 @@ export enum TidyHistogramBucketFormat {
 }
 
 export enum TidyHistogramBucketType {
+    /**
+     * [from, to)
+     */
     LEFT_CLOSED = 'leftClosed',
+
+    /**
+     * (from, to]
+     */
     RIGHT_CLOSED = 'rightClosed'
+}
+
+export enum HistogramBinType {
+    AUTOMATIC_WITH_BINS = "automatic",
+    USER_DEFINED = "userDefined",
+
+    /**
+     * Makes sure that the automatic buckets do not consist of floating point numbers with many decimals.
+     * E.g., it uses [0, 0.5, 1] instead of [0.001, 0.4955, 0.99]. User cannot set the number of bins however.
+     */
+    INTERVAL_STEPS = "roundedIntervals"
 }
 
 export interface TidyHistogramOptions extends FormFieldObject {
@@ -21,7 +39,7 @@ export interface TidyHistogramOptions extends FormFieldObject {
      *
      * Automatically create buckets or define them yourself.
      */
-    binType: "automatic" | "userDefined"
+    binType: HistogramBinType;
 
     /**
      * Bucket Count.
@@ -29,6 +47,11 @@ export interface TidyHistogramOptions extends FormFieldObject {
      * The number of buckets to auto generate.
      */
     numberOfBins: number;
+
+    /**
+     * Number of buckets per interval step.
+     */
+    prettyIntervalCount: number;
 
     /**
      * Custom Buckets.
@@ -74,24 +97,31 @@ export const TidyHistogramMetaOptions = (group?: string, hideSort = false): Form
             fieldType: "option",
             editorConf: {
                 allowDuplicate: true,
-                optionValues: ["automatic", "userDefined"],
+                optionValues: Object.values(HistogramBinType),
                 optionName: "HistogramBinType"
             },
-            defaultValue: "automatic"
+            defaultValue: HistogramBinType.AUTOMATIC_WITH_BINS
         },
         'numberOfBins': {
             group,
             fieldType: "number",
             defaultValue: 10,
             dependsOn: "binType",
-            dependsOnVisibility: dependsOnValue => dependsOnValue === "automatic"
+            dependsOnVisibility: dependsOnValue => dependsOnValue === HistogramBinType.AUTOMATIC_WITH_BINS
         },
         'customBins': {
             group,
             fieldType: "json",
             defaultValue: '[{"to": 10},{"from":10,"to":100},{"from":100}]',
             dependsOn: "binType",
-            dependsOnVisibility: dependsOnValue => dependsOnValue === "userDefined"
+            dependsOnVisibility: dependsOnValue => dependsOnValue === HistogramBinType.USER_DEFINED
+        },
+        'prettyIntervalCount': {
+            group,
+            fieldType: "number",
+            defaultValue: 4,
+            dependsOn: "binType",
+            dependsOnVisibility: dependsOnValue => dependsOnValue === HistogramBinType.INTERVAL_STEPS
         },
         'sortBins': {
             group,

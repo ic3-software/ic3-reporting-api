@@ -631,3 +631,8 @@ export interface TreeRowPropsTreeData {
     hasChildren: boolean;
     isSelected: boolean;
 }
+
+/**
+ * Function filtering the rows of a column / table. Returns true if the row is included, false if the row is excluded.
+ */
+export type TidyRowFilter = (rowIdx: number) => boolean;

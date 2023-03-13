@@ -20,3 +20,7 @@ export class LazyTreeClasses {
 }
 
 export declare type LazyTreeClassesClassKey = keyof LazyTreeClasses;
+
+export interface LazyTreeProps {
+
+}
