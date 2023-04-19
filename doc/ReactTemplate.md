@@ -1,6 +1,39 @@
 ## React Widget Template
 
-A React [widget template](./WidgetTemplate.md) defines a new widget implemention using React. You can use Material-UI in the widget definition, because the icCube dashboards application already loads it. You can share and load the library using Webpack Module Federation.
+A React [widget template](./WidgetTemplate.md) defines a new widget implemention using React. You can use Material-UI in
+the widget definition, because the icCube dashboards application already loads it. You can share and load the library
+using Webpack Module Federation.
+
+### reactEl
+
+On top of the common meta definition this kind of template is responsible to implement the `reactEl` hook:
+
+```typescript
+export interface IPublicWidgetReactTemplateDefinition<T extends FormFieldObject> extends IPublicCommonWidgetTemplateDefinition {
+
+    reactComponent: true;
+
+    /**
+     * The React Hook component  (function with props as parameter)
+     */
+    reactEl?: React.FunctionComponent<{
+        wContext: IWidgetPublicContext,
+        data: IWidgetTemplateTidyData,
+        options: OPTIONS,
+        widgetHeader: string
+    }>;
+}
+```
+
+The React element will be re-rendered while editing it (e.g., new options being applied, new query result available)
+as well as when reacting to end-user interactions (e.g., filter being applied, click row of a table updating its
+selection, etc.).
+
+Please refer to this [file](./WidgetTemplateDefinition.md) for more details about the widget template definition.
+
+### jsCode (deprecated as of v8.4.0)
+
+_The `jsCode` method has been deprecated in favor of the `reactEl` as described above._
 
 On top of the common meta definition this kind of template is responsible to implement the `jsCode` method:
 
@@ -28,11 +61,7 @@ export interface IPublicReactChartTemplate<T extends FormFieldObject> {
 }
 ```
 
-The React element will be re-rendered while editing it (e.g., new options being applied, new query result available)
-as well as when reacting to end-user interactions (e.g., filter being applied, click row of a table updating its
-selection, etc.).
-
-Please refer to this [file](./WidgetTemplateDefinition.md) for more details about the widget template definition.
+### Example
 
 For additional and up-to-date information check in GitHub the working example
 [ic3-demo-plugin-react](https://github.com/ic3-software/ic3-demo-plugin-react).

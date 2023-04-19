@@ -36,5 +36,34 @@ export enum QueryType {
     HTTP_CSV = "HTTP_CSV"
 }
 
+export interface IWidgetBoxIconsDefinition {
+    disableQueryRunning?: boolean;
+    disableQueryFilter?: boolean;
+    disableQueryCellOnError?: boolean;
+    disableQueryMaxRowsReached?: boolean;
+    disableDrilldown?: boolean;
+    disableHelp?: boolean;
+    disableInteractionSwitch?: boolean;
+}
+
+export type IUserMenuOptions =
+    'editGadget' |
+    'editWidget' |
+    'deleteWidget' |
+    'deleteGadget' |
+    'convertGadgetToWidget' |
+    'addEventToAllQueries' |
+    'migrateWidget' |
+    'maximize' |
+    'clearSorting' |
+    'showData' |
+    'resetQuery' |
+    'clearState' |
+    'clearSelection' |
+    'toInitialSelectionOnEditing' |
+    'toInitialSelection' |
+    'export_xls' |
+    'export_png' |
+    'export_svg';
 
 

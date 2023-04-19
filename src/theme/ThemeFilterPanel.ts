@@ -75,6 +75,8 @@ export class FilterPanelClasses {
      */
     static readonly inputField = "ic3FilterPanel-filterInputfield";
 
+    static readonly dateTimePicker = "ic3FilterPanel-dateTimePicker";
+
     /**
      * A div with the displayed values for the value selector in preview mode
      */

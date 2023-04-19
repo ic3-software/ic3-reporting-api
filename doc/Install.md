@@ -1,4 +1,4 @@
-## icCube Dashboards Installation
+## Installation & Plugin Configuration
 
 In the Dashboards use case of the Admin console, use the top right wrench icon or drag & drop the ZIP file directly into
 the table:

@@ -16,8 +16,8 @@ export interface ISeriesValues {
     values: ITidyNumericColumn;
     colors?: ITidyColorColumn;
 
-    // Used to identify the parent series ID for trend columns.
-    parentSeriesId?: string;
+    // Used to identify the parent series value col for trend columns.
+    parentValueColIdx?: number;
 
 }
 
@@ -42,11 +42,8 @@ export class PublicAmchartsData {
         this.table = table;
     }
 
-    static getSeriesId(seriesId: number, rowIdx?: number, group?: ITidyColumn): string {
-        if (group && rowIdx != null) {
-            return group.getAmcharts4GroupKey(rowIdx) + "." + String(seriesId);
-        }
-        return IAmcharts4DataKey.NULL + "." + String(seriesId);
+    static getSeriesId(groupKey: string, valueColIdx: number): string {
+        return groupKey + "." + String(valueColIdx);
     }
 
     /**
@@ -96,7 +93,7 @@ export class PublicAmchartsData {
                     return;
                 }
 
-                const seriesKey = groupKey + "." + String(idx);
+                const seriesKey = PublicAmchartsData.getSeriesId(groupKey, idx);
                 let item = itemControl.get(seriesKey);
                 if (item == null) {
                     const newItem = seriesControl.create(seriesKey, groupKey, seriesKey + "v", seriesKey + "c", onValue);
@@ -162,7 +159,7 @@ export class PublicAmchartsData {
      * Call a function on each series and it's column
      * @param itemControl map keeping track of current series in the chart.
      */
-    forEachSeries<T>(itemControl: Map<string, T>, callback: (col: ITidyNumericColumn, seriesId: string, series: T)=>void): void {
+    forEachSeries<T>(itemControl: Map<string, T>, callback: (col: ITidyNumericColumn, seriesId: string, series: T) => void): void {
 
         this.updateSeries(itemControl, {
             create: () => {

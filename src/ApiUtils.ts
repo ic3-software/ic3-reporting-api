@@ -63,8 +63,8 @@ export class ApiUtils {
             return {
 
                 apiVersion: new ReportingVersion(
-                    "8.4.0-alpha.2" || "-",
-                    "Mon, 13 Mar 2023 14:55:27 GMT" || "-"
+                    "8.4.0" || "-",
+                    "Wed, 19 Apr 2023 07:38:04 GMT" || "-"
                 ),
 
                 ...definition,
@@ -103,7 +103,7 @@ export class ApiUtils {
         return {
 
             ...wrapped,
-            ...definition,
+            ...definition as any /* since Typescript 5.0.2 */,
 
             resolveDefinition: undefined,
             jsCode: wrapped.jsCode,

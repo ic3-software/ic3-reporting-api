@@ -9,12 +9,24 @@ export class DatePickerClasses {
      */
     static readonly root = "ic3DatePicker-root";
 
+
+    static readonly rowDirection = "ic3DatePicker-row-direction";
+
+    static readonly columnDirection = "ic3DatePicker-column-direction";
+
     /**
      * + Mui DatePicker and/or DateRangePicker classes
      */
+    static readonly fieldSeparator = "ic3DatePicker-fieldSeparator";
 }
 
 export declare type DatePickerClassKey = keyof DatePickerClasses;
+
+export enum DatePickerRangeDirection {
+    auto = "AUTO",
+    horizontal = "HORIZONTAL",
+    vertical = "VERTICAL",
+}
 
 /**
  * Date Picker Options (fields of the "Chart" tab in the widget editor).
@@ -29,16 +41,16 @@ export declare type DatePickerClassKey = keyof DatePickerClasses;
 export interface DatePickerChartOptions extends FormFieldObject {
 
     /**
-     * Helper Text.
-     *
-     * Display this text when the datepicker is empty.
+     * The label content (i.e Date)
      */
-    helperText?: string;
+    label?: string;
 
     /**
-     * Text to show when the filter is empty.
+     * Helper Text.
+     *
+     * A text below the date picker to help the user when entering the date
      */
-    placeholderText? : string;
+    dateHelperText?: string;
 
     /**
      * Input Date Format.
@@ -108,17 +120,18 @@ export interface DatePickerChartOptions extends FormFieldObject {
      */
     initialEndDate?: string;
 
-    /**
-     * Range Picker: Helper Text (End).
-     *
-     * Placeholder value for the end of the range. The widget shows this when the end of the range is empty.
-     */
-    helperEndText?: string;
 
     /**
-     * Text to show when the second date picker is empty.
+     * The label content for the end date
      */
-    placeholderTextEnd? : string;
+    endLabel?: string;
+
+    // /**
+    //  * Helper Text for the end date
+    //  *
+    //  * A text below the date picker to help the user when entering the date
+    //  */
+    // dateHelperEndText?: string;
 
     /**
      * Range Picker: Center Text.
@@ -143,6 +156,12 @@ export interface DatePickerChartOptions extends FormFieldObject {
      */
     rangeToUniqueName: string;
 
+    /**
+     * The direction of the Picker, horizontal/vertical/auto
+     *
+     * "auto" will choose the direction depending on the ration width/height > 0.9
+     */
+    rangeDirection: DatePickerRangeDirection;
     /**
      * Dates.
      *

@@ -27,6 +27,7 @@ export class FilterSliderClasses {
      * Slot for Selection Label (below the slider)
      */
     static readonly selectionLabel = "ic3FilterSlider-SelectionLabel";
+    static readonly emptySelection = "ic3FilterSlider-EmptySelection";
 
     /**
      * root modifiers for horizontal or vertical slider

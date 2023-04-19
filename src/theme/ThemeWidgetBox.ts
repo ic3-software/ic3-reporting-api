@@ -90,6 +90,8 @@ export class WidgetBoxClasses {
      * attribute for the root div containing the widgetId
      */
     static readonly widgetIdAttribute: string = "data-widget-id";
+
+    static readonly nsIdAttribute: string = "data-ns-id";
 }
 
 export declare type WidgetBoxClassKey = keyof WidgetBoxClasses;

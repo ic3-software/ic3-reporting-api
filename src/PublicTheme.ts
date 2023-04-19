@@ -25,7 +25,12 @@ import {Components} from "@mui/material/styles/components";
 import {FilterPanelClassesKey, FilterPanelProps} from "./theme/ThemeFilterPanel";
 import {FilterCheckboxProps, FilterCheckboxRadioClassKey} from "./theme/ThemeFilterCheckboxRadio";
 import {ReportAppLeftPanelClassKey} from "./theme/ThemeReportAppLeftPanel";
-import {FilterTreeClassKey, FilterTreeProps} from "./theme/ThemeFilterTree";
+import {
+    FilterTreeClassKey,
+    FilterTreePopOverClassKey,
+    FilterTreePopOverProps,
+    FilterTreeProps
+} from "./theme/ThemeFilterTree";
 import {DatePickerClassKey, FilterDatePickerProps} from "./theme/ThemeDatePicker";
 import {FilterAutocompleteClassesKey, FilterAutocompleteProps} from "./theme/ThemeFilterAutocomplete";
 import {AppMenuIconClassKey, AppMenuIconProps} from "./theme/ThemeAppMenuIcon";
@@ -37,6 +42,7 @@ import {PrintButtonClassKey, StyledPrintButtonDivProps} from "./theme/ThemePrint
 import {CodeMirrorClassesKey} from "./theme/ThemeCodeMirror";
 import {WidgetTemplateChartOptions} from "./PublicTemplates";
 import {WidgetFilteredByClassesKey} from "./theme/ThemeWidgetFilteredBy";
+import {IUserMenuOptions, IWidgetBoxIconsDefinition} from "./ITypes";
 
 export type Ic3ChartVariants = {
     [Name in keyof WidgetTemplateChartOptions]?: Array<{
@@ -407,6 +413,11 @@ export interface ic3Theme {
 
     };
 
+    palette: {
+        darken: (color: string, factor: number) => string;
+        lighten: (color: string, factor: number) => string;
+    }
+
     table: Record<TableRowHeightOptions, { rowHeight: number; headerRowHeight: number }>;
 
     treeFilter: {
@@ -420,8 +431,12 @@ export interface ic3Theme {
 
     userMenu: {
         disableUserMenuEdition: boolean;
-        userMenuFilter?: (options: string[], templateDef?: IPublicWidgetTemplateDefinition<any>) => string[];
+        userMenuFilter?: (options: IUserMenuOptions[], templateDef?: IPublicWidgetTemplateDefinition<any>) => IUserMenuOptions[];
     }
+
+    widgetIcons?: {
+        disableWidgetIconsEdition?: boolean
+    } & IWidgetBoxIconsDefinition,
 
     widgetBox: {
         contentOffset: {
@@ -558,10 +573,23 @@ export interface ic3ThemeOptions {
         options?: google.maps.MapOptions;
     }
 
+    /**
+     * Change the settings for the user menu for some or all widgets.
+     */
     userMenu?: {
+        /**
+         * Set to true to make the user menu option readonly (non-editable) for all widgets.
+         */
         disableUserMenuEdition?: boolean;
-        userMenuFilter?: (options: string[], templateDef?: IPublicWidgetTemplateDefinition<any>) => string[];
+        /**
+         * Filter the items in the user menu. Return an empty array to disable and not show the user menu.
+         */
+        userMenuFilter?: (options: IUserMenuOptions[], templateDef?: IPublicWidgetTemplateDefinition<any>) => IUserMenuOptions[];
     }
+
+    widgetIcons?: {
+        disableWidgetIconsEdition?: boolean
+    } & IWidgetBoxIconsDefinition,
 
     widgetBox?: {
         contentOffset: {
@@ -704,6 +732,10 @@ interface ic3BaseComponents {
     FilterTree?: {
         styleOverrides?: ComponentsOverrides["FilterTree"];
         variants?: ComponentsVariants["FilterTree"];
+    },
+    FilterTreePopOver?: {
+        styleOverrides?: ComponentsOverrides["FilterTreePopOver"];
+        variants?: ComponentsVariants["FilterTreePopOver"];
     }
     FilterDatePicker?: {
         styleOverrides?: ComponentsOverrides["FilterDatePicker"];
@@ -908,6 +940,7 @@ declare module '@mui/material/styles/overrides' {
         FilterSlider: FilterSliderClassKey;
         ListCounter: ListCounterClassKey;
         FilterTree: FilterTreeClassKey;
+        FilterTreePopOver: FilterTreePopOverClassKey;
         FilterDatePicker: DatePickerClassKey;
         FilterAutocomplete: FilterAutocompleteClassesKey;
 
@@ -952,6 +985,7 @@ declare module '@mui/material/styles/props' {
         FilterSlider: FilterSliderProps;
         ListCounter: ListCounterProps;
         FilterTree: FilterTreeProps;
+        FilterTreePopOver: FilterTreePopOverProps;
         FilterDatePicker: FilterDatePickerProps;
         FilterAutocomplete: FilterAutocompleteProps;
 

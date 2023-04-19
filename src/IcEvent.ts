@@ -51,3 +51,20 @@ export interface TidyActionEvent extends PublicIcEvent {
     readonly tidyIdxHint: number
 
 }
+
+export enum WidgetNotificationType {
+
+    doAllEvents = "ic3doAllEvents",
+
+    doExportToExcel = "ic3exportToExcel",
+    doExportToPNG = "ic3exportToPNG",
+    doExportToSVG = "ic3exportToSVG",
+
+    toInitialSelection = 'ic3toInitialSelection',
+
+    clearSelection = "ic3clearSelection",
+
+    doTemplateUserMenuAction = "ic3doTemplateUserMenuAction",
+}
+
+export type WidgetNotificationHandler = { type: WidgetNotificationType; handler: (type: WidgetNotificationType, event: PublicIcEvent) => void }

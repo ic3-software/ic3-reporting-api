@@ -245,10 +245,6 @@ export interface ITidyTableInteractionEvent {
      */
     firesEvent(actionName: string): boolean;
 
-    /**
-     * register a callback that will be called each time an event is send to the channel bound to the actionName
-     */
-    onNotification(actionName: string, callback: (event: any) => void): void;
 }
 
 export interface ITidyTableInteraction extends ITidyTableInteractionSelection, ITidyTableInteractionEvent, ITidyTableDrilldown {

@@ -12,12 +12,12 @@ export class FilterTreeClasses extends LazyTreeClasses {
     /**
      *  Style applied to the tree item without control icons
      */
-    static simpleItemLabel: "ic3TreeFilter-simpleItemLabel";
+    static readonly simpleItemLabel = "ic3TreeFilter-simpleItemLabel";
 
     /**
      *  Style applied to the tree item witht control icons
      */
-    static itemLabelWithIcons: "ic3TreeFilter-itemLabelWithIcons";
+    static readonly itemLabelWithIcons = "ic3TreeFilter-itemLabelWithIcons";
 
     /**
      * + Ic3GlobalClasses
@@ -26,7 +26,12 @@ export class FilterTreeClasses extends LazyTreeClasses {
 
 }
 
+export class FilterTreePopOverClasses {
+
+}
+
 export declare type FilterTreeClassKey = keyof FilterTreeClasses;
+export declare type FilterTreePopOverClassKey = keyof FilterTreePopOverClasses;
 
 export type FilterFireEventMode =
     TreeFireEventMode.ALL_SELECTED |
@@ -112,7 +117,7 @@ export interface FilterTreeChartOptions extends FilterTidyTableChartOptions {
     /**
      * Variant.
      */
-    autoCompleteVariant: string;
+    autoCompleteVariant?: string;
 
     /**
      * Size (Dropdown/Autocomplete).
@@ -133,4 +138,8 @@ export interface FilterTreeProps {
     printing: boolean;
     variant?: string;
     size: 'small' | 'medium';
+}
+
+export interface FilterTreePopOverProps {
+    variant?: string;
 }

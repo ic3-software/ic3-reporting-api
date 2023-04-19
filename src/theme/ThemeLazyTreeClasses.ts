@@ -1,5 +1,10 @@
 export class LazyTreeClasses {
 
+    /**
+     * Style applied to the root element.
+     */
+    static readonly lazyRoot = 'ic3LazyTreeView-root';
+
     /** Styles applied to the search toolbar element */
     static readonly toolbar = 'ic3LazyTreeView-toolbar';
 
@@ -17,6 +22,19 @@ export class LazyTreeClasses {
 
     /** Styles applied to the TreeRoot element */
     static readonly treeRoot = 'ic3LazyTreeView-treeRoot';
+
+    /**
+     * Item classes
+     */
+    static readonly itemRoot = 'ic3LazyTreeView-itemRoot';
+
+    static readonly itemContainer = 'ic3LazyTreeView-itemContainer';
+
+    static readonly leftDiv = 'ic3LazyTreeView-itemLeftDiv';
+
+    static readonly itemLabelContainer = 'ic3LazyTreeView-itemLabelContainer';
+
+    static readonly itemIcon = 'ic3LazyTreeView-itemIcon';
 }
 
 export declare type LazyTreeClassesClassKey = keyof LazyTreeClasses;

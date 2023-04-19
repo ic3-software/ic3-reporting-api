@@ -381,9 +381,11 @@ export interface ITidyTable {
      * the resulting data object are given by '<group_id>.' preceding the values.
      * @param level this column expands the axis so that widgets can plot level-like charts using guides. This expansion
      * follows the patters axis-label[level-label].
+     * @param hideNulls column, do not include records where all rows in group evaluate to NULL.
      */
     toAmcharts4Data<F extends string>(category: ITidyColumn, value: Record<F, ITidyColumn | undefined>,
-                                      group?: ITidyColumn | ITidyColumn[], level?: ITidyColumn): IAmCharts4Data[];
+                                      group?: ITidyColumn | ITidyColumn[], level?: ITidyColumn,
+                                      hideNulls?: ITidyColumn): IAmCharts4Data[];
 
     /**
      * Creates a data object for the Amcharts treemap
@@ -578,6 +580,12 @@ export interface ITidyTable {
     toHistogramBucketColumn(context: IPublicContext, valueCol: ITidyBaseColumnReadonly<number | null>, options: TidyHistogramOptions): ITidyColumn;
 
     addTotalRows(totals: Map<number, ITotalRowValues[]>): void;
+
+    /**
+     * Mark these rows as total rows in the table.
+     * @param totalRows
+     */
+    setTotalRows(totalRows: (rowIdx: number) => boolean): void;
 
     /**
      * Get a column by its role as defined in the mdxBuilderSettings.

@@ -171,7 +171,7 @@ export type FormFields<T extends FormFieldObject> = {
 };
 
 export enum IFormFieldGroupTypes {
-    Selection = 'selection',
+    Selection = 'groupSelection',
     FilterGeneralOption = 'filterGeneralOptionsGroup',
     FilterItem = 'filterItemGroup',
 }

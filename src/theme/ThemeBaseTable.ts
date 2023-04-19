@@ -10,6 +10,11 @@ export enum TableColumnSizing {
 export interface BaseTableChartOptions extends FormFieldObject {
 
     /**
+     * If active, the color defined in the Tidy Table are applied to the table
+     */
+    applyHeaderColorDecoration?: boolean;
+
+    /**
      * Row Height.
      */
     tableSize: TableRowHeightOptions;
@@ -66,6 +71,12 @@ export interface BaseTableChartOptions extends FormFieldObject {
      */
     columnPinned: string;
 
+    /**
+     * Visible (CSV).
+     *
+     * A list of boolean values: 'true', 'false'. The last value repeats itself.
+     */
+    columnVisible: string;
     /**
      * Columns Header Menu.
      *

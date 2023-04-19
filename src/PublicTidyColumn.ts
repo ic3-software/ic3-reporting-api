@@ -538,7 +538,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
 
     /**
      * Get the MDX axis coordinate, if available.
-     * @see {AxisCoordinate}
+     * @see AxisCoordinate
      */
     getAxisCoordinate(): AxisCoordinate | undefined;
 
@@ -802,6 +802,24 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      */
     getAmcharts4GroupKey(rowIdx: number): string;
 
+    /**
+     * Mark the column as a total column. Total columns have a different styling and css-class in tables and pivot
+     * tables.
+     * @param isTotal new value. Set to true to mark this column as a total. Use false to remove the mark.
+     * @see isTotalColumn
+     */
+    setIsTotalColumn(isTotal: boolean): void;
+
+    /**
+     * Returns true if and only if the column contains total values.
+     * @see setTotalColumn
+     */
+    getIsTotalColumn(): boolean;
+
+    /**
+     * return true if the column was created from an MDX axis (i.e.   [Geo].[Countries] on 0 )
+     */
+    isMdxAxis(): boolean;
 }
 
 export interface PublicTidyColumnCellDecorationRenderedOptions {

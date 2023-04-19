@@ -34,9 +34,7 @@ export interface FilterAutocompleteChartOptions extends FilterTidyTableChartOpti
      *
      * Allows for selecting a set of preset options. Note that a variant is possibly overriding defined options.
      */
-    variant?: string;
-
-    inputVariant: "standard" | "filled" | "outlined";
+    variant?: "fixedHeight" | "standard" | "filled" | "outlined";
 
     /**
      * Size.
@@ -60,4 +58,6 @@ export interface FilterAutocompleteChartOptions extends FilterTidyTableChartOpti
 
 }
 
-export type FilterAutocompleteProps = Pick<FilterAutocompleteChartOptions, 'variant' | 'size'> & { hideInput?: boolean };
+export type FilterAutocompleteProps =
+    Pick<FilterAutocompleteChartOptions, 'variant' | 'size'>
+    & { hideInput?: boolean };

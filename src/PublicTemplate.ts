@@ -181,8 +181,15 @@ export interface IPublicJsChartTemplate<T extends FormFieldObject> {
 
 }
 
+export interface IPublicWidgetReactProps<OPTIONS> {
+    wContext: IWidgetPublicContext,
+    data: IWidgetTemplateTidyData,
+    options: OPTIONS,
+    widgetHeader: string
+}
+
 /**
- * The definition of a widget that renders using React.
+ *
  *
  * @see IPublicReactChartTemplate
  * @see FormFieldObject
@@ -190,9 +197,14 @@ export interface IPublicJsChartTemplate<T extends FormFieldObject> {
 export interface IPublicWidgetReactTemplateDefinition<OPTIONS extends FormFieldObject> extends IPublicCommonWidgetTemplateDefinition<OPTIONS> {
 
     /**
-     * Actual widget rendering logic.
+     * Deprecated: use reactEl instead.
      */
-    jsCode: (context: IWidgetPublicContext) => IPublicReactChartTemplate<OPTIONS>;
+    jsCode?: (context: IWidgetPublicContext) => IPublicReactChartTemplate<OPTIONS>;
+
+    /**
+     * The React Hook component  (function with props as parameter)
+     */
+    reactEl?: React.FunctionComponent<IPublicWidgetReactProps<OPTIONS>>;
 
     reactComponent: true;
 

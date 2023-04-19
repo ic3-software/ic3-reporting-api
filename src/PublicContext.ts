@@ -8,6 +8,7 @@ import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {ITidyMath} from "./PublicTidyMath";
 import {ILogger} from "./Logger";
 import {AppNotification} from "./INotification";
+import {WidgetNotificationHandler} from "./IcEvent";
 
 export enum WidgetRenderLayoutStatus {
     RENDERING = "RENDERING",
@@ -62,7 +63,7 @@ export interface IPublicContext {
      */
     localizeTransformationCaption(template: ITidyTableTransformation<any>): { info: string, description?: string };
 
-    localizeFormField(pluginId: string, widgetTemplateId: string, name: string, ...args: any[]): [string, string | undefined];
+    localizeFormField(pluginId: string, widgetTemplateId: string, name: string, ...args: any[]): [string, string | undefined, string | undefined];
 
     /**
      * A bunch of mathematical functions related to the tidy table.
@@ -103,7 +104,7 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      */
-    createTableMarkdownExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined,  selectedColumns: ITidyColumn[] | undefined): (() => string) | undefined;
+    createTableMarkdownExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): (() => string) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -175,15 +176,6 @@ export interface IWidgetPublicContext extends IPublicContext {
 
     wrapWithTooltip(tooltip: string | undefined, wrappedElement: React.ReactElement): React.ReactElement;
 
-    /**
-     * Allows to setup a template specific callback on userMenuAction (e.g. setZoom in GoogleMaps action)
-     *
-     * if the callback returns an object, the object should contains a record with new values for the
-     * template form fields, FormFieldDef (i.e.  {zoom:14} to set the zoom to 14). If in editing mode,
-     * the edited options in the widget editor panel will be updated.
-     */
-    onUserMenuAction(callback: (userMenuAction: string, event: any) => Record<string, any> | undefined): void;
-
     onWidgetRenderStatusChange(status: WidgetRenderLayoutStatus): void;
 
     /**
@@ -227,14 +219,6 @@ export interface IWidgetPublicContext extends IPublicContext {
      * Note it's NOT the initial value but value if undefined
      */
     useReduxOwnPropsState<T>(fieldName: string, valueIfUndefined?: T): [T, (newValue: T | undefined) => void];
-
-    /**
-     * doExport callback is called on each exportToExcel from the userMenu of the widget
-     *
-     * if the callback returns a tidyTable, this table will be exported
-     * if undefined is returned no further action
-     */
-    onExportToExcel(doExport: (fileName: string | undefined) => ITidyTable | undefined): void;
 
     /**
      * React -> useSelector on widgetOwnProps[fieldName]
@@ -297,6 +281,25 @@ export interface IWidgetPublicContext extends IPublicContext {
      */
     widgetClearWarnings(): void;
 
+    /**
+     * Notification
+     *
+     * like a listener on the components, for React the implementation uses a useEffect, it should
+     * NOT be called conditionally.
+     */
+    useNotification(notifications: WidgetNotificationHandler | WidgetNotificationHandler[], deps: ReadonlyArray<unknown> | undefined): void;
+
+    useUserMenu(handler: (userMenu: string) => any | void, deps: ReadonlyArray<unknown> | undefined): void;
+
+    /**
+     * doExport callback is called on each exportToExcel from the userMenu of the widget
+     *
+     * if the callback returns a tidyTable, this table will be exported
+     * if undefined is returned no further action
+     */
+    onExportToExcel(doExport: (fileName: string | undefined) => ITidyTable | undefined): void;
+
+    useUserMenuWidth(): number | undefined;
 }
 
 export interface IWidgetEditorPublicContext {
