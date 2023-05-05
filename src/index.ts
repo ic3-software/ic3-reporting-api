@@ -69,5 +69,6 @@ export * from "./theme/ThemeTable";
 export * from "./theme/ThemeReportAppLeftPanel";
 export * from "./theme/ThemeWidgetBox";
 export * from "./theme/ThemeWidgetBoxContentMessage";
+export * from "./theme/ThemeIc3TableCell";
 
 

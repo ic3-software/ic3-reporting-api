@@ -1,4 +1,10 @@
-import {EntityItem, ITidyTableSelection, SelectionBehaviour, WidgetTidySelectionOptions} from "./PublicTidyTableTypes";
+import {
+    EntityItem,
+    ITidyTableSelection,
+    SelectionBehaviour,
+    TidyRowFilter,
+    WidgetTidySelectionOptions
+} from "./PublicTidyTableTypes";
 import {ITidyBaseColumn, ITidyColumn} from "./PublicTidyColumn";
 import {ILazyTreeViewLoader} from "./LazyTreeView";
 import {PublicIcEvent} from "./IcEvent";
@@ -244,6 +250,12 @@ export interface ITidyTableInteractionEvent {
      * returns true if the actionName in bound to a channel
      */
     firesEvent(actionName: string): boolean;
+
+    /**
+     * Returns a function that evaluates to true if and only if that row is selected.
+     * Returns undefined if there is no selection.
+     */
+    getIsRowSelectedFilter(): TidyRowFilter | undefined;
 
 }
 

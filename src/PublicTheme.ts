@@ -43,6 +43,7 @@ import {CodeMirrorClassesKey} from "./theme/ThemeCodeMirror";
 import {WidgetTemplateChartOptions} from "./PublicTemplates";
 import {WidgetFilteredByClassesKey} from "./theme/ThemeWidgetFilteredBy";
 import {IUserMenuOptions, IWidgetBoxIconsDefinition} from "./ITypes";
+import {Ic3TableCellProps, ThemeIc3TableCellClassesKey} from "./theme/ThemeIc3TableCell";
 
 export type Ic3ChartVariants = {
     [Name in keyof WidgetTemplateChartOptions]?: Array<{
@@ -799,6 +800,12 @@ interface ic3BaseComponents {
     WidgetBoxFilteredByTooltip?: {
         styleOverrides?: ComponentsOverrides["WidgetBoxFilteredByTooltip"];
     }
+    Ic3TableCell?: {
+        styleOverrides?: ComponentsOverrides["Ic3TableCell"];
+    }
+    Ic3TableCellError?: {
+        styleOverrides?: ComponentsOverrides["Ic3TableCellError"];
+    }
     "amCharts4.AmCharts4BubbleChart"?: {
         variants?: Ic3ChartVariants["amCharts4.AmCharts4BubbleChart"]
     }
@@ -969,6 +976,8 @@ declare module '@mui/material/styles/overrides' {
         CodeMirror: CodeMirrorClassesKey;
 
         WidgetBoxFilteredByTooltip: WidgetFilteredByClassesKey;
+        Ic3TableCell: ThemeIc3TableCellClassesKey;
+        Ic3TableCellError: ThemeIc3TableCellClassesKey;
 
     }
 
@@ -1006,6 +1015,8 @@ declare module '@mui/material/styles/props' {
         QueryBuilderNode: QueryBuilderNodeProps;
 
         PrintButton: StyledPrintButtonDivProps;
+        Ic3TableCell: Ic3TableCellProps;
+        Ic3TableCellError: Ic3TableCellProps;
     }
 
 }

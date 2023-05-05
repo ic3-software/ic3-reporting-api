@@ -9,6 +9,7 @@ import {ITidyMath} from "./PublicTidyMath";
 import {ILogger} from "./Logger";
 import {AppNotification} from "./INotification";
 import {WidgetNotificationHandler} from "./IcEvent";
+import {TidyRowFilter} from "./PublicTidyTableTypes";
 
 export enum WidgetRenderLayoutStatus {
     RENDERING = "RENDERING",
@@ -76,8 +77,10 @@ export interface IPublicContext {
      * @param expression typically coming from a widget field so it cannot be null if there is a default value.
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
+     * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
+     * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
      */
-    createTableRowTextExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => string) | undefined;
+    createTableRowTextExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => string) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -85,8 +88,9 @@ export interface IPublicContext {
      * @param expression typically coming from a widget field so it cannot be null if there is a default value.
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
+     * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
      */
-    createTableTextExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined): (() => string) | undefined;
+    createTableTextExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, isRowSelected?: TidyRowFilter): (() => string) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -94,8 +98,10 @@ export interface IPublicContext {
      * @param expression typically coming from a widget field so it cannot be null if there is a default value.
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
+     * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
+     * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
      */
-    createTableRowMarkdownExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => string) | undefined;
+    createTableRowMarkdownExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => string) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -103,8 +109,10 @@ export interface IPublicContext {
      * @param expression typically coming from a widget field so it cannot be null if there is a default value.
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
+     * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
+     * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
      */
-    createTableMarkdownExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): (() => string) | undefined;
+    createTableMarkdownExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): (() => string) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -112,15 +120,23 @@ export interface IPublicContext {
      * @param expression typically coming from a widget field so it cannot be null if there is a default value.
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
+     * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
+     * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
      */
-    createTableRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => number | undefined) | undefined;
+    createTableRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => number | undefined) | undefined;
 
     /**
      * same as  createTableRowNumericExpr but returning a string
+     * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
+     * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
      */
-    createTableRowNumericStringExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => string | undefined) | undefined;
+    createTableRowNumericStringExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => string | undefined) | undefined;
 
-    createTableScaleRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): ((rowIdx: number) => number | undefined) | undefined;
+    /*
+     * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
+     * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
+     */
+    createTableScaleRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => number | undefined) | undefined;
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -128,8 +144,10 @@ export interface IPublicContext {
      * @param expression typically coming from a widget field so it cannot be null if there is a default value.
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
+     * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
+     * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
      */
-    createTableNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined): (() => number | undefined) | undefined;
+    createTableNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): (() => number | undefined) | undefined;
 
 
 }
@@ -296,8 +314,10 @@ export interface IWidgetPublicContext extends IPublicContext {
      *
      * if the callback returns a tidyTable, this table will be exported
      * if undefined is returned no further action
+     *
+     * disabled === true, the doExport function is not used
      */
-    onExportToExcel(doExport: (fileName: string | undefined) => ITidyTable | undefined): void;
+    onExportToExcel(doExport: undefined | ((fileName: string | undefined) => ITidyTable | undefined), disabled?: boolean): void;
 
     useUserMenuWidth(): number | undefined;
 }

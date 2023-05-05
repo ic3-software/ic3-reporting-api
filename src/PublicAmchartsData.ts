@@ -155,6 +155,10 @@ export class PublicAmchartsData {
         return this.onValues[idx].values;
     }
 
+    getValueColumns(): ITidyNumericColumn[] {
+        return this.onValues.map(i => i.values);
+    }
+
     /**
      * Call a function on each series and it's column
      * @param itemControl map keeping track of current series in the chart.
