@@ -37,9 +37,9 @@ export class FilterPanelClasses {
     static readonly headerDivAddButton = "ic3FilterPanel-HeaderDivAddButton";
 
     /**
-     * Remove all button
+     * Reset filter button
      */
-    static readonly headerDivRemoveAllButton = "ic3FilterPanel-HeaderDivRemoveAllButton";
+    static readonly headerDivResetButton = "ic3FilterPanel-HeaderDivResetButton";
 
     /**
      * Div of the content root. Used for animation purposes.

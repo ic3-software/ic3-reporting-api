@@ -55,8 +55,7 @@ export interface DatePickerChartOptions extends FormFieldObject {
     /**
      * Input Date Format.
      *
-     * The input date format using the [date-fns](https://date-fns.org/v2.23.0/docs/format) syntax.
-     * For example, dd => 22, MM => 02, MMM => Jan, MMMM => January, yyyy => 2025, EEEE -> Monday).
+     * The input date format
      */
     dateFormat: string;
 
@@ -94,7 +93,7 @@ export interface DatePickerChartOptions extends FormFieldObject {
     /**
      * Date Caption.
      *
-     * The caption of the fired event. A back ticked format string using the [date-fns](https://date-fns.org/v2.23.0/docs/format) syntax.
+     * The caption of the fired event.
      * For example, dd => 22, MM => 02, MMM => Jan, MMMM => January, yyyy => 2025, EEEE => Monday.
      */
     dateToCaption: string;

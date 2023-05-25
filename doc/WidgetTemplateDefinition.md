@@ -1,6 +1,6 @@
 ## Widget Template Definition
 
-You can register a new [widget template](./WidgetTemplate.md) (aka. widget in this document) in the plugin by using
+You can register a new [widget template](WidgetTemplate.md) (aka. widget in this document) in the plugin by using
 the following code:
 
 ```typescript

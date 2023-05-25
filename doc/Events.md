@@ -83,7 +83,7 @@ to publish an event (or subscribe) to a channel. E.g.,  `ClickDonutSlice`, `Sele
 | Publish&#8209;ClickDonutSlice  | year          | When a user click on a Donut slice, fire an event on the year channel containing the year represented by the slice. |
 | Subscribe&#8209;AddToSelection | year          | When a new event is prevent on the channel year, the widget is adding the event value to its selection. |
 
-From a widget developer point of view, the [widget template](./WidgetTemplate.md) definition contains a `eventRoles`
+From a widget developer point of view, the [widget template](WidgetTemplate.md) definition contains a `eventRoles`
 section that is describing the actions supported by the widget. As an example, the following code:
 
 ```javascript
@@ -111,6 +111,6 @@ notified only on event content change.
 ##### Selection (Publish/Subscribe)
 
 Those actions are internally managed by icCube to synchronize selection in `ITidyTableInteraction`. The actual state and
-the consistency of the selection is managed by icCube. Refer to this [page](./Interactions.md) for more information.
+the consistency of the selection is managed by icCube. Refer to this [page](Interactions.md) for more information.
 
 _

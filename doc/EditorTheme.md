@@ -1,6 +1,6 @@
 ## Editor Theme
 
-A regular [theme](./Theme.md) used to render the dashboard editor as opposed to rendered dashboards.
+A regular [theme](Theme.md) used to render the dashboard editor as opposed to rendered dashboards.
 
 ### Options
 

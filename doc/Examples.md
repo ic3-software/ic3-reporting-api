@@ -45,10 +45,10 @@ the plugins loaded into an icCube server.
 
 ### Develop
 
-Refer to this [page](./Develop.md) that is explaining how to develop a plugin.
+Refer to this [page](Develop.md) that is explaining how to develop a plugin.
 
 ### Build/Deploy
 
-Refer to this [page](./Deploy.md) that is explaining how to deploy a plugin.
+Refer to this [page](Deploy.md) that is explaining how to deploy a plugin.
 
 _

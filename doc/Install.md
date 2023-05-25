@@ -3,7 +3,7 @@
 In the Dashboards use case of the Admin console, use the top right wrench icon or drag & drop the ZIP file directly into
 the table:
 
-![installation](./images/dashboards.png)
+![installation](images/dashboards.png)
 
 ### Configuration
 

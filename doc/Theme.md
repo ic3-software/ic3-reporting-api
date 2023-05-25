@@ -129,13 +129,13 @@ The [ic3-demo-plugin-theme](https://github.com/ic3-software/ic3-demo-plugin-them
 A theme is able to (re)define the default values of the widget options visible in the widget editor. For example,
 tables could be defaulted to `compact` layout mode.
 
-Refer to this [page](./ThemeWidgetDefaults.md) for more details.
+Refer to this [page](ThemeWidgetDefaults.md) for more details.
 
 ### Font (CSS Files)
 
 A theme definition can import CSS files that for example contain font (e.g. @fontsource/lato/400.css).
 
-Refer to this [page](./ThemeCssFontFiles.md) for more details.
+Refer to this [page](ThemeCssFontFiles.md) for more details.
 
 ### Defining a new Theme
 

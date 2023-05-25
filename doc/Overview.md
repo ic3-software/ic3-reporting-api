@@ -2,7 +2,7 @@
 
 The icCube Dashboards application depends on plugins to add custom theme, widgets, data transformations, etc. A plugin
 is a Webpack module that is loaded by the Dashboards application at runtime using the **Webpack Module Federation**
-mechanism. Refer to this [page](./Develop.md) for more details.
+mechanism. Refer to this [page](Develop.md) for more details.
 
 The plugin dev. kit is available in Typescript.
 
@@ -17,10 +17,10 @@ The dev. kit source code is available on GitHub [here](https://github.com/ic3-so
 
 ### Working Examples
 
-Several working examples with their source code are available. Refer to this [page](./Examples.md) for more details.
+Several working examples with their source code are available. Refer to this [page](Examples.md) for more details.
 
 ### Reference Documentation
 
-Refer to this [page](./Reference.md) for a complete documentation of the plugin dev. kit.
+Refer to this [page](Reference.md) for a complete documentation of the plugin dev. kit.
 
 _

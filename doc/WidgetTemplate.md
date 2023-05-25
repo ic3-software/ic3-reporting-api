@@ -6,14 +6,14 @@ using meta information and implements the actual rendering and behavior logic in
     export type IPublicWidgetTemplateDefinition<T extends FormFieldObject> =
         IPublicWidgetReactTemplateDefinition<T> | IPublicWidgetJsTemplateDefinition<T>;
 
-Please refer to this [file](./WidgetTemplateDefinition.md) for more details about the widget template definition.
+Please refer to this [file](WidgetTemplateDefinition.md) for more details about the widget template definition.
 
 ### Javascript vs React Widgets
 
 The icCube Dashboards is written in React. Two kinds of widget template implementations are available:
 
-- [Javascript](./JavascriptTemplate.md): implementing a new widget using plain Javascript/Typescript.
-- [React](./ReactTemplate.md): implementing a new widget using React.
+- [Javascript](JavascriptTemplate.md): implementing a new widget using plain Javascript/Typescript.
+- [React](ReactTemplate.md): implementing a new widget using React.
 
 The commented source code of the following demo plugins contain working examples of several new widgets:
 

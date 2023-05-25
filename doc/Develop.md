@@ -13,7 +13,7 @@ by a running instance of icCube Dashboards application.
 #### icCube Dashboards Server Configuration
 
 For developing that plugin, you need a local icCube server where the Dashboard application has been
-[installed](./Install.md) and you need to ensure it is configured to load the plugin. For that purpose,
+[installed](Install.md) and you need to ensure it is configured to load the plugin. For that purpose,
 the `ic3report-config.js` file should contain the following (replacing `MyPluginJS` and the port `4000`
 with the actual name and the actual port number: check the README.md file in the plugin project):
 

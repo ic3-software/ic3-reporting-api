@@ -1,6 +1,6 @@
 ## React Widget Template
 
-A React [widget template](./WidgetTemplate.md) defines a new widget implemention using React. You can use Material-UI in
+A React [widget template](WidgetTemplate.md) defines a new widget implemention using React. You can use Material-UI in
 the widget definition, because the icCube dashboards application already loads it. You can share and load the library
 using Webpack Module Federation.
 
@@ -29,7 +29,7 @@ The React element will be re-rendered while editing it (e.g., new options being 
 as well as when reacting to end-user interactions (e.g., filter being applied, click row of a table updating its
 selection, etc.).
 
-Please refer to this [file](./WidgetTemplateDefinition.md) for more details about the widget template definition.
+Please refer to this [file](WidgetTemplateDefinition.md) for more details about the widget template definition.
 
 ### jsCode (deprecated as of v8.4.0)
 

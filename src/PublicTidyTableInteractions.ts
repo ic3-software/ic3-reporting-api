@@ -364,6 +364,11 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
     setSortSelectionToColumnOrder(value: boolean): void;
 
     /**
+     * Returns compacted selection if TreeFireEventMode === COMPACT_ON_PARENT. Else returns undefined.
+     */
+    getCompactedSelectionItems(): ITidyTableSelection[] | undefined;
+
+    /**
      * Returns the widgets selection options.
      */
     getWidgetSelectionOptions(): WidgetTidySelectionOptions;

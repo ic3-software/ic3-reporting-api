@@ -23,6 +23,6 @@ Before uploading your plugin delete or rename the folder `MyPlugin`. Once deploy
                     ...
 
 Ensure then that the icCube Dashboards application is configured to load that plugin at runtime via the
-`ic3report-config.js` file. More information can be found at this [page](./Install.md#configuration).
+`ic3report-config.js` file. More information can be found at this [page](Install.md#configuration).
 
 _
