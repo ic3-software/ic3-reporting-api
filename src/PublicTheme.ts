@@ -44,6 +44,7 @@ import {WidgetTemplateChartOptions} from "./PublicTemplates";
 import {WidgetFilteredByClassesKey} from "./theme/ThemeWidgetFilteredBy";
 import {IUserMenuOptions, IWidgetBoxIconsDefinition} from "./ITypes";
 import {Ic3TableCellProps, ThemeIc3TableCellClassesKey} from "./theme/ThemeIc3TableCell";
+import {RegexFilterClassesKey, RegexFilterProps} from "./theme/ThemeRegexFilter";
 
 export type Ic3ChartVariants = {
     [Name in keyof WidgetTemplateChartOptions]?: Array<{
@@ -176,6 +177,15 @@ export interface ic3Palette {
      * The color for a selected item
      */
     selected: Property.Color;
+
+    /**
+     * For charts, you can define a function that derives the selected color from the color of the clicked item without
+     * selection. For example, you can use darken(color) from Mui-Material to get a darker color.
+     * @param color the color of the item without selection.
+     * @Return the color for the item in the selected state.
+     */
+    selectedChart?: (color: Property.Color | undefined | null) => Property.Color;
+
     /**
      * The text color for a selected item
      */
@@ -722,6 +732,10 @@ interface ic3BaseComponents {
         variants?: ComponentsVariants['FilterPanel'];
         styleOverrides?: ComponentsOverrides["FilterPanel"];
     }
+    RegexFilter?: {
+        variants?: ComponentsVariants['RegexFilter'];
+        styleOverrides?: ComponentsOverrides["RegexFilter"];
+    }
     FilterSlider?: {
         styleOverrides?: ComponentsOverrides["FilterSlider"];
         variants?: ComponentsVariants["FilterSlider"];
@@ -944,6 +958,7 @@ declare module '@mui/material/styles/overrides' {
         FilterButtons: FilterButtonsClassKey;
         LazyTreeViewStyled: LazyTreeClassesClassKey;
         FilterPanel: FilterPanelClassesKey;
+        RegexFilter: RegexFilterClassesKey;
         FilterSlider: FilterSliderClassKey;
         ListCounter: ListCounterClassKey;
         FilterTree: FilterTreeClassKey;
@@ -991,6 +1006,7 @@ declare module '@mui/material/styles/props' {
         FilterButtons: FilterButtonsProps;
         LazyTreeViewStyled: LazyTreeProps;
         FilterPanel: FilterPanelProps;
+        RegexFilter: RegexFilterProps;
         FilterSlider: FilterSliderProps;
         ListCounter: ListCounterProps;
         FilterTree: FilterTreeProps;

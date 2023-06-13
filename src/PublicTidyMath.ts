@@ -1,6 +1,7 @@
 import {ITidyBaseColumnReadonly} from "./PublicTidyColumn";
 import {HistogramData, HistogramOptions, TidyRowFilter} from "./PublicTidyTableTypes";
 import {TrendLineType} from "./theme/ThemeAmCharts4";
+import {ITidyTable} from "./PublicTidyTable";
 
 /**
  * Utility class for doing maths in columns
@@ -106,11 +107,67 @@ export interface ITidyMath {
     ols(y: ITidyBaseColumnReadonly<number | null>, x: ITidyBaseColumnReadonly<number | null>): ((x: number) => number) | undefined;
 
     /**
+     * Returns the previous value in the column , undefined if idx is 0
+     * @param column
+     * @param idx row index.
+     */
+    prev(column: ITidyBaseColumnReadonly<number | null>, idx: number): number | undefined | null;
+
+    /**
+     * Returns the next value in the column , undefined if idx is last one
+     * @param column
+     * @param idx row index.
+     */
+    next(column: ITidyBaseColumnReadonly<number | null>, idx: number): number | undefined | null;
+
+    /**
+     * Returns the first value in the column
+     * @param column
+     * @param idx row index.
+     */
+    first(column: ITidyBaseColumnReadonly<number | null>, idx: number): number | undefined | null;
+
+    /**
+     * Returns the last value in the column
+     * @param column
+     * @param idx row index.
+     */
+    last(column: ITidyBaseColumnReadonly<number | null>, idx: number): number | undefined | null;
+
+    /**
      * Calculate the percentage w.r.t. the total of the column.
      * @param column
      * @param idx row index of the cell to calculate the percentage of.
      */
     percent(column: ITidyBaseColumnReadonly<number | null>, idx: number): number | undefined;
+
+    /**
+     * Calculate the percentage w.r.t. the first value of the column.
+     * @param column
+     * @param idx row index of the cell to calculate the percentage of.
+     */
+    percentFirst(column: ITidyBaseColumnReadonly<number | null>, idx: number): number | undefined;
+
+    /**
+     * Calculate the percentage w.r.t. the last value of the column.
+     * @param column
+     * @param idx row index of the cell to calculate the percentage of.
+     */
+    percentLast(column: ITidyBaseColumnReadonly<number | null>, idx: number): number | undefined;
+
+    /**
+     * Calculate the percentage w.r.t. the table total value (all numeric columns).
+     * @param column
+     * @param idx row index of the cell to calculate the percentage of.
+     */
+    percentTable(table: ITidyTable, column: ITidyBaseColumnReadonly<number | null>, idx: number): number | undefined;
+
+    /**
+     * Calculate the percentage w.r.t. the row value of all numeric columns.
+     * @param column
+     * @param idx row index of the cell to calculate the percentage of.
+     */
+    percentRow(table: ITidyTable, column: ITidyBaseColumnReadonly<number | null>, idx: number): number | undefined;
 
     /**
      * Count the values in the column. For example: [a, b, b] -> {a: 1, b: 2}.

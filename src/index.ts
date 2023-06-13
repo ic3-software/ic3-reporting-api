@@ -45,6 +45,7 @@ export * from "./theme/ThemeFilterAutocomplete";
 export * from "./theme/ThemeFilterButtons";
 export * from "./theme/ThemeFilterCheckboxRadio";
 export * from "./theme/ThemeFilterPanel";
+export * from "./theme/ThemeRegexFilter";
 export * from "./theme/ThemeSinglePanelFilter";
 export * from "./theme/ThemeFilterSlider";
 export * from "./theme/ThemeFilterTree";

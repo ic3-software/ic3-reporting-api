@@ -115,9 +115,17 @@ export enum ITidyColumnNamedProperties {
     eventMdxValue = "eventMdxValue",
 
     /**
-     * Column defined as an MDX axis, the unique name of the column  (the name is the value of the column)
+     * Column defined as an MDX axis, the unique name of the column  (the name is the value of the column).
+     * This value is fired when doing selection events.
+     * @see {ITidyColumn.getMdxInfo}
      */
     uniqueName = "uniqueName",
+
+    /**
+     * The caption of the selection event to use. Returned by getMdxInfo(..).
+     * @see {ITidyColumn.getMdxInfo}
+     */
+    mdxInfoCaption = "mdxInfoCaption",
 
     /**
      * Column defined as an MDX axis, the caption of the column
@@ -751,10 +759,10 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     getRowIndexOf(value: T): number | undefined;
 
     /**
-     * For a hierarchical columns returns a a list of transformed colummns  columns as needed by a pivot
+     * For a hierarchical columns returns a a list of transformed columns  columns as needed by a pivot
      * table like structure
      *
-     * (e.g.  a columns with Year, Quarter and Month will be converteded into 3 columns [Year,Quarter,Month])
+     * (e.g.  a columns with Year, Quarter and Month will be converted into 3 columns [Year,Quarter,Month])
      *
      * .. still experimental
      *
@@ -890,50 +898,3 @@ export type ITidyColumnIsType<T extends TidyColumnsType> =
                                             T extends TidyColumnsType.MIXED ? ITidyColumn :
                                                 T extends TidyColumnsType.NULL ? ITidyNullColumn :
                                                     ITidyUnknownColumn;
-
-/**
- * Introduced for tidy table HTML expression (e.g., tooltip) completion.
- *
- * Quite simple for now: caption (as shown in the completion) to the actual Javascript method.
- */
-export interface TidyTableExprColumnMeta {
-
-    caption: string;
-
-    method: string;
-
-    /**
-     * If true, then modifier only available when eval mode is "row".
-     */
-    argRow?: boolean;
-
-    /**
-     * If true, then modifier only available when the fieldMeta has allowTotalOfSelection set to true.
-     */
-    allowsSelectedTotal?: boolean;
-
-}
-
-export const TidyTableTextExprColumnMetas: TidyTableExprColumnMeta[] = [
-
-    {caption: "total", method: "sum"},
-    {caption: "average", method: "mean"},
-    {caption: "median", method: "median"},
-    {caption: "min", method: "min"},
-    {caption: "max", method: "max"},
-    {caption: "variance", method: "variance"},
-    {caption: "standardDeviation", method: "standardDeviation"},
-    {caption: "count", method: "count"},
-
-    {caption: "percent", method: "percent", argRow: true},
-
-    {caption: "caption", method: "getCaption"},
-
-    {caption: "mdxName", method: "mdxName", argRow: true},
-    {caption: "mdxCaption", method: "mdxCaption", argRow: true},
-    {caption: "mdxUniqueName", method: "mdxUniqueName", argRow: true},
-    {caption: "mdxKey", method: "mdxKey", argRow: true},
-
-    {caption: "totalSelectedOrTotal", method: "sumFiltered", allowsSelectedTotal: true}
-
-];

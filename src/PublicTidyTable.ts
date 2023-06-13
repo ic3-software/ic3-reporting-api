@@ -510,7 +510,8 @@ export interface ITidyTable {
     createTable(): ITidyTable;
 
     /**
-     * Returns a new table with the original columns and rows filtered and in a new order
+     * Returns a new table with the original columns and rows filtered and in a new order.
+     * It leaves the original table intact.
      *
      * cols : [2,1,4]  -> 3 columns in a new order
      * rowIdx:[55,2,3,5] -> 4 rows in a new order
