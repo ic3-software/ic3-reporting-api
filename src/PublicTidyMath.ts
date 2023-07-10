@@ -202,4 +202,5 @@ export interface ITidyMath {
      * Returns the covariance between two columns. Nulls are interpreted as zeros.
      */
     covariance(x: ITidyBaseColumnReadonly<number | null>, y: ITidyBaseColumnReadonly<number | null>): number | undefined;
+
 }

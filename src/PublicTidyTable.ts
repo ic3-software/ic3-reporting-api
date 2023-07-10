@@ -71,7 +71,7 @@ export interface ITidyTable {
 
     isSameDimensionality(other: ITidyTable): boolean;
 
-    asPivotTableForExcel(nullValue: any): ITidyColumn[];
+    asPivotTableForExcel(nullValue: any, rows: number[] | undefined): ITidyColumn[];
 
     /**
      * Return all columns in the table

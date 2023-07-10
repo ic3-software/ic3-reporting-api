@@ -759,16 +759,12 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     getRowIndexOf(value: T): number | undefined;
 
     /**
-     * For a hierarchical columns returns a a list of transformed columns  columns as needed by a pivot
-     * table like structure
+     * For a hierarchical columns returns a list of transformed columns as needed by a pivot table like structure.
+     * If this column is not hierarchical, return this unchanged.
      *
-     * (e.g.  a columns with Year, Quarter and Month will be converted into 3 columns [Year,Quarter,Month])
-     *
-     * .. still experimental
-     *
-     * If not, hierarchical, return this
+     * E.g., a columns with Year, Quarter and Month will be converted into 3 columns [Year,Quarter,Month]).
      */
-    toFlatColumns(nullValue: any): ITidyUnknownColumn[];
+    toFlatColumns(nullValue: any, rows: number[] | undefined): ITidyUnknownColumn[];
 
     /**
      * Returns the tree-path for the node, including the node itself. The path starts at the node at rowIdx and contains

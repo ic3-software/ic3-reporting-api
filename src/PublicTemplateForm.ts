@@ -145,7 +145,8 @@ export type FormFields<T extends FormFieldObject> = {
                                             Required<T>[key] extends boolean ? Omit<IFormBooleanFieldDef, 'fieldPath'> :
                                                 Required<T>[key] extends number ? Omit<IFormNumberFieldDef, 'fieldPath'> :
                                                     Required<T>[key] extends number ? Omit<IFormMaskFieldDef, 'fieldPath'> :
-                                                        Required<T>[key] extends string ? Omit<IFormOptionFieldSingleDef, 'fieldPath'>
+                                                        Required<T>[key] extends string ?
+                                                            Omit<IFormOptionFieldSingleDef, 'fieldPath'>
                                                             | Omit<IFormStringFieldDef, 'fieldPath'>
                                                             | Omit<IFormFormatterPickerFieldDef, 'fieldPath'>
                                                             | Omit<IFormWidgetVariantFieldDef, 'fieldPath'>
@@ -161,7 +162,9 @@ export type FormFields<T extends FormFieldObject> = {
                                                             | Omit<IFormJsFieldDef, 'fieldPath'>
                                                             | Omit<IFormJsonFieldDef, 'fieldPath'>
                                                             | Omit<IFormMarkdownFieldDef, 'fieldPath'>
-                                                            | Omit<IFormOptionFieldReportPathDef, 'fieldPath'> :
+                                                            | Omit<IFormOptionFieldReportPathDef, 'fieldPath'>
+                                                            | Omit<IFormPropertyChooserBaseDef, 'fieldPath'>
+                                                            :
 
                                                             Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
                                                                 | Omit<IFormGroupsFieldDef, 'fieldPath'> :
@@ -339,7 +342,11 @@ export type FormFieldType =
     /**
      * @see IFormSearchAndReplaceArrayFieldDefType
      */
-    "searchAndReplaceArray"
+    "searchAndReplaceArray" |
+    /**
+     * @see IFormPropertyChooserBaseDef
+     */
+    "propertyChooser"
     ;
 
 export type FormFieldTidyTableExprType =
@@ -618,6 +625,22 @@ interface IFormColumnChooserBaseDef<T extends TidyTableColumnSelector | TidyTabl
     }
 
 }
+
+export interface IFormPropertyChooserBaseDef extends IFormFieldDef<string> {
+
+    fieldType: "propertyChooser",
+
+    editorConf?: {
+
+        /**
+         * Only columns of this/these type(s) are allowed.
+         */
+        allowedTypes?: TidyColumnsType[];
+
+    }
+
+}
+
 
 /**
  * @see FormFieldDef
@@ -1318,5 +1341,6 @@ export type FormFieldDef =
     IFormWidgetVariantFieldDef |
     IFormFormatterPickerFieldDef |
     IFormGranularitySelectionFieldDef |
-    IFormSearchAndReplaceArrayFieldDef
+    IFormSearchAndReplaceArrayFieldDef |
+    IFormPropertyChooserBaseDef
     ;

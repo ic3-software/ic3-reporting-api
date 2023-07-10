@@ -17,6 +17,10 @@ const PluginDefinition = ApiUtils.makePlugin({
         // ...
     },
 
+    registerUserMenuOptions(logger: ILogger, manager: IUserMenuOptionManager) {
+        // ...
+    },
+
     registerThemes(manager: IThemeManager) {
         // ...
     },

@@ -160,6 +160,12 @@ export interface FilterPanelChartOptions extends FormFieldObject {
     customFilterConfig?: string;
 
     /**
+     * These filters are not allowed to be selected by the user. These filters are hidden from the add filter menu.
+     * // TODO (tom) localize + document this option #1373
+     */
+    notAllowedFiltersConfig?: string;
+
+    /**
      * Default Filters.
      *
      * These filters are in the filter panel upon opening the dashboard.

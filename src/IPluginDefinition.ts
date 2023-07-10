@@ -8,6 +8,7 @@ import {WidgetTemplateIDs} from "./PublicTemplates";
 import {FormFieldObject} from "./PublicTemplateForm";
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {ILogger} from "./Logger";
+import {IUserMenuOptionManager} from "./IUserMenuOptionManager";
 
 export interface IPluginDefinition {
 
@@ -25,6 +26,8 @@ export interface IPluginDefinition {
     registerAmCharts4?: (logger: ILogger, callback: (am4core: any) => void) => void;
 
     registerLocalization?: (logger: ILogger, manager: ILocalizationManager) => void;
+
+    registerUserMenuOptions?: (logger: ILogger, manager: IUserMenuOptionManager) => void;
 
     registerThemes?: (logger: ILogger, manager: IThemeManager) => void;
 

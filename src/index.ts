@@ -5,6 +5,7 @@ export * from "./INotification";
 export * from "./IPluginDefinition";
 export * from "./IRemotePluginName";
 export * from "./IThemeManager";
+export * from "./IUserMenuOptionManager";
 export * from "./PublicAmchartsData";
 export * from "./PublicAmCharts4Base";
 export * from "./ITidyTableTransformation"
@@ -71,5 +72,7 @@ export * from "./theme/ThemeReportAppLeftPanel";
 export * from "./theme/ThemeWidgetBox";
 export * from "./theme/ThemeWidgetBoxContentMessage";
 export * from "./theme/ThemeIc3TableCell";
+export * from "./theme/ThemeSeparator";
+
 
 

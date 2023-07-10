@@ -319,6 +319,8 @@ export interface IWidgetPublicContext extends IPublicContext {
      */
     onExportToExcel(doExport: undefined | ((fileName: string | undefined) => ITidyTable | undefined), disabled?: boolean): void;
 
+    exportToExcel(table: ITidyTable, asPivotForExcel: boolean, rows: number[] | undefined): void;
+
     useUserMenuWidth(): number | undefined;
 }
 

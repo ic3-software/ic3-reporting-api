@@ -93,6 +93,16 @@ export enum SeriesLabelsPosition {
     OUTSIDE = "OUTSIDE"
 }
 
+export enum SeriesType {
+    LINE = "LINE",
+    COLUMN = "COLUMN"
+}
+
+export enum DrawSeriesOnAxis {
+    LEFT = "left",
+    RIGHT = "right"
+}
+
 export interface IBulletShapeOptions extends FormFieldObject {
     bulletShapeWidth: number;
     bulletShapeHeight: number;
@@ -625,6 +635,33 @@ export interface Am4ValueLabelOptions extends FormFieldObject {
     seriesLabelsStackTotalText?: string;
 }
 
+export interface Am4SecondValueLabelOptions extends FormFieldObject {
+    /**
+     * @see Am4ValueLabelOptions
+     */
+    seriesLabelsEnabledSecond: boolean;
+
+    /**
+     * @see Am4ValueLabelOptions
+     */
+    seriesLabelsTextSecond: string;
+
+    /**
+     * @see Am4ValueLabelOptions
+     */
+    seriesLabelsPositionSecond: SeriesLabelsPosition;
+
+    /**
+     * @see Am4ValueLabelOptions
+     */
+    seriesLabelsHideOversizeSecond: boolean;
+
+    /**
+     * @see Am4ValueLabelOptions
+     */
+    seriesLabelsStackTotalTextSecond?: string;
+}
+
 export interface Am4ChartCursorOptions extends FormFieldObject {
 
     /**
@@ -694,6 +731,11 @@ export interface Am4SankeyFlowOptions extends FormFieldObject {
      * Color Mode.
      */
     colorMode: 'solid' | 'gradient' | 'fromNode' | 'toNode';
+
+    /**
+     * The tooltip for the node
+     */
+    flowTooltip?: string;
 }
 
 export interface Am4SankeyNodeOptions extends FormFieldObject, IStrokeStyleProperties {
@@ -704,6 +746,11 @@ export interface Am4SankeyNodeOptions extends FormFieldObject, IStrokeStylePrope
      * Depending on the orientation, the width (if horizontal) or height (if vertical) of the node.
      */
     nodeWidth: number;
+
+    /**
+     * Tooltip for the node
+     */
+    nodeTooltip?: string;
 }
 
 export interface Am4SankeyDiagramOptions extends FormFieldObject {
@@ -714,6 +761,11 @@ export interface Am4SankeyDiagramOptions extends FormFieldObject {
      * Show the Sankey from left to right if 'Horizontal' and from top to bottom if 'Vertical'.
      */
     orientation: 'horizontal' | 'vertical';
+
+    /**
+     * If true, the first column describes the from nodes, and the second column the to nodes.
+     */
+    useFromToDataDefinition: boolean;
 }
 
 export interface Am4TreeMapSeriesOptions extends FormFieldObject, IStrokeStyleProperties {
@@ -1359,12 +1411,6 @@ export interface Am4ValueAxisRangeOptions extends FormFieldObject {
 export interface Am4LineSeriesOptions extends FormFieldObject, IStrokeStyleProperties, IBulletShapeOptions {
 
     /**
-     * [Combo Chart]
-     *
-     * Line.
-     *
-     * Values for the line.
-     *
      * [Line Chart]
      *
      * Line Values.
@@ -1446,29 +1492,79 @@ export interface Am4LineSeriesOptions extends FormFieldObject, IStrokeStylePrope
     smoothLineTensionY: number;
 }
 
-export interface Am4ComboSeriesOptions extends Am4LineSeriesOptions, Am4ColumnSeriesOptions {
+export interface Am4ComboSeriesOptions extends FormFieldObject, IStrokeStyleProperties {
+
+    /**
+     * Values for the left series. Named line due to legacy.
+     */
+    lineValue: TidyTableColumnSelector[];
+
+    /**
+     * Values for the right series. Named column due to legacy.
+     */
+    columnValue: TidyTableColumnSelector[];
 
     /**
      * Draw the line-series in this axis. Defaults to "left".
      */
-    lineSeriesDrawOnAxis: "left" | "right";
+    lineSeriesDrawOnAxis: DrawSeriesOnAxis;
 
     /**
      * Draw the column-series in this axis. Defaults to "right".
      */
-    columnSeriesDrawOnAxis: "left" | "right";
+    columnSeriesDrawOnAxis: DrawSeriesOnAxis;
+
+    /**
+     * Type of the left series. Line / Column.
+     */
+    seriesTypeLeft: SeriesType;
+
+    /**
+     * Type of the right series. Line / Column.
+     */
+    seriesTypeRight: SeriesType;
+
+    // Options if left series is LINE. @see Am4LineSeriesOptions
+    lineBulletShapeLeft?: TidyTableColumnSelector;
+    hideLineBulletsLeft: boolean;
+    chartCursorTooltipLineLeft: string;
+    legendLineSeriesLabelLeft?: string;
+    legendLineSeriesShowValueLeft: boolean;
+    areaFillOpacityLeft: number;
+    lineSeriesColorLeft?: TidyTableColumnSelector;
+    connectLineSeriesLeft: boolean;
+    smoothLineMethodLeft: Amcharts4LineSmoothMethod;
+    smoothLineTensionXLeft: number;
+    smoothLineTensionYLeft: number;
+    // Options if left series is COLUMN. @see Am4ColumnSeriesOptions
+    chartCursorTooltipColumnLeft: string;
+    legendColumnSeriesLabelLeft?: string;
+    legendColumnSeriesShowValueLeft: boolean;
+    columnSeriesColorLeft?: TidyTableColumnSelector;
+
+    // Options if right series is LINE. @see Am4LineSeriesOptions
+    lineBulletShapeRight?: TidyTableColumnSelector;
+    hideLineBulletsRight: boolean;
+    chartCursorTooltipLineRight: string;
+    legendLineSeriesLabelRight?: string;
+    legendLineSeriesShowValueRight: boolean;
+    areaFillOpacityRight: number;
+    lineSeriesColorRight?: TidyTableColumnSelector;
+    connectLineSeriesRight: boolean;
+    smoothLineMethodRight: Amcharts4LineSmoothMethod;
+    smoothLineTensionXRight: number;
+    smoothLineTensionYRight: number;
+    // Options if right series is COLUMN. @see Am4ColumnSeriesOptions
+    chartCursorTooltipColumnRight: string;
+    legendColumnSeriesLabelRight?: string;
+    legendColumnSeriesShowValueRight: boolean;
+    columnSeriesColorRight?: TidyTableColumnSelector;
 
 }
 
 export interface Am4ColumnSeriesOptions extends FormFieldObject, IStrokeStyleProperties {
 
     /**
-     * [Combo Chart]
-     *
-     * Values.
-     *
-     * Values for the columns.
-     *
      * [Column Chart]
      *
      * Column Values.
@@ -1780,6 +1876,7 @@ export type AmCharts4ComboChartOptions =
     & Am4ChartCursorOptions
     & Am4ScrollbarOptions
     & Am4ChartOptions
+    & Am4ValueLabelOptions
     ;
 
 export type AmCharts4CoordinateChartOptions =

@@ -114,6 +114,12 @@ export interface IWidgetTemplateMdxBuilderAxisProps {
      * Show the mdxAxis names in this order in the builder
      */
     showOrder?: number;
+
+    /**
+     * Allows to overwrite the ON "rows"in the MDX query  (to be used on modifyDefinition function)
+     */
+    overwriteAxisName?: string;
+
 }
 
 export interface IWidgetTemplateMdxBuilderMapping {
@@ -143,6 +149,16 @@ export interface IWidgetTemplateMdxBuilderMapping {
      * An MDX query if the builder is empty.
      */
     mdxQueryIfEmpty?: boolean;
+
+
+    /**
+     *  model is a IMdxQueryBuilderModel, that is not shared publicly yet
+     *
+     *  returns a modified definition or an MDX statement in a string
+     *
+     *  If we return a string (MDX Statement), the Filters are still going to be appended to the end
+     */
+    modifyDefinition?: (model: any, definition: IWidgetTemplateMdxBuilderMapping) => IWidgetTemplateMdxBuilderMapping | string,
 }
 
 /**

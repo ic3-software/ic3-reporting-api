@@ -44,6 +44,10 @@ export interface IPageMargin {
     right: number;
 }
 
+/**
+ * The background grid used for example to snap widgets to.
+ * Not related to the grid layout itself.
+ */
 export interface IWidgetLayoutGridDefinition {
 
     snap: boolean;
@@ -51,6 +55,48 @@ export interface IWidgetLayoutGridDefinition {
 
     width: number;
     height: number;
+}
+
+/**
+ * Control how the layout is responding to width change.
+ */
+export interface IWidgetLayoutResponsivenessDefinition {
+
+    /**
+     * Grid only for now.
+     */
+    type: "grid";
+
+    /**
+     * The number of virtual columns the widgets are aligned to (e.g., 12).
+     */
+    columnCount: number;
+
+    /**
+     * The number of pixels of each virtual column.
+     */
+    columnWidth: number;
+
+    /**
+     * Setup once the layout configuration is being resolved against the theme.
+     */
+    themeSpacing: number;
+
+    /**
+     * The grid margins.
+     */
+    margin: number;
+
+    /**
+     * Define the horizontal space between the widgets.
+     */
+    columnSpacing?: number;
+
+    /**
+     * Define the vertical space between the widgets.
+     */
+    rowSpacing?: number;
+
 }
 
 export interface IPageHeaderFooterLogoDefinition {
@@ -146,6 +192,9 @@ export interface IWidgetLayoutDefinition {
 
     cssClass?: string;
 
+    /**
+     * Not relevant if responsiveness is being defined: always an unlimited portrait.
+     */
     pageSize: IKnownPageSize | IManualPageSize | IUnlimitedPageSize;
     pageOrientation: PaperOrientation;
 
@@ -158,9 +207,19 @@ export interface IWidgetLayoutDefinition {
 
     /**
      * Widgets are zoomed so that their bounding box fits the horizontal page area.
+     * Not relevant if responsiveness is being defined.
      */
     expandH?: boolean;
 
+    /**
+     * Control how this layout is responding to width change.
+     */
+    responsiveness?: IWidgetLayoutResponsivenessDefinition;
+
+    /**
+     * The background grid used for example to snap widgets to.
+     * Not related to the grid layout itself.
+     */
     grid: IWidgetLayoutGridDefinition;
 
     header?: IPageHeaderFooterDefinition;

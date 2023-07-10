@@ -6,7 +6,9 @@ export enum ISeriesValuesType {
     LINE,
     COLUMN,
     TREND,
-    DIVERGENT
+    DIVERGENT,
+    LEFT_SERIES,
+    RIGHT_SERIES
 }
 
 
@@ -191,6 +193,13 @@ export class PublicAmchartsData {
      */
     isMultiMeasure(): boolean {
         return this.onValues.filter(i => i.type !== ISeriesValuesType.TREND).length > 1;
+    }
+
+    /**
+     * Returns the first column used for a series type.
+     */
+    getFirstColumnOfType(seriesType: ISeriesValuesType): ITidyColumn | undefined {
+        return this.onValues.find(i => i.type===seriesType)?.values;
     }
 
 }

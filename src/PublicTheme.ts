@@ -324,6 +324,14 @@ export interface ic3PaletteOptions {
     selectedBackground?: Property.Color;
     selectedOpacity?: number;
 
+    /**
+     * For charts, you can define a function that derives the selected color from the color of the clicked item without
+     * selection. For example, you can use darken(color) from Mui-Material to get a darker color.
+     * @param color the color of the item without selection.
+     * @Return the color for the item in the selected state.
+     */
+    selectedChart?: (color: Property.Color | undefined | null) => Property.Color;
+
     unSelectedOpacity?: number;
 
     hoverBackground?: Property.Color;

@@ -56,6 +56,10 @@ More details about transformation can be found [here](TidyTableTransformations.m
 Refer to this [page](Localization.md) for more information about translating widget and transformation fields used in
 their respective editors.
 
+### User Menu Options
+
+Refer to this [page](UserMenuOptions.md) for more information about adding a new user menu option.
+
 ### Theme
 
 A theme is a preset package containing graphical appearance and functionality details used to customize the look of the
