@@ -81,6 +81,26 @@ export type ThemeTextFormatters = Record<string, ThemeTextFormatter> & {
 
 };
 
+export interface ThemeFormatterPerLocale {
+    /**
+     * Fallback formatter for when no language is specified or a language is specified that is not defined in this
+     * model.
+     */
+    default: ThemeFormatters;
+
+    /**
+     * A formatter per locale. Use JAVA locale tags for defining a formatter for that locale, e.g., en, en_US, nl, nl_NL, etc..
+     * Longer tags have prio over shorter tags. For example, if the user has locale en_US, the dashboards first use
+     * the en_US tag. If it isn't found, it will use the en tag. If that also isn't found, it will use the default.
+     */
+    [k: string]: ThemeFormatters;
+}
+
+export function isThemeFormatterPerLocale(x: DeepPartial<ThemeFormatterPerLocale | ThemeFormatters> | undefined): x is ThemeFormatterPerLocale {
+    return x?.['default'] != null;
+}
+
+
 export type ThemeFormatters = {
 
     text: ThemeTextFormatters,
@@ -380,7 +400,9 @@ export interface ic3Theme {
 
     waitForFonts?: () => Promise<any>;
 
-    formatter: ThemeFormatters;
+    formatter: ThemeFormatterPerLocale
+        /* for backwards compatibility */
+        | ThemeFormatters;
 
     /**
      * Icons used in tables and trees
@@ -571,7 +593,7 @@ export interface ic3ThemeOptions {
      */
     waitForFonts?: () => Promise<any>;
 
-    formatter?: DeepPartial<ThemeFormatters>;
+    formatter?: DeepPartial<ThemeFormatterPerLocale | ThemeFormatters>;
 
     icons?: Partial<ic3Theme['icons']>;
 

@@ -1,5 +1,6 @@
 import {PaperOrientation, PaperSizeUnits} from "./ITypes";
 import {Property} from "csstype";
+import {Breakpoint} from "@mui/material/styles";
 
 type CSSProperties = any;
 
@@ -57,6 +58,15 @@ export interface IWidgetLayoutGridDefinition {
     height: number;
 }
 
+export interface IResponsiveBreakpoint {
+    md: number;
+    xs: number;
+}
+
+export type ResponsiveValue = {
+    [key in Breakpoint]: number
+} & { print: number, printLandscape?: number }
+
 /**
  * Control how the layout is responding to width change.
  */
@@ -83,19 +93,40 @@ export interface IWidgetLayoutResponsivenessDefinition {
     themeSpacing: number;
 
     /**
+     * The grid column span multiplier (i.e. x2 when the tables so widgets are twice as wide)
+     */
+    multiplier: ResponsiveValue;
+
+    /**
      * The grid margins.
      */
-    margin: number;
+    margin: ResponsiveValue;
 
     /**
-     * Define the horizontal space between the widgets.
+     * Defines the horizontal space between the widgets.
      */
-    columnSpacing?: number;
+    columnSpacing?: ResponsiveValue;
 
     /**
-     * Define the vertical space between the widgets.
+     * Defines the vertical space between the widgets.
      */
-    rowSpacing?: number;
+    rowSpacing?: ResponsiveValue;
+
+    /**
+     * Defines a grid to snap the height of the widgets in group.
+     *
+     * When the group grid is defined as %, the grid percentages will be kept on group height resizing
+     * (not the case if the grid is defined in pixels)
+     *
+     * <ul>
+     *     <li> undefined   : no constraint.
+     *     <li> array       : a list of percentages to snap the widgets (e.g., [0.1,.0.2,0.3....1.0] to have
+     *                       a grid 10% of group height, 20%, etc...).
+     *     <li> number < 1  : a percentage of the group height.
+     *     <li> number >= 1 : grid in pixels
+     * </ul>
+     */
+    groupSnapSteps: number[] | number;
 
 }
 
@@ -189,6 +220,10 @@ export interface IPageHeaderFooterDefinition {
 export interface IWidgetLayoutDefinition {
 
     layoutConfigId: string;
+
+    layoutGroup: string;
+
+    layoutName: string;
 
     cssClass?: string;
 

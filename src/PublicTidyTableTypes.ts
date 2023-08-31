@@ -181,38 +181,32 @@ export interface IFormFieldGranularityColumns {
     type: "all_columns";
 }
 
+
 /**
- * Coordinate of an MDX member
+ * The coordinate of an MDX axis. If and only if the columns source is from ON 0, the hierIdx is defined.
  */
-export interface MdxMemberCoordinates {
+export interface AxisCoordinate {
     /**
-     * index of the axis. ON 0, ON 1, etc..
+     * Object keeping track of the transformation from the original axis to the current column.
+     * If this object is undefined, then the column can not be constructed using a coordinate transformation of the axis.
+     */
+    repetitionInfo?: MdxRepetitionInfo;
+
+    /**
+     * index of the axis. ON 0, ON 1, etc...
      */
     axisIdx: number;
 
     /**
      * index of the tuple in the axis. E.g. (AF, 2009) in [AF, 2008, AF, 2009, AF, 2010] has index 1.
      */
-    tupleIdx: number;
+    tupleIdx?: number;
 
     /**
      * index of the member in the tuple. E.g. AF in (AF, 2009) has index 0 and 2009 has index 1.
      * undefined means use the whole tuple.
      */
     hierIdx?: number;
-}
-
-type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
-
-/**
- * The coordinate of an MDX axis. If and only if the columns source is from ON 0, the hierIdx is defined.
- */
-export interface AxisCoordinate extends Optional<MdxMemberCoordinates, "tupleIdx"> {
-    /**
-     * Object keeping track of the transformation from the original axis to the current column.
-     * If this object is undefined, then the column can not be constructed using a coordinate transformation of the axis.
-     */
-    repetitionInfo?: MdxRepetitionInfo;
 }
 
 export interface MdxRepetitionInfo {
@@ -316,11 +310,6 @@ export interface MdxInfo {
      * hierUN
      */
     hierUN: string;
-
-    /**
-     * Index on the MDX axis of the tuple the member belongs to.
-     */
-    tupleIndex: number;
 
 }
 

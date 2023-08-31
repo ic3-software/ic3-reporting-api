@@ -7,7 +7,6 @@ import {
     ITidyColumnIndex,
     ITidyColumnsSource,
     MdxInfo,
-    MdxMemberCoordinates,
     TidyCellError,
     TidyColumnsSubType,
     TidyColumnsType,
@@ -17,6 +16,7 @@ import {ThemeTextFormatter} from "./PublicTheme";
 import {Property} from "csstype";
 import {AppNotification} from "./INotification";
 import {MdxNodeIdentifier} from "./PublicTidyTable";
+import {IPublicContext} from "./PublicContext";
 
 export interface ITidyColumnTypedValue {
 
@@ -126,6 +126,12 @@ export enum ITidyColumnNamedProperties {
      * @see {ITidyColumn.getMdxInfo}
      */
     mdxInfoCaption = "mdxInfoCaption",
+
+    /**
+     * The MdxInfo
+     * @see {ITidyColumn.getMdxInfo}
+     */
+    mdxInfo = "mdxInfo",
 
     /**
      * Column defined as an MDX axis, the caption of the column
@@ -337,7 +343,12 @@ export interface ITidyBaseColumnReadonly<T> {
     /**
      * Returns the color of this columns header.
      */
-    getHeaderColor(): string | undefined;
+    getHeaderColor(hierarchyIdx?: number): string | undefined;
+
+    /**
+     * Returns the colors of this columns header.
+     */
+    getHeaderColors(): (string | undefined)[] | string | undefined;
 
 }
 
@@ -348,7 +359,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     /**
      * Set the color for the columns header
      */
-    setHeaderColor(color: string | undefined): void;
+    setHeaderColor(color: (string | undefined)[] | string | undefined): void;
 
     isSameDimensionality(other: ITidyBaseColumn<any>): boolean;
 
@@ -366,6 +377,11 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * @param callback given the row index, outputs a value or undefined.
      */
     findFirst<P>(callback: (idx: number) => P | undefined): P | undefined;
+
+    /**
+     * returns true if the column as a property defining the formatted value
+     */
+    hasFormattedValue(): boolean;
 
     /**
      * Get the formatted value of the column at position idx.
@@ -515,11 +531,6 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * if the column is not a MDX dimension.
      */
     getHierarchyDefaultMember(): EntityItem | undefined;
-
-    /**
-     * Get the mdx coordinate (axeIdx,hierIdx,tupleIdx) of the cell at rowIdx. Defines a member in a MDX Query result axes
-     */
-    getMdxCoordinates(rowIdx: number): MdxMemberCoordinates | undefined;
 
     /**
      * Get the array of MDX info in the column.
@@ -685,6 +696,13 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     setFormattedValues(formattedValues: (string | null)[] | ((value: T | undefined) => string), caption?: string): void;
 
     /**
+     * Resets the formatted value
+     *
+     * @see setFormattedValues
+     */
+    resetFormat(context: IPublicContext, format: ThemeTextFormatter): void;
+
+    /**
      * Set the colors for the column.
      * @param caption the caption for the added property
      */
@@ -824,6 +842,9 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * return true if the column was created from an MDX axis (i.e.   [Geo].[Countries] on 0 )
      */
     isMdxAxis(): boolean;
+
+    addRowValue(insert: ITidyColumnAddValueInsert): void;
+
 }
 
 export interface PublicTidyColumnCellDecorationRenderedOptions {

@@ -60,4 +60,5 @@ export interface FilterAutocompleteChartOptions extends FilterTidyTableChartOpti
 
 export type FilterAutocompleteProps =
     Pick<FilterAutocompleteChartOptions, 'variant' | 'size'>
-    & { hideInput?: boolean };
+    & { hideInput?: boolean }
+    & { addHOverflow: boolean };

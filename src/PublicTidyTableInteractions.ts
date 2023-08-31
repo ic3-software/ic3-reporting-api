@@ -226,6 +226,8 @@ export interface ITidyTableInteractionEvent {
 
     /**
      * actionName if the action is bound to a channel, sends the events ( e.g. 'onClick' to the channel 'year' )
+     *
+     * If rowIdx is an empty array, [], fires a mdx empty set event -> ∅
      */
     fireEvent(actionName: string, column: ITidyColumn | ITidyColumn[] | undefined, rowIdx: number | number[]): void;
 

@@ -101,6 +101,10 @@ export interface IFormFieldDef<DEFAULT_VALUE_TYPE> {
      */
     translated?: boolean;
 
+    /**
+     * Allow for group of fields, disabled help in form wrapper
+     */
+    disableHelpInWrapper?: boolean;
 }
 
 /**
@@ -152,10 +156,13 @@ export type FormFields<T extends FormFieldObject> = {
                                                             | Omit<IFormWidgetVariantFieldDef, 'fieldPath'>
                                                             | Omit<IFormTidyTableTextExprFieldDef, 'fieldPath'>
                                                             | Omit<IFormTidyTableTextRowExprFieldDef, 'fieldPath'>
+                                                            | Omit<IFormTidyTableNumericStringColumnExprFieldDef, 'fieldPath'>
                                                             | Omit<IFormTidyTableHtmlRowExprFieldDef, 'fieldPath'>
                                                             | Omit<IFormTidyTableHtmlExprFieldDef, 'fieldPath'>
                                                             | Omit<IFormTidyTableNumericExprFieldDef, 'fieldPath'>
                                                             | Omit<IFormTidyTableNumericRowExprFieldDef, 'fieldPath'>
+                                                            | Omit<IFormTidyTableNumericColumnExprFieldDef, 'fieldPath'>
+                                                            | Omit<IFormTidyTableNumericJSColumnExprFieldDef, 'fieldPath'>
                                                             | Omit<IFormTidyTableColorRowExprFieldDef, 'fieldPath'>
                                                             | Omit<IFormTidyTableStringRowExprFieldDef, 'fieldPath'>
                                                             | Omit<IFormTidyTableScaleRowExprFieldDef, 'fieldPath'>
@@ -164,6 +171,7 @@ export type FormFields<T extends FormFieldObject> = {
                                                             | Omit<IFormMarkdownFieldDef, 'fieldPath'>
                                                             | Omit<IFormOptionFieldReportPathDef, 'fieldPath'>
                                                             | Omit<IFormPropertyChooserBaseDef, 'fieldPath'>
+                                                            | Omit<IFormLayoutFieldDef, 'fieldPath'>
                                                             :
 
                                                             Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
@@ -308,6 +316,14 @@ export type FormFieldType =
      */
     "tidyTableNumericRowExpr" |
     /**
+     * @see IFormTidyTableNumericColumnExprFieldDef
+     */
+    "tidyTableNumericJSColumnExpr" |
+    /**
+     * @see IFormTidyTableNumericJSColumnExprFieldDef
+     */
+    "tidyTableNumericColumnExpr" |
+    /**
      * @see IFormTidyTableStringRowExprFieldDef
      */
     "tidyTableStringRowExpr" |
@@ -328,6 +344,10 @@ export type FormFieldType =
      */
     "tidyTableTextRowExpr" |
     /**
+     * @see IFormTidyTableNumericStringColumnExprFieldDef
+     */
+    "tidyTableNumericStringColumnExpr" |
+    /**
      * @see IFormUrlFieldDef
      */
     "url" |
@@ -346,27 +366,38 @@ export type FormFieldType =
     /**
      * @see IFormPropertyChooserBaseDef
      */
-    "propertyChooser"
+    "propertyChooser" |
+    /**
+     * @see IFormLayoutFieldDef
+     */
+    "layout"
+
     ;
 
 export type FormFieldTidyTableExprType =
     "tidyTableHtmlExpr" |
     "tidyTableHtmlRowExpr" |
     "tidyTableNumericExpr" |
+    "tidyTableNumericColumnExpr" |
+    "tidyTableNumericJSColumnExpr" |
     "tidyTableNumericRowExpr" |
     "tidyTableScaleRowExpr" |
     "tidyTableTextExpr" |
+    "tidyTableNumericStringColumnExpr" |
     "tidyTableTextRowExpr" |
     "tidyTableStringRowExpr" |
     "tidyTableColorRowExpr"
-    ;
+
 
 export function isTidyTableExpr(type: FormFieldType): type is FormFieldTidyTableExprType {
     return type === "tidyTableHtmlExpr"
         || type === "tidyTableHtmlRowExpr"
         || type === "tidyTableTextExpr"
+        || type === "tidyTableNumericStringColumnExpr"
+        || type === "tidyTableNumericJSColumnExpr"
         || type === "tidyTableTextRowExpr"
         || type === "tidyTableNumericExpr"
+        || type === "tidyTableNumericColumnExpr"
         || type === "tidyTableNumericRowExpr"
         || type === "tidyTableStringRowExpr"
         || type === "tidyTableColorRowExpr"
@@ -381,6 +412,13 @@ export function isTidyTableExprTable(type: FormFieldType) {
         ;
 }
 
+export function isTidyTableExprColumn(type: FormFieldType): boolean {
+    return type === "tidyTableNumericColumnExpr"
+        || type === "tidyTableNumericStringColumnExpr"
+        || type === "tidyTableNumericJSColumnExpr"
+        ;
+}
+
 export function isTidyTableExprRow(type: FormFieldType): boolean {
     return type === "tidyTableHtmlRowExpr"
         || type === "tidyTableTextRowExpr"
@@ -389,6 +427,14 @@ export function isTidyTableExprRow(type: FormFieldType): boolean {
         || type === "tidyTableColorRowExpr"
         || type === "tidyTableScaleRowExpr"
         ;
+}
+
+export function isTidyTableExprNumericString(type: FormFieldType): type is "tidyTableColorRowExpr" | "tidyTableStringRowExpr" | "tidyTableNumericStringColumnExpr" {
+    return type === "tidyTableColorRowExpr" || type === "tidyTableStringRowExpr" || type === "tidyTableNumericStringColumnExpr"
+}
+
+export function isTidyTableExprNumericJS(type: FormFieldType): type is "tidyTableNumericJSColumnExpr" {
+    return type === "tidyTableNumericJSColumnExpr"
 }
 
 export function isTidyTableExprText(type: FormFieldType): type is "tidyTableTextExpr" | "tidyTableTextRowExpr" {
@@ -403,8 +449,9 @@ export function isTidyTableExprTextHtml(type: FormFieldType): type is "tidyTable
         ;
 }
 
-export function isTidyTableExprNumeric(type: FormFieldType): type is "tidyTableNumericExpr" | "tidyTableNumericRowExpr" {
+export function isTidyTableExprNumeric(type: FormFieldType): type is "tidyTableNumericExpr" | "tidyTableNumericRowExpr" | "tidyTableNumericColumnExpr" {
     return type === "tidyTableNumericExpr"
+        || type === "tidyTableNumericColumnExpr"
         || type === "tidyTableNumericRowExpr"
         ;
 }
@@ -535,6 +582,12 @@ export interface IFormAutocompleteFieldDef<OPTION> extends IFormFieldDef<OPTION>
 export interface IFormBooleanFieldDef extends IFormFieldDef<boolean> {
 
     fieldType: "boolean" | "fixedBoolean" | "groupBoolean",
+
+}
+
+export interface IFormLayoutFieldDef extends IFormFieldDef<string> {
+
+    fieldType: "layout",
 
 }
 
@@ -1188,6 +1241,70 @@ export interface IFormTidyTableNumericRowExprFieldDef extends IFormFieldDef<stri
 
 /**
  * A numeric expression containing tidy table value accessor (e.g., chart's value axis minimum).
+ * The evaluation context is a column.
+ *
+ * @see FormFieldDef
+ */
+export interface IFormTidyTableNumericColumnExprFieldDef extends IFormFieldDef<string> {
+
+    fieldType: "tidyTableNumericColumnExpr",
+
+    editorConf?: {
+        /**
+         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
+         * expression when evaluating in the dialog editor.
+         */
+        userSelectsCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _currentColumn in the expression.
+         * The default current column comes from the first dependsOn option.
+         */
+        useCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _selectedColumns in the expression.
+         * The default selected columns come from the second dependsOn option.
+         */
+        useSelectedColumns?: boolean,
+    },
+
+}
+
+/**
+ * A numeric expression containing tidy table value accessor (e.g., chart's value axis minimum).
+ * The evaluation context is a column.
+ *
+ * @see FormFieldDef
+ */
+export interface IFormTidyTableNumericJSColumnExprFieldDef extends IFormFieldDef<string> {
+
+    fieldType: "tidyTableNumericJSColumnExpr",
+
+    editorConf?: {
+        /**
+         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
+         * expression when evaluating in the dialog editor.
+         */
+        userSelectsCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _currentColumn in the expression.
+         * The default current column comes from the first dependsOn option.
+         */
+        useCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _selectedColumns in the expression.
+         * The default selected columns come from the second dependsOn option.
+         */
+        useSelectedColumns?: boolean,
+    },
+
+}
+
+/**
+ * A numeric expression containing tidy table value accessor (e.g., chart's value axis minimum).
  * The evaluation context is a row.
  *
  * @see FormFieldDef
@@ -1283,6 +1400,38 @@ export interface IFormTidyTableTextRowExprFieldDef extends IFormFieldDef<string>
 }
 
 /**
+ * A text expression containing tidy table value accessor (e.g., cell renderer link).
+ * The evaluation context is a column.
+ *
+ * @see FormFieldDef
+ */
+export interface IFormTidyTableNumericStringColumnExprFieldDef extends IFormFieldDef<string> {
+
+    fieldType: "tidyTableNumericStringColumnExpr",
+
+    editorConf?: {
+        /**
+         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
+         * expression when evaluating in the dialog editor.
+         */
+        userSelectsCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _currentColumn in the expression.
+         * The default current column comes from the first dependsOn option.
+         */
+        useCurrentColumn?: boolean,
+
+        /**
+         * If true, user can use _selectedColumns in the expression.
+         * The default selected columns come from the second dependsOn option.
+         */
+        useSelectedColumns?: boolean,
+    },
+
+}
+
+/**
  * icCube variants (defined in the theme's ic3.widgetVariants).
  *
  * @see FormFieldDef
@@ -1342,5 +1491,6 @@ export type FormFieldDef =
     IFormFormatterPickerFieldDef |
     IFormGranularitySelectionFieldDef |
     IFormSearchAndReplaceArrayFieldDef |
-    IFormPropertyChooserBaseDef
+    IFormPropertyChooserBaseDef |
+    IFormLayoutFieldDef
     ;

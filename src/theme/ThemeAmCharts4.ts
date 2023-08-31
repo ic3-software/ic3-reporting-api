@@ -313,7 +313,7 @@ export interface Am4GaugeAxisOptions extends FormFieldObject {
     /**
      * Format.
      *
-     * Format pattern. Examples: integer: `#.`; number: `#`; two decimals: `#.00`; thousands/millions: `#a`; currency: `€#`.
+     * Format pattern. Examples: integer: `#`; two decimals: `#.00`; thousands/millions: `#a`; currency: `€#`.
      */
     gaugeAxisValueFormat?: string;
 
@@ -507,7 +507,7 @@ export interface Am4ValueAxisOptions extends FormFieldObject {
     /**
      * Value Format.
      *
-     * Format pattern. Examples: integer: `#.`; number: `#`; two decimals: `#.00`; thousands/millions: `#a`; currency: `€#`.
+     * Format pattern. Examples: integer: `#`; two decimals: `#.00`; thousands/millions: `#a`; currency: `€#`.
      */
     yAxisValueFormat?: string;
 
@@ -997,7 +997,7 @@ export interface Am4SecondValueAxisOptions extends FormFieldObject {
     /**
      * Value Format.
      *
-     * Format pattern. Examples: integer: `#.`; number: `#`; two decimals: `#.00`; thousands/millions: `#a`; currency: `€#`.
+     * Format pattern. Examples: integer: `#`; two decimals: `#.00`; thousands/millions: `#a`; currency: `€#`.
      */
     yAxisSecondValueFormat?: string;
 
@@ -1877,6 +1877,7 @@ export type AmCharts4ComboChartOptions =
     & Am4ScrollbarOptions
     & Am4ChartOptions
     & Am4ValueLabelOptions
+    & Am4SecondValueLabelOptions
     ;
 
 export type AmCharts4CoordinateChartOptions =

@@ -36,7 +36,6 @@ import {
     GeoMapChartOptions
 } from "./theme/ThemeAmCharts4";
 import {PrintButtonChartOptions} from "./theme/ThemePrintButton";
-import {SeparatorChartOptions} from "./theme/ThemeSeparator";
 
 interface IWidgetTemplateChartOptions {
 
@@ -68,8 +67,6 @@ interface IWidgetTemplateChartOptions {
     "ic3.PivotTable": PivotTableChartOptions,
 
     "ic3.RepetitionWidget": RepetitionWidgetChartOptions,
-
-    "ic3.Separator": SeparatorChartOptions,
 
     "ic3.Table": TableChartOptions,
 

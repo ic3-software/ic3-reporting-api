@@ -2,7 +2,7 @@ import {LazyTreeViewProps} from "./LazyTreeView";
 import {ITidyTable} from "./PublicTidyTable";
 import {ITidyTableTransformation} from "./ITidyTableTransformation";
 import {Theme} from "@mui/material/styles";
-import {ThemeTextFormatter} from "./PublicTheme";
+import {ThemeFormatters, ThemeTextFormatter} from "./PublicTheme";
 import {ITidyColumn, ITidyNumericColumn} from "./PublicTidyColumn";
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {ITidyMath} from "./PublicTidyMath";
@@ -33,6 +33,11 @@ export interface IPublicContext {
     useGoogleMapHook(): boolean | Error;
 
     getTheme(): Theme;
+
+    /**
+     * Return the formatter for the current user's locale.
+     */
+    getThemeFormatter(): ThemeFormatters;
 
     getUserName(): string;
 
@@ -65,6 +70,11 @@ export interface IPublicContext {
     localizeTransformationCaption(template: ITidyTableTransformation<any>): { info: string, description?: string };
 
     localizeFormField(pluginId: string, widgetTemplateId: string, name: string, ...args: any[]): [string, string | undefined, string | undefined];
+
+    /**
+     * markdown to sanitized html
+     */
+    markdownToHtml(markDown: string): string;
 
     /**
      * A bunch of mathematical functions related to the tidy table.
@@ -149,6 +159,37 @@ export interface IPublicContext {
      */
     createTableNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): (() => number | undefined) | undefined;
 
+    /**
+     * same as  createTableNumericExpr but returning a javascript object
+     */
+    createTableNumericStringExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): (() => any | undefined) | undefined;
+
+
+    /**
+     * same as  createTableNumericExpr but returning a javascript object
+     */
+    createTableNumericJSExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): (() => any | undefined) | undefined;
+
+    /**
+     * Event methods that do not depend on a Table
+     *
+     * @see ITidyTableInteractionEvent for more
+     */
+
+    /**
+     * actionName if the action is bound to a channel, clears the event (has no value)
+     */
+    fireClearEventName(actionName: string): void;
+
+    /**
+     * actionName if the action is bound to a channel, send an Mdx Event (value,mdx)
+     */
+    fireMdxEventName(actionName: string, value: string, mdx: string): void;
+
+    /**
+     * Used for publishing app notifications (e.g., print the report).
+     */
+    fireAppNotification(notification: AppNotification): void;
 
 }
 
@@ -216,11 +257,6 @@ export interface IWidgetPublicContext extends IPublicContext {
      * actionName if the action is bound to a channel, send an Mdx Event (value,mdx)
      */
     fireMdxEvent(actionName: string, value: string, mdx: string): void;
-
-    /**
-     * Used for publishing app notifications (e.g., print the report).
-     */
-    fireAppNotification(notification: AppNotification): void;
 
     /**
      * Cypress testing purpose, after a rendering of the chart

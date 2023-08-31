@@ -79,6 +79,13 @@ export interface PivotTableChartOptions extends BaseTableChartOptions {
     cornerText?: string;
 
     /**
+     * Sortable (CSV).
+     *
+     * Display the sort options for the top left header. A list of boolean values: 'true', 'false'. The last value repeats itself.
+     */
+    leftHeaderSortable: string;
+
+    /**
      * Merge Left Header.
      *
      * Use a single cell int the top left corner of the table.

@@ -24,6 +24,73 @@ export interface IRectangleSize {
 export interface IRectangle extends IRectanglePosition, IRectangleSize {
 }
 
+/**
+ * Widget box configuration when the widget is rendered in the responsive grid layout.
+ * This is used instead of the regular rectangle and positionOrder configuration.
+ */
+export interface IWidgetBoxGridLayoutInfo {
+
+    /**
+     * Handy (same as in IWidgetDefinition).
+     */
+    widgetId: string;
+
+    /**
+     * The responsive grid layout is made of a single flex (row) box.
+     * The index in the only row of the 'flex' layout.
+     */
+    position: number;
+
+    /**
+     * A part of the total number of columns in the 'flex' layout.
+     */
+    colSpan: number;
+
+    /**
+     * The actual physical height.
+     */
+    height: number;
+
+    /**
+     * The group (i.e., nested grid layout) this widget belongs to.
+     */
+    group?: IWidgetBoxGroupGridLayoutInfo;
+
+}
+
+/**
+ * Support for nested grid layout : a grid item can be a group of widgets rendered as a grid layout.
+ *
+ * The actual number of columns of this nested grid layout is the colSpan of the group seen as a regular
+ * item of the containing grid layout. The group inherit both the column and row spacing of its containing
+ * grid layout and has no margin.
+ *
+ * For the sake of simplicity a group cannot contain a group.
+ */
+export interface IWidgetBoxGroupGridLayoutInfo {
+
+    groupId: string;
+
+    /**
+     * A group is a regular item of its containing grid layout.
+     * @see IWidgetBoxGridLayoutInfo
+     */
+    position: number;
+
+    /**
+     * A group is a regular item of its containing grid layout.
+     * @see IWidgetBoxGridLayoutInfo
+     */
+    colSpan: number;
+
+    /**
+     * A group is a regular item of its containing grid layout.
+     * @see IWidgetBoxGridLayoutInfo
+     */
+    height: number;
+
+}
+
 export interface IWidgetLayoutData {
 
     /**
@@ -46,6 +113,8 @@ export interface IWidgetLayoutInfo extends IRectangle {
     pageNb: number;
 
     positionOrder: number;
+
+    gridLayoutInfo?: IWidgetBoxGridLayoutInfo;
 
     data?: IWidgetLayoutData;
 
@@ -397,6 +466,8 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
      * header is repeating on each page.
      */
     withOptionAutoExpandKeepTableHeader?: boolean;
+
+    withOptionAutoExpandHeightNotDependingOnWidth?: boolean;
 
     /**
      * If and only if not null, hide option 'Interactions' > 'Drilldown' > 'Pivot Table Like' and set it default value to withDrilldownPivotTableLikeAs.

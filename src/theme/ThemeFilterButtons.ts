@@ -72,8 +72,19 @@ export interface FilterButtonsChartOptions extends FilterTidyTableChartOptions {
 
 }
 
+/**
+ * Props for the FilterButtons root slot.
+ */
 export interface FilterButtonsProps {
     printing: boolean;
     variant?: string;
     grouped: boolean;
+    columns?: number;
+}
+
+/**
+ * Props for the FilterButtons Container slot.
+ */
+export interface FilterButtonsContainerProps {
+    columns?: number;
 }
