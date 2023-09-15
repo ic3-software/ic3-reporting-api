@@ -375,33 +375,46 @@ export type FormFieldType =
     ;
 
 export type FormFieldTidyTableExprType =
+    "tidyTableColorRowExpr" |
     "tidyTableHtmlExpr" |
     "tidyTableHtmlRowExpr" |
-    "tidyTableNumericExpr" |
     "tidyTableNumericColumnExpr" |
+    "tidyTableNumericExpr" |
     "tidyTableNumericJSColumnExpr" |
     "tidyTableNumericRowExpr" |
+    "tidyTableNumericStringColumnExpr" |
     "tidyTableScaleRowExpr" |
     "tidyTableTextExpr" |
-    "tidyTableNumericStringColumnExpr" |
     "tidyTableTextRowExpr" |
-    "tidyTableStringRowExpr" |
-    "tidyTableColorRowExpr"
+    "tidyTableStringRowExpr"
+    ;
 
 
 export function isTidyTableExpr(type: FormFieldType): type is FormFieldTidyTableExprType {
-    return type === "tidyTableHtmlExpr"
+    return type === "tidyTableColorRowExpr"
+        || type === "tidyTableHtmlExpr"
         || type === "tidyTableHtmlRowExpr"
-        || type === "tidyTableTextExpr"
-        || type === "tidyTableNumericStringColumnExpr"
+        || type === "tidyTableNumericColumnExpr"
+        || type === "tidyTableNumericExpr"
         || type === "tidyTableNumericJSColumnExpr"
+        || type === "tidyTableNumericRowExpr"
+        || type === "tidyTableNumericStringColumnExpr"
+        || type === "tidyTableScaleRowExpr"
+        || type === "tidyTableTextExpr"
         || type === "tidyTableTextRowExpr"
+        || type === "tidyTableStringRowExpr"
+        ;
+}
+
+export function isTidyTableExprJS(type: FormFieldType): boolean {
+    return type === "tidyTableColorRowExpr"
+        || type === "tidyTableStringRowExpr"
+        || type === "tidyTableScaleRowExpr"
         || type === "tidyTableNumericExpr"
         || type === "tidyTableNumericColumnExpr"
+        || type === "tidyTableNumericStringColumnExpr"
+        || type === "tidyTableNumericJSColumnExpr"
         || type === "tidyTableNumericRowExpr"
-        || type === "tidyTableStringRowExpr"
-        || type === "tidyTableColorRowExpr"
-        || type === "tidyTableScaleRowExpr"
         ;
 }
 

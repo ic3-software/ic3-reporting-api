@@ -532,9 +532,9 @@ export interface ic3Theme {
             color: Property.Color;
 
             /**
-             * The radius of the dot when hovering
+             * the width as percentage of the viewport of the cursor line when hovering
              */
-            radius: number;
+            lineWidth: number;
 
             /**
              * The width of the stroke when hovering

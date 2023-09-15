@@ -93,7 +93,7 @@ export interface IWidgetLayoutResponsivenessDefinition {
     themeSpacing: number;
 
     /**
-     * The grid column span multiplier (i.e. x2 when the tables so widgets are twice as wide)
+     * The grid column span multiplier (i.e., x2 when the tables so widgets are twice as wide).
      */
     multiplier: ResponsiveValue;
 
@@ -116,12 +116,12 @@ export interface IWidgetLayoutResponsivenessDefinition {
      * Defines a grid to snap the height of the widgets in group.
      *
      * When the group grid is defined as %, the grid percentages will be kept on group height resizing
-     * (not the case if the grid is defined in pixels)
+     * (not the case if the grid is defined in pixels).
      *
      * <ul>
      *     <li> undefined   : no constraint.
      *     <li> array       : a list of percentages to snap the widgets (e.g., [0.1,.0.2,0.3....1.0] to have
-     *                       a grid 10% of group height, 20%, etc...).
+     *                        a grid 10% of group height, 20%, etc...).
      *     <li> number < 1  : a percentage of the group height.
      *     <li> number >= 1 : grid in pixels
      * </ul>
@@ -231,8 +231,15 @@ export interface IWidgetLayoutDefinition {
      * Not relevant if responsiveness is being defined: always an unlimited portrait.
      */
     pageSize: IKnownPageSize | IManualPageSize | IUnlimitedPageSize;
+
+    /**
+     * Not relevant if responsiveness is being defined: always an unlimited portrait.
+     */
     pageOrientation: PaperOrientation;
 
+    /**
+     * Not relevant if responsiveness is being defined: margins are defined per breakpoint.
+     */
     pageMargin: IPageMargin;
 
     /**
@@ -247,7 +254,8 @@ export interface IWidgetLayoutDefinition {
     expandH?: boolean;
 
     /**
-     * Control how this layout is responding to width change.
+     * Control how this layout is responding to width change : check ic3-demo-plugin-them
+     * (https://github.com/ic3-software/ic3-demo-plugin-theme) for a complete example.
      */
     responsiveness?: IWidgetLayoutResponsivenessDefinition;
 

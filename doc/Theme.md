@@ -106,6 +106,7 @@ in GitHub.
 ### Chart Variants
 
 You can also define variants for charts. For example, the code below defines a variant for the donut chart:
+
 ```ts
 theme.components["amCharts4.AmCharts4DonutChart"]: {
     variants: [
@@ -137,6 +138,35 @@ A theme definition can import CSS files that for example contain font (e.g. @fon
 
 Refer to this [page](ThemeCssFontFiles.md) for more details.
 
+### Widget Layouts
+
+A theme contains the list of widget [layouts](../../layouts/Layouts.md) that are defining how the widgets
+can be visually arranged within a dashboard.
+
+```ts
+theme.ic3.layouts = [{
+    
+    layoutConfigId: 'Statos Desktop Layout',
+
+    layoutGroup: "Statos Static",
+    layoutName: "Desktop",
+
+    pageSize: {
+        type: "unlimited",
+        pageSizeUnits: "px",
+        pageWidth: 1350,
+    },
+
+    pageOrientation: "portrait",
+
+    // ...
+    
+}] as IWidgetLayoutDefinition[]
+```
+
+For additional information, check [ic3-demo-plugin-theme](https://github.com/ic3-software/ic3-demo-plugin-theme)
+in GitHub. This project contains several examples of layouts and a copy of the Statos responsive layouts.
+
 ### Defining a new Theme
 
 To define a new theme we advise you to look at the
@@ -147,7 +177,7 @@ can contain both a theme and widget definitions.
 Bear in mind, you are free to add new fields to your theme to use across your widget plugin. Those fields
 are pure Javascript/Typescript objects and can hold primitive types as well as functions.
 
-Looking for inspiration? You can check the following Web sites:
+Looking for inspiration? You can check the following Websites:
 [Material UI Theme Builder](https://next.material-ui.com/customization/theming#theme-builder),
 [Mui Treasury site](https://mui-treasury.com/).
 

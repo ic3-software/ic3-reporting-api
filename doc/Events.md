@@ -70,7 +70,7 @@ In the dashboards, the title (or any other text options, queries, etc.) `@{chann
 For example, the following text: `Sales: @{year}` becomes `Sales: 2020` when the event `2020` is fired into the `year` channel.
 
 At the programing level, an event content might be more than a simple string. You can check the API source
-code [code](https://github.com/ic3-software/ic3-reporting-api/blob/master/src/IcEvent.ts) that provides for an
+code [code](https://github.com/ic3-software/ic3-reporting-api/blob/main/src/IcEvent.ts) that provides for an
 up-to-date documentation.
 
 #### Widget Meta Information (Event Roles)
