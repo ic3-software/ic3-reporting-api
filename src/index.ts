@@ -1,6 +1,7 @@
 export * from "./ApiUtils";
 export * from "./IcEvent";
 export * from "./ILocalizationManager";
+export * from "./IMigrationManager";
 export * from "./INotification";
 export * from "./IPluginDefinition";
 export * from "./IRemotePluginName";

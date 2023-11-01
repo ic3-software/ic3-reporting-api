@@ -14,9 +14,25 @@ export enum ISeriesValuesType {
 
 export interface ISeriesValues {
 
-    type: ISeriesValuesType;  // etc..
-    values: ITidyNumericColumn;
+    type: ISeriesValuesType;
+
+    /**
+     * Value column.
+     * @see {PublicAmchartsData.TAG_VALUE}.
+     */
+    values: ITidyColumn;
+
+    /**
+     * Color column.
+     * @see {PublicAmchartsData.TAG_COLOR}.
+     */
     colors?: ITidyColorColumn;
+
+    /**
+     * Extra values.
+     * @see {PublicAmchartsData.TAG_ADDITIONAL_VALUE}.
+     */
+    additionalValues?: ITidyColumn;
 
     // Used to identify the parent series value col for trend columns.
     parentValueColIdx?: number;
@@ -28,6 +44,10 @@ export interface ISeriesValues {
  * data and the creation of the series of that chart.
  */
 export class PublicAmchartsData {
+
+    public static readonly TAG_VALUE = 'v';
+    public static readonly TAG_COLOR = 'c';
+    public static readonly TAG_ADDITIONAL_VALUE = 'v2';
 
     private readonly onValues: ISeriesValues[];
     private readonly onAxis: ITidyColumn;
@@ -67,11 +87,16 @@ export class PublicAmchartsData {
                 valueColumn = value.values;
             }
 
-            chartValues[String(idx) + "v"] = valueColumn;
+            chartValues[String(idx) + PublicAmchartsData.TAG_VALUE] = valueColumn;
 
             if (value.colors) {
-                chartValues[String(idx) + "c"] = value.colors;
+                chartValues[String(idx) + PublicAmchartsData.TAG_COLOR] = value.colors;
             }
+
+            if (value.additionalValues) {
+                chartValues[String(idx) +   PublicAmchartsData.TAG_ADDITIONAL_VALUE] = value.additionalValues;
+            }
+
         });
 
         return this.table.toAmcharts4Data(this.onAxis, chartValues, this.onGroup, this.onLevel);
@@ -82,7 +107,7 @@ export class PublicAmchartsData {
      * Create, update and remove series in the chart.
      * @param itemControl map keeping track of current series in the chart.
      * @param seriesControl object controlling the adding/removing/updating of series.
-     * @param firstGroupOnly only call the first group
+     * @param firstGroupOnly only call the first group.
      */
     updateSeries<T>(itemControl: Map<string, T>, seriesControl: IAmchartsSeriesControl<T>, firstGroupOnly?: boolean): void {
         const group = this.onGroup;
@@ -98,7 +123,9 @@ export class PublicAmchartsData {
                 const seriesKey = PublicAmchartsData.getSeriesId(groupKey, idx);
                 let item = itemControl.get(seriesKey);
                 if (item == null) {
-                    const newItem = seriesControl.create(seriesKey, groupKey, seriesKey + "v", seriesKey + "c", onValue);
+                    const newItem = seriesControl.create(seriesKey, groupKey,
+                        seriesKey + PublicAmchartsData.TAG_VALUE,
+                        seriesKey + PublicAmchartsData.TAG_COLOR, onValue);
                     itemControl.set(seriesKey, newItem);
                     item = newItem;
                 }
@@ -162,7 +189,7 @@ export class PublicAmchartsData {
     }
 
     /**
-     * Call a function on each series and it's column
+     * Call a function on each series, and its column
      * @param itemControl map keeping track of current series in the chart.
      */
     forEachSeries<T>(itemControl: Map<string, T>, callback: (col: ITidyNumericColumn, seriesId: string, series: T) => void): void {
@@ -171,7 +198,7 @@ export class PublicAmchartsData {
             create: () => {
                 throw Error("SNBH series cannot be created");
             },
-            update: (seriesId, groupKey, series, sValue, groupRows) => {
+            update: (seriesId, _groupKey, series, sValue, _groupRows) => {
                 callback(sValue.values, seriesId, series);
             },
             remove: () => {
@@ -189,7 +216,7 @@ export class PublicAmchartsData {
     }
 
     /**
-     * Returns true if and only if there are multiple non-trend measures in the chart.
+     * Returns true if and only if multiple non-trend measures are in the chart.
      */
     isMultiMeasure(): boolean {
         return this.onValues.filter(i => i.type !== ISeriesValuesType.TREND).length > 1;
@@ -211,7 +238,7 @@ export class PublicAmchartsData {
 export interface IAmchartsSeriesControl<T> {
 
     /**
-     * If defined, only call create, update and remove where typeFilter(type) returns true.
+     * If defined, only call create, update and remove where `typeFilter(type)` returns true.
      */
     typeFilter?: (type: ISeriesValuesType) => boolean,
 
@@ -221,7 +248,7 @@ export interface IAmchartsSeriesControl<T> {
      * @param groupKey key for the group by (if defined). If not defined, use _
      * @param valueKey series value dataField
      * @param fillKey series fill dataField
-     * @param sValue the onValues part used
+     * @param sValue the onValues part used.
      */
     create: (seriesId: string, groupKey: string, valueKey: string, fillKey: string, sValue: ISeriesValues) => T,
 

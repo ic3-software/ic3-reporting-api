@@ -68,15 +68,56 @@ export interface INoSchemaRendererOptions {
 }
 
 export type ThemeTextFormatter = {
+    /**
+     * Format used in the reporting application.
+     */
     formatReport: ((value: any, locale: string) => string) | string;
+
+    /**
+     * Format used when exporting to Excel.
+     */
     formatExcel?: string;
 };
 
 export type ThemeTextFormatters = Record<string, ThemeTextFormatter> & {
 
+    /**
+     * The default formatter for displaying datetime values.
+     * Also used in the expressions when using $value.formatDate()$.
+     *
+     * Default: {
+     *     formatReport: "yyyy-MM-dd HH:mm:ss"
+     * }
+     */
     defaultDate: ThemeTextFormatter;
+
+    /**
+     * The default way to format any number that has no format defined.
+     * Used in the expressions when using $value.formatNumber()$.
+     *
+     * Default: {
+     *     formatReport: "#,###.####"
+     * }
+     */
     defaultNumber: ThemeTextFormatter;
+
+    /**
+     * Used in the expressions when using $value.formatAmount()$.
+     *
+     * Default: {
+     *     formatReport: "#,###"
+     * }
+     */
     defaultAmount: ThemeTextFormatter;
+
+    /**
+     * Default formatter for percentage values.
+     * Used in the expressions when using $value.formatPercentage()$.
+     *
+     * Default: {
+     *     formatReport: "##.0%"
+     * }
+     */
     defaultPercentage: ThemeTextFormatter;
 
 };
@@ -104,8 +145,6 @@ export function isThemeFormatterPerLocale(x: DeepPartial<ThemeFormatterPerLocale
 export type ThemeFormatters = {
 
     text: ThemeTextFormatters,
-
-    emptyCell: string;
 
     amCharts4: Amcharts4ThemeDateFormatter;
 
@@ -507,12 +546,18 @@ export interface ic3Theme {
     },
 
     /**
+     * A zoom applied to the widget content when rendered for printing.
+     * Defaulted to 0.64.
+     */
+    widgetContentPrintScale?: number;
+
+    /**
      * The first defined layout is used as the default one.
      */
     layouts: IWidgetLayoutDefinition[];
 
     /**
-     * Default values (e.g., box options, chart options, etc..).
+     * Default values (e.g., box options, chart options, etc...).
      */
     widgetDefaults?: IThemeWidgetDefaults;
 
@@ -640,10 +685,15 @@ export interface ic3ThemeOptions {
     };
 
     /**
-     * Default values (e.g., box options, chart options, etc..).
+     * Default values (e.g., box options, chart options, etc...).
      */
     widgetDefaults?: IThemeWidgetDefaults;
 
+    /**
+     * A scale applied to the widget content when rendered for printing.
+     * Defaulted to 0.64.
+     */
+    widgetContentPrintScale?: number;
 
     /**
      * The first defined layout is used as the default one.

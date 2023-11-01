@@ -512,6 +512,13 @@ export interface Am4ValueAxisOptions extends FormFieldObject {
     yAxisValueFormat?: string;
 
     /**
+     * Maximum number of decimals to allow when placing grid lines and labels on axis.
+     *
+     * Set it to 0 (zero) to force integer-only axis labels.
+     */
+    yAxisMaxPrecision?: number;
+
+    /**
      * Minimum Grid Distance.
      *
      * The minimum distance between the grid lines.
@@ -539,6 +546,8 @@ export interface Am4ValueAxisOptions extends FormFieldObject {
      */
     yAxisPostRenderHook?: Hook<any>;
 }
+
+export type Am4DateAxisOptions = Pick<Am4ValueAxisOptions, "yAxisTitleText" | "yAxisMinGridDistance" | "yAxisShowGridLines" | "yAxisPostRenderHook"| "0242ac130003">;
 
 export interface Am4SimpleColumnSeriesOptions extends FormFieldObject, IStrokeStyleProperties {
 
@@ -1002,6 +1011,13 @@ export interface Am4SecondValueAxisOptions extends FormFieldObject {
     yAxisSecondValueFormat?: string;
 
     /**
+     * Maximum number of decimals to allow when placing grid lines and labels on axis.
+     *
+     * Set it to 0 (zero) to force integer-only axis labels.
+     */
+    yAxisSecondMaxPrecision?: number;
+
+    /**
      * Minimum Grid Distance.
      *
      * The minimum distance between the grid lines.
@@ -1138,7 +1154,7 @@ export interface Am4CategoryDateAxisOptions extends FormFieldObject {
      * NO -> never use them
      * AUTO -> use them if the level is a date or datetime (in MDX, these are levels of type DAY, HOUR, MINUTE, SECOND).
      */
-    useDatetimeAxis: UseDatetimeAxis
+    useDatetimeAxis: UseDatetimeAxis;
 
     /**
      * Axis.
@@ -1620,6 +1636,20 @@ export interface Am4ColumnSeriesOptions extends FormFieldObject, IStrokeStylePro
     columnSeriesColor?: TidyTableColumnSelector;
 }
 
+export interface Am4GanttSeriesOptions extends Omit<Am4ColumnSeriesOptions, "columnValue" | "legendColumnSeriesShowValue"> {
+
+    /**
+     * Start datetime values of the gantt series.
+     */
+    startValue: TidyTableColumnSelector[];
+
+    /**
+     * End datetime values of the gantt series.
+     */
+    endValue: TidyTableColumnSelector[];
+
+}
+
 export interface Am4DivergentAxisLabelOptions extends FormFieldObject {
 
     /**
@@ -1913,6 +1943,20 @@ export type AmCharts4RegularBarChartOptions =
     & Am4TrendLineOptions
     & Am4ScrollbarOptions
     & Am4ValueAxisRangeOptions
+    & Am4ChartOptions
+    ;
+
+/**
+ * The corresponding AmCharts 4 chart class is XYChart.
+ */
+export type AmCharts4GanttChartOptions =
+    & Am4CategoryDateAxisOptions
+    & Am4DateAxisOptions
+    & Am4GanttSeriesOptions
+    & Am4LegendOptions
+    & Am4ValueLabelOptions
+    & Am4ChartCursorOptions
+    & Am4ScrollbarOptions
     & Am4ChartOptions
     ;
 

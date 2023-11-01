@@ -1,4 +1,5 @@
 import {FormFieldObject} from "../PublicTemplateForm";
+import {PaperOrientation} from "../ITypes";
 
 export class PrintButtonClasses {
 
@@ -29,6 +30,9 @@ export interface PrintButtonChartOptions extends FormFieldObject {
     variant: "text" | "outlined" | "contained" | string;
 
     withDialog: boolean;
+
+    paperSizeName?: string;
+    paperOrientation?: PaperOrientation,
 
 }
 

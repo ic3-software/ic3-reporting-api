@@ -387,16 +387,20 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * Get the formatted value of the column at position idx.
      *
      * undefined - if the formatted_value is not available
-     * null - if it's empty
      *
      * @param idx the position to return the value of.
      */
     getFormattedValue(idx: number): string | undefined;
 
     /**
-     * Return the formatted value. Fallback on the value itself.
+     * Return the formatted value. Returns undefined if the value is undefined.
+     * If the value has no format, then it uses the default format from the theme.
+     *
+     * @param idx row index
+     * @param context the widget context. Used to access the default formatters. Leave undefined to not use the theme
+     * default formatters.
      */
-    getFormattedValueOrValue(idx: number): string | undefined;
+    getFormattedValueOrValue(idx: number, context?: IPublicContext): string | undefined;
 
     getNumberFormatInfo(): string | undefined;
 

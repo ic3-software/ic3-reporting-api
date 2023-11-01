@@ -191,6 +191,20 @@ export interface IPublicContext {
      */
     fireAppNotification(notification: AppNotification): void;
 
+    formatDate(value: Date | string | undefined | null, format: ThemeTextFormatter | null | undefined, locale?: string): string;
+
+    formatNumber(value: number | string | undefined | null, format: ThemeTextFormatter | null | undefined, locale?: string): string;
+
+    /**
+     * A shortcut for formatNumber( theme.formatter.defaultNumber )
+     */
+    formatAmount(value: number | string | undefined | null, locale?: string): string;
+
+    /**
+     * A shortcut for formatNumber( theme.formatter.defaultPercent )
+     */
+    formatPercent(value: number | string | undefined | null, locale?: string): string;
+
 }
 
 export interface IWidgetPublicContext extends IPublicContext {
@@ -218,20 +232,6 @@ export interface IWidgetPublicContext extends IPublicContext {
     renderWidgetContentMessage(type: IContentMessageType, message: string): any;
 
     renderLazyTreeView<T>(props: LazyTreeViewProps): T;
-
-    formatDate(value: Date | string | undefined | null, format: ThemeTextFormatter | null | undefined, locale?: string): string;
-
-    formatNumber(value: number | string | undefined | null, format: ThemeTextFormatter | null | undefined, locale?: string): string;
-
-    /**
-     * A shortcut for formatNumber( theme.formatter.defaultNumber )
-     */
-    formatAmount(value: number | string | undefined | null, locale?: string): string;
-
-    /**
-     * A shortcut for formatNumber( theme.formatter.defaultPercent )
-     */
-    formatPercent(value: number | string | undefined | null, locale?: string): string;
 
     wrapWithTooltip(tooltip: string | undefined, wrappedElement: React.ReactElement): React.ReactElement;
 
@@ -358,6 +358,19 @@ export interface IWidgetPublicContext extends IPublicContext {
     exportToExcel(table: ITidyTable, asPivotForExcel: boolean, rows: number[] | undefined): void;
 
     useUserMenuWidth(): number | undefined;
+
+    /**
+     * Get the (translated) file name for exporting. Does not include file extension. Method returns 'export-file'
+     * if no file name is found.
+     * @param defaultName if not undefined, method returns this.
+     * @param defaultFileName
+     */
+    getExportFileName(defaultFileName?: string): string;
+
+    /**
+     * Returns true if and only if the widgets has a header (from the chart box settings).
+     */
+    widgetHasHeader(): boolean;
 }
 
 export interface IWidgetEditorPublicContext {

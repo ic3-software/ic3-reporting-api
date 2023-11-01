@@ -65,7 +65,7 @@ export interface IResponsiveBreakpoint {
 
 export type ResponsiveValue = {
     [key in Breakpoint]: number
-} & { print: number, printLandscape?: number }
+}
 
 /**
  * Control how the layout is responding to width change.
@@ -111,6 +111,18 @@ export interface IWidgetLayoutResponsivenessDefinition {
      * Defines the vertical space between the widgets.
      */
     rowSpacing?: ResponsiveValue;
+
+    print?: {
+        multiplier: number;
+        columnSpacing: number;
+        rowSpacing: number;
+    };
+
+    printLandscape?: {
+        multiplier: number;
+        columnSpacing: number;
+        rowSpacing: number;
+    };
 
     /**
      * Defines a grid to snap the height of the widgets in group.
@@ -219,6 +231,18 @@ export interface IPageHeaderFooterDefinition {
  */
 export interface IWidgetLayoutDefinition {
 
+    /**
+     * icCube internal : used to create a missing layout when resolving
+     * the layout definition id of the dashboard definition.
+     */
+    missing?: true;
+
+    /**
+     * icCube internal : used to create a missing layout when resolving
+     * the layout definition id of the dashboard definition.
+     */
+    missingLayoutConfigId?: string;
+
     layoutConfigId: string;
 
     layoutGroup: string;
@@ -226,6 +250,16 @@ export interface IWidgetLayoutDefinition {
     layoutName: string;
 
     cssClass?: string;
+
+    /**
+     * The theme is defining a scale (widgetContentPrintScale) applied to the widget content
+     * when rendered for printing. The following flag is requesting to render the widget content
+     * on screen using the printing scale.
+     *
+     * We advise defining it for any layout dedicated for printing (e.g., A4, Letter) to get a
+     * visual rendering close to the printed one.
+     */
+    applyWidgetContentPrintScaleForRendering? : true,
 
     /**
      * Not relevant if responsiveness is being defined: always an unlimited portrait.

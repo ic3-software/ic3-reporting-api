@@ -15,6 +15,7 @@ export declare type TableClassKey = keyof TableClasses;
  */
 export interface TableProps {
 
+    noHeader: boolean;
     variant?: string;
     printing: boolean;
 }

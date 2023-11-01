@@ -89,6 +89,8 @@ export interface IFormFieldDef<DEFAULT_VALUE_TYPE> {
      */
     dependsOnVisibility?: boolean | ((dependsOnValue?: any) => boolean);
 
+    valueFromDependsOnValue?: (dependsOnValue?: string) => any;
+
     /**
      * When defined a function that returns the visibility of the field.
      */
@@ -139,45 +141,46 @@ export type FormFields<T extends FormFieldObject> = {
         // matching T type with FormFieldType
         Required<T>[key] extends FormFieldObject ? Omit<IFormEmbeddedFieldDef<Required<T>[key]>, 'fieldPath'> :
             Required<T>[key] extends IPaletteDef ? Omit<IFormPaletteEditorFieldDef, 'fieldPath'> :
-                Required<T>[key] extends IColorDef ? Omit<IFormColorEditorFieldDef, 'fieldPath'> :
-                    Required<T>[key] extends TidyTableColumnSelector[] ? Omit<IFormColumnChooserMultipleFieldDef, 'fieldPath'> :
-                        Required<T>[key] extends TidyTableColumnSelector ? Omit<IFormColumnChooserSingleFieldDef, 'fieldPath'> :
-                            Required<T>[key] extends IFormEventMappingArrayFieldDefType ? Omit<IFormEventMappingArrayFieldDef, 'fieldPath'> :
-                                Required<T>[key] extends IFormEventArrayFieldDefType ? Omit<IFormEventArrayFieldDef, 'fieldPath'> :
-                                    Required<T>[key] extends IFormSearchAndReplaceArrayFieldDefType ? Omit<IFormSearchAndReplaceArrayFieldDef, 'fieldPath'> :
-                                        Required<T>[key] extends Hook<any> ? Omit<IFormHookFieldDef<any>, 'fieldPath'> :
-                                            Required<T>[key] extends boolean ? Omit<IFormBooleanFieldDef, 'fieldPath'> :
-                                                Required<T>[key] extends number ? Omit<IFormNumberFieldDef, 'fieldPath'> :
-                                                    Required<T>[key] extends number ? Omit<IFormMaskFieldDef, 'fieldPath'> :
-                                                        Required<T>[key] extends string ?
-                                                            Omit<IFormOptionFieldSingleDef, 'fieldPath'>
-                                                            | Omit<IFormStringFieldDef, 'fieldPath'>
-                                                            | Omit<IFormFormatterPickerFieldDef, 'fieldPath'>
-                                                            | Omit<IFormWidgetVariantFieldDef, 'fieldPath'>
-                                                            | Omit<IFormTidyTableTextExprFieldDef, 'fieldPath'>
-                                                            | Omit<IFormTidyTableTextRowExprFieldDef, 'fieldPath'>
-                                                            | Omit<IFormTidyTableNumericStringColumnExprFieldDef, 'fieldPath'>
-                                                            | Omit<IFormTidyTableHtmlRowExprFieldDef, 'fieldPath'>
-                                                            | Omit<IFormTidyTableHtmlExprFieldDef, 'fieldPath'>
-                                                            | Omit<IFormTidyTableNumericExprFieldDef, 'fieldPath'>
-                                                            | Omit<IFormTidyTableNumericRowExprFieldDef, 'fieldPath'>
-                                                            | Omit<IFormTidyTableNumericColumnExprFieldDef, 'fieldPath'>
-                                                            | Omit<IFormTidyTableNumericJSColumnExprFieldDef, 'fieldPath'>
-                                                            | Omit<IFormTidyTableColorRowExprFieldDef, 'fieldPath'>
-                                                            | Omit<IFormTidyTableStringRowExprFieldDef, 'fieldPath'>
-                                                            | Omit<IFormTidyTableScaleRowExprFieldDef, 'fieldPath'>
-                                                            | Omit<IFormJsFieldDef, 'fieldPath'>
-                                                            | Omit<IFormJsonFieldDef, 'fieldPath'>
-                                                            | Omit<IFormMarkdownFieldDef, 'fieldPath'>
-                                                            | Omit<IFormOptionFieldReportPathDef, 'fieldPath'>
-                                                            | Omit<IFormPropertyChooserBaseDef, 'fieldPath'>
-                                                            | Omit<IFormLayoutFieldDef, 'fieldPath'>
-                                                            :
+                Required<T>[key] extends IFormConditionalColorRule[] ? Omit<IFormConditionalColorRulesFieldDef, 'fieldPath'> :
+                    Required<T>[key] extends IColorDef ? Omit<IFormColorEditorFieldDef, 'fieldPath'> :
+                        Required<T>[key] extends TidyTableColumnSelector[] ? Omit<IFormColumnChooserMultipleFieldDef, 'fieldPath'> :
+                            Required<T>[key] extends TidyTableColumnSelector ? Omit<IFormColumnChooserSingleFieldDef, 'fieldPath'> :
+                                Required<T>[key] extends IFormEventMappingArrayFieldDefType ? Omit<IFormEventMappingArrayFieldDef, 'fieldPath'> :
+                                    Required<T>[key] extends IFormEventArrayFieldDefType ? Omit<IFormEventArrayFieldDef, 'fieldPath'> :
+                                        Required<T>[key] extends IFormSearchAndReplaceArrayFieldDefType ? Omit<IFormSearchAndReplaceArrayFieldDef, 'fieldPath'> :
+                                            Required<T>[key] extends Hook<any> ? Omit<IFormHookFieldDef<any>, 'fieldPath'> :
+                                                Required<T>[key] extends boolean ? Omit<IFormBooleanFieldDef, 'fieldPath'> :
+                                                    Required<T>[key] extends number ? Omit<IFormNumberFieldDef, 'fieldPath'> :
+                                                        Required<T>[key] extends number ? Omit<IFormMaskFieldDef, 'fieldPath'> :
+                                                            Required<T>[key] extends string ?
+                                                                Omit<IFormOptionFieldSingleDef, 'fieldPath'>
+                                                                | Omit<IFormStringFieldDef, 'fieldPath'>
+                                                                | Omit<IFormFormatterPickerFieldDef, 'fieldPath'>
+                                                                | Omit<IFormWidgetVariantFieldDef, 'fieldPath'>
+                                                                | Omit<IFormTidyTableTextExprFieldDef, 'fieldPath'>
+                                                                | Omit<IFormTidyTableTextRowExprFieldDef, 'fieldPath'>
+                                                                | Omit<IFormTidyTableNumericStringColumnExprFieldDef, 'fieldPath'>
+                                                                | Omit<IFormTidyTableHtmlRowExprFieldDef, 'fieldPath'>
+                                                                | Omit<IFormTidyTableHtmlExprFieldDef, 'fieldPath'>
+                                                                | Omit<IFormTidyTableNumericExprFieldDef, 'fieldPath'>
+                                                                | Omit<IFormTidyTableNumericRowExprFieldDef, 'fieldPath'>
+                                                                | Omit<IFormTidyTableNumericColumnExprFieldDef, 'fieldPath'>
+                                                                | Omit<IFormTidyTableNumericJSColumnExprFieldDef, 'fieldPath'>
+                                                                | Omit<IFormTidyTableColorRowExprFieldDef, 'fieldPath'>
+                                                                | Omit<IFormTidyTableStringRowExprFieldDef, 'fieldPath'>
+                                                                | Omit<IFormTidyTableScaleRowExprFieldDef, 'fieldPath'>
+                                                                | Omit<IFormJsFieldDef, 'fieldPath'>
+                                                                | Omit<IFormJsonFieldDef, 'fieldPath'>
+                                                                | Omit<IFormMarkdownFieldDef, 'fieldPath'>
+                                                                | Omit<IFormOptionFieldReportPathDef, 'fieldPath'>
+                                                                | Omit<IFormPropertyChooserBaseDef, 'fieldPath'>
+                                                                | Omit<IFormLayoutFieldDef, 'fieldPath'>
+                                                                :
 
-                                                            Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
-                                                                | Omit<IFormGroupsFieldDef, 'fieldPath'> :
+                                                                Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
+                                                                    | Omit<IFormGroupsFieldDef, 'fieldPath'> :
 
-                                                                never /* type not supported */
+                                                                    never /* type not supported */
         )
 };
 
@@ -370,8 +373,11 @@ export type FormFieldType =
     /**
      * @see IFormLayoutFieldDef
      */
-    "layout"
-
+    "layout" |
+    /**
+     * @see IFormConditionalColorRulesFieldDef
+     */
+    "conditionalColorRules"
     ;
 
 export type FormFieldTidyTableExprType =
@@ -765,7 +771,7 @@ export interface IFormEventMappingArrayFieldDef extends IFormFieldDef<IFormEvent
  * @see FormFieldDef
  */
 
-export type IFormSearchAndReplaceArrayFieldDefType = { from: string; to: string }[];
+export type IFormSearchAndReplaceArrayFieldDefType = { from?: string; to?: string }[];
 
 export interface IFormSearchAndReplaceArrayFieldDef extends IFormFieldDef<IFormSearchAndReplaceArrayFieldDefType> {
 
@@ -1463,6 +1469,28 @@ export interface IFormFormatterPickerFieldDef extends IFormFieldDef<string> {
     fieldType: "formatterPicker"
 }
 
+/**
+ * @see FormFieldDef
+ */
+
+export enum ConditionalRuleOperators {
+    EQUALS = "EQUALS",
+    GREATER_THAN = "GREATER_THAN",
+    GREATER_EQUAL_THAN = "GREATER_EQUAL_THAN",
+    SMALLER_THAN = "SMALLER_THAN",
+    SMALLER_EQUAL_THAN = "SMALLER_EQUAL_THAN"
+}
+
+export interface IFormConditionalColorRule {
+    operator: ConditionalRuleOperators;
+    value?: string;
+    color?: IColorDef;
+}
+
+export interface IFormConditionalColorRulesFieldDef extends IFormFieldDef<IFormConditionalColorRule[]> {
+    fieldType: "conditionalColorRules"
+}
+
 
 // ---------------------------------------------------------------------------------------------------------------------
 //      Allows for typing the field meta definitions.
@@ -1505,5 +1533,6 @@ export type FormFieldDef =
     IFormGranularitySelectionFieldDef |
     IFormSearchAndReplaceArrayFieldDef |
     IFormPropertyChooserBaseDef |
-    IFormLayoutFieldDef
+    IFormLayoutFieldDef |
+    IFormConditionalColorRulesFieldDef
     ;

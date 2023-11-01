@@ -92,6 +92,16 @@ export class FilterPanelClasses {
      */
     static readonly selectableContent = "ic3FilterPanel-selectableContent";
 
+    /**
+     * Icon to make the filter panel collapsed (only available on App Left Panel)
+     */
+    static readonly collapsibleIcon = "ic3FilterPanel-collapsibleIcon";
+
+    /**
+     * Div when it's collapsed
+     */
+    static readonly collapsedDiv = "ic3FilterPanel-collapsedDiv";
+
 }
 
 export interface FilterPanelProps {
@@ -105,6 +115,11 @@ export interface FilterPanelProps {
      * If true, grow filter in row direction. If false, grow in column direction.
      */
     filterLayoutHorizontal?: boolean;
+
+    /**
+     * true if the filter panel is collapsible
+     */
+    isCollapsible?: boolean;
 }
 
 export declare type FilterPanelClassesKey = keyof FilterPanelClasses;
@@ -200,5 +215,28 @@ export interface FilterPanelChartOptions extends FormFieldObject {
      */
     hidePropertyFilters?: boolean;
 
+    /**
+     * Only allow users to select from these operators.
+     */
+    allowedOperatorsConfig?: IPGFilterItemFilterType[];
+
 }
 
+export type TextFilterType = "EQUALS"
+    | "NOT_EQUALS"
+    | "STARTS_WITH"
+    | "ENDS_WITH"
+    | "CONTAINS"
+    | "NOT_CONTAINS"
+    | "REGEX";
+
+export type IPGFilterItemFilterType = TextFilterType
+    | "IS_ANY_OF"
+    | "IS_NONE_OF"
+    | "GREATER_THAN"
+    | "GREATER_EQUAL_THAN"
+    | "SMALLER_THAN"
+    | "SMALLER_EQUAL_THAN"
+    | "BETWEEN"
+    | "IS_EMPTY"
+    | "IS_NOT_EMPTY";

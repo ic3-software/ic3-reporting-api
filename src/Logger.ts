@@ -19,6 +19,7 @@ export type LoggerComponent =
     "History" |
     "Keyboard" |
     "Layout" |
+    "LayoutConverter" |
     "LayoutPage" |
     "LayoutRender" |
     "Loader" |

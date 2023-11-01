@@ -119,6 +119,13 @@ export interface IWidgetLayoutInfo extends IRectangle {
     data?: IWidgetLayoutData;
 
     resizingConstraint?: ResizingConstraintOptions;
+
+    /**
+     * When _ printing _, the widget's layout has been converted and this scale has been applied to compute
+     * the new widget size.
+     */
+    widgetContentScaled?: number;
+
 }
 
 export type IPublicWidgetTemplateDefinition<T extends FormFieldObject> =
@@ -188,6 +195,11 @@ export interface IWidgetTemplateMdxBuilderAxisProps {
      * Allows to overwrite the ON "rows"in the MDX query  (to be used on modifyDefinition function)
      */
     overwriteAxisName?: string;
+
+    /**
+     * This is used to give end customers information on the limit of the query (column have 1000 by default, rows 100'000)
+     */
+    infoForSizing?: "TIDY_ROW" | "TIDY_COL";
 
 }
 
@@ -594,8 +606,9 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
     firesGlobalEventAtStart?: (options: OPTIONS | undefined, templateDef: IPublicWidgetTemplateDefinition<OPTIONS>) => boolean;
 
     /**
-     * Limit on the rows of the tidy result to be sure that the browser does not crash during rendering.
-     * Leave to undefined or set to -1 to have no limit.
+     * Limit on the rows of the tidy result to both prevent the server and the browser to process
+     * too many items. Set to -1 to have no limit. Note that the server side is defining a limit as well.
+     * See icCube/help?ic3topic=dashboards.gettingstarted.Configuration for more details.
      *
      * Note: can be overridden via Dashboards options (ic3report-config.js).
      */

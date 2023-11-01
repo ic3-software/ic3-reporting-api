@@ -51,6 +51,7 @@ export interface AppDivProps {
 export enum TopBarOptions {
     None,
     Standard,
+    Filter
 }
 
 export enum LeftBarOptions {

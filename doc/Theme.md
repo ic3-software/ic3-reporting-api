@@ -146,7 +146,7 @@ can be visually arranged within a dashboard.
 ```ts
 theme.ic3.layouts = [{
     
-    layoutConfigId: 'Statos Desktop Layout',
+    layoutConfigId: "Statos Desktop Layout",
 
     layoutGroup: "Statos Static",
     layoutName: "Desktop",

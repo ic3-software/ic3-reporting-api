@@ -9,6 +9,7 @@ import {FormFieldObject} from "./PublicTemplateForm";
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {ILogger} from "./Logger";
 import {IUserMenuOptionManager} from "./IUserMenuOptionManager";
+import {IMigrationManager} from "./IMigrationManager";
 
 export interface IPluginDefinition {
 
@@ -24,6 +25,8 @@ export interface IPluginDefinition {
      * When defining new widgets using amCharts 4, this method registers the icCube license.
      */
     registerAmCharts4?: (logger: ILogger, callback: (am4core: any) => void) => void;
+
+    registerMigrator? :(logger: ILogger, manager: IMigrationManager) => void;
 
     registerLocalization?: (logger: ILogger, manager: ILocalizationManager) => void;
 

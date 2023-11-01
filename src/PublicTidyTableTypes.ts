@@ -509,6 +509,11 @@ export enum InterpolationAppliedTo {
     TABLE = "TABLE"
 }
 
+export enum SortingMethod {
+    NONE = "NONE",
+    COLUMN = "COLUMN"
+}
+
 export interface ConvertToTypeParseSettings {
     locale?: string;
     dateFormat?: string;
