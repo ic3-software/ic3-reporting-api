@@ -519,6 +519,9 @@ export interface ic3Theme {
     } & IWidgetBoxIconsDefinition,
 
     widgetBox: {
+
+        extraHeight? : number;
+
         contentOffset: {
             top: number;
             left: number;
@@ -678,6 +681,13 @@ export interface ic3ThemeOptions {
     } & IWidgetBoxIconsDefinition,
 
     widgetBox?: {
+
+        /**
+         * Used when computing the height of the widget when (vertical) auto-expand is being applied.
+         * E.g., margins, paddings, ...
+         */
+        extraHeight? : number;
+
         contentOffset: {
             top: number;
             left: number;

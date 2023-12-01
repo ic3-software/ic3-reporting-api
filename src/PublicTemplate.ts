@@ -352,10 +352,15 @@ export interface IPublicWidgetJsTemplateDefinition<OPTIONS extends FormFieldObje
 interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject> {
 
     /**
+     * Used for finding the right documentation of `typeForHelp` is not defined.
      * Determine the widget icon in the widget infos.
-     * Used for finding the right documentation.
      */
     type: WidgetTemplateDefinitionType;
+
+    /**
+     * Used for finding the right documentation (override `type`).
+     */
+    typeForHelp?: WidgetTemplateDefinitionType;
 
     /**
      * Unique within the plugin. Must not contain any dot (this is NOT the templateId)
