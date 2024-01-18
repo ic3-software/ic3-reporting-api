@@ -860,11 +860,16 @@ export interface BaseTidyColumnCellDecoration {
 
     handlesCellsOnError?: boolean;
 
+    /**
+     * Default (i.e., when not defined) is true.
+     */
+    handlesBackgroundColor?: boolean;
+
     appliesToCell?: (rowIdx: number) => boolean;
 
     /**
-     *
-     * If an object is returned the underlying code uses emotion css function to convert to a className so you can do className like css
+     * If an object is returned the underlying code uses emotion CSS function to convert to a className,
+     * so you can do className like CSS :
      *
      * {
      *      fontSize: "0.7rem",
@@ -872,9 +877,9 @@ export interface BaseTidyColumnCellDecoration {
      *        fontSize: "1.4rem",
      *      }
      * }
-     *
      */
     cssStyles?: (rowIdx: number) => Record<string, any> | undefined;
+
 }
 
 export interface ReactTidyColumnCellDecoration extends BaseTidyColumnCellDecoration {

@@ -678,6 +678,7 @@ export type IWidgetTemplateDataMappingDef = IFormColumnChooserFieldDef;
  */
 export enum TemplateEventActionNames {
     SELECTION = 'Selection',
+    DRILLDOWN = 'Drilldown',
 
     // Notifications
     ADD_SELECTION = 'AddSelection',

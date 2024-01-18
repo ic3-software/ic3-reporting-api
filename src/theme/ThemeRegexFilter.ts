@@ -26,6 +26,8 @@ export class RegexFilterClasses {
     static readonly footerButtons = "ic3RegexFilter-footerButtons";
 
     static readonly filterCount = "ic3RegexFilter-filterCount";
+
+    static readonly selectResultsButton = "ic3RegexFilter-selectResultsButton";
 }
 
 export declare type RegexFilterClassesKey = keyof RegexFilterClasses;

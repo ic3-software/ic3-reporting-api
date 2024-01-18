@@ -10,9 +10,9 @@ import {
 } from "./PublicTidyTableTypes";
 import {ITidyTable} from "./PublicTidyTable";
 
-export type Hook<T> = {
+export type Hook<T, P> = {
 
-    hook: (value: T) => void;
+    hook: (value: T, options: P) => void;
 
 }
 
@@ -148,7 +148,7 @@ export type FormFields<T extends FormFieldObject> = {
                                 Required<T>[key] extends IFormEventMappingArrayFieldDefType ? Omit<IFormEventMappingArrayFieldDef, 'fieldPath'> :
                                     Required<T>[key] extends IFormEventArrayFieldDefType ? Omit<IFormEventArrayFieldDef, 'fieldPath'> :
                                         Required<T>[key] extends IFormSearchAndReplaceArrayFieldDefType ? Omit<IFormSearchAndReplaceArrayFieldDef, 'fieldPath'> :
-                                            Required<T>[key] extends Hook<any> ? Omit<IFormHookFieldDef<any>, 'fieldPath'> :
+                                            Required<T>[key] extends Hook<any, any> ? Omit<IFormHookFieldDef<any>, 'fieldPath'> :
                                                 Required<T>[key] extends boolean ? Omit<IFormBooleanFieldDef, 'fieldPath'> :
                                                     Required<T>[key] extends number ? Omit<IFormNumberFieldDef, 'fieldPath'> :
                                                         Required<T>[key] extends number ? Omit<IFormMaskFieldDef, 'fieldPath'> :
@@ -175,6 +175,8 @@ export type FormFields<T extends FormFieldObject> = {
                                                                 | Omit<IFormOptionFieldReportPathDef, 'fieldPath'>
                                                                 | Omit<IFormPropertyChooserBaseDef, 'fieldPath'>
                                                                 | Omit<IFormLayoutFieldDef, 'fieldPath'>
+                                                                | Omit<IFormLayoutFieldDef, 'fieldPath'>
+                                                                | Omit<IFormFilterPanelModelSelectorFieldDef, 'fieldPath'>
                                                                 :
 
                                                                 Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
@@ -377,7 +379,11 @@ export type FormFieldType =
     /**
      * @see IFormConditionalColorRulesFieldDef
      */
-    "conditionalColorRules"
+    "conditionalColorRules" |
+    /**
+     * @see IFormFilterPanelModelSelectorFieldDef
+     */
+    "filterPanelModelSelector"
     ;
 
 export type FormFieldTidyTableExprType =
@@ -811,7 +817,7 @@ export interface IFormGroupsFieldDef extends IFormFieldDef<string[]> {
 /**
  * @see FormFieldDef
  */
-export interface IFormHookFieldDef<T> extends IFormFieldDef<Hook<T>> {
+export interface IFormHookFieldDef<T> extends IFormFieldDef<Hook<T, any>> {
 
     fieldType: "hook",
 
@@ -1492,6 +1498,14 @@ export interface IFormConditionalColorRulesFieldDef extends IFormFieldDef<IFormC
 }
 
 
+/**
+ * @see FormFieldDef
+ */
+export interface IFormFilterPanelModelSelectorFieldDef extends IFormFieldDef<string> {
+    fieldType: "filterPanelModelSelector"
+}
+
+
 // ---------------------------------------------------------------------------------------------------------------------
 //      Allows for typing the field meta definitions.
 // ---------------------------------------------------------------------------------------------------------------------
@@ -1534,5 +1548,6 @@ export type FormFieldDef =
     IFormSearchAndReplaceArrayFieldDef |
     IFormPropertyChooserBaseDef |
     IFormLayoutFieldDef |
-    IFormConditionalColorRulesFieldDef
+    IFormConditionalColorRulesFieldDef |
+    IFormFilterPanelModelSelectorFieldDef
     ;

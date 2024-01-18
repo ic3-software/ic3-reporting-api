@@ -441,10 +441,10 @@ export interface Am4SimpleCategoryAxisOptions extends FormFieldObject {
      * In-place processing of the amCharts 4 category/date axis instance.
      *
      * <pre>
-     *     ( value: CategoryAxis | DateAxis ) => void;
+     *     ( value: CategoryAxis | DateAxis, options?: Am4SimpleCategoryAxisOptions ) => void;
      * </pre>
      */
-    xAxisPostRenderHook?: Hook<any>;
+    xAxisPostRenderHook?: Hook<any, Am4SimpleCategoryAxisOptions>;
 }
 
 export interface Am4ValueAxisOptions extends FormFieldObject {
@@ -541,13 +541,22 @@ export interface Am4ValueAxisOptions extends FormFieldObject {
      * In-place processing of the amCharts 4 category/date axis instance.
      *
      * <pre>
-     *     ( value: ValueAxis ) => void;
+     *     ( value: ValueAxis, options: Am4ValueAxisOptions ) => void;
      * </pre>
      */
-    yAxisPostRenderHook?: Hook<any>;
+    yAxisPostRenderHook?: Hook<any, Am4ValueAxisOptions>;
 }
 
-export type Am4DateAxisOptions = Pick<Am4ValueAxisOptions, "yAxisTitleText" | "yAxisMinGridDistance" | "yAxisShowGridLines" | "yAxisPostRenderHook"| "0242ac130003">;
+export interface Am4DateAxisOptions extends FormFieldObject, Pick<Am4ValueAxisOptions, "yAxisTitleText" | "yAxisMinGridDistance" | "yAxisShowGridLines"> {
+    /**
+     * In-place processing of the amCharts 4 date axis instance.
+     *
+     * <pre>
+     *     ( value: ValueAxis, options: Am4DateAxisOptions ) => void;
+     * </pre>
+     */
+    yAxisPostRenderHook?: Hook<any, Am4DateAxisOptions>;
+}
 
 export interface Am4SimpleColumnSeriesOptions extends FormFieldObject, IStrokeStyleProperties {
 
@@ -1035,10 +1044,10 @@ export interface Am4SecondValueAxisOptions extends FormFieldObject {
      * In-place processing of the amCharts 4 category/date axis instance.
      *
      * <pre>
-     *     ( value: ValueAxis ) => void;
+     *     ( value: ValueAxis, options: Am4SecondValueAxisOptions ) => void;
      * </pre>
      */
-    yAxisSecondPostRenderHook?: Hook<any>;
+    yAxisSecondPostRenderHook?: Hook<any, Am4SecondValueAxisOptions>;
 }
 
 export interface Am4BubbleSeriesOptions extends FormFieldObject, IStrokeStyleProperties {
@@ -1321,10 +1330,10 @@ export interface Am4CategoryDateAxisOptions extends FormFieldObject {
      * In-place processing of the amCharts 4 category/date axis instance.
      *
      * <pre>
-     *     ( value: CategoryAxis | DateAxis ) => void;
+     *     ( value: CategoryAxis | DateAxis, options: Am4CategoryDateAxisOptions ) => void;
      * </pre>
      */
-    xAxisPostRenderHook?: Hook<any>;
+    xAxisPostRenderHook?: Hook<any, Am4CategoryDateAxisOptions>;
 }
 
 export interface Am4ValueAxisRangeOptions extends FormFieldObject {
@@ -1802,16 +1811,16 @@ export interface Am4ChartOptions extends FormFieldObject {
      *          whose name is available in chart options below.
      * </pre>
      */
-    postRenderHook?: Hook<PublicAmCharts4Base<any, any>>;
+    postRenderHook?: Hook<PublicAmCharts4Base<any, any>, any>;
 
     /**
      * Called after the chart is created.
      *
      * <pre>
-     *     ( chart: amcharts4.Chart ) => void;
+     *     ( chart: amcharts4.Chart, options: Am4ChartOptions ) => void;
      * </pre>
      */
-    onChartCreatedHook?: Hook<any>;
+    onChartCreatedHook?: Hook<any, Am4ChartOptions>;
 
 }
 

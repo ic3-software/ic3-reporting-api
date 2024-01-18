@@ -37,6 +37,21 @@ export interface IThemeWidgetDefaults {
      * @see IWidgetTemplateChartOptions (PublicTemplates.ts)
      */
     options?: Record<string, any>;
+
+    /**
+     * Default values for widget icons. These settings override the defaults set in the theme in `widgetIcons`.
+     *
+     * Lookup order:
+     *
+     * <pre>
+     *      plugin-id.template-id.option
+     *      plugin-id.option
+     *      option
+     * </pre>
+     *
+     * @see IWidgetIcons (PublicTheme.ts)
+     */
+    widgetIcons?: Record<string, any>;
 }
 
 /**

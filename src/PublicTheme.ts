@@ -514,9 +514,7 @@ export interface ic3Theme {
         userMenuFilter?: (options: IUserMenuOptions[], templateDef?: IPublicWidgetTemplateDefinition<any>) => IUserMenuOptions[];
     }
 
-    widgetIcons?: {
-        disableWidgetIconsEdition?: boolean
-    } & IWidgetBoxIconsDefinition,
+    widgetIcons?: IWidgetIcons;
 
     widgetBox: {
 
@@ -676,9 +674,11 @@ export interface ic3ThemeOptions {
         userMenuFilter?: (options: IUserMenuOptions[], templateDef?: IPublicWidgetTemplateDefinition<any>) => IUserMenuOptions[];
     }
 
-    widgetIcons?: {
-        disableWidgetIconsEdition?: boolean
-    } & IWidgetBoxIconsDefinition,
+    /**
+     * Controls the icons to show for all widgets. To hide icons for a single widget, see `widgetDefaults`.
+     * @see {ic3ThemeOptions.widgetDefaults}.
+     */
+    widgetIcons?: IWidgetIcons;
 
     widgetBox?: {
 
@@ -792,6 +792,16 @@ export interface ic3ThemeOptions {
         },
     },
 
+}
+
+interface IWidgetIcons extends IWidgetBoxIconsDefinition {
+    /**
+     * Set to true to make the widget icon options readonly (non-editable) for all widgets. Also, this enforces to
+     * always use the default values set in the theme.
+     * @see {ic3ThemeOptions.widgetIcons}
+     * @see {ic3ThemeOptions.widgetDefaults}
+     */
+    disableWidgetIconsEdition?: boolean;
 }
 
 

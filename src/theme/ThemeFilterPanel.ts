@@ -66,6 +66,14 @@ export class FilterPanelClasses {
      */
     static readonly filterItemDivHeader = "ic3FilterPanel-filterItemHeader";
 
+    /**
+     * Div around the filter clear button. Used for showing the tooltip when hovered.
+     */
+    static readonly filterItemClearButtonContainer = "ic3FilterPanel-ItemClearButtonContainer";
+
+    /**
+     * Class for the clear button itself.
+     */
     static readonly filterItemClearButton = "ic3FilterPanel-ItemClearButton";
 
     static readonly filterItemRemoveButton = "ic3FilterPanel-ItemRemoveButton";

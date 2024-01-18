@@ -162,7 +162,7 @@ export interface ITidyTableInteractionSelection {
     /**
      * Resets the selection to his default/initial state.
      */
-    handletoInitialSelection(): void;
+    handleToInitialSelection(): void;
 
     /**
      * Get the selection mode (single or multiple) of the interaction object.

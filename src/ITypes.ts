@@ -36,6 +36,9 @@ export enum QueryType {
     HTTP_CSV = "HTTP_CSV"
 }
 
+/**
+ * Set to `true` to hide the icon.
+ */
 export interface IWidgetBoxIconsDefinition {
     disableQueryRunning?: boolean;
     disableQueryFilter?: boolean;
