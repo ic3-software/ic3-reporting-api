@@ -8,6 +8,7 @@ export * from "./IRemotePluginName";
 export * from "./IThemeManager";
 export * from "./IUserMenuOptionManager";
 export * from "./PublicAmchartsData";
+export * from "./PublicDateShortcutUtils";
 export * from "./PublicAmCharts4Base";
 export * from "./ITidyTableTransformation"
 export * from "./ITidyTableTransformationManager"

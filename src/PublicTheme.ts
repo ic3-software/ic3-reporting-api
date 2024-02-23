@@ -31,7 +31,10 @@ import {
     FilterTreePopOverProps,
     FilterTreeProps
 } from "./theme/ThemeFilterTree";
-import {DatePickerClassKey, FilterDatePickerProps} from "./theme/ThemeDatePicker";
+import {
+    DatePickerClassKey, DatePickerShortcut, DateRangePickerShortcut,
+    FilterDatePickerProps
+} from "./theme/ThemeDatePicker";
 import {FilterAutocompleteClassesKey, FilterAutocompleteProps} from "./theme/ThemeFilterAutocomplete";
 import {AppMenuIconClassKey, AppMenuIconProps} from "./theme/ThemeAppMenuIcon";
 import {QueryBuilderNodeClassKey, QueryBuilderNodeProps} from "./theme/ThemeQueryBuilderNode";
@@ -82,6 +85,16 @@ export type ThemeTextFormatter = {
 export type ThemeTextFormatters = Record<string, ThemeTextFormatter> & {
 
     /**
+     * The default formatter for displaying date values.
+     * Also used in the expressions when using $value.formatDate()$.
+     *
+     * Default: {
+     *     formatReport: "yyyy-MM-dd"
+     * }
+     */
+    defaultDate: ThemeTextFormatter;
+
+    /**
      * The default formatter for displaying datetime values.
      * Also used in the expressions when using $value.formatDate()$.
      *
@@ -89,7 +102,7 @@ export type ThemeTextFormatters = Record<string, ThemeTextFormatter> & {
      *     formatReport: "yyyy-MM-dd HH:mm:ss"
      * }
      */
-    defaultDate: ThemeTextFormatter;
+    defaultDatetime: ThemeTextFormatter;
 
     /**
      * The default way to format any number that has no format defined.
@@ -518,7 +531,7 @@ export interface ic3Theme {
 
     widgetBox: {
 
-        extraHeight? : number;
+        extraHeight?: number;
 
         contentOffset: {
             top: number;
@@ -614,6 +627,19 @@ export interface ic3Theme {
          * Left - Offset of dashboard page to the editor. Default 25.
          */
         viewPortOffsetLeft: number;
+    },
+
+    /**
+     * Options for date/range pickers. Filter panel / date picker filter.
+     */
+    datePicker: {
+        shortcuts: Record<'default', {
+            datePickerShortcuts: DatePickerShortcut[],
+            rangePickerShortcuts: DateRangePickerShortcut[]
+        }> & Record<string, {
+            datePickerShortcuts: DatePickerShortcut[],
+            rangePickerShortcuts: DateRangePickerShortcut[]
+        }>
     }
 
 }
@@ -686,9 +712,12 @@ export interface ic3ThemeOptions {
          * Used when computing the height of the widget when (vertical) auto-expand is being applied.
          * E.g., margins, paddings, ...
          */
-        extraHeight? : number;
+        extraHeight?: number;
 
         contentOffset: {
+            /**
+             * Corresponds to the actual height as defined for WidgetBoxClasses.header.
+             */
             top: number;
             left: number;
         };
@@ -791,6 +820,8 @@ export interface ic3ThemeOptions {
             }
         },
     },
+
+    datePicker?: DeepPartial<ic3Theme['datePicker']>;
 
 }
 

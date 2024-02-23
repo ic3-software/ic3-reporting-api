@@ -1,5 +1,6 @@
 import {SelectionBehaviour, TidyTableColumnSelector} from "../PublicTidyTableTypes";
 import {FormFieldObject} from "../PublicTemplateForm";
+import {PublicDateShortcutUtils} from "../PublicDateShortcutUtils";
 
 // TOM : needs clarification
 export class DatePickerClasses {
@@ -8,6 +9,11 @@ export class DatePickerClasses {
      * Style applied to the root element.
      */
     static readonly root = "ic3DatePicker-root";
+
+    /**
+     * Fix div inside the root.
+     */
+    static readonly container = "ic3DatePicker-container";
 
 
     static readonly rowDirection = "ic3DatePicker-row-direction";
@@ -18,6 +24,11 @@ export class DatePickerClasses {
      * + Mui DatePicker and/or DateRangePicker classes
      */
     static readonly fieldSeparator = "ic3DatePicker-fieldSeparator";
+
+    /**
+     * Label showing the selected shortcut. Clicking this label opens the shortcut menu.
+     */
+    static readonly shortcutLabel = "ic3DatePicker-shortcutLabel";
 }
 
 export declare type DatePickerClassKey = keyof DatePickerClasses;
@@ -168,8 +179,67 @@ export interface DatePickerChartOptions extends FormFieldObject {
      */
     dates?: TidyTableColumnSelector;
 
+    /**
+     * Shortcuts
+     */
+    shortcutsEnabled: boolean;
+
+    /**
+     *
+     */
+    shortcutsAnchorDate?: string;
+
+    /**
+     * From where to source the initial date.
+     */
+    initialDateFrom: InitialDateFrom;
+
+    /**
+     * Source the initial date/range from this shortcut.
+     */
+    initialShortcut?: string;
+
+    /**
+     * User can choose from the shortcuts in this group. Edit the groups in the theme plugin.
+     */
+    allowedShortcutGroup: string;
+
 }
+
+interface IShortcut<T> {
+    /**
+     * Show this name in the datepicker.
+     *
+     * Localize depending on the anchor date:
+     * — if undefined, Translate with `shortcutItemsDatePicker.<name>` in the localization.
+     * — if present, Translate with `shortcutItemsDatePicker.<name>.$anchor` in the localization. Fallback to translation with no anchor.
+     */
+    name: string;
+
+    /**
+     * Return the range of the dates that this shortcut selects. The date to return should be of type
+     * Dayjs. See the `dayjs` library. Return `null` to clear the start/end value.
+     */
+    getValue: (util: PublicDateShortcutUtils) => T;
+
+    /**
+     * If an anchor date is defined, then this shortcut will show.
+     * — true: only show the shortcut when there is an anchor date.
+     * — false: do not show this shortcut when there is an anchor date.
+     * — undefined: always show the shortcut.
+     */
+    needsAnchor?: boolean;
+}
+
+export type DatePickerShortcut = IShortcut<any>;
+
+export type  DateRangePickerShortcut = IShortcut<[any, any]>;
 
 export interface FilterDatePickerProps {
 
+}
+
+export enum InitialDateFrom {
+    MANUAL_DATES = "manual",
+    SHORTCUT = "shortcut",
 }

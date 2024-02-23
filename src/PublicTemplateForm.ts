@@ -1,4 +1,4 @@
-import {IWidgetEditorPublicContext} from "./PublicContext";
+import {IPublicContext, IWidgetEditorPublicContext} from "./PublicContext";
 import {ITidyColumn} from "./PublicTidyColumn";
 import * as React from "react";
 import {AutocompleteRenderInputParams, AutocompleteRenderOptionState} from "@mui/material/Autocomplete/Autocomplete";
@@ -9,6 +9,7 @@ import {
     TidyTableColumnSelector
 } from "./PublicTidyTableTypes";
 import {ITidyTable} from "./PublicTidyTable";
+import {Theme} from "@mui/material/styles";
 
 export type Hook<T, P> = {
 
@@ -177,10 +178,11 @@ export type FormFields<T extends FormFieldObject> = {
                                                                 | Omit<IFormLayoutFieldDef, 'fieldPath'>
                                                                 | Omit<IFormLayoutFieldDef, 'fieldPath'>
                                                                 | Omit<IFormFilterPanelModelSelectorFieldDef, 'fieldPath'>
+                                                                | Omit<IFormShortcutChooserDef<string>, 'fieldPath'>
                                                                 :
 
                                                                 Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
-                                                                    | Omit<IFormGroupsFieldDef, 'fieldPath'> :
+                                                                    | Omit<IFormGroupsFieldDef, 'fieldPath'> | Omit<IFormShortcutChooserDef<string[]>, 'fieldPath'> :
 
                                                                     never /* type not supported */
         )
@@ -383,7 +385,11 @@ export type FormFieldType =
     /**
      * @see IFormFilterPanelModelSelectorFieldDef
      */
-    "filterPanelModelSelector"
+    "filterPanelModelSelector" |
+    /**
+     * @see IFormShortcutChooserDef
+     */
+    "shortcutChooser"
     ;
 
 export type FormFieldTidyTableExprType =
@@ -572,7 +578,9 @@ export interface IFormAutocompleteFieldDef<OPTION> extends IFormFieldDef<OPTION>
 
         freeSolo?: boolean;
 
-        optionValues?: OPTION[] | ((callback: ((suggestions: OPTION[]) => void), dependsOnValue?: any) => void);
+        optionValues?: OPTION[] | ((callback: ((suggestions: OPTION[]) => void), dependsOnValue?: any, param?: {
+            theme: Theme
+        }) => void);
         optionValuesObsolete?: boolean;
         optionValuesObsoleteMessage?: string;
 
@@ -1506,6 +1514,18 @@ export interface IFormFilterPanelModelSelectorFieldDef extends IFormFieldDef<str
 }
 
 
+export type LocalizeContext = Pick<IPublicContext, 'localize'>;
+
+export interface IFormShortcutChooserDef<T extends string | string[]> extends IFormFieldDef<T> {
+    fieldType: "shortcutChooser",
+    editorConf?: {
+
+        getOptions: (deps: any, theme: Theme, context: LocalizeContext) => IOption[];
+
+    }
+}
+
+
 // ---------------------------------------------------------------------------------------------------------------------
 //      Allows for typing the field meta definitions.
 // ---------------------------------------------------------------------------------------------------------------------
@@ -1549,5 +1569,6 @@ export type FormFieldDef =
     IFormPropertyChooserBaseDef |
     IFormLayoutFieldDef |
     IFormConditionalColorRulesFieldDef |
-    IFormFilterPanelModelSelectorFieldDef
+    IFormFilterPanelModelSelectorFieldDef |
+    IFormShortcutChooserDef<any>
     ;

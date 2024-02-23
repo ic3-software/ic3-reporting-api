@@ -41,11 +41,21 @@ export interface IPublicContext {
 
     getUserName(): string;
 
+    getReportName(): string;
+
+    getReportFolderName(): string;
+
     getReportLocale(): string;
 
-    getNumberFormatter(format: ThemeTextFormatter): (value: any | undefined) => string;
+    /**
+     * @param format Formatter. Defaults to `defaultNumber` from the theme.
+     */
+    getNumberFormatter(format: ThemeTextFormatter | null | undefined): (value: any | undefined) => string;
 
-    getDateFormatter(format: ThemeTextFormatter): (value: any | undefined) => string;
+    /**
+     * @param format Formatter. Defaults to `defaultDate` or `defaultDatetime` from the theme.
+     */
+    getDateFormatter(format: ThemeTextFormatter | null | undefined): (value: any | undefined) => string;
 
     /**
      * translate the content of a report (the title of widgets, content of some widgets...). This does use another file

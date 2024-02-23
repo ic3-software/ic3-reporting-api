@@ -630,7 +630,7 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
      * Change the data to show when the user presses show-data from the widget menu.
      * @param ownProps
      */
-    getShowHideDataTable?: (table: ITidyTable | undefined, options: OPTIONS, ownProps: any) => ITidyTable | undefined;
+    getShowHideDataTable?: (table: ITidyTable | undefined, options: OPTIONS, ownProps: any, theme: Theme) => ITidyTable | undefined;
 
 }
 

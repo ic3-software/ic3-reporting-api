@@ -210,7 +210,7 @@ export interface FilterPanelChartOptions extends FormFieldObject {
     /**
      * Name template for the fields with properties. Use 'levelName' and 'propertyName' as placeholders.
      */
-    propertyFieldNameTemplate: string;
+    propertyFieldNameTemplate?: string;
 
     /**
      * Use the simple selection filter if and only if `useSimpleFilterCutoff` is not null and the level
@@ -227,6 +227,11 @@ export interface FilterPanelChartOptions extends FormFieldObject {
      * Only allow users to select from these operators.
      */
     allowedOperatorsConfig?: IPGFilterItemFilterType[];
+
+    /**
+     * Set to `true` to show date picker shortcuts.
+     */
+    datePickerShortcuts?: boolean;
 
 }
 
