@@ -246,4 +246,9 @@ export interface TableChartOptions extends BaseTableChartOptions {
      */
     useColumnGrouping: boolean;
 
+    /**
+     * Use checkbox selection. Adds a column with checkboxes as the first column.
+     */
+    useCheckboxSelection: boolean;
+
 }

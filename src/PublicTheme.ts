@@ -32,7 +32,9 @@ import {
     FilterTreeProps
 } from "./theme/ThemeFilterTree";
 import {
-    DatePickerClassKey, DatePickerShortcut, DateRangePickerShortcut,
+    DatePickerClassKey,
+    DatePickerShortcut,
+    DateRangePickerShortcut,
     FilterDatePickerProps
 } from "./theme/ThemeDatePicker";
 import {FilterAutocompleteClassesKey, FilterAutocompleteProps} from "./theme/ThemeFilterAutocomplete";
@@ -642,6 +644,22 @@ export interface ic3Theme {
         }>
     }
 
+    /**
+     * Options for saving the state of all dashboard filters into local storage.
+     */
+    filterState?: {
+
+        /**
+         * Set to true to disable auto save for all dashboards and make the option inactive.
+         */
+        disableFilterStateOption?: boolean;
+
+        /**
+         * The default value for auto-saving filter setting.
+         */
+        autosaveFilterStateToSessionStorage?: boolean;
+
+    }
 }
 
 export interface ic3ThemeOptions {
@@ -727,6 +745,11 @@ export interface ic3ThemeOptions {
      * Default values (e.g., box options, chart options, etc...).
      */
     widgetDefaults?: IThemeWidgetDefaults;
+
+    /**
+     * Settings for the filter state.
+     */
+    filterState?: Partial<ic3Theme['filterState']>;
 
     /**
      * A scale applied to the widget content when rendered for printing.

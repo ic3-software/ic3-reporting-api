@@ -1,7 +1,11 @@
 import {IPublicContext, IWidgetEditorPublicContext} from "./PublicContext";
 import {ITidyColumn} from "./PublicTidyColumn";
 import * as React from "react";
-import {AutocompleteRenderInputParams, AutocompleteRenderOptionState} from "@mui/material/Autocomplete/Autocomplete";
+import {
+    AutocompleteProps,
+    AutocompleteRenderInputParams,
+    AutocompleteRenderOptionState
+} from "@mui/material/Autocomplete/Autocomplete";
 import {
     ChartTemplateDataMapping,
     IFormFieldGranularityItem,
@@ -601,6 +605,8 @@ export interface IFormAutocompleteFieldDef<OPTION> extends IFormFieldDef<OPTION>
         ) => React.ReactNode;
 
         disableClearable?: boolean;
+
+        renderTags?: AutocompleteProps<OPTION, any, any, any>['renderTags']
 
     }
 }

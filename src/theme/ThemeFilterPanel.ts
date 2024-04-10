@@ -106,7 +106,7 @@ export class FilterPanelClasses {
     static readonly collapsibleIcon = "ic3FilterPanel-collapsibleIcon";
 
     /**
-     * Div when it's collapsed
+     * Div when it is collapsed
      */
     static readonly collapsedDiv = "ic3FilterPanel-collapsedDiv";
 

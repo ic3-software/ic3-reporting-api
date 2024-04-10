@@ -379,7 +379,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     findFirst<P>(callback: (idx: number) => P | undefined): P | undefined;
 
     /**
-     * returns true if the column as a property defining the formatted value
+     * returns true if the column as a property defining the formatted value.
      */
     hasFormattedValue(): boolean;
 
@@ -405,7 +405,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     getNumberFormatInfo(): string | undefined;
 
     /**
-     * Get cell as expected by xlsx library (do not include the interface as it's lazy loaded !)
+     * Get cell as expected by XLSX library (do not include the interface as it is lazy loaded!).
      * Does not return the format string.
      *
      * @param idx the position to return the value of.
@@ -423,9 +423,10 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     getXGridType(): "string" | "number" | "date" | "dateTime" | "boolean" | undefined;
 
     /**
-     * Return the cell decoration of the column
+     * Return the cell decoration of the column at `rowIdx`. If the cell has multiple renderers, this method returns
+     * the last added one.
      */
-    getCellDecoration(): PublicTidyColumnCellDecoration | undefined;
+    getCellDecoration(rowIdx: number): PublicTidyColumnCellDecorationRendered | undefined;
 
     /**
      * Returns true if the column has a property of requested name.
@@ -433,7 +434,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     hasProperty(name: ITidyColumnNamedProperties | string): boolean;
 
     /**
-     * Returns true if the column has color property or is a color column
+     * Returns true if the column has color property or is a color column.
      */
     hasColorProperty(): boolean;
 
@@ -466,7 +467,8 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     getOptionalProperty(name: ITidyColumnNamedProperties | string): ITidyUnknownColumn | undefined;
 
     /**
-     * Get the value of the property for the given property coordinate and the given row (undefined if the property does not exist)
+     * Get the value of the property for the given property coordinate, and the given row (undefined if the property
+     * does not exist).
      * @param name name of the property.
      * @param rowIdx row index for the value to return.
      */
@@ -494,7 +496,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
 
     /**
      * Get the entity item for the column. Used in column selection.
-     * Returns empty array if there are no entityItems.
+     * Returns an empty array if no entityItems.
      * @param hierarchyIndeces only include these hierarchies for generating the EntityItem. Leave undefined to include
      * all.
      */
@@ -519,7 +521,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     hasChildren(index: number): boolean;
 
     /**
-     * Returns the children of the node at index.
+     * Returns the children of the node at `index`.
      */
     getChildren(index: number): number[];
 
@@ -538,7 +540,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
 
     /**
      * Get the array of MDX info in the column.
-     * Returns an empty array if there is no MDX info.
+     * Returns an empty array if no MDX info.
      */
     getMdxInfos(): (MdxInfo | undefined)[];
 
@@ -568,9 +570,9 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     /**
      * Get the axis values in this column.
      *
-     * If it's an MDX Axis, the potentially sorted MDX axis (e.g. pivot table sort)
+     * If it is an MDX Axis, the potentially sorted MDX axis (e.g., pivot table sort)
      *
-     * If it's not, return undefined
+     * If it is not, return undefined
      */
     mdxAxis(): ReadonlyArray<T> | undefined;
 
@@ -609,7 +611,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     /**
      * Convert the column to another type. This modifies the values to be of that type.
      *
-     * If type is datetime, then the settings contain the date locale (default='en_US') and
+     * If type is datetime, then the settings contain the date locale (default='en_US'), and
      * the dateformat (default = 'yyyy-MM-dd').
      */
     convertToType(type: TidyColumnsType, settings?: ConvertToTypeParseSettings): void;
@@ -627,7 +629,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     /**
      * Change the values of the column.
      * @param values the new values for the column.
-     * @param newType the new type of the column. Leave undefined for automatic inference.
+     * @param newType the new type for the column. Leave undefined for automatic inference.
      */
     setValues<P>(values: P[], newType?: AllowedColumnType<P>): void;
 
@@ -693,9 +695,9 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     reIndex(index: number[]): void;
 
     /**
-     * Set the formatted values. Use this if you have the formatted values pre-calculated
+     * Set the formatted values. Use this if you have the formatted values pre-calculated,
      * or a function to calculate the formatted values.
-     * @param caption the caption for the added property
+     * @param caption the caption for the added property.
      */
     setFormattedValues(formattedValues: (string | null)[] | ((value: T | undefined) => string), caption?: string): void;
 
@@ -708,7 +710,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
 
     /**
      * Set the colors for the column.
-     * @param caption the caption for the added property
+     * @param caption the caption for the added property.
      */
     setColors(colors: (Property.Color | null)[], caption?: string): void;
 
@@ -736,10 +738,10 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     mapAllRows<P>(callbackFn: (index: number, column: ITidyBaseColumn<T>) => P | undefined, forceMapAllRows?: boolean): P[];
 
     /**
-     * Map the rows that are visible given a hierarchical axis and an array of boolean values
+     * Map the rows that are visible given a hierarchical axis, and an array of boolean values
      * @param expanded a function indicating for each index if it is expanded or not. If it is collapsed, then all
      * children are not visible.
-     * @param fun function to apply
+     * @param fun function to apply.
      */
     mapVisibleRows<P>(expanded: (rowIdx: number) => boolean, fun: (index: number) => P): P[];
 
@@ -768,7 +770,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     getInitialSelectionRowIndices(column: ITidyColumn | undefined, items: any[]): number[];
 
     /**
-     * The ITidyTableSelection row identifier for the row (uniqueName if it's an MDX like column)
+     * The ITidyTableSelection row identifier for the row (uniqueName if it is an MDX like column).
      */
     getSelectionRowIdentifier(idx: number): string;
 
@@ -784,7 +786,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * For a hierarchical columns returns a list of transformed columns as needed by a pivot table like structure.
      * If this column is not hierarchical, return this unchanged.
      *
-     * E.g., a columns with Year, Quarter and Month will be converted into 3 columns [Year,Quarter,Month]).
+     * E.g., a columns with Year, Quarter and Month will be converted into 3 columns [Year, Quarter, Month].
      */
     toFlatColumns(nullValue: any, rows: number[] | undefined): ITidyUnknownColumn[];
 
@@ -796,19 +798,21 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     getNodePath(rowIdx: number): number[];
 
     /**
-     * Returns if present a notification as defined by the properties of the columns
+     * Returns if present a notification as defined by the properties of the columns.
      */
     getAppNotification(rowIdx: number): AppNotification | undefined;
 
     /**
-     * Returns if present an action as defined by the properties of the columns
+     * Returns if present an action as defined by the properties of the columns.
      */
     getEventAction(rowIdx: number): [string, TidyActionEvent] | undefined;
 
     mapUniqueNames<T>(uniqueNames: string[], mapper: (idx: number) => T | null | undefined): T[];
 
     /**
-     * Cell decoration
+     * Add the renderer to the column. If a cell has multiple renderers, it uses the last added renderer.
+     *
+     * @see {BaseTidyColumnCellDecoration.appliesToCell}.
      */
     setCellDecoration(decoration: PublicTidyColumnCellDecoration): void;
 
@@ -819,12 +823,12 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     getIndex(): ITidyColumnIndex[];
 
     /**
-     * undefined if it's not an Mdx member column
+     * undefined if it is not an MDX member column
      */
     getQueryNodeIdentifier(idx: number): MdxNodeIdentifier | undefined;
 
     /**
-     * Returns the group key at the row index for use with table.toAmcharts4Data.
+     * Returns the group key at the row index for use with `table.toAmcharts4Data`.
      */
     getAmcharts4GroupKey(rowIdx: number): string;
 
@@ -843,7 +847,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     getIsTotalColumn(): boolean;
 
     /**
-     * return true if the column was created from an MDX axis (i.e.   [Geo].[Countries] on 0 )
+     * return true if the column was created from an MDX axis (i.e., [Geo].[Countries] on 0).
      */
     isMdxAxis(): boolean;
 
@@ -851,13 +855,14 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
 
 }
 
-export interface PublicTidyColumnCellDecorationRenderedOptions {
-    cellWidth?: number;
-    cellHeight: number;
-}
-
 export interface BaseTidyColumnCellDecoration {
 
+    /**
+     * If true, the renderer handles errors in the cells. If false, the table/pivot table renders an error if the cell
+     * has one.
+     *
+     * Use `column.getError(tidyRow)` to get the error of a cell.
+     */
     handlesCellsOnError?: boolean;
 
     /**
@@ -865,18 +870,24 @@ export interface BaseTidyColumnCellDecoration {
      */
     handlesBackgroundColor?: boolean;
 
+    /**
+     * A function that determines if the renderer is applied to a cell. Return true if yes, return false if not.
+     * @param rowIdx row index.
+     */
     appliesToCell?: (rowIdx: number) => boolean;
 
     /**
      * If an object is returned the underlying code uses emotion CSS function to convert to a className,
      * so you can do className like CSS :
      *
+     * ```TypeScript
      * {
      *      fontSize: "0.7rem",
      *      ':hover': {
      *        fontSize: "1.4rem",
      *      }
      * }
+     * ```
      */
     cssStyles?: (rowIdx: number) => Record<string, any> | undefined;
 
@@ -884,21 +895,50 @@ export interface BaseTidyColumnCellDecoration {
 
 export interface ReactTidyColumnCellDecoration extends BaseTidyColumnCellDecoration {
 
+    /**
+     * False if your renderer returns a React element or if you have no renderer.
+     */
     stringRenderer?: false;
 
-    renderer?: (rowIdx: number, options?: PublicTidyColumnCellDecorationRenderedOptions) => React.ReactElement;
+    /**
+     * The cell renders the returned React element. Note that for the Pivot Table, Emotion CSS and JS does not work.
+     */
+    renderer?: (rowIdx: number) => React.ReactElement;
 
 }
 
 export interface HtmlTidyColumnCellDecoration extends BaseTidyColumnCellDecoration {
 
+    /**
+     * True if your renderer returns a HTML string.
+     */
     stringRenderer: true;
 
-    renderer: (rowIdx: number, options?: PublicTidyColumnCellDecorationRenderedOptions) => string;
+    /**
+     * The cell renders the returned string as HTML.
+     */
+    renderer: (rowIdx: number) => string;
 
 }
 
 export type PublicTidyColumnCellDecoration = ReactTidyColumnCellDecoration | HtmlTidyColumnCellDecoration;
+
+/**
+ * The renderer for a cell at a row index.
+ *
+ * @see {PublicTidyColumnCellDecoration}
+ */
+export type PublicTidyColumnCellDecorationRendered = ({
+    stringRenderer: true;
+    renderer: () => string;
+} | {
+    stringRenderer?: false;
+    renderer?: () => React.ReactElement;
+}) & {
+    handlesCellsOnError?: boolean;
+    handlesBackgroundColor?: boolean;
+    cssStyles?: () => Record<string, any> | undefined;
+}
 
 export type ITidyColumn = ITidyBaseColumn<any>;
 export type ITidyUnknownColumn = ITidyBaseColumn<unknown>;

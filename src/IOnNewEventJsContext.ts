@@ -9,6 +9,18 @@ export interface IEventPayLoad {
 
 export interface IOnNewEventJsContext {
 
+    isAppConsole(): boolean;
+
+    isAppReportViewer(): boolean;
+
+    isAppReportEditor(): boolean;
+
+    isAppReportEditorPreview(): boolean;
+
+    isAppReportAppEditor(): boolean;
+
+    isAppGadgetEditor(): boolean;
+
     /**
      * A context cache that persist over calls.
      */

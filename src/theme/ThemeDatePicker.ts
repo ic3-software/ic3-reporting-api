@@ -206,7 +206,7 @@ export interface DatePickerChartOptions extends FormFieldObject {
 
 }
 
-interface IShortcut<T> {
+interface IShortcut<D /* date type */, T /* shortcut return type */> {
     /**
      * Show this name in the datepicker.
      *
@@ -219,8 +219,16 @@ interface IShortcut<T> {
     /**
      * Return the range of the dates that this shortcut selects. The date to return should be of type
      * Dayjs. See the `dayjs` library. Return `null` to clear the start/end value.
+     *
+     * A datepicker shortcut returns the date. Return null to reset the date.
+     *
+     * A range picker shortcut returns a range: [startDate (included), endDate (included)]. Return [null, null] to reset
+     * the date.
+     *
+     * If the date returned is outside the allowed range of dates in the widget, then the datepicker disables the
+     * option.
      */
-    getValue: (util: PublicDateShortcutUtils) => T;
+    getValue: (util: PublicDateShortcutUtils<D>) => T;
 
     /**
      * If an anchor date is defined, then this shortcut will show.
@@ -231,9 +239,9 @@ interface IShortcut<T> {
     needsAnchor?: boolean;
 }
 
-export type DatePickerShortcut = IShortcut<any>;
+export type DatePickerShortcut<T = any> = IShortcut<T, T | null>;
 
-export type  DateRangePickerShortcut = IShortcut<[any, any]>;
+export type  DateRangePickerShortcut<T = any> = IShortcut<T, [T | null, T | null]>;
 
 export interface FilterDatePickerProps {
 

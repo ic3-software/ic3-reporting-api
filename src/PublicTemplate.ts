@@ -7,7 +7,7 @@ import {ReactElement} from "react";
 import {Theme} from "@mui/material/styles";
 import {WidgetTemplateChartOptions, WidgetTemplateIDs} from "./PublicTemplates";
 import {ChartTemplateDataMapping, IFormFieldGranularityItem} from "./PublicTidyTableTypes";
-import {ResizingConstraintOptions} from "./theme/ThemeWidgetBox";
+import {PositionModeOptions, ResizingConstraintOptions} from "./theme/ThemeWidgetBox";
 import {QueryType} from "./ITypes";
 import {ILogger} from "./Logger";
 
@@ -119,6 +119,8 @@ export interface IWidgetLayoutInfo extends IRectangle {
     data?: IWidgetLayoutData;
 
     resizingConstraint?: ResizingConstraintOptions;
+
+    positionMode?: PositionModeOptions;
 
     /**
      * When _ printing _, the widget's layout has been converted and this scale has been applied to compute
@@ -632,6 +634,10 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
      */
     getShowHideDataTable?: (table: ITidyTable | undefined, options: OPTIONS, ownProps: any, theme: Theme) => ITidyTable | undefined;
 
+    /**
+     * For lazy filters or widgets with selection do not clean initial Selection based on initial tidy table
+     */
+    doNotCleanSelectionOnInitialProps?: true;
 }
 
 /**

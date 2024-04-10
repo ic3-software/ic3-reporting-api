@@ -36,6 +36,10 @@ export class AppClasses {
      * Style applied to
      */
     static readonly zoomWidget: string = "ic3App-zoomWidget";
+    /**
+     * Class added to root when the left filter panel is collapsed.
+     */
+    static readonly leftPanelCollapsed: string = "ic3LeftPanelCollapsed";
 }
 
 export declare type AppClassKey = keyof AppClasses;

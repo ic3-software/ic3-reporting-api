@@ -27,6 +27,18 @@ export interface IPublicContext {
 
     logger(): ILogger;
 
+    isAppConsole(): boolean;
+
+    isAppReportViewer(): boolean;
+
+    isAppReportEditor(): boolean;
+
+    isAppReportEditorPreview(): boolean;
+
+    isAppReportAppEditor(): boolean;
+
+    isAppGadgetEditor(): boolean;
+
     /**
      * React, returns true when loaded
      */
@@ -62,7 +74,7 @@ export interface IPublicContext {
      *
      * aka content localization
      */
-    translateContent(content: string): string;
+    translateContent(content: string, ...args: any[]): string;
 
     /**
      * localized report application tags (e.g. edit, write, save.. )

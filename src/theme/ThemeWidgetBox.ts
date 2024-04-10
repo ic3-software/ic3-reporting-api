@@ -112,6 +112,10 @@ export enum ResizingConstraintOptions {
     FixedWidthRightAligned = "FixedWidthRightAligned"
 }
 
+export enum PositionModeOptions {
+    Fixed = "Fixed",
+}
+
 /**
  * Support for repetition widget | pivot table expanding to make the whole content visible.
  */

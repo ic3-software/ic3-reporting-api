@@ -224,6 +224,8 @@ export interface IPageHeaderFooterDefinition {
     center?: IPageHeaderFooterPartDefinition;
     right?: IPageHeaderFooterPartDefinition;
 
+    printOnly?: true;
+
 }
 
 /**
