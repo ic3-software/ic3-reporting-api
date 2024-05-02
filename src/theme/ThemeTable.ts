@@ -40,8 +40,6 @@ export class TableClasses {
     static readonly 'cell--textLeft' = "MuiDataGrid-cell--textLeft";
     /* 	Styles applied to the cell element if align="right". */
     static readonly 'cell--textRight' = "MuiDataGrid-cell--textRight";
-    /* 	Styles applied to the cell element if the cell has a custom renderer. */
-    static readonly 'cell--withRenderer' = "MuiDataGrid-cell--withRenderer";
     /* 	Styles applied to the cell element. */
     static readonly 'cell' = "MuiDataGrid-cell";
     /* 	Styles applied to the cell checkbox element. */
@@ -78,10 +76,6 @@ export class TableClasses {
     static readonly 'columnHeaderTitleContainer' = "MuiDataGrid-columnHeaderTitleContainer";
     /* 	Styles applied to the column headers. */
     static readonly 'columnHeaders' = "MuiDataGrid-columnHeaders";
-    /* 	Styles applied to the column headers's inner element. */
-    static readonly 'columnHeadersInner' = "MuiDataGrid-columnHeadersInner";
-    /* 	Styles applied to the column headers's inner element if there is a horizontal scrollbar. */
-    static readonly 'columnHeadersInner--scrollable' = "MuiDataGrid-columnHeadersInner--scrollable";
     /* 	Styles applied to the column header separator if the column is resizable. */
     static readonly 'columnSeparator--resizable' = "MuiDataGrid-columnSeparator--resizable";
     /* 	Styles applied to the column header separator if the column is being resized. */
@@ -148,12 +142,6 @@ export class TableClasses {
     static readonly 'pinnedColumns--left' = "MuiDataGrid-pinnedColumns--left";
     /* 	Styles applied to the right pinned columns. */
     static readonly 'pinnedColumns--right' = "MuiDataGrid-pinnedColumns--right";
-    /* 	Styles applied to the pinned column headers. */
-    static readonly 'pinnedColumnHeaders' = "MuiDataGrid-pinnedColumnHeaders";
-    /* 	Styles applied to the left pinned column headers. */
-    static readonly 'pinnedColumnHeaders--left' = "MuiDataGrid-pinnedColumnHeaders--left";
-    /* 	Styles applied to the right pinned column headers. */
-    static readonly 'pinnedColumnHeaders--right' = "MuiDataGrid-pinnedColumnHeaders--right";
     /* 	Styles applied to the root element. */
     static readonly 'root' = "MuiDataGrid-root";
     /* 	Styles applied to the row element if the row is editable. */

@@ -1657,6 +1657,11 @@ export interface Am4GanttSeriesOptions extends Omit<Am4ColumnSeriesOptions, "col
      */
     endValue: TidyTableColumnSelector[];
 
+    /**
+     * If true, show groups in the same lane instead of in their separate lanes.
+     */
+    showGroupsOnSingleLane?:boolean;
+
 }
 
 export interface Am4DivergentAxisLabelOptions extends FormFieldObject {

@@ -853,6 +853,12 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
 
     addRowValue(insert: ITidyColumnAddValueInsert): void;
 
+    /**
+     * Returns true if and only if the all the datetime values in the column are dates (and do not have a time
+     * component).
+     */
+    hasOnlyDates(): boolean;
+
 }
 
 export interface BaseTidyColumnCellDecoration {

@@ -913,7 +913,11 @@ interface ic3BaseComponents {
     FilterAutocomplete?: {
         styleOverrides?: ComponentsOverrides["FilterAutocomplete"];
         variants?: ComponentsVariants["FilterAutocomplete"];
-    }
+    },
+    FilterAutocompletePopper?: {
+        styleOverrides?: ComponentsOverrides["MuiPopper"];
+        variants?: ComponentsVariants["MuiPopper"];
+    },
     GoogleMarker?: {
         variants?: ComponentsVariants['GoogleMarker'];
     }

@@ -54,14 +54,16 @@ export class PublicAmchartsData {
     private readonly onLevel: ITidyColumn | undefined;
     private readonly onGroup: ITidyColumn | undefined;
     private readonly table: ITidyTable;
+    private readonly disableGroupRecords?: boolean;
 
     constructor(table: ITidyTable, onValues: ISeriesValues[], onAxis: ITidyColumn, onGroup?: ITidyColumn,
-                onLevel?: ITidyColumn) {
+                onLevel?: ITidyColumn, disableGroupRecords?: boolean) {
         this.onValues = onValues;
         this.onAxis = onAxis;
         this.onGroup = onGroup;
         this.onLevel = onLevel;
         this.table = table;
+        this.disableGroupRecords = disableGroupRecords;
     }
 
     static getSeriesId(groupKey: string, valueColIdx: number): string {
@@ -94,12 +96,12 @@ export class PublicAmchartsData {
             }
 
             if (value.additionalValues) {
-                chartValues[String(idx) +   PublicAmchartsData.TAG_ADDITIONAL_VALUE] = value.additionalValues;
+                chartValues[String(idx) + PublicAmchartsData.TAG_ADDITIONAL_VALUE] = value.additionalValues;
             }
 
         });
 
-        return this.table.toAmcharts4Data(this.onAxis, chartValues, this.onGroup, this.onLevel);
+        return this.table.toAmcharts4Data(this.onAxis, chartValues, this.onGroup, this.onLevel, undefined, this.disableGroupRecords);
 
     }
 
@@ -136,7 +138,7 @@ export class PublicAmchartsData {
             });
         };
 
-        if (group != null) {
+        if (group != null && !this.disableGroupRecords) {
             const index = group.groupBy(true);
             if (firstGroupOnly) {
                 const groupIdx = index.values().next();
@@ -226,7 +228,7 @@ export class PublicAmchartsData {
      * Returns the first column used for a series type.
      */
     getFirstColumnOfType(seriesType: ISeriesValuesType): ITidyColumn | undefined {
-        return this.onValues.find(i => i.type===seriesType)?.values;
+        return this.onValues.find(i => i.type === seriesType)?.values;
     }
 
 }
