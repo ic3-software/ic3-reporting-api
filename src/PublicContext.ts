@@ -393,7 +393,15 @@ export interface IWidgetPublicContext extends IPublicContext {
      * Returns true if and only if the widgets has a header (from the chart box settings).
      */
     widgetHasHeader(): boolean;
+
+    getBoxSettings(): IPublicWidgetBoxSettings | undefined;
 }
+
+export interface IPublicWidgetBoxSettings {
+    widgetId: string;
+    waitingEventOrResult?: string;
+    emptyResult?: string;
+};
 
 export interface IWidgetEditorPublicContext {
 

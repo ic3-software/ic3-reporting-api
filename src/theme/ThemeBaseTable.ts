@@ -10,9 +10,14 @@ export enum TableColumnSizing {
 export interface BaseTableChartOptions extends FormFieldObject {
 
     /**
-     * If active, the color defined in the Tidy Table are applied to the table
+     * If active, the color defined in the Tidy Table are applied to the table.
      */
     applyHeaderColorDecoration?: boolean;
+
+    /**
+     * If enabled, show tooltips on every cell in the table (excluding renderers). Default = true.
+     */
+    cellTooltips: boolean;
 
     /**
      * Row Height.

@@ -1,5 +1,5 @@
 import {CSSInterpolation} from "@mui/system";
-import {ic3Components} from "./PublicTheme";
+import {Components} from "@mui/material/styles";
 
 export enum EmbeddedThemeNames {
 
@@ -73,12 +73,12 @@ export interface IThemeManager {
      * The theme decorator allows to setup the Theme.components and Theme.ic3 using the theme
      * created from its partial options (e.g., using palette, typography, spacing, etc...)
      */
-    registerTheme(themeOptions: any, themeDecorator?: (theme: any) => ic3Components, baseTheme?: EmbeddedThemeNames): void;
+    registerTheme(themeOptions: any, themeDecorator?: (theme: any) => Components, baseTheme?: EmbeddedThemeNames): void;
 
     /**
      * Register editor themes. Change the editor theme in ic3report-config.js by setting defaultEditorThemeId to a
      * themeId from a theme using this method.
      */
-    registerEditorTheme(themeOptions: any, themeDecorator?: (theme: any) => ic3Components): void;
+    registerEditorTheme(themeOptions: any, themeDecorator?: (theme: any) => Components): void;
 
 }

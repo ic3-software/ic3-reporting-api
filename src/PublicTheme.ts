@@ -1029,7 +1029,8 @@ interface ic3BaseComponents {
 }
 
 /**
- * For Typing purpose extending MUI Theme with ic3 components
+ * For Typing purpose extending MUI Theme with ic3 components.
+ * @deprecated Please use `Components` with `import { Components } from "@mui/material/styles";`.
  */
 export interface ic3Components extends ic3BaseComponents, Components {
 

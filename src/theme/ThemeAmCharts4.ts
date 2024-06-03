@@ -1807,7 +1807,8 @@ export interface Am4ChartOptions extends FormFieldObject {
     widgetVariant?: string;
 
     /**
-     * In-place processing of the amCharts 4 chart instance.
+     * Hook to change the chart series, axes and other components. This hook is called for each data or options update
+     * and after all the component have updated. You can use it to change the settings in the chart.
      *
      * <pre>
      *     ( value: PublicAmchartsBase<amcharts4.Chart, options> ) => void;
@@ -1819,7 +1820,7 @@ export interface Am4ChartOptions extends FormFieldObject {
     postRenderHook?: Hook<PublicAmCharts4Base<any, any>, any>;
 
     /**
-     * Called after the chart is created.
+     * Called once, directly after the chart is created.
      *
      * <pre>
      *     ( chart: amcharts4.Chart, options: Am4ChartOptions ) => void;

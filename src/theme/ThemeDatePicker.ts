@@ -52,6 +52,13 @@ export enum DatePickerRangeDirection {
 export interface DatePickerChartOptions extends FormFieldObject {
 
     /**
+     * Variant.
+     *
+     * Allows for selecting a set of preset options. Note that a variant is possibly overriding defined options.
+     */
+    variant?: string;
+
+    /**
      * The label content (i.e Date)
      */
     label?: string;
@@ -244,6 +251,11 @@ export type DatePickerShortcut<T = any> = IShortcut<T, T | null>;
 export type  DateRangePickerShortcut<T = any> = IShortcut<T, [T | null, T | null]>;
 
 export interface FilterDatePickerProps {
+
+    /**
+     * Variant defined in the theme. If the theme has variants, then the user can select one.
+     */
+    variant?: string;
 
 }
 
