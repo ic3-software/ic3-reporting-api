@@ -1660,7 +1660,7 @@ export interface Am4GanttSeriesOptions extends Omit<Am4ColumnSeriesOptions, "col
     /**
      * If true, show groups in the same lane instead of in their separate lanes.
      */
-    showGroupsOnSingleLane?:boolean;
+    showGroupsOnSingleLane?: boolean;
 
 }
 
@@ -1923,6 +1923,7 @@ export type AmCharts4ComboChartOptions =
     & Am4ChartOptions
     & Am4ValueLabelOptions
     & Am4SecondValueLabelOptions
+    & Am4ValueAxisRangeOptions
     ;
 
 export type AmCharts4CoordinateChartOptions =

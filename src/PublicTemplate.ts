@@ -354,6 +354,14 @@ export interface IPublicWidgetJsTemplateDefinition<OPTIONS extends FormFieldObje
 interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject> {
 
     /**
+     * [BETA]
+     *
+     * Introduced to tag a template as part of the AI [BETA] features.
+     * Currently used to filter out the template when AI not enabled.
+     */
+    ai?: true;
+
+    /**
      * Used for finding the right documentation of `typeForHelp` is not defined.
      * Determine the widget icon in the widget infos.
      */

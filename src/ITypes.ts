@@ -44,6 +44,7 @@ export interface IWidgetBoxIconsDefinition {
     disableQueryFilter?: boolean;
     disableQueryCellOnError?: boolean;
     disableQueryMaxRowsReached?: boolean;
+    // Disable the drilldown back button.
     disableDrilldown?: boolean;
     disableHelp?: boolean;
     disableInteractionSwitch?: boolean;

@@ -62,9 +62,39 @@ export class WidgetBoxClasses {
     static readonly header: string = "ic3WidgetBox-header";
 
     /**
+     * Styles applied to the widgetBox header left element ( title and drilldown )
+     */
+    static readonly headerLeft: string = "ic3WidgetBox-headerLeft";
+
+    /**
+     * Styles applied to the widgetBox header right element ( user menu )
+     */
+    static readonly headerRight: string = "ic3WidgetBox-headerRight";
+
+    /**
+     * Styles applied to the header element has no title
+     */
+    static readonly headerNoTitle: string = "ic3WidgetBox-headerNoTitle";
+
+    /**
+     * Styles applied to the header element container has no title
+     */
+    static readonly headerNoTitleContainer: string = "ic3WidgetBox-headerNoTitleContainer";
+
+    /**
      * Styles applied to the widgetBox header Title element
      */
     static readonly headerTitle: string = "ic3WidgetBox-headerTitle";
+
+    /**
+     * Styles applied to the widgetBox header Drilldown element
+     */
+    static readonly headerLeftSeparator: string = "ic3WidgetBox-headerLeftSeparator";
+
+    /**
+     * Styles applied to the widgetBox header Drilldown element
+     */
+    static readonly headerDrilldown: string = "ic3WidgetBox-headerDrilldown";
 
     /**
      * Root Styles applied to the widgetBox root element when the box is with header

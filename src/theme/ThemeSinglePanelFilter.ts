@@ -16,7 +16,7 @@ export interface SinglePanelFilterChartOptions extends FormFieldObject, Pick<Fil
     "allowedOperatorsConfig" | "datePickerShortcuts"> {
 
     /**
-     * The ID of the level / hierarchy that is used in the filter.
+     * The ID of the level / hierarchy that is used in the filter. Equal to `IPGFilterItem.fieldId`.
      */
     levelId: string;
 

@@ -1,5 +1,6 @@
 export type LoggerComponent =
 
+    "AI" |
     "AlertDialog" |
     "AmCharts4" |
     "AmCharts4GeoMap" |

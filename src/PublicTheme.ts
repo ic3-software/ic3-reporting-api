@@ -50,6 +50,8 @@ import {WidgetFilteredByClassesKey} from "./theme/ThemeWidgetFilteredBy";
 import {IUserMenuOptions, IWidgetBoxIconsDefinition} from "./ITypes";
 import {Ic3TableCellProps, ThemeIc3TableCellClassesKey} from "./theme/ThemeIc3TableCell";
 import {RegexFilterClassesKey, RegexFilterProps} from "./theme/ThemeRegexFilter";
+import {AIWidgetChatBotClassKey, AIWidgetChatBotStyleProps} from "./theme/ThemeAIWidgetChatBot";
+import {FilterPanelViewsMenuClassesKey} from "./theme/ThemeFilterPanelViewsMenu";
 
 export type Ic3ChartVariants = {
     [Name in keyof WidgetTemplateChartOptions]?: Array<{
@@ -524,6 +526,11 @@ export interface ic3Theme {
         markerClustererOptions?: MarkerClustererOptions;
     }
 
+    drilldown?: {
+        /* disables drilldown path in the header and hides the option (if true, like older versions)*/
+        disableDrilldownInTitle?: boolean;
+    },
+
     userMenu: {
         disableUserMenuEdition: boolean;
         userMenuFilter?: (options: IUserMenuOptions[], templateDef?: IPublicWidgetTemplateDefinition<any>) => IUserMenuOptions[];
@@ -650,14 +657,19 @@ export interface ic3Theme {
     filterState?: {
 
         /**
-         * Set to true to disable auto save for all dashboards and make the option inactive.
+         * Set to true to disable auto save for all dashboards/apps and make the option inactive.
          */
         disableFilterStateOption?: boolean;
 
         /**
-         * The default value for auto-saving filter setting.
+         * The default value for auto-saving filter setting in the dashboards.
          */
         autosaveFilterStateToSessionStorage?: boolean;
+
+        /**
+         * The default value for auto-saving filter setting in the application filter panel.
+         */
+        autosaveReportAppFilterStateToSessionStorage?: boolean;
 
     }
 }
@@ -861,6 +873,10 @@ interface IWidgetIcons extends IWidgetBoxIconsDefinition {
 
 interface ic3BaseComponents {
 
+    AIWidgetChatBot?: {
+        styleOverrides?: ComponentsOverrides["AIWidgetChatBot"];
+        variants?: ComponentsVariants["AIWidgetChatBot"];
+    }
     AlertDialog?: {
         styleOverrides?: ComponentsOverrides["AlertDialog"];
     }
@@ -1108,6 +1124,8 @@ declare module '@mui/material/styles/overrides' {
 
     interface ComponentNameToClassKey {
 
+        AIWidgetChatBot: AIWidgetChatBotClassKey;
+
         AlertDialog: AlertDialogClassKey;
         App: AppClassKey;
 
@@ -1117,6 +1135,7 @@ declare module '@mui/material/styles/overrides' {
         FilterButtons: FilterButtonsClassKey;
         LazyTreeViewStyled: LazyTreeClassesClassKey;
         FilterPanel: FilterPanelClassesKey;
+        FilterPanelViewsMenu: FilterPanelViewsMenuClassesKey;
         RegexFilter: RegexFilterClassesKey;
         FilterSlider: FilterSliderClassKey;
         ListCounter: ListCounterClassKey;
@@ -1160,6 +1179,8 @@ declare module '@mui/material/styles/overrides' {
 declare module '@mui/material/styles/props' {
 
     interface ComponentsPropsList {
+
+        AIWidgetChatBot: AIWidgetChatBotStyleProps;
 
         FilterCheckbox: FilterCheckboxProps;
         FilterButtons: FilterButtonsProps;

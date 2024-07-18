@@ -133,6 +133,13 @@ export interface KpiCartChartOptions extends SparkChartOptionsMeta {
     includeTrendIcon: boolean;
 
     /**
+     * Delta for zero value
+     *
+     * If the target value is below this delta value it is considered as a delta value  (rounding issue)
+     */
+    deltaZero?: number;
+
+    /**
      * Icon.
      *
      * The icon that indicate the trend.

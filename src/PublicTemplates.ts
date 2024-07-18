@@ -36,8 +36,11 @@ import {
     GeoMapChartOptions
 } from "./theme/ThemeAmCharts4";
 import {PrintButtonChartOptions} from "./theme/ThemePrintButton";
+import {AIWidgetChatBotOptions} from "./theme/ThemeAIWidgetChatBot";
 
 interface IWidgetTemplateChartOptions {
+
+    "ic3.AIChatBox": AIWidgetChatBotOptions,
 
     "ic3.DatePicker": DatePickerChartOptions,
 

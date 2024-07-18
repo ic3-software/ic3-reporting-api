@@ -58,7 +58,7 @@ export interface IFormFieldDef<DEFAULT_VALUE_TYPE> {
     group?: string;
 
     /**
-     * When defined, the value is added as a prefix to the fieldPath to defined the localization tag.
+     * When defined, the value is added as a prefix to the fieldPath to define the localization tag.
      */
     fieldPrefixTag?: IFormFieldGroupTypes | string;
 
@@ -310,6 +310,10 @@ export type FormFieldType =
      * @see IFormStringFieldDef
      */
     "string" |
+    /**
+     * @see IFormTextFieldDef
+     */
+    "text" |
     /**
      * @see IFormTidyTableHtmlExprFieldDef
      */
@@ -857,6 +861,10 @@ export interface IFormJsonFieldDef extends IFormFieldDef<string> {
 
     fieldType: "json",
 
+    editorConf?: {
+        helpMdFile: string;
+    }
+
 }
 
 /**
@@ -1061,7 +1069,7 @@ export interface IFormReportPermaLinkFieldDef extends IFormFieldDef<string> {
  */
 export interface IFormStringFieldDef extends IFormFieldDef<string> {
 
-    fieldType: "string" | "url",
+    fieldType: "string" | "url" | "text",
 
     editorConf?: {
 
@@ -1071,7 +1079,18 @@ export interface IFormStringFieldDef extends IFormFieldDef<string> {
         suggestions?: string[] | ((callback: ((candidates: string[]) => void), dependsOnValue?: any) => void);
 
         copyToClipboard?: boolean;
+
+        /**
+         * Show an error if the value is not valid. Return an empty string if the value is valid.
+         */
+        valueValidator?: (value: any) => string;
     }
+
+}
+
+export interface IFormTextFieldDef extends IFormFieldDef<string> {
+
+    fieldType: "text",
 
 }
 

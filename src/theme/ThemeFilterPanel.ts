@@ -27,9 +27,34 @@ export class FilterPanelClasses {
     static readonly titleDivText = "ic3FilterPanel-title-text";
 
     /**
+     * The help button next to the filter panel title
+     */
+    static readonly titleDivButtons = "ic3FilterPanel-title-buttons";
+
+    /**
+     * Icon to make the filter panel collapsed (only available on App Left Panel)
+     */
+    static readonly collapsibleIcon = "ic3FilterPanel-collapsibleIcon";
+
+    /**
+     * Help icon
+     */
+    static readonly helpIcon = "ic3FilterPanel-helpIcon";
+
+    /**
+     * Menu icon for filter panel views.
+     */
+    static readonly menuIcon = "ic3FilterPanel-menuIcon";
+
+    /**
      * Div containing the add and remove all buttons
      */
     static readonly headerDivButtons = "ic3FilterPanel-header-buttons";
+
+    /**
+     * alert
+     */
+    static readonly alert = "ic3FilterPanel-alert";
 
     /**
      * Add button
@@ -83,6 +108,11 @@ export class FilterPanelClasses {
      */
     static readonly inputField = "ic3FilterPanel-filterInputfield";
 
+    /**
+     * Classname for the checkmark 'set' button.
+     */
+    static readonly inputFieldSetValueButton = "ic3FilterPanel-inputFieldSetValueButton";
+
     static readonly dateTimePicker = "ic3FilterPanel-dateTimePicker";
 
     /**
@@ -94,16 +124,16 @@ export class FilterPanelClasses {
      * Classname for the field label
      */
     static readonly fieldName = "ic3FilterPanel-fieldName";
+    /**
+
+     * Classname for the field label
+     */
+    static readonly fieldNameExtra = "ic3FilterPanel-fieldName-extra";
 
     /**
      * Div with selectable items for filters with few items
      */
     static readonly selectableContent = "ic3FilterPanel-selectableContent";
-
-    /**
-     * Icon to make the filter panel collapsed (only available on App Left Panel)
-     */
-    static readonly collapsibleIcon = "ic3FilterPanel-collapsibleIcon";
 
     /**
      * Div when it is collapsed
@@ -194,6 +224,11 @@ export interface FilterPanelChartOptions extends FormFieldObject {
      * Easily change by clicking 'Set Default Filters' in the user menu of the widget header.
      */
     initialFilterConfig?: string;
+
+    /**
+     * Allow users to save and load filters. Filters are stored in the users' browser.
+     */
+    enableViews?: boolean;
 
     /**
      * If true, grow filter in row direction. If false, grow in column direction.
