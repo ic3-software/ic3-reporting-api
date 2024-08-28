@@ -231,6 +231,11 @@ export interface FilterPanelChartOptions extends FormFieldObject {
     enableViews?: boolean;
 
     /**
+     * Max number of views a user can have. Empty means unlimited.
+     */
+    maxNumberOfViews?: number;
+
+    /**
      * If true, grow filter in row direction. If false, grow in column direction.
      */
     filterLayoutHorizontal?: boolean;

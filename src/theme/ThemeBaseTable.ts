@@ -20,6 +20,11 @@ export interface BaseTableChartOptions extends FormFieldObject {
     cellTooltips: boolean;
 
     /**
+     * Save the state of the table in the users browsers local storage.
+     */
+    saveTableStateLocally?: boolean;
+
+    /**
      * Row Height.
      */
     tableSize: TableRowHeightOptions;

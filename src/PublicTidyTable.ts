@@ -641,6 +641,11 @@ export interface ITidyTable {
      *
      */
     getTopHeaderHierarchyCount(): number;
+
+    /**
+     * Clear the index. Use for resetting sorting / filtering.
+     */
+    resetIndex(): void;
 }
 
 

@@ -52,6 +52,7 @@ import {Ic3TableCellProps, ThemeIc3TableCellClassesKey} from "./theme/ThemeIc3Ta
 import {RegexFilterClassesKey, RegexFilterProps} from "./theme/ThemeRegexFilter";
 import {AIWidgetChatBotClassKey, AIWidgetChatBotStyleProps} from "./theme/ThemeAIWidgetChatBot";
 import {FilterPanelViewsMenuClassesKey} from "./theme/ThemeFilterPanelViewsMenu";
+import {Ic3TableCellDrilldownProps, ThemeIc3TableCellDrilldownClassesKey} from "./theme/ThemeIc3TableCellDrilldown";
 
 export type Ic3ChartVariants = {
     [Name in keyof WidgetTemplateChartOptions]?: Array<{
@@ -991,6 +992,9 @@ interface ic3BaseComponents {
     Ic3TableCell?: {
         styleOverrides?: ComponentsOverrides["Ic3TableCell"];
     }
+    Ic3TableCellDrilldown?: {
+        styleOverrides?: ComponentsOverrides["Ic3TableCellDrilldown"];
+    }
     Ic3TableCellError?: {
         styleOverrides?: ComponentsOverrides["Ic3TableCellError"];
     }
@@ -1170,6 +1174,7 @@ declare module '@mui/material/styles/overrides' {
 
         WidgetBoxFilteredByTooltip: WidgetFilteredByClassesKey;
         Ic3TableCell: ThemeIc3TableCellClassesKey;
+        Ic3TableCellDrilldown: ThemeIc3TableCellDrilldownClassesKey;
         Ic3TableCellError: ThemeIc3TableCellClassesKey;
 
     }
@@ -1212,6 +1217,7 @@ declare module '@mui/material/styles/props' {
 
         PrintButton: StyledPrintButtonDivProps;
         Ic3TableCell: Ic3TableCellProps;
+        Ic3TableCellDrilldown: Ic3TableCellDrilldownProps;
         Ic3TableCellError: Ic3TableCellProps;
     }
 

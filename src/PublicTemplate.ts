@@ -733,6 +733,12 @@ export interface ITemplateEventActionDef {
      */
     selectionSubscribe?: string;
 
+    /**
+     * Return true if the widget fires the event on its first render. This forces other widgets that use this event
+     * to wait before rendering.
+     */
+    isEventFiredAtStart?: (roleName: string, options: any) => boolean;
+
 }
 
 export interface IWrappedWidgetTemplateDefinition<WIDGET extends WidgetTemplateIDs> {

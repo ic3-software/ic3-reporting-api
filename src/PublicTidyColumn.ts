@@ -695,6 +695,11 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     reIndex(index: number[]): void;
 
     /**
+     * Reset the index set using `reIndex`.
+     */
+    resetIndex(): void;
+
+    /**
      * Set the formatted values. Use this if you have the formatted values pre-calculated,
      * or a function to calculate the formatted values.
      * @param caption the caption for the added property.

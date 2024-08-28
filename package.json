@@ -1,6 +1,6 @@
 {
   "name": "@ic3/reporting-api",
-  "version": "8.4.13",
+  "version": "8.4.14",
   "description": "icCube dashboards API",
   "homepage": "https://github.com/ic3-software/ic3-reporting-api",
   "repository": "https://github.com/ic3-software/ic3-reporting-api",
@@ -11,14 +11,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@mui/material": "5.16.1",
-    "@mui/system": "5.16.1",
-    "@emotion/react": "11.11.4",
-    "@emotion/styled": "11.11.5"
+    "@mui/material": "5.16.7",
+    "@mui/system": "5.16.7",
+    "@emotion/react": "11.13.0",
+    "@emotion/styled": "11.13.0"
   },
   "devDependencies": {
     "@types/markerclustererplus": "2.1.33",
-    "@types/node": "20.14.10",
+    "@types/node": "22.3.0",
     "@types/react": "18.3.3",
     "del-cli": "5.1.0",
     "typescript": "5.4.5"

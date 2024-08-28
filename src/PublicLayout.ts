@@ -251,6 +251,9 @@ export interface IWidgetLayoutDefinition {
 
     layoutName: string;
 
+    /**
+     * CSS class of the layout.
+     */
     cssClass?: string;
 
     /**

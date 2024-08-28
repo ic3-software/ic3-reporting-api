@@ -220,6 +220,8 @@ export interface ITidyTableDrilldown {
     hasDrilldown(): boolean;
 
     hasNodeDrilldown(nodeInfo: MdxNodeIdentifier, stopDrillDownDepth?: number): boolean;
+
+    hasPivotLikeDrilldown(): boolean;
 }
 
 export interface ITidyTableInteractionEvent {
@@ -389,5 +391,11 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      * Use for publishing app notifications, e.g., print the report.
      */
     publishAppNotification(notification: AppNotification): void;
+
+    /**
+     * Get a column from the underlying tidy table.
+     * @param columnIdx
+     */
+    getDrilldownColumn(columnIdx: number): ITidyColumn;
 }
 

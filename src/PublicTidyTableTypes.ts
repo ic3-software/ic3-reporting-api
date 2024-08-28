@@ -3,7 +3,7 @@
  */
 
 import {TidyHistogramBucketType} from "./PublicTidyHistogram";
-import {ITidyColumn, ITidyColumnAddValueInsert} from "./PublicTidyColumn";
+import {ITidyColumn, ITidyColumnAddValueCopyRow, ITidyColumnAddValueInsert} from "./PublicTidyColumn";
 import {MdxNodeIdentifier} from "./PublicTidyTable";
 import {SelectionMode} from "./PublicTidyTableInteractions";
 
@@ -533,7 +533,7 @@ export interface ITotalRowValues {
     /**
      * Keys as column names.
      */
-    totalTexts: Record<string, ITidyColumnAddValueInsert>;
+    totalTexts: Record<string, ITidyColumnAddValueInsert | ITidyColumnAddValueCopyRow>;
 
 }
 

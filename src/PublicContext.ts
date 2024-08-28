@@ -55,6 +55,8 @@ export interface IPublicContext {
 
     getReportName(): string;
 
+    getReportPath(): string;
+
     getReportFolderName(): string;
 
     getReportLocale(): string;
