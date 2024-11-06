@@ -282,6 +282,8 @@ export interface IWidgetPublicContext extends IPublicContext {
      */
     fireMdxEvent(actionName: string, value: string, mdx: string): void;
 
+    fireMdxEvents(events: {actionName: string, value: string, mdx: string}[]): void;
+
     /**
      * Cypress testing purpose, after a rendering of the chart
      */

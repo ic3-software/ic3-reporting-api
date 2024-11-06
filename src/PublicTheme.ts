@@ -53,6 +53,7 @@ import {RegexFilterClassesKey, RegexFilterProps} from "./theme/ThemeRegexFilter"
 import {AIWidgetChatBotClassKey, AIWidgetChatBotStyleProps} from "./theme/ThemeAIWidgetChatBot";
 import {FilterPanelViewsMenuClassesKey} from "./theme/ThemeFilterPanelViewsMenu";
 import {Ic3TableCellDrilldownProps, ThemeIc3TableCellDrilldownClassesKey} from "./theme/ThemeIc3TableCellDrilldown";
+import {FilterSwitchClassKey, FilterSwitchProps} from "./theme/ThemeFilterSwitch";
 
 export type Ic3ChartVariants = {
     [Name in keyof WidgetTemplateChartOptions]?: Array<{
@@ -508,6 +509,7 @@ export interface ic3Theme {
         checkIndeterminate: React.ReactNode | undefined;
         radioUnselected: React.ReactNode | undefined;
         radioSelected: React.ReactNode | undefined;
+        hasDescendantsIndicatorIcon: React.ReactNode | undefined;
 
     };
 
@@ -998,6 +1000,10 @@ interface ic3BaseComponents {
     Ic3TableCellError?: {
         styleOverrides?: ComponentsOverrides["Ic3TableCellError"];
     }
+    Ic3FilterSwitch?: {
+        styleOverrides?: ComponentsOverrides["Ic3FilterSwitch"];
+        variants?: ComponentsVariants["Ic3FilterSwitch"];
+    }
     "amCharts4.AmCharts4BubbleChart"?: {
         variants?: Ic3ChartVariants["amCharts4.AmCharts4BubbleChart"]
     }
@@ -1144,6 +1150,7 @@ declare module '@mui/material/styles/overrides' {
         FilterSlider: FilterSliderClassKey;
         ListCounter: ListCounterClassKey;
         FilterTree: FilterTreeClassKey;
+        Ic3FilterSwitch: FilterSwitchClassKey;
         FilterTreePopOver: FilterTreePopOverClassKey;
         FilterDatePicker: DatePickerClassKey;
         FilterAutocomplete: FilterAutocompleteClassesKey;
@@ -1195,6 +1202,7 @@ declare module '@mui/material/styles/props' {
         FilterSlider: FilterSliderProps;
         ListCounter: ListCounterProps;
         FilterTree: FilterTreeProps;
+        Ic3FilterSwitch: FilterSwitchProps;
         FilterTreePopOver: FilterTreePopOverProps;
         FilterDatePicker: FilterDatePickerProps;
         FilterAutocomplete: FilterAutocompleteProps;

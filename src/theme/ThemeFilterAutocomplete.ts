@@ -52,6 +52,11 @@ export interface FilterAutocompleteChartOptions extends FilterTidyTableChartOpti
     limitChips: number;
 
     /**
+     * Maximum items that allowed in the selection.
+     */
+    limitSelection?: number;
+
+    /**
      * Text to show when the filter is empty.
      */
     placeholderText?: string;

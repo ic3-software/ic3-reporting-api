@@ -25,6 +25,7 @@ export type LoggerComponent =
     "LayoutRender" |
     "Loader" |
     "Localization" |
+    "MdxConsole" |
     "Operation" |
     "Other" |
     "PivotTable" |

@@ -37,6 +37,7 @@ import {
 } from "./theme/ThemeAmCharts4";
 import {PrintButtonChartOptions} from "./theme/ThemePrintButton";
 import {AIWidgetChatBotOptions} from "./theme/ThemeAIWidgetChatBot";
+import {FilterSwitchChartOptions} from "./theme/ThemeFilterSwitch";
 
 interface IWidgetTemplateChartOptions {
 
@@ -53,6 +54,7 @@ interface IWidgetTemplateChartOptions {
     "ic3.FilterPanel": FilterPanelChartOptions,
     "ic3.FilterSlider": FilterSliderChartOptions,
     "ic3.FilterTree": FilterTreeChartOptions,
+    "ic3.FilterSwitch": FilterSwitchChartOptions,
 
     "ic3.GoogleHeatMap": GoogleHeatMapChartOptions,
     "ic3.GoogleKmlLayer": GoogleKmlLayerChartOptions,

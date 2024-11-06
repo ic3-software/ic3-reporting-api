@@ -287,6 +287,26 @@ export interface IPublicWidgetReactProps<OPTIONS> {
     widgetHeader: string
 }
 
+export interface IPublicErrorDefinition {
+
+    /**
+     * e.g. a user defined javascript error vs a programming error
+     */
+    expected?: boolean;
+
+    name: string;
+    args?: any[];
+
+    cause?: any;
+
+}
+
+export interface IPublicWidgetReactMdxResultOnErrorProps {
+
+    error: IPublicErrorDefinition;
+
+}
+
 /**
  *
  *
@@ -304,6 +324,8 @@ export interface IPublicWidgetReactTemplateDefinition<OPTIONS extends FormFieldO
      * The React Hook component  (function with props as parameter)
      */
     reactEl?: React.FunctionComponent<IPublicWidgetReactProps<OPTIONS>>;
+
+    reactElMdxResultOnError? : React.FunctionComponent<IPublicWidgetReactMdxResultOnErrorProps>;
 
     reactComponent: true;
 
@@ -464,6 +486,7 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
     withoutQuery?: boolean;
 
     withoutSelection?: boolean;
+    withoutInitialSelection?: boolean;
     withoutDrilldown?: boolean;
     withoutEvents?: boolean;
 

@@ -112,6 +112,8 @@ export interface IFormFieldDef<DEFAULT_VALUE_TYPE> {
      * Allow for group of fields, disabled help in form wrapper
      */
     disableHelpInWrapper?: boolean;
+
+    onValueSet?: (value: any) => void;
 }
 
 /**
@@ -763,7 +765,6 @@ export interface IFormColumnSelectionFieldDef extends IFormFieldDef<any> {
 
     editorConf: {
 
-        columnAlias: string;
         multiple?: boolean;
 
     }

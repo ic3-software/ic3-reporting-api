@@ -280,6 +280,8 @@ export type ITidyRow = any[];
 export interface MdxInfo {
 
     uniqueName: string;
+    // uniqueNameCS: boolean;
+
     key: any;
     keyS: string | undefined;
 
@@ -287,7 +289,9 @@ export interface MdxInfo {
     caption: string;
 
     isAll?: boolean;
+
     pun?: string;
+    // punCS?: boolean;
 
     /**
      * Children count
@@ -361,12 +365,16 @@ export interface IMdxAxisSeriesInfo {
 export interface EntityItem {
 
     uniqueName: string;
+    // uniqueNameCS: boolean;
+
     key?: any;
 
     name: string;
     caption: string;
 
     parentUN?: string;
+    // parentUNCS?: boolean;
+
     hierUN?: string;
 
     selected?: boolean;
@@ -600,7 +608,7 @@ export interface WidgetTidySelectionOptions {
     /**
      * List with items in the initial selection.
      */
-    initSelectionUserDefined?: string[];
+    initSelectionUserDefined?: string[] | string;
 
     /**
      * Column with items in the initial selection. The column has a truthy value for items that are in the initial

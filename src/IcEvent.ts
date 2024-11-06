@@ -56,6 +56,10 @@ export enum WidgetNotificationType {
 
     doAllEvents = "ic3doAllEvents",
 
+    doCustomAction = "ic3doCustomAction",
+
+    doExportWidgetData = "ic3exportWidgetData",
+
     doExportToExcel = "ic3exportToExcel",
     doExportToPNG = "ic3exportToPNG",
     doExportToSVG = "ic3exportToSVG",

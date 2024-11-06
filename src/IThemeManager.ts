@@ -67,7 +67,21 @@ export type IThemeWidgetVariant = {
     defaultProps: Record<string, any>;
 }
 
+/**
+ * Examples:
+ * - Change the primary color of the theme to red: `theme.palette.primary.main = "#ff0000";`
+ * - Change default chart color: `theme.palette.ic3.chartSingleColors.default = "#ff0000";`
+ * - Change background: `theme.palette.ic3.pageBackgroundColor = "#ff0000";`
+ * - Change selected color: `theme.palette.ic3.selected = "#ff0000";`
+ */
+export type IThemeProcessor = (theme: any, params?: any) => void;
+
 export interface IThemeManager {
+
+    /**
+     * Used by IReportDefinition.setThemeProcessorCall().
+     */
+    registerThemeProcessor(name: string, processor: IThemeProcessor): void;
 
     /**
      * The theme decorator allows to setup the Theme.components and Theme.ic3 using the theme

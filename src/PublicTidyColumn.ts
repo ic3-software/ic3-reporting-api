@@ -769,12 +769,6 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     deleteProperty(propertyName: ITidyColumn | string): void;
 
     /**
-     * @param column the initial selection as a column
-     * @param items the initial selection (name, ...)
-     */
-    getInitialSelectionRowIndices(column: ITidyColumn | undefined, items: any[]): number[];
-
-    /**
      * The ITidyTableSelection row identifier for the row (uniqueName if it is an MDX like column).
      */
     getSelectionRowIdentifier(idx: number): string;
@@ -863,6 +857,13 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * component).
      */
     hasOnlyDates(): boolean;
+
+    /**
+     * Returns the level depth of the column.
+     *
+     * E.g., if you have a table with `2018`, `2018 Q1` as columns, then the level depths are 0 and 1.
+     */
+    getColumnLevelDepth() : number;
 
 }
 

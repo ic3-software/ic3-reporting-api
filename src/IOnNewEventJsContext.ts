@@ -90,4 +90,9 @@ export interface IOnNewEventJsContext {
      */
     getWidgetHeaderTitle$(widgetId: string): any;
 
+    /**
+     * Localize the tag using the content localization files.
+     */
+    localize(tag: string, ...args: any[]) : string;
+
 }
