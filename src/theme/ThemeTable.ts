@@ -239,4 +239,9 @@ export interface TableChartOptions extends BaseTableChartOptions {
      */
     useCheckboxSelection: boolean;
 
+    /**
+     * Show the first column as a hierarchy instead of a flat list.
+     */
+    showHierarchy: boolean;
+
 }

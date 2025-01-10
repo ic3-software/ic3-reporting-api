@@ -13,6 +13,12 @@ export class AppClasses {
      */
     static readonly toolbar: string = "ic3App-toolbar";
     /**
+     * Style applied to
+     */
+    static readonly drawer: string = "ic3App-drawer";
+
+    static readonly drawerSmall: string = "ic3App-drawer-small";
+    /**
      * Dashboard in viewer mode
      */
     static readonly payload: string = "ic3App-payload";

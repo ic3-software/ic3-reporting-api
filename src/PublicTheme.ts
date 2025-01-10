@@ -719,6 +719,11 @@ export interface ic3ThemeOptions {
         options?: google.maps.MapOptions;
     }
 
+    drilldown?: {
+        /* disables drilldown path in the header and hides the option (if true, like older versions)*/
+        disableDrilldownInTitle?: boolean;
+    },
+
     /**
      * Change the settings for the user menu for some or all widgets.
      */

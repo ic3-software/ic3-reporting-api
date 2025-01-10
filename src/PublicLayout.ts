@@ -142,6 +142,18 @@ export interface IWidgetLayoutResponsivenessDefinition {
 
 }
 
+/**
+ * Experimental.
+ */
+export interface IWidgetLayoutCssGridDefinition {
+
+    gridTemplateColumns: string;
+    gridTemplateRows: string;
+
+    gridTemplateAreas: string;
+
+}
+
 export interface IPageHeaderFooterLogoDefinition {
 
     // CSS: applied to the img element.
@@ -297,6 +309,11 @@ export interface IWidgetLayoutDefinition {
      * (https://github.com/ic3-software/ic3-demo-plugin-theme) for a complete example.
      */
     responsiveness?: IWidgetLayoutResponsivenessDefinition;
+
+    /**
+     * Experimental.
+     */
+    cssGrid?: IWidgetLayoutCssGridDefinition;
 
     /**
      * The background grid used for example to snap widgets to.

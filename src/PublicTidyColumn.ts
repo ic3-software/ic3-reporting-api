@@ -497,10 +497,10 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     /**
      * Get the entity item for the column. Used in column selection.
      * Returns an empty array if no entityItems.
-     * @param hierarchyIndeces only include these hierarchies for generating the EntityItem. Leave undefined to include
+     * @param hierarchyIndices only include these hierarchies for generating the EntityItem. Leave undefined to include
      * all.
      */
-    getColumnEntityItem(hierarchyIndeces?: number[]): EntityItem[];
+    getColumnEntityItem(hierarchyIndices?: number[]): EntityItem[];
 
     /**
      * Get the index of the parent. Returns -1 if the parent is the root.

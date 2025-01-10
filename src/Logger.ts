@@ -4,7 +4,6 @@ export type LoggerComponent =
     "AlertDialog" |
     "AmCharts4" |
     "AmCharts4GeoMap" |
-    "AmCharts5" |
     "App" |
     "AppCustomHeaders" |
     "AppStarter" |

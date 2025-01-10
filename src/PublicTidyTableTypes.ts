@@ -282,7 +282,13 @@ export interface MdxInfo {
     uniqueName: string;
     // uniqueNameCS: boolean;
 
+    /**
+     * The key parsed as date|time.
+     */
     key: any;
+    /**
+     * The key as converted to string in the client.
+     */
     keyS: string | undefined;
 
     name: string;

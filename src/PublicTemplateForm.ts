@@ -87,6 +87,9 @@ export interface IFormFieldDef<DEFAULT_VALUE_TYPE> {
      */
     dependsOn?: string | string[];
 
+    /**
+     * Clear the field if the value in the depends-on field changes.
+     */
     dependsOnReset?: true;
 
     /**
