@@ -34,6 +34,8 @@ export interface PrintButtonChartOptions extends FormFieldObject {
     paperSizeName?: string;
     paperOrientation?: PaperOrientation,
 
+    "$-fileName"?: string;
+
 }
 
 export interface StyledPrintButtonDivProps {

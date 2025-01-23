@@ -67,6 +67,7 @@ export enum WidgetNotificationType {
     toInitialSelection = 'ic3toInitialSelection',
 
     clearSelection = "ic3clearSelection",
+    clearState = "ic3clearState",
 
     doTemplateUserMenuAction = "ic3doTemplateUserMenuAction",
 }
