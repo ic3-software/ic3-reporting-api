@@ -244,4 +244,9 @@ export interface TableChartOptions extends BaseTableChartOptions {
      */
     showHierarchy: boolean;
 
+    /**
+     * MDX Console support for now.
+     */
+    showRowNumbers?: boolean;
+
 }

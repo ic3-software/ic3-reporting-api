@@ -167,7 +167,7 @@ export interface ITidyMath {
      * @param column
      * @param idx row index of the cell to calculate the percentage of.
      */
-    percentRow(table: ITidyTable, column: ITidyBaseColumnReadonly<number | null>, idx: number): number | undefined;
+    percentRow(table: ITidyTable, column: ITidyBaseColumnReadonly<number | null>, idx: number): number | undefined | null;
 
     /**
      * Count the values in the column. For example: [a, b, b] -> {a: 1, b: 2}.

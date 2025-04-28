@@ -67,12 +67,22 @@ export interface IOnNewEventJsContext {
     getEventWidgetId(event: IEventPayLoad): string | undefined;
 
     /**
-     * Returns the widget jQuery object
+     * Returns the widget, jQuery object
      *
      * Using JQuery might conflict with React's state.
      * Use with care as you will modify the DOM directly.
      */
     getWidget$(widgetId: string): any;
+
+    /**
+     * Returns a list of widgets, jQuery object
+     *
+     * selector : can be a list of class names .class1.class2
+     *
+     * Using JQuery might conflict with React's state.
+     * Use with care as you will modify the DOM directly.
+     */
+    getWidgets$(selector: string): any;
 
     /**
      * Returns the widget header jQuery object.

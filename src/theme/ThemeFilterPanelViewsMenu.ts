@@ -6,6 +6,10 @@ export class FilterPanelViewsMenuClasses {
 
     static readonly maxViewsReachedText = "ic3FilterPanelViewsMenu-maxViewsReachedText";
 
+    static readonly viewsText = "ic3FilterPanelViewsMenu-viewsText";
+
+    static readonly errorText = "ic3FilterPanelViewsMenu-errorText";
+
 }
 
 export declare type FilterPanelViewsMenuClassesKey = keyof FilterPanelViewsMenuClasses;

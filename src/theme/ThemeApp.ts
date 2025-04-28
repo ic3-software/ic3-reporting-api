@@ -56,6 +56,7 @@ export interface AppDivProps {
     viewer: boolean;
     opacity?: string;
     editorActive: boolean;
+    drawerW: string;
 }
 
 export enum TopBarOptions {

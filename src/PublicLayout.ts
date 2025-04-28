@@ -19,10 +19,12 @@ export interface IPageSize {
  * From icCube server print component configuration.
  */
 export interface IKnownPageSize extends IPageSize {
+    type: "known";
     name: string;
 }
 
 export interface IManualPageSize extends IPageSize {
+    type: "manual";
     pageSizeUnits: PaperSizeUnits;
     pageWidth: number;
     pageHeight: number;
@@ -32,6 +34,7 @@ export interface IManualPageSize extends IPageSize {
  * Unlimited in height.
  */
 export interface IUnlimitedPageSize extends IPageSize {
+    type: "unlimited";
     pageSizeUnits: PaperSizeUnits;
     pageWidth: number;
 }

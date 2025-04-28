@@ -397,5 +397,11 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      * @param columnIdx
      */
     getDrilldownColumn(columnIdx: number): ITidyColumn;
+
+    /**
+     * Return the selection behaviour when the selection is empty.
+     */
+    getEmptyMode(): SelectionBehaviour | undefined;
+
 }
 

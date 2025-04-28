@@ -548,9 +548,13 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
 
     /**
      * This widget knows how to render a result without any data.
-     * (e.g., data picker)
      */
     handlesNoData?: boolean;
+
+    /**
+     * This widget knows how to render when it has no query.
+     */
+    handlesEmptyQuery?: boolean;
 
     /**
      * This widget is responsible to notify its rendered status. Required with asynchronous rendering

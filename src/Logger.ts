@@ -42,7 +42,9 @@ export type LoggerComponent =
     "Table" |
     "WidgetBox" |
     "WidgetBoxWrapper" |
-    "WidgetTemplateLibrary"
+    "WidgetTemplateLibrary" |
+    "FilterPanel" |
+    "FilterPanelViews"
     ;
 
 

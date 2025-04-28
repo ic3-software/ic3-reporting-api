@@ -7,10 +7,10 @@ export default class ReportingVersion {
 
     public readonly timestamp: string;
 
-    constructor(version: string, timestamp: string) {
+    constructor(version: string | undefined, timestamp: string | undefined) {
 
-        this.version = version;
-        this.timestamp = timestamp;
+        this.version = version ?? "-";
+        this.timestamp = timestamp ?? "-";
     }
 
     public getInfo() {

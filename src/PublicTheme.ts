@@ -54,6 +54,8 @@ import {AIWidgetChatBotClassKey, AIWidgetChatBotStyleProps} from "./theme/ThemeA
 import {FilterPanelViewsMenuClassesKey} from "./theme/ThemeFilterPanelViewsMenu";
 import {Ic3TableCellDrilldownProps, ThemeIc3TableCellDrilldownClassesKey} from "./theme/ThemeIc3TableCellDrilldown";
 import {FilterSwitchClassKey, FilterSwitchProps} from "./theme/ThemeFilterSwitch";
+import {HomeCardClassKey} from "./theme/ThemeHomeCard";
+import {HomeConsoleClassKey} from "./theme/ThemeHomeConsole";
 
 export type Ic3ChartVariants = {
     [Name in keyof WidgetTemplateChartOptions]?: Array<{
@@ -157,7 +159,7 @@ export interface ThemeFormatterPerLocale {
 }
 
 export function isThemeFormatterPerLocale(x: DeepPartial<ThemeFormatterPerLocale | ThemeFormatters> | undefined): x is ThemeFormatterPerLocale {
-    return x?.['default'] != null;
+    return (x as ThemeFormatterPerLocale)?.['default'] != null;
 }
 
 
@@ -490,6 +492,7 @@ export interface ic3Theme {
         queryError: JSX.Element;
         queryWarning: JSX.Element;
         helpIcon: JSX.Element;
+        helpIconOutlined: JSX.Element;
         closeQueryIcon: JSX.Element;  // Icon for user to close the query (if it's running long)
         interactionModeSelection: JSX.Element;
         interactionModeDrilldown: JSX.Element;
@@ -510,6 +513,9 @@ export interface ic3Theme {
         radioUnselected: React.ReactNode | undefined;
         radioSelected: React.ReactNode | undefined;
         hasDescendantsIndicatorIcon: React.ReactNode | undefined;
+
+        // Filter panel views
+        getViewsMenuCustomButtonIcon: (name: string | undefined) => React.ReactNode | undefined;
 
     };
 
@@ -868,7 +874,7 @@ export interface ic3ThemeOptions {
 
 }
 
-interface IWidgetIcons extends IWidgetBoxIconsDefinition {
+interface IWidgetIcons extends IWidgetBoxIconsDefinition, Record<string, any> {
     /**
      * Set to true to make the widget icon options readonly (non-editable) for all widgets. Also, this enforces to
      * always use the default values set in the theme.
@@ -1056,6 +1062,12 @@ interface ic3BaseComponents {
     }
     "amCharts4.AmCharts4GeoMap"?: {
         variants?: Ic3ChartVariants["amCharts4.AmCharts4GeoMap"]
+    },
+    HomeCard?: {
+        styleOverrides?: ComponentsOverrides["HomeCard"]
+    },
+    HomeConsole?: {
+        styleOverrides?: ComponentsOverrides["HomeConsole"]
     }
 }
 
@@ -1188,6 +1200,9 @@ declare module '@mui/material/styles/overrides' {
         Ic3TableCell: ThemeIc3TableCellClassesKey;
         Ic3TableCellDrilldown: ThemeIc3TableCellDrilldownClassesKey;
         Ic3TableCellError: ThemeIc3TableCellClassesKey;
+
+        HomeCard: HomeCardClassKey;
+        HomeConsole: HomeConsoleClassKey;
 
     }
 

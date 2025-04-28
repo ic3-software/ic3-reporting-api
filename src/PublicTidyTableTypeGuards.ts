@@ -10,11 +10,11 @@ export function isTidyTableMappingColumnSelectorOptions(v: unknown): v is TidyTa
     return typeof v === "string" && v.startsWith('@IC3_');
 }
 
-export function isTidyTableColumnIdentifier(v: unknown): v is TidyTableColumnIdentifier {
+export function isTidyTableColumnIdentifier(v: any): v is TidyTableColumnIdentifier {
     return typeof v === "object" && v != null && typeof v["name"] === "string";
 }
 
-export function isTidyTableRoleSelector(v: unknown): v is TidyTableRoleSelector {
+export function isTidyTableRoleSelector(v: any): v is TidyTableRoleSelector {
     return typeof v === "object" && v != null && typeof v["role"] === "string";
 }
 

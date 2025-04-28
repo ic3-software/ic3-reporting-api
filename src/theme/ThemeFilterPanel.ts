@@ -37,6 +37,11 @@ export class FilterPanelClasses {
     static readonly collapsibleIcon = "ic3FilterPanel-collapsibleIcon";
 
     /**
+     * Icon showing how many filters you have
+     */
+    static readonly collapsedNumberOfFiltersIcon = "ic3FilterPanel-collapsedNumberOfFiltersIcon";
+
+    /**
      * Help icon
      */
     static readonly helpIcon = "ic3FilterPanel-helpIcon";
