@@ -56,6 +56,8 @@ export interface AIWidgetChatBotOptions extends FormFieldObject {
      */
     frozen?: true;
 
+    resetOnDataChanged?: true;
+
     tableDataMaxRow?: number;
 
     tableDataCaptionPage0?: string;

@@ -40,7 +40,6 @@ export enum QueryType {
  * Set to `true` to hide the icon.
  */
 export interface IWidgetBoxIconsDefinition {
-    disableQueryRunning?: boolean;
     disableQueryFilter?: boolean;
     disableQueryCellOnError?: boolean;
     disableQueryMaxRowsReached?: boolean;
@@ -61,7 +60,7 @@ export type IUserMenuOptions =
     'maximize' |
     'clearSorting' |
     'showData' |
-    'resetQuery' |
+    'resetDrilldown' |
     'clearState' |
     'clearSelection' |
     'toInitialSelectionOnEditing' |

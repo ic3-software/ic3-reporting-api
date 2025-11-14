@@ -19,8 +19,8 @@ import {FilterAutocompleteChartOptions} from "./theme/ThemeFilterAutocomplete";
 import {FilterTreeChartOptions} from "./theme/ThemeFilterTree";
 import {
     AmCharts4BubbleChartOptions,
-    AmCharts4ComboChartOptions,
-    AmCharts4DonutChartOptions,
+    AmCharts4ComboChartOptions, AmCharts4DivergentBarChartOptions,
+    AmCharts4DonutChartOptions, AmCharts4GanttChartOptions,
     AmCharts4GaugeChartOptions,
     AmCharts4HistogramOptions,
     AmCharts4RegularAreaChartOptions,
@@ -95,10 +95,14 @@ interface IWidgetTemplateChartOptions {
     "amCharts4.AmCharts4Histogram": AmCharts4HistogramOptions,
     "amCharts4.AmCharts4SankeyDiagram": AmCharts4SankeyDiagramOptions,
     "amCharts4.AmCharts4TreeMap": AmCharts4TreemapOptions,
+    "amCharts4.AmCharts4GanttChart": AmCharts4GanttChartOptions,
+    "amCharts4.AmCharts4DivergentBarChart": AmCharts4DivergentBarChartOptions,
 
     // amCharts 4: Geo.
 
     "amCharts4.AmCharts4GeoMap": GeoMapChartOptions,
+
+
 
 }
 

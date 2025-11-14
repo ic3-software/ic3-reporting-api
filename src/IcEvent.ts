@@ -70,6 +70,9 @@ export enum WidgetNotificationType {
     clearState = "ic3clearState",
 
     doTemplateUserMenuAction = "ic3doTemplateUserMenuAction",
+
+    doPrintReport = "ic3doPrintReport",
+    onWidgetZoom = "ic3onWidgetZoom"
 }
 
 export type WidgetNotificationHandler = { type: WidgetNotificationType; handler: (type: WidgetNotificationType, event: PublicIcEvent) => void }

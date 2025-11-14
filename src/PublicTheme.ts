@@ -2,60 +2,61 @@ import {ComponentsOverrides, ComponentsVariants, Interpolation, Theme} from "@mu
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {IWidgetLayoutDefinition} from "./PublicLayout";
 import {IThemeWidgetDefaults} from "./IThemeManager";
-import {AlertDialogClassKey} from "./theme/ThemeAlertDialog";
-import {AppClassKey, AppDivProps} from "./theme/ThemeApp";
-import {ErrorRendererClassKey} from "./theme/ThemeErrorRenderer";
-import {HtmlBoxClassKey, StyledHtmlBoxProps} from "./theme/ThemeHtmlBox";
-import {LayoutClassKey} from "./theme/ThemeLayout";
-import {LayoutPageClassKey} from "./theme/ThemeLayoutPage";
-import {ReportAppBarClassKey} from "./theme/ThemeReportAppBar";
-import {WidgetBoxClassKey, WidgetBoxDivProps} from "./theme/ThemeWidgetBox";
-import {WidgetBoxContentMessageClassKey} from "./theme/ThemeWidgetBoxContentMessage";
 import * as React from "react";
 import {ReactElement} from "react";
-import {TypographyStyleOptions} from "@mui/material/styles/createTypography";
+import {TypographyStyle} from "@mui/material/styles";
 import {Property} from "csstype";
-import {FilterButtonsClassKey, FilterButtonsProps} from "./theme/ThemeFilterButtons";
-import {FilterSliderClassKey, FilterSliderProps} from "./theme/ThemeFilterSlider";
-import {GoogleMarkerVariantChartOptions} from "./theme/ThemeGoogleMarker";
 import {IPublicContext} from "./PublicContext";
-import {TableClassKey, TableProps} from "./theme/ThemeTable";
-import {PivotTableClassKey, PivotTableProps} from "./theme/ThemePivotTable";
-import {Components} from "@mui/material/styles/components";
-import {FilterPanelClassesKey, FilterPanelProps} from "./theme/ThemeFilterPanel";
-import {FilterCheckboxProps, FilterCheckboxRadioClassKey} from "./theme/ThemeFilterCheckboxRadio";
-import {ReportAppLeftPanelClassKey} from "./theme/ThemeReportAppLeftPanel";
-import {
-    FilterTreeClassKey,
-    FilterTreePopOverClassKey,
-    FilterTreePopOverProps,
-    FilterTreeProps
-} from "./theme/ThemeFilterTree";
 import {
     DatePickerClassKey,
     DatePickerShortcut,
     DateRangePickerShortcut,
     FilterDatePickerProps
 } from "./theme/ThemeDatePicker";
+import {WidgetTemplateChartOptions} from "./PublicTemplates";
+import {IUserMenuOptions, IWidgetBoxIconsDefinition} from "./ITypes";
+import {AIWidgetChatBotClassKey, AIWidgetChatBotStyleProps} from "./theme/ThemeAIWidgetChatBot";
+import {AlertDialogClassKey} from "./theme/ThemeAlertDialog";
+import {AppClassKey, AppDivProps} from "./theme/ThemeApp";
+import {ErrorRendererClassKey} from "./theme/ThemeErrorRenderer";
+import {FilterCheckboxProps, FilterCheckboxRadioClassKey} from "./theme/ThemeFilterCheckboxRadio";
+import {FilterButtonsClassKey, FilterButtonsProps} from "./theme/ThemeFilterButtons";
+import {LazyTreeClassesClassKey, LazyTreeProps} from "./theme/ThemeLazyTreeClasses";
+import {FilterPanelClassesKey, FilterPanelProps} from "./theme/ThemeFilterPanel";
+import {FilterPanelViewsMenuClassesKey} from "./theme/ThemeFilterPanelViewsMenu";
+import {RegexFilterClassesKey, RegexFilterProps} from "./theme/ThemeRegexFilter";
+import {FilterSliderClassKey, FilterSliderProps} from "./theme/ThemeFilterSlider";
+import {ListCounterClassKey, ListCounterProps} from "./theme/ThemeListCounter";
+import {
+    FilterTreeClassKey,
+    FilterTreePopOverClassKey,
+    FilterTreePopOverProps,
+    FilterTreeProps
+} from "./theme/ThemeFilterTree";
+import {FilterSwitchClassKey, FilterSwitchProps} from "./theme/ThemeFilterSwitch";
 import {FilterAutocompleteClassesKey, FilterAutocompleteProps} from "./theme/ThemeFilterAutocomplete";
+import {HtmlBoxClassKey, StyledHtmlBoxProps} from "./theme/ThemeHtmlBox";
+import {KpiCardClassKey, KpiCardProps} from "./theme/ThemeKpiCard";
+import {LayoutClassKey} from "./theme/ThemeLayout";
+import {LayoutPageClassKey} from "./theme/ThemeLayoutPage";
+import {PivotTableClassKey, PivotTableProps} from "./theme/ThemePivotTable";
+import {TableClassKey, TableProps} from "./theme/ThemeTable";
+import {ReportAppBarClassKey} from "./theme/ThemeReportAppBar";
+import {WidgetBoxClassKey, WidgetBoxDivProps} from "./theme/ThemeWidgetBox";
+import {WidgetBoxContentMessageClassKey} from "./theme/ThemeWidgetBoxContentMessage";
+import {ReportAppLeftPanelClassKey} from "./theme/ThemeReportAppLeftPanel";
 import {AppMenuIconClassKey, AppMenuIconProps} from "./theme/ThemeAppMenuIcon";
 import {QueryBuilderNodeClassKey, QueryBuilderNodeProps} from "./theme/ThemeQueryBuilderNode";
-import {KpiCardClassKey, KpiCardProps} from "./theme/ThemeKpiCard";
-import {ListCounterClassKey, ListCounterProps} from "./theme/ThemeListCounter";
-import {LazyTreeClassesClassKey, LazyTreeProps} from "./theme/ThemeLazyTreeClasses";
 import {PrintButtonClassKey, StyledPrintButtonDivProps} from "./theme/ThemePrintButton";
 import {CodeMirrorClassesKey} from "./theme/ThemeCodeMirror";
-import {WidgetTemplateChartOptions} from "./PublicTemplates";
 import {WidgetFilteredByClassesKey} from "./theme/ThemeWidgetFilteredBy";
-import {IUserMenuOptions, IWidgetBoxIconsDefinition} from "./ITypes";
 import {Ic3TableCellProps, ThemeIc3TableCellClassesKey} from "./theme/ThemeIc3TableCell";
-import {RegexFilterClassesKey, RegexFilterProps} from "./theme/ThemeRegexFilter";
-import {AIWidgetChatBotClassKey, AIWidgetChatBotStyleProps} from "./theme/ThemeAIWidgetChatBot";
-import {FilterPanelViewsMenuClassesKey} from "./theme/ThemeFilterPanelViewsMenu";
 import {Ic3TableCellDrilldownProps, ThemeIc3TableCellDrilldownClassesKey} from "./theme/ThemeIc3TableCellDrilldown";
-import {FilterSwitchClassKey, FilterSwitchProps} from "./theme/ThemeFilterSwitch";
 import {HomeCardClassKey} from "./theme/ThemeHomeCard";
 import {HomeConsoleClassKey} from "./theme/ThemeHomeConsole";
+import {GoogleMarkerVariantChartOptions} from "./theme/ThemeGoogleMarker";
+import {Ic3CustomDrilldownMenuClassesKey} from "./theme/ThemeIc3CustomDrilldownMenu";
+import {Ic3WidgetBoxSpinnerProps, ThemeIc3WidgetBoxSpinnerClassesKey} from "./theme/ThemeIc3WidgetBoxSpinner";
 
 export type Ic3ChartVariants = {
     [Name in keyof WidgetTemplateChartOptions]?: Array<{
@@ -432,7 +433,7 @@ export interface ic3PaletteOptions {
 
 export interface ic3Typography {
 
-    amCharts4: TypographyStyleOptions
+    amCharts4: TypographyStyle;
 
 }
 
@@ -441,7 +442,7 @@ export interface ic3TypographyOptions {
     /**
      * Typography for the amCharts plugin.
      */
-    amCharts4?: TypographyStyleOptions
+    amCharts4?: TypographyStyle;
 
 }
 
@@ -594,30 +595,53 @@ export interface ic3Theme {
     widgetDefaults?: IThemeWidgetDefaults;
 
     /**
-     * Styling for the sparklines in the sparkline transformation and the KPI card
+     * Styling for the sparklines in the sparkline transformation and the KPI card.
      */
     sparklineSettings: {
-        /**
-         * The width of the line in the sparkline
-         */
-        lineWidth: number;
 
         /**
-         * The cursor when the user hovers over the sparkline
+         * Line sparkline settings.
          */
-        cursor: {
-            color: Property.Color;
-
+        line: {
             /**
-             * the width as percentage of the viewport of the cursor line when hovering
+             * The width of the line in the sparkline
              */
             lineWidth: number;
 
             /**
-             * The width of the stroke when hovering
+             * The cursor when the user hovers over the sparkline
              */
-            width: number;
-        };
+            cursor: {
+                color: Property.Color;
+
+                /**
+                 * the width of the cursor dot when hovering.
+                 */
+                spotRadius: number;
+
+                /**
+                 * The width of the stroke when hovering
+                 */
+                width: number;
+            }
+        },
+
+        /**
+         * Column sparkline settings.
+         */
+        column: {
+
+            /**
+             * Radius of the columns rounded corners.
+             */
+            cornerRadius: number;
+
+            /**
+             * Space between columns.
+             */
+            columnSpacing: number;
+
+        }
     }
 
     noSchemaRenderer?: (context: IPublicContext, options: INoSchemaRendererOptions) => ReactElement;
@@ -884,8 +908,106 @@ interface IWidgetIcons extends IWidgetBoxIconsDefinition, Record<string, any> {
     disableWidgetIconsEdition?: boolean;
 }
 
+export interface ic3ComponentNameToClassKey {
+    AIWidgetChatBot: AIWidgetChatBotClassKey;
 
-interface ic3BaseComponents {
+    AlertDialog: AlertDialogClassKey;
+    App: AppClassKey;
+
+    ErrorRenderer: ErrorRendererClassKey;
+
+    FilterCheckbox: FilterCheckboxRadioClassKey;
+    FilterButtons: FilterButtonsClassKey;
+    LazyTreeViewStyled: LazyTreeClassesClassKey;
+    FilterPanel: FilterPanelClassesKey;
+    FilterPanelViewsMenu: FilterPanelViewsMenuClassesKey;
+    Ic3CustomDrilldownMenu: Ic3CustomDrilldownMenuClassesKey;
+    RegexFilter: RegexFilterClassesKey;
+    FilterSlider: FilterSliderClassKey;
+    ListCounter: ListCounterClassKey;
+    FilterTree: FilterTreeClassKey;
+    Ic3FilterSwitch: FilterSwitchClassKey;
+    FilterTreePopOver: FilterTreePopOverClassKey;
+    FilterDatePicker: DatePickerClassKey;
+    FilterAutocomplete: FilterAutocompleteClassesKey;
+
+    HtmlBox: HtmlBoxClassKey;
+    KpiCard: KpiCardClassKey;
+    Layout: LayoutClassKey;
+
+    LayoutPage: LayoutPageClassKey;
+
+    PivotTable: PivotTableClassKey;
+    Table: TableClassKey;
+
+    ReportAppBar: ReportAppBarClassKey;
+
+    WidgetBox: WidgetBoxClassKey;
+    WidgetBoxContentMessage: WidgetBoxContentMessageClassKey;
+
+    ReportAppLeftPanel: ReportAppLeftPanelClassKey;
+
+    AppMenuIcon: AppMenuIconClassKey;
+
+    QueryBuilderNode: QueryBuilderNodeClassKey;
+
+    PrintButton: PrintButtonClassKey;
+
+    CodeMirror: CodeMirrorClassesKey;
+
+    WidgetBoxFilteredByTooltip: WidgetFilteredByClassesKey;
+    Ic3TableCell: ThemeIc3TableCellClassesKey;
+    Ic3TableCellDrilldown: ThemeIc3TableCellDrilldownClassesKey;
+    Ic3TableCellError: ThemeIc3TableCellClassesKey;
+
+    Ic3WidgetBoxSpinner: ThemeIc3WidgetBoxSpinnerClassesKey;
+
+    HomeCard: HomeCardClassKey;
+    HomeConsole: HomeConsoleClassKey;
+}
+
+export interface ic3ComponentsPropsList {
+
+    AIWidgetChatBot: AIWidgetChatBotStyleProps;
+
+    FilterCheckbox: FilterCheckboxProps;
+    FilterButtons: FilterButtonsProps;
+    LazyTreeViewStyled: LazyTreeProps;
+    FilterPanel: FilterPanelProps;
+    RegexFilter: RegexFilterProps;
+    FilterSlider: FilterSliderProps;
+    ListCounter: ListCounterProps;
+    FilterTree: FilterTreeProps;
+    Ic3FilterSwitch: FilterSwitchProps;
+    FilterTreePopOver: FilterTreePopOverProps;
+    FilterDatePicker: FilterDatePickerProps;
+    FilterAutocomplete: FilterAutocompleteProps;
+
+    HtmlBox: StyledHtmlBoxProps;
+    KpiCard: KpiCardProps;
+
+    PivotTable: PivotTableProps;
+    Table: TableProps;
+
+    WidgetBox: WidgetBoxDivProps;
+
+    GoogleMarker: GoogleMarkerVariantChartOptions;
+
+    AppMenuIconStyled: AppMenuIconProps;
+
+    App: AppDivProps;
+
+    QueryBuilderNode: QueryBuilderNodeProps;
+
+    PrintButton: StyledPrintButtonDivProps;
+    Ic3TableCell: Ic3TableCellProps;
+    Ic3TableCellDrilldown: Ic3TableCellDrilldownProps;
+    Ic3TableCellError: Ic3TableCellProps;
+
+    Ic3WidgetBoxSpinner: Ic3WidgetBoxSpinnerProps;
+}
+
+export interface ic3BaseComponents {
 
     AIWidgetChatBot?: {
         styleOverrides?: ComponentsOverrides["AIWidgetChatBot"];
@@ -1011,6 +1133,10 @@ interface ic3BaseComponents {
     Ic3TableCellError?: {
         styleOverrides?: ComponentsOverrides["Ic3TableCellError"];
     }
+    Ic3WidgetBoxSpinner?: {
+        defaultProps?: Partial<Ic3WidgetBoxSpinnerProps>;
+        styleOverrides?: ComponentsOverrides["Ic3WidgetBoxSpinner"];
+    }
     Ic3FilterSwitch?: {
         styleOverrides?: ComponentsOverrides["Ic3FilterSwitch"];
         variants?: ComponentsVariants["Ic3FilterSwitch"];
@@ -1069,184 +1195,4 @@ interface ic3BaseComponents {
     HomeConsole?: {
         styleOverrides?: ComponentsOverrides["HomeConsole"]
     }
-}
-
-/**
- * For Typing purpose extending MUI Theme with ic3 components.
- * @deprecated Please use `Components` with `import { Components } from "@mui/material/styles";`.
- */
-export interface ic3Components extends ic3BaseComponents, Components {
-
-}
-
-
-/**
- *
- * MUI Module augmentation
- *
- */
-
-declare module "@mui/material/styles/createPalette" {
-
-    interface Palette {
-
-        ic3: ic3Palette;
-
-    }
-
-    interface PaletteOptions {
-
-        ic3?: ic3PaletteOptions;
-
-    }
-}
-
-declare module "@mui/material/styles/createTypography" {
-
-    interface Typography {
-
-        ic3: ic3Typography;
-
-    }
-
-    interface TypographyOptions {
-
-        ic3?: ic3TypographyOptions;
-
-    }
-
-}
-
-declare module '@mui/material/styles/createTheme' {
-
-    interface Theme {
-
-        ic3: ic3Theme;
-
-    }
-
-    /**
-     * Input of createMuiTheme( {...} )
-     */
-    interface ThemeOptions {
-
-        ic3: ic3ThemeOptions;
-
-    }
-
-}
-
-/**
- * All Components using Material-UI like variants (using styled)
- */
-declare module '@mui/material/styles/components' {
-
-    interface Components extends ic3BaseComponents {
-
-    }
-
-}
-
-declare module '@mui/material/styles/overrides' {
-
-    interface ComponentNameToClassKey {
-
-        AIWidgetChatBot: AIWidgetChatBotClassKey;
-
-        AlertDialog: AlertDialogClassKey;
-        App: AppClassKey;
-
-        ErrorRenderer: ErrorRendererClassKey;
-
-        FilterCheckbox: FilterCheckboxRadioClassKey;
-        FilterButtons: FilterButtonsClassKey;
-        LazyTreeViewStyled: LazyTreeClassesClassKey;
-        FilterPanel: FilterPanelClassesKey;
-        FilterPanelViewsMenu: FilterPanelViewsMenuClassesKey;
-        RegexFilter: RegexFilterClassesKey;
-        FilterSlider: FilterSliderClassKey;
-        ListCounter: ListCounterClassKey;
-        FilterTree: FilterTreeClassKey;
-        Ic3FilterSwitch: FilterSwitchClassKey;
-        FilterTreePopOver: FilterTreePopOverClassKey;
-        FilterDatePicker: DatePickerClassKey;
-        FilterAutocomplete: FilterAutocompleteClassesKey;
-
-        HtmlBox: HtmlBoxClassKey;
-        KpiCard: KpiCardClassKey;
-        Layout: LayoutClassKey;
-
-        LayoutPage: LayoutPageClassKey;
-
-        PivotTable: PivotTableClassKey;
-        Table: TableClassKey;
-
-        ReportAppBar: ReportAppBarClassKey;
-
-        WidgetBox: WidgetBoxClassKey;
-        WidgetBoxContentMessage: WidgetBoxContentMessageClassKey;
-
-        ReportAppLeftPanel: ReportAppLeftPanelClassKey;
-
-        AppMenuIcon: AppMenuIconClassKey;
-
-        QueryBuilderNode: QueryBuilderNodeClassKey;
-
-        PrintButton: PrintButtonClassKey;
-
-        CodeMirror: CodeMirrorClassesKey;
-
-        WidgetBoxFilteredByTooltip: WidgetFilteredByClassesKey;
-        Ic3TableCell: ThemeIc3TableCellClassesKey;
-        Ic3TableCellDrilldown: ThemeIc3TableCellDrilldownClassesKey;
-        Ic3TableCellError: ThemeIc3TableCellClassesKey;
-
-        HomeCard: HomeCardClassKey;
-        HomeConsole: HomeConsoleClassKey;
-
-    }
-
-}
-
-declare module '@mui/material/styles/props' {
-
-    interface ComponentsPropsList {
-
-        AIWidgetChatBot: AIWidgetChatBotStyleProps;
-
-        FilterCheckbox: FilterCheckboxProps;
-        FilterButtons: FilterButtonsProps;
-        LazyTreeViewStyled: LazyTreeProps;
-        FilterPanel: FilterPanelProps;
-        RegexFilter: RegexFilterProps;
-        FilterSlider: FilterSliderProps;
-        ListCounter: ListCounterProps;
-        FilterTree: FilterTreeProps;
-        Ic3FilterSwitch: FilterSwitchProps;
-        FilterTreePopOver: FilterTreePopOverProps;
-        FilterDatePicker: FilterDatePickerProps;
-        FilterAutocomplete: FilterAutocompleteProps;
-
-        HtmlBox: StyledHtmlBoxProps;
-        KpiCard: KpiCardProps;
-
-        PivotTable: PivotTableProps;
-        Table: TableProps;
-
-        WidgetBox: WidgetBoxDivProps;
-
-        GoogleMarker: GoogleMarkerVariantChartOptions;
-
-        AppMenuIconStyled: AppMenuIconProps;
-
-        App: AppDivProps;
-
-        QueryBuilderNode: QueryBuilderNodeProps;
-
-        PrintButton: StyledPrintButtonDivProps;
-        Ic3TableCell: Ic3TableCellProps;
-        Ic3TableCellDrilldown: Ic3TableCellDrilldownProps;
-        Ic3TableCellError: Ic3TableCellProps;
-    }
-
 }

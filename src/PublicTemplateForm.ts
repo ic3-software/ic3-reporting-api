@@ -2,11 +2,6 @@ import {IPublicContext, IWidgetEditorPublicContext} from "./PublicContext";
 import {ITidyColumn} from "./PublicTidyColumn";
 import * as React from "react";
 import {
-    AutocompleteProps,
-    AutocompleteRenderInputParams,
-    AutocompleteRenderOptionState
-} from "@mui/material/Autocomplete/Autocomplete";
-import {
     ChartTemplateDataMapping,
     IFormFieldGranularityItem,
     TidyColumnsType,
@@ -14,6 +9,12 @@ import {
 } from "./PublicTidyTableTypes";
 import {ITidyTable} from "./PublicTidyTable";
 import {Theme} from "@mui/material/styles";
+import {
+    AutocompleteProps,
+    AutocompleteRenderInputParams,
+    AutocompleteRenderOptionState
+} from "@mui/material/Autocomplete";
+import {IFormTidyTableExprFieldDef} from "./PublicTemplateExprForm";
 
 export type Hook<T, P> = {
 
@@ -174,7 +175,6 @@ export type FormFields<T extends FormFieldObject> = {
                                                                 | Omit<IFormTidyTableHtmlExprFieldDef, 'fieldPath'>
                                                                 | Omit<IFormTidyTableNumericExprFieldDef, 'fieldPath'>
                                                                 | Omit<IFormTidyTableNumericRowExprFieldDef, 'fieldPath'>
-                                                                | Omit<IFormTidyTableNumericColumnExprFieldDef, 'fieldPath'>
                                                                 | Omit<IFormTidyTableNumericJSColumnExprFieldDef, 'fieldPath'>
                                                                 | Omit<IFormTidyTableColorRowExprFieldDef, 'fieldPath'>
                                                                 | Omit<IFormTidyTableStringRowExprFieldDef, 'fieldPath'>
@@ -319,54 +319,7 @@ export type FormFieldType =
      * @see IFormTextFieldDef
      */
     "text" |
-    /**
-     * @see IFormTidyTableHtmlExprFieldDef
-     */
-    "tidyTableHtmlExpr" |
-    /**
-     * @see IFormTidyTableHtmlRowExprFieldDef
-     */
-    "tidyTableHtmlRowExpr" |
-    /**
-     * @see IFormTidyTableNumericExprFieldDef
-     */
-    "tidyTableNumericExpr" |
-    /**
-     * @see IFormTidyTableNumericRowExprFieldDef
-     */
-    "tidyTableNumericRowExpr" |
-    /**
-     * @see IFormTidyTableNumericColumnExprFieldDef
-     */
-    "tidyTableNumericJSColumnExpr" |
-    /**
-     * @see IFormTidyTableNumericJSColumnExprFieldDef
-     */
-    "tidyTableNumericColumnExpr" |
-    /**
-     * @see IFormTidyTableStringRowExprFieldDef
-     */
-    "tidyTableStringRowExpr" |
-    /**
-     * @see IFormTidyTableColorRowExprFieldDef
-     */
-    "tidyTableColorRowExpr" |
-    /**
-     * @see IFormTidyTableScaleRowExprFieldDef
-     */
-    "tidyTableScaleRowExpr" |
-    /**
-     * @see IFormTidyTableTextExprFieldDef
-     */
-    "tidyTableTextExpr" |
-    /**
-     * @see IFormTidyTableTextRowExprFieldDef
-     */
-    "tidyTableTextRowExpr" |
-    /**
-     * @see IFormTidyTableNumericStringColumnExprFieldDef
-     */
-    "tidyTableNumericStringColumnExpr" |
+    FormFieldTidyTableExprType |
     /**
      * @see IFormUrlFieldDef
      */
@@ -406,17 +359,50 @@ export type FormFieldType =
     ;
 
 export type FormFieldTidyTableExprType =
+    |
+    /**
+     * @see IFormTidyTableColorRowExprFieldDef
+     */
     "tidyTableColorRowExpr" |
+    /**
+     * @see IFormTidyTableHtmlExprFieldDef
+     */
     "tidyTableHtmlExpr" |
+    /**
+     * @see IFormTidyTableHtmlRowExprFieldDef
+     */
     "tidyTableHtmlRowExpr" |
-    "tidyTableNumericColumnExpr" |
+    /**
+     * @see IFormTidyTableNumericExprFieldDef
+     */
     "tidyTableNumericExpr" |
+    /**
+     * @see IFormTidyTableNumericJSColumnExprFieldDef
+     */
     "tidyTableNumericJSColumnExpr" |
+    /**
+     * @see IFormTidyTableNumericRowExprFieldDef
+     */
     "tidyTableNumericRowExpr" |
+    /**
+     * @see IFormTidyTableNumericStringColumnExprFieldDef
+     */
     "tidyTableNumericStringColumnExpr" |
+    /**
+     * @see IFormTidyTableScaleRowExprFieldDef
+     */
     "tidyTableScaleRowExpr" |
+    /**
+     * @see IFormTidyTableTextExprFieldDef
+     */
     "tidyTableTextExpr" |
+    /**
+     * @see IFormTidyTableTextRowExprFieldDef
+     */
     "tidyTableTextRowExpr" |
+    /**
+     * @see IFormTidyTableStringRowExprFieldDef
+     */
     "tidyTableStringRowExpr"
     ;
 
@@ -425,7 +411,6 @@ export function isTidyTableExpr(type: FormFieldType): type is FormFieldTidyTable
     return type === "tidyTableColorRowExpr"
         || type === "tidyTableHtmlExpr"
         || type === "tidyTableHtmlRowExpr"
-        || type === "tidyTableNumericColumnExpr"
         || type === "tidyTableNumericExpr"
         || type === "tidyTableNumericJSColumnExpr"
         || type === "tidyTableNumericRowExpr"
@@ -442,7 +427,6 @@ export function isTidyTableExprJS(type: FormFieldType): boolean {
         || type === "tidyTableStringRowExpr"
         || type === "tidyTableScaleRowExpr"
         || type === "tidyTableNumericExpr"
-        || type === "tidyTableNumericColumnExpr"
         || type === "tidyTableNumericStringColumnExpr"
         || type === "tidyTableNumericJSColumnExpr"
         || type === "tidyTableNumericRowExpr"
@@ -457,8 +441,7 @@ export function isTidyTableExprTable(type: FormFieldType) {
 }
 
 export function isTidyTableExprColumn(type: FormFieldType): boolean {
-    return type === "tidyTableNumericColumnExpr"
-        || type === "tidyTableNumericStringColumnExpr"
+    return type === "tidyTableNumericStringColumnExpr"
         || type === "tidyTableNumericJSColumnExpr"
         ;
 }
@@ -493,9 +476,8 @@ export function isTidyTableExprTextHtml(type: FormFieldType): type is "tidyTable
         ;
 }
 
-export function isTidyTableExprNumeric(type: FormFieldType): type is "tidyTableNumericExpr" | "tidyTableNumericRowExpr" | "tidyTableNumericColumnExpr" {
+export function isTidyTableExprNumeric(type: FormFieldType): type is "tidyTableNumericExpr" | "tidyTableNumericRowExpr" {
     return type === "tidyTableNumericExpr"
-        || type === "tidyTableNumericColumnExpr"
         || type === "tidyTableNumericRowExpr"
         ;
 }
@@ -514,13 +496,16 @@ export enum AutocompleteNoOptionsText {
     NO_COLUMNS = "NO_COLUMNS",
     NO_QUERY_RESULT = "NO_QUERY_RESULT",
     QUERY_HAS_ERROR = "QUERY_HAS_ERROR",
+    TRANSFORMATION_HAS_ERROR = "TRANSFORMATION_HAS_ERROR",
+    QUERY_OUTDATED = "QUERY_OUTDATED",
 }
 
 /**
  * Show an action button below the options
  */
 export enum AutocompleteActions {
-    ADD_COLOR = "ADD_COLOR"
+    ADD_COLOR = "ADD_COLOR",
+    REFRESH_QUERY = "REFRESH_QUERY"
 }
 
 export type CodeMirrorMode =
@@ -594,13 +579,13 @@ export interface IFormAutocompleteFieldDef<OPTION> extends IFormFieldDef<OPTION>
         optionValues?: OPTION[] | ((callback: ((suggestions: OPTION[]) => void), dependsOnValue?: any, param?: {
             theme: Theme
         }) => void);
-        optionValuesObsolete?: boolean;
-        optionValuesObsoleteMessage?: string;
 
         noOptionsText?: AutocompleteNoOptionsText;
 
         /**
-         * Show an action button below the options
+         * Show an action button below the options.
+         *
+         * If the query is outdated or not run yet, it shows a refresh action instead.
          */
         action?: AutocompleteActions;
 
@@ -978,12 +963,6 @@ export interface IFormOptionFieldMultipleDef extends IFormFieldDef<string[]> {
         optionName?: string;
 
         getCaption?: (id: string) => string;
-
-        /**
-         * Use the first option available if the current value is not in the available options.
-         * It resets to null if there are no available options.
-         */
-        useFirstIfOptionNotFound?: boolean;
     }
 }
 
@@ -1009,12 +988,6 @@ export interface IFormOptionFieldSingleDef extends IFormFieldDef<string> {
         optionName?: string;
 
         getCaption?: (id: string) => string;
-
-        /**
-         * Use the first option available if the current value is not in the available options.
-         * It resets to null if there are no available options.
-         */
-        useFirstIfOptionNotFound?: boolean;
     }
 
 }
@@ -1100,76 +1073,22 @@ export interface IFormTextFieldDef extends IFormFieldDef<string> {
 
 
 /**
- * An HTML (markdown) text expression containing tidy table value accessor (e.g., Donut's center text).
+ * A Markdown text expression containing tidy table value accessor (e.g., Donut's center text).
  * The evaluation context is the table.
  *
  * @see FormFieldDef
  */
-export interface IFormTidyTableHtmlExprFieldDef extends IFormFieldDef<string> {
-
-    fieldType: "tidyTableHtmlExpr",
-
-    editorConf?: {
-        /**
-         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
-         * expression when evaluating in the dialog editor.
-         */
-        userSelectsCurrentColumn?: boolean;
-
-        /**
-         * If true, user can use _currentColumn in the expression.
-         * The default current column comes from the first dependsOn option.
-         */
-        useCurrentColumn?: boolean;
-
-        /**
-         * If true, user can use _selectedColumns in the expression.
-         * The default selected columns come from the second dependsOn option.
-         */
-        useSelectedColumns?: boolean;
-
-        /**
-         * If true, the user can use $value.totalSelectedOrTotal$ to get the total of the selected for this field.
-         */
-        allowTotalOfSelection?: boolean;
-    },
+export interface IFormTidyTableHtmlExprFieldDef extends IFormTidyTableExprFieldDef<"tidyTableHtmlExpr"> {
 
 }
 
 /**
- * An HTML (markdown) text expression containing tidy table value accessor (e.g., chart's tooltip).
+ * An Markdown text expression containing tidy table value accessor (e.g., chart's tooltip).
  * The evaluation context is a row.
  *
  * @see FormFieldDef
  */
-export interface IFormTidyTableHtmlRowExprFieldDef extends IFormFieldDef<string> {
-
-    fieldType: "tidyTableHtmlRowExpr",
-
-    editorConf?: {
-        /**
-         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
-         * expression when evaluating in the dialog editor.
-         */
-        userSelectsCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _currentColumn in the expression.
-         * The default current column comes from the first dependsOn option.
-         */
-        useCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _selectedColumns in the expression.
-         * The default selected columns come from the second dependsOn option.
-         */
-        useSelectedColumns?: boolean,
-
-        /**
-         * Set here to override the available columns and roles in the completion meta.
-         */
-        completionMeta?: string[];
-    },
+export interface IFormTidyTableHtmlRowExprFieldDef extends IFormTidyTableExprFieldDef<"tidyTableHtmlRowExpr"> {
 
 }
 
@@ -1179,29 +1098,7 @@ export interface IFormTidyTableHtmlRowExprFieldDef extends IFormFieldDef<string>
  *
  * @see FormFieldDef
  */
-export interface IFormTidyTableNumericExprFieldDef extends IFormFieldDef<string> {
-
-    fieldType: "tidyTableNumericExpr",
-
-    editorConf?: {
-        /**
-         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
-         * expression when evaluating in the dialog editor.
-         */
-        userSelectsCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _currentColumn in the expression.
-         * The default current column comes from the first dependsOn option.
-         */
-        useCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _selectedColumns in the expression.
-         * The default selected columns come from the second dependsOn option.
-         */
-        useSelectedColumns?: boolean,
-    },
+export interface IFormTidyTableNumericExprFieldDef extends IFormTidyTableExprFieldDef<"tidyTableNumericExpr"> {
 
 }
 
@@ -1211,29 +1108,7 @@ export interface IFormTidyTableNumericExprFieldDef extends IFormFieldDef<string>
  *
  * @see FormFieldDef
  */
-export interface IFormTidyTableStringRowExprFieldDef extends IFormFieldDef<string> {
-
-    fieldType: "tidyTableStringRowExpr",
-
-    editorConf?: {
-        /**
-         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
-         * expression when evaluating in the dialog editor.
-         */
-        userSelectsCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _currentColumn in the expression.
-         * The default current column comes from the first dependsOn option.
-         */
-        useCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _selectedColumns in the expression.
-         * The default selected columns come from the second dependsOn option.
-         */
-        useSelectedColumns?: boolean,
-    },
+export interface IFormTidyTableStringRowExprFieldDef extends IFormTidyTableExprFieldDef<"tidyTableStringRowExpr"> {
 
 }
 
@@ -1243,29 +1118,7 @@ export interface IFormTidyTableStringRowExprFieldDef extends IFormFieldDef<strin
  *
  * @see FormFieldDef
  */
-export interface IFormTidyTableColorRowExprFieldDef extends IFormFieldDef<string> {
-
-    fieldType: "tidyTableColorRowExpr",
-
-    editorConf?: {
-        /**
-         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
-         * expression when evaluating in the dialog editor.
-         */
-        userSelectsCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _currentColumn in the expression.
-         * The default current column comes from the first dependsOn option.
-         */
-        useCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _selectedColumns in the expression.
-         * The default selected columns come from the second dependsOn option.
-         */
-        useSelectedColumns?: boolean,
-    },
+export interface IFormTidyTableColorRowExprFieldDef extends IFormTidyTableExprFieldDef<"tidyTableColorRowExpr"> {
 
 }
 
@@ -1275,29 +1128,7 @@ export interface IFormTidyTableColorRowExprFieldDef extends IFormFieldDef<string
  *
  * @see FormFieldDef
  */
-export interface IFormTidyTableNumericRowExprFieldDef extends IFormFieldDef<string> {
-
-    fieldType: "tidyTableNumericRowExpr",
-
-    editorConf?: {
-        /**
-         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
-         * expression when evaluating in the dialog editor.
-         */
-        userSelectsCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _currentColumn in the expression.
-         * The default current column comes from the first dependsOn option.
-         */
-        useCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _selectedColumns in the expression.
-         * The default selected columns come from the second dependsOn option.
-         */
-        useSelectedColumns?: boolean,
-    },
+export interface IFormTidyTableNumericRowExprFieldDef extends IFormTidyTableExprFieldDef<"tidyTableNumericRowExpr"> {
 
 }
 
@@ -1307,61 +1138,7 @@ export interface IFormTidyTableNumericRowExprFieldDef extends IFormFieldDef<stri
  *
  * @see FormFieldDef
  */
-export interface IFormTidyTableNumericColumnExprFieldDef extends IFormFieldDef<string> {
-
-    fieldType: "tidyTableNumericColumnExpr",
-
-    editorConf?: {
-        /**
-         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
-         * expression when evaluating in the dialog editor.
-         */
-        userSelectsCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _currentColumn in the expression.
-         * The default current column comes from the first dependsOn option.
-         */
-        useCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _selectedColumns in the expression.
-         * The default selected columns come from the second dependsOn option.
-         */
-        useSelectedColumns?: boolean,
-    },
-
-}
-
-/**
- * A numeric expression containing tidy table value accessor (e.g., chart's value axis minimum).
- * The evaluation context is a column.
- *
- * @see FormFieldDef
- */
-export interface IFormTidyTableNumericJSColumnExprFieldDef extends IFormFieldDef<string> {
-
-    fieldType: "tidyTableNumericJSColumnExpr",
-
-    editorConf?: {
-        /**
-         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
-         * expression when evaluating in the dialog editor.
-         */
-        userSelectsCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _currentColumn in the expression.
-         * The default current column comes from the first dependsOn option.
-         */
-        useCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _selectedColumns in the expression.
-         * The default selected columns come from the second dependsOn option.
-         */
-        useSelectedColumns?: boolean,
-    },
+export interface IFormTidyTableNumericJSColumnExprFieldDef extends IFormTidyTableExprFieldDef<"tidyTableNumericJSColumnExpr"> {
 
 }
 
@@ -1371,29 +1148,7 @@ export interface IFormTidyTableNumericJSColumnExprFieldDef extends IFormFieldDef
  *
  * @see FormFieldDef
  */
-export interface IFormTidyTableScaleRowExprFieldDef extends IFormFieldDef<string> {
-
-    fieldType: "tidyTableScaleRowExpr",
-
-    editorConf: {
-        /**
-         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
-         * expression when evaluating in the dialog editor.
-         */
-        userSelectsCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _currentColumn in the expression.
-         * The default current column comes from the first dependsOn option.
-         */
-        useCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _selectedColumns in the expression.
-         * The default selected columns come from the second dependsOn option.
-         */
-        useSelectedColumns?: boolean,
-    },
+export interface IFormTidyTableScaleRowExprFieldDef extends IFormTidyTableExprFieldDef<"tidyTableScaleRowExpr"> {
 
 }
 
@@ -1403,29 +1158,7 @@ export interface IFormTidyTableScaleRowExprFieldDef extends IFormFieldDef<string
  *
  * @see FormFieldDef
  */
-export interface IFormTidyTableTextExprFieldDef extends IFormFieldDef<string> {
-
-    fieldType: "tidyTableTextExpr",
-
-    editorConf?: {
-        /**
-         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
-         * expression when evaluating in the dialog editor.
-         */
-        userSelectsCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _currentColumn in the expression.
-         * The default current column comes from the first dependsOn option.
-         */
-        useCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _selectedColumns in the expression.
-         * The default selected columns come from the second dependsOn option.
-         */
-        useSelectedColumns?: boolean,
-    },
+export interface IFormTidyTableTextExprFieldDef extends IFormTidyTableExprFieldDef<"tidyTableTextExpr"> {
 
 }
 
@@ -1435,29 +1168,7 @@ export interface IFormTidyTableTextExprFieldDef extends IFormFieldDef<string> {
  *
  * @see FormFieldDef
  */
-export interface IFormTidyTableTextRowExprFieldDef extends IFormFieldDef<string> {
-
-    fieldType: "tidyTableTextRowExpr",
-
-    editorConf?: {
-        /**
-         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
-         * expression when evaluating in the dialog editor.
-         */
-        userSelectsCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _currentColumn in the expression.
-         * The default current column comes from the first dependsOn option.
-         */
-        useCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _selectedColumns in the expression.
-         * The default selected columns come from the second dependsOn option.
-         */
-        useSelectedColumns?: boolean,
-    },
+export interface IFormTidyTableTextRowExprFieldDef extends IFormTidyTableExprFieldDef<"tidyTableTextRowExpr"> {
 
 }
 
@@ -1467,29 +1178,7 @@ export interface IFormTidyTableTextRowExprFieldDef extends IFormFieldDef<string>
  *
  * @see FormFieldDef
  */
-export interface IFormTidyTableNumericStringColumnExprFieldDef extends IFormFieldDef<string> {
-
-    fieldType: "tidyTableNumericStringColumnExpr",
-
-    editorConf?: {
-        /**
-         * If true, user can use select a column in the dialog editor. This column then is the _currentColumn in the
-         * expression when evaluating in the dialog editor.
-         */
-        userSelectsCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _currentColumn in the expression.
-         * The default current column comes from the first dependsOn option.
-         */
-        useCurrentColumn?: boolean,
-
-        /**
-         * If true, user can use _selectedColumns in the expression.
-         * The default selected columns come from the second dependsOn option.
-         */
-        useSelectedColumns?: boolean,
-    },
+export interface IFormTidyTableNumericStringColumnExprFieldDef extends IFormTidyTableExprFieldDef<"tidyTableNumericStringColumnExpr"> {
 
 }
 
@@ -1518,10 +1207,15 @@ export interface IFormFormatterPickerFieldDef extends IFormFieldDef<string> {
 
 export enum ConditionalRuleOperators {
     EQUALS = "EQUALS",
+    NOT_EQUALS = "NOT_EQUALS",
     GREATER_THAN = "GREATER_THAN",
     GREATER_EQUAL_THAN = "GREATER_EQUAL_THAN",
     SMALLER_THAN = "SMALLER_THAN",
-    SMALLER_EQUAL_THAN = "SMALLER_EQUAL_THAN"
+    SMALLER_EQUAL_THAN = "SMALLER_EQUAL_THAN",
+    CONTAINS = "CONTAINS",
+    NOT_CONTAINS = "NOT_CONTAINS",
+    STARTS_WITH = "STARTS_WITH",
+    ENDS_WITH = "ENDS_WITH"
 }
 
 export interface IFormConditionalColorRule {

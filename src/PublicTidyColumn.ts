@@ -434,15 +434,12 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
     hasProperty(name: ITidyColumnNamedProperties | string): boolean;
 
     /**
-     * Returns true if the column has color property or is a color column.
-     */
-    hasColorProperty(): boolean;
-
-    /**
      * Returns the color column (if defined).
      *
      * If the column has type 'color', then it returns itself. Else it returns the
-     * column of the first property with type 'color'.
+     * column of the first property(1) with type 'color' (if it is defined).
+     *
+     * (1) the fore color property is excluded.
      */
     getColorColumn(): ITidyColorColumn | undefined;
 
@@ -450,7 +447,9 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * Returns the color of a cell (if defined).
      *
      * If the column has type 'color', then it returns the cell value. Else it returns the
-     * value at rowIdx of the first property with type 'color' (if it is defined).
+     * value at rowIdx of the first property(1) with type 'color' (if it is defined).
+     *
+     * (1) the fore color property is excluded.
      */
     getColor(rowIdx: number): Property.Color | undefined;
 
@@ -473,14 +472,6 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * @param rowIdx row index for the value to return.
      */
     getPropertyAt(name: ITidyColumnNamedProperties | string, rowIdx: number): any;
-
-    /**
-     * Return the properties of a column for a given cell index.
-     *
-     * @param idx row index of cell.
-     * @deprecated
-     */
-    getPropertiesAt(idx: number): Record<string, any>;
 
     /**
      * Return available properties for this column as a list of columns.

@@ -13,7 +13,7 @@ import {FilterPanelChartOptions} from "./ThemeFilterPanel";
  */
 export interface SinglePanelFilterChartOptions extends FormFieldObject, Pick<FilterPanelChartOptions,
     "variant" | "initialFilterConfig" | "measureMdx" | "useSimpleFilterCutoff" | "useSimpleFilterCutoff" |
-    "allowedOperatorsConfig" | "datePickerShortcuts"> {
+    "allowedOperatorsConfig" | "datePickerShortcuts" | "shortcutsAnchorDate" | "allowedShortcutGroup"> {
 
     /**
      * The ID of the level / hierarchy that is used in the filter. Equal to `IPGFilterItem.fieldId`.

@@ -44,7 +44,8 @@ export type LoggerComponent =
     "WidgetBoxWrapper" |
     "WidgetTemplateLibrary" |
     "FilterPanel" |
-    "FilterPanelViews"
+    "FilterPanelViews" |
+    "UseOnWhenVisible"
     ;
 
 

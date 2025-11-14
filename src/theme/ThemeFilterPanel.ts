@@ -121,7 +121,13 @@ export class FilterPanelClasses {
     static readonly dateTimePicker = "ic3FilterPanel-dateTimePicker";
 
     /**
-     * A div with the displayed values for the value selector in preview mode
+     * Classname for the value selector div.
+     */
+    static readonly valueSelector = "ic3FilterPanel-valueSelector";
+
+    /**
+     * A div with the displayed values for the value selector in preview mode. Only visible when the operator is
+     * `Is Any Of` or `Is None Of`.
      */
     static readonly inputFieldPreviewValues = "ic3FilterPanel-PreviewValue";
 
@@ -278,6 +284,15 @@ export interface FilterPanelChartOptions extends FormFieldObject {
      */
     datePickerShortcuts?: boolean;
 
+    /**
+     * Anchor date when using shortcuts. This expression is evaluated against the time level used.
+     */
+    shortcutsAnchorDate?: string;
+
+    /**
+     * User can choose from the shortcuts in this group. Edit the groups in the theme plugin.
+     */
+    allowedShortcutGroup: string;
 }
 
 export type TextFilterType = "EQUALS"

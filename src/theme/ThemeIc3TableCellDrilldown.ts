@@ -1,6 +1,5 @@
 export class ThemeIc3TableCellDrilldownClasses {
 
-
     public static loading = "Ic3TableCellDrilldown-loading";
     public static normal = "Ic3TableCellDrilldown-normal";
     public static expanded = "Ic3TableCellDrilldown-expanded";
@@ -12,6 +11,7 @@ export declare type ThemeIc3TableCellDrilldownClassesKey = keyof ThemeIc3TableCe
 
 export interface Ic3TableCellDrilldownProps {
     levelDepth: number;
+    // If true, only listen to click on the drilldown icon.
     hasRender: boolean;
     hasChildren: boolean;
 }

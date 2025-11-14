@@ -10,6 +10,7 @@ import {ILogger} from "./Logger";
 import {AppNotification} from "./INotification";
 import {WidgetNotificationHandler} from "./IcEvent";
 import {TidyRowFilter} from "./PublicTidyTableTypes";
+import {FormFieldTidyTableExprType} from "./PublicTemplateForm";
 
 export enum WidgetRenderLayoutStatus {
     RENDERING = "RENDERING",
@@ -106,6 +107,17 @@ export interface IPublicContext {
     tidyMath(): ITidyMath;
 
     /**
+     * Create an expression from a field.
+     *
+     * @param expression typically coming from a widget field so it cannot be null if there is a default value.
+     * To prevent usage of the default, pass a string with a single space to make this method return undefined.
+     * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
+     * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
+     */
+    createExpression<T extends FormFieldTidyTableExprType>(fieldType: T, field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter):
+        T extends "tidyTableColorRowExpr" | "tidyTableScaleRowExpr" | "tidyTableHtmlRowExpr" | "tidyTableNumericRowExpr" | "tidyTableStringRowExpr" | "tidyTableTextRowExpr" ? ((rowIdx: number) => string) | undefined : (() => string) | undefined;
+
+    /**
      * Not in widget public context because of transformation not applied from a widget context always.
      *
      * @param expression typically coming from a widget field so it cannot be null if there is a default value.
@@ -113,6 +125,8 @@ export interface IPublicContext {
      * undefined.
      * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
      * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
+     *
+     * @deprecated will be removed in version >=9.1.0. Use `createExpression` instead.
      */
     createTableRowTextExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => string) | undefined;
 
@@ -123,6 +137,8 @@ export interface IPublicContext {
      * To prevent usage of the default, pass an "empty" string that makes this method returns
      * undefined.
      * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
+     *
+     * @deprecated will be removed in version >=9.1.0. Use `createExpression` instead.
      */
     createTableTextExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, isRowSelected?: TidyRowFilter): (() => string) | undefined;
 
@@ -134,6 +150,8 @@ export interface IPublicContext {
      * undefined.
      * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
      * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
+     *
+     * @deprecated will be removed in version >=9.1.0. Use `createExpression` instead.
      */
     createTableRowMarkdownExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => string) | undefined;
 
@@ -145,6 +163,8 @@ export interface IPublicContext {
      * undefined.
      * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
      * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
+     *
+     * @deprecated will be removed in version >=9.1.0. Use `createExpression` instead.
      */
     createTableMarkdownExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): (() => string) | undefined;
 
@@ -156,6 +176,8 @@ export interface IPublicContext {
      * undefined.
      * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
      * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
+     *
+     * @deprecated will be removed in version >=9.1.0. Use `createExpression` instead.
      */
     createTableRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => number | undefined) | undefined;
 
@@ -163,12 +185,16 @@ export interface IPublicContext {
      * same as  createTableRowNumericExpr but returning a string
      * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
      * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
+     *
+     * @deprecated will be removed in version >=9.1.0. Use `createExpression` instead.
      */
     createTableRowNumericStringExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => string | undefined) | undefined;
 
-    /*
+    /**
      * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
      * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
+     *
+     * @deprecated will be removed in version >=9.1.0. Use `createExpression` instead.
      */
     createTableScaleRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => number | undefined) | undefined;
 
@@ -180,17 +206,23 @@ export interface IPublicContext {
      * undefined.
      * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
      * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
+     *
+     * @deprecated will be removed in version >=9.1.0. Use `createExpression` instead.
      */
     createTableNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): (() => number | undefined) | undefined;
 
     /**
      * same as  createTableNumericExpr but returning a javascript object
+     *
+     * @deprecated will be removed in version >=9.1.0. Use `createExpression` instead.
      */
     createTableNumericStringExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): (() => any | undefined) | undefined;
 
 
     /**
      * same as  createTableNumericExpr but returning a javascript object
+     *
+     * @deprecated will be removed in version >=9.1.0. Use `createExpression` instead.
      */
     createTableNumericJSExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): (() => any | undefined) | undefined;
 
@@ -272,7 +304,7 @@ export interface IWidgetStableContext extends IPublicContext {
      */
     fireMdxEvent(actionName: string, value: string, mdx: string): void;
 
-    fireMdxEvents(events: {actionName: string, value: string, mdx: string}[]): void;
+    fireMdxEvents(events: { actionName: string, value: string, mdx: string }[]): void;
 
     /**
      * Cypress testing purpose, after a rendering of the chart
@@ -383,6 +415,20 @@ export interface IWidgetStableContext extends IPublicContext {
      */
     getExportFileName(defaultFileName?: string): string;
 
+    /**
+     * Returns the report name of the report defining this widget (i.e. could be the embedding)
+     */
+    getDefiningReportName(): string;
+
+    /**
+     * Returns the report path of the report defining this widget (i.e. could be the embedding)
+     */
+    getDefiningReportPath(): string;
+
+    /**
+     * Returns the report folder name of the report defining this widget (i.e. could be the embedding)
+     */
+    getDefiningReportFolderName(): string;
 
 }
 
@@ -410,375 +456,7 @@ export interface IWidgetPublicContext extends IPublicContext {
      */
     widgetHasHeader(): boolean;
 
-    getBoxSettings(): IPublicWidgetBoxSettings | undefined;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getTemplateId(): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getNsId(): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getWidgetId(): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getTemplateId(): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    isPrintingMode(): boolean;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    renderWidgetContentMessage(type: IContentMessageType, message: string): any;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    renderLazyTreeView<T>(props: LazyTreeViewProps): T;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    wrapWithTooltip(tooltip: string | undefined, wrappedElement: React.ReactElement): React.ReactElement;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    onWidgetRenderStatusChange(status: WidgetRenderLayoutStatus): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    firesEvent(actionName: string): boolean;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    fireClearEvent(actionName: string): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    fireMdxEvent(actionName: string, value: string, mdx: string): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    fireMdxEvents(events: { actionName: string, value: string, mdx: string }[]): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    incrementWidgetContentRendering(): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getWidgetTemplateDefinition(qualifiedId: string): IPublicWidgetTemplateDefinition<any>;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    resolveWidgetTemplateDefinition(definition: IPublicWidgetTemplateDefinition<any>): Promise<IPublicWidgetTemplateDefinition<any>>;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    useReduxOwnPropsState<T>(fieldName: string, valueIfUndefined?: T): [T, (newValue: T | undefined) => void];
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    useReduxOwnProps<T>(fieldName: string): T;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    setReduxOwnProps(fieldName: string, value: any): void;
-
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    reactUseGoogleMap(): boolean | Error;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    reactUseGoogleMapPlus(mapOptions: any, ref: any): undefined | { map?: any; error?: Error };
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getMapCoordinates(table: ITidyTable): [ITidyNumericColumn, ITidyNumericColumn] | [];
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getGoogleMapRenderedDelayMS(): number;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    addWidgetWarning(warning: string, severity?: WidgetWarningSeverity): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    widgetClearWarnings(): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    useNotification(notifications: WidgetNotificationHandler | WidgetNotificationHandler[], deps: ReadonlyArray<unknown> | undefined): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    useUserMenu(handler: (userMenu: string) => any | void, deps: ReadonlyArray<unknown> | undefined): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    onExportToExcel(doExport: undefined | ((fileName: string | undefined) => ITidyTable | undefined | null), disabled?: boolean): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    exportToExcel(table: ITidyTable, asPivotForExcel: boolean, rows: number[] | undefined): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    useUserMenuWidth(): number | undefined;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getExportFileName(defaultFileName?: string): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    logger(): ILogger;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    isAppConsole(): boolean;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    isAppReportViewer(): boolean;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    isAppReportEditor(): boolean;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    isAppReportEditorPreview(): boolean;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    isAppReportAppEditor(): boolean;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    isAppGadgetEditor(): boolean;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    useGoogleMapHook(): boolean | Error;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getTheme(): Theme;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getThemeFormatter(): ThemeFormatters;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getUserName(): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getReportName(): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getReportPath(): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getReportFolderName(): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getReportLocale(): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getNumberFormatter(format: ThemeTextFormatter | null | undefined): (value: any | undefined) => string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    getDateFormatter(format: ThemeTextFormatter | null | undefined): (value: any | undefined) => string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    translateContent(content: string, ...args: any[]): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    localize(name: string, ...args: any[]): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    localizeError(name: string, ...args: any[]): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    localizeTransformationCaption(template: ITidyTableTransformation<any>): { info: string, description?: string };
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    localizeFormField(pluginId: string, widgetTemplateId: string, name: string, ...args: any[]): [string, string | undefined, string | undefined];
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    markdownToHtml(markDown: string): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    tidyMath(): ITidyMath;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    createTableRowTextExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => string) | undefined;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    createTableTextExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, isRowSelected?: TidyRowFilter): (() => string) | undefined;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    createTableRowMarkdownExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => string) | undefined;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    createTableMarkdownExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): (() => string) | undefined;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    createTableRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => number | undefined) | undefined;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    createTableRowNumericStringExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => string | undefined) | undefined;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    createTableScaleRowNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): ((rowIdx: number) => number | undefined) | undefined;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    createTableNumericExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): (() => number | undefined) | undefined;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    createTableNumericStringExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): (() => any | undefined) | undefined;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    createTableNumericJSExpr(field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter): (() => any | undefined) | undefined;
-
-    /**
-     * Event methods that do not depend on a Table
-     *
-     * @see ITidyTableInteractionEvent for more
-     */
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    fireClearEventName(actionName: string): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    fireMdxEventName(actionName: string, value: string, mdx: string): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    fireAppNotification(notification: AppNotification): void;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    formatDate(value: Date | string | undefined | null, format: ThemeTextFormatter | null | undefined, locale?: string): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    formatNumber(value: number | string | undefined | null, format: ThemeTextFormatter | null | undefined, locale?: string): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    formatAmount(value: number | string | undefined | null, locale?: string): string;
-
-    /**
-     * @deprecated use the method in this.getStableContext()
-     */
-    formatPercent(value: number | string | undefined | null, locale?: string): string;
-
+    getBoxSettings(): IPublicWidgetBoxSettings;
 
 }
 

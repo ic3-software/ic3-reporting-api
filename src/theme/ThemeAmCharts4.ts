@@ -445,6 +445,11 @@ export interface Am4SimpleCategoryAxisOptions extends FormFieldObject {
      * </pre>
      */
     xAxisPostRenderHook?: Hook<any, Am4SimpleCategoryAxisOptions>;
+
+    /**
+     * Cache the scrollbar state into local storage. The scrollbar state is kept when refreshing the dashboard.
+     */
+    xAxisSaveZoom?: boolean;
 }
 
 export interface Am4ValueAxisOptions extends FormFieldObject {
@@ -545,9 +550,14 @@ export interface Am4ValueAxisOptions extends FormFieldObject {
      * </pre>
      */
     yAxisPostRenderHook?: Hook<any, Am4ValueAxisOptions>;
+
+    /**
+     * Cache the scrollbar state into local storage. The scrollbar state is kept when refreshing the dashboard.
+     */
+    yAxisSaveZoom?: boolean;
 }
 
-export interface Am4DateAxisOptions extends FormFieldObject, Pick<Am4ValueAxisOptions, "yAxisTitleText" | "yAxisMinGridDistance" | "yAxisShowGridLines"> {
+export interface Am4DateAxisOptions extends FormFieldObject, Pick<Am4ValueAxisOptions, "yAxisTitleText" | "yAxisMinGridDistance" | "yAxisShowGridLines" | "yAxisSaveZoom"> {
     /**
      * In-place processing of the amCharts 4 date axis instance.
      *
@@ -1334,6 +1344,11 @@ export interface Am4CategoryDateAxisOptions extends FormFieldObject {
      * </pre>
      */
     xAxisPostRenderHook?: Hook<any, Am4CategoryDateAxisOptions>;
+
+    /**
+     * Cache the scrollbar state into local storage. The scrollbar state is kept when refreshing the dashboard.
+     */
+    xAxisSaveZoom?: boolean;
 }
 
 export interface Am4ValueAxisRangeOptions extends FormFieldObject {

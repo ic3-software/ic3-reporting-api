@@ -542,19 +542,19 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
     userMenuDisableInteractionMode?: boolean;
 
     /**
-     * @deprecated
-     */
-    withoutTidyTable?: boolean;
-
-    /**
      * This widget knows how to render a result without any data.
      */
     handlesNoData?: boolean;
 
     /**
-     * This widget knows how to render when it has no query.
+     * This widget knows how to render when it has an empty query result.
      */
     handlesEmptyQuery?: boolean;
+
+    /**
+     * When the widget is just created, it shows an edit widget button. Set true here to show the widget instead.
+     */
+    canRenderWithoutUserConfig?: boolean;
 
     /**
      * This widget is responsible to notify its rendered status. Required with asynchronous rendering

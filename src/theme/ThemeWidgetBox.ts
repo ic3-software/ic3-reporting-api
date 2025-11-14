@@ -155,6 +155,7 @@ export interface IWidgetBoxExpandOptions {
 
     keepBoxHeader: boolean;
     keepTableHeader: boolean;
+    onlyWhenPrinting: boolean;
 }
 
 export interface IWidgetRectangle {

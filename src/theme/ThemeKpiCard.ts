@@ -173,14 +173,4 @@ export interface SparkChartOptionsMeta extends FormFieldObject {
      * Fill the area under the sparkline.
      */
     sparklineHasArea: boolean;
-
-    /**
-     * Radius of the columns rounded corners.
-     */
-    columnSparkCornerRadius: number;
-
-    /**
-     * Space between columns.
-     */
-    columnSparkColumnSpacing: number;
 }
