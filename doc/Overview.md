@@ -4,9 +4,9 @@ The icCube Dashboards application depends on plugins to add custom theme, widget
 is a Webpack module that is loaded by the Dashboards application at runtime using the **Webpack Module Federation**
 mechanism. Refer to this [page](Develop.md) for more details.
 
-The plugin dev. kit is available in Typescript.
+The plugin dev. kit is available in TypeScript.
 
-Even if the icCube Dashboards is written in React, you can write your plugin in plain Javascript/Typescript and use your
+Even if the icCube Dashboards is written in React, you can write your plugin in plain JavaScript/TypeScript and use your
 favourite libraries. See the working example section below.
 
 Note that Material-UI 5.x is required for accessing and developing a new theme.

@@ -1,10 +1,10 @@
-import {ComponentsOverrides, ComponentsVariants, Interpolation, Theme} from "@mui/material";
+import {ComponentsOverrides, ComponentsVariants, Interpolation, Theme, TypographyStyle} from "@mui/material/styles";
+import {SvgIcon} from "@mui/material";
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {IWidgetLayoutDefinition} from "./PublicLayout";
 import {IThemeWidgetDefaults} from "./IThemeManager";
 import * as React from "react";
 import {ReactElement} from "react";
-import {TypographyStyle} from "@mui/material/styles";
 import {Property} from "csstype";
 import {IPublicContext} from "./PublicContext";
 import {
@@ -45,7 +45,7 @@ import {ReportAppBarClassKey} from "./theme/ThemeReportAppBar";
 import {WidgetBoxClassKey, WidgetBoxDivProps} from "./theme/ThemeWidgetBox";
 import {WidgetBoxContentMessageClassKey} from "./theme/ThemeWidgetBoxContentMessage";
 import {ReportAppLeftPanelClassKey} from "./theme/ThemeReportAppLeftPanel";
-import {AppMenuIconClassKey, AppMenuIconProps} from "./theme/ThemeAppMenuIcon";
+import {ic3AppMenuIconClassKey, ic3AppMenuItemClassKey, ic3AppMenuItemHeaderClassKey} from "./theme/ThemeAppMenuIcon";
 import {QueryBuilderNodeClassKey, QueryBuilderNodeProps} from "./theme/ThemeQueryBuilderNode";
 import {PrintButtonClassKey, StyledPrintButtonDivProps} from "./theme/ThemePrintButton";
 import {CodeMirrorClassesKey} from "./theme/ThemeCodeMirror";
@@ -57,6 +57,7 @@ import {HomeConsoleClassKey} from "./theme/ThemeHomeConsole";
 import {GoogleMarkerVariantChartOptions} from "./theme/ThemeGoogleMarker";
 import {Ic3CustomDrilldownMenuClassesKey} from "./theme/ThemeIc3CustomDrilldownMenu";
 import {Ic3WidgetBoxSpinnerProps, ThemeIc3WidgetBoxSpinnerClassesKey} from "./theme/ThemeIc3WidgetBoxSpinner";
+import {ic3CorePalette, ic3CorePaletteOptions, ic3CoreTheme} from "@ic3/common-api";
 
 export type Ic3ChartVariants = {
     [Name in keyof WidgetTemplateChartOptions]?: Array<{
@@ -247,7 +248,8 @@ type DeepPartial<T> = {
     [P in keyof T]?: T[P] extends Record<string, unknown> ? DeepPartial<T[P]> : T[P];
 }
 
-export interface ic3Palette {
+
+export interface ic3Palette extends ic3CorePalette {
 
     /**
      * The color for the page background (can be overridden at layout level).
@@ -297,42 +299,6 @@ export interface ic3Palette {
      */
     reportAppMenu: string;
 
-    /**
-     * List of named colors for ic3 applications ( MDX IDE, Admin ... )
-     */
-    appColors?: { 'default'?: Property.Color } & Record<string, Property.Color>;
-
-    /**
-     * Darkens a color for an onhover effect
-     *
-     * If null or undefined, returns onHover color
-     */
-    onHover: (color?: Property.Color | undefined | null) => Property.Color;
-
-    mdx: {
-        annotation: string;
-        comment: string;
-        definitionKeyword: string;
-        keyword: string;
-        labelName: string;
-        number: string;
-        operator: string;
-        propertyName: string;
-        separator: string;
-        string: string;
-        variableName: string;
-        dimension: string;
-        hierarchy: string;
-        level: string;
-        member: string;
-        measureGroup: string;
-        measureFolder: string;
-        measure: string;
-        set: string;
-        calcMeasure: string;
-        event: string;
-        hierarchyFolder: string;
-    }
 }
 
 interface MandatorySingleColors {
@@ -396,9 +362,7 @@ interface MandatorySingleColors {
 
 }
 
-export interface ic3PaletteOptions {
-
-    pageBackgroundColor: Property.Color;
+export interface ic3PaletteOptions extends ic3CorePaletteOptions {
 
     selected?: Property.Color;
     selectedText?: Property.Color;
@@ -421,13 +385,6 @@ export interface ic3PaletteOptions {
     chartSingleColors?: Partial<MandatorySingleColors> & Record<string, Property.Color>;
 
     reportAppMenu?: Property.Color;
-
-    appColors?: { 'default'?: Property.Color } & Record<string, Property.Color>
-
-    onHover?: (color: Property.Color) => Property.Color;
-
-    mdx?: Partial<ic3Palette['mdx']>;
-
 }
 
 
@@ -452,10 +409,7 @@ export enum TableRowHeightOptions {
     small = "small"
 }
 
-export interface ic3Theme {
-
-    id: string;
-    caption: string;
+export interface ic3Theme extends ic3CoreTheme {
 
     cssClass: string;
 
@@ -464,6 +418,19 @@ export interface ic3Theme {
     formatter: ThemeFormatterPerLocale
         /* for backwards compatibility */
         | ThemeFormatters;
+
+    /**
+     * For the App Viewer the height of the Application header (css style)
+     */
+    appViewer?: {
+        appTopPanelHeight?: string;
+        appTopPanelWithFilterHeight?: string;
+        appLeftPanelWidth?: string;
+        appLeftPanelCollapsedWidth?: string;
+
+        appMenuInnerPercentage?: string; // the size of the button with the icon (css)
+        appMenuOuterPercentage?: string; // the inner icons size  (css)
+    }
 
     /**
      * Icons used in tables and trees
@@ -519,6 +486,11 @@ export interface ic3Theme {
         getViewsMenuCustomButtonIcon: (name: string | undefined) => React.ReactNode | undefined;
 
     };
+
+    /**
+     * Additional icons in the icon cell renderer.
+     */
+    iconsCellRenderer?: Record<string, typeof SvgIcon>;
 
     palette: {
         darken: (color: string, factor: number) => string;
@@ -647,31 +619,6 @@ export interface ic3Theme {
     noSchemaRenderer?: (context: IPublicContext, options: INoSchemaRendererOptions) => ReactElement;
 
     /**
-     * Theme settings for the editor (application & report).
-     */
-    editor: {
-        /**
-         * Editor logo. Defaults to icCubes logo.
-         */
-        logo: string;
-
-        /**
-         * Alt text for the logo image. Default = icCube.
-         */
-        logoAlt: string;
-
-        /**
-         * Top - Offset of dashboard page to the editor. Default 25.
-         */
-        viewPortOffsetTop: number;
-
-        /**
-         * Left - Offset of dashboard page to the editor. Default 25.
-         */
-        viewPortOffsetLeft: number;
-    },
-
-    /**
      * Options for date/range pickers. Filter panel / date picker filter.
      */
     datePicker: {
@@ -723,6 +670,16 @@ export interface ic3ThemeOptions {
     cssClass?: string;
 
     /**
+     * For the App Viewer the height of the Application header (css style)
+     */
+    appViewer?: {
+        appTopPanelHeight?: string;
+        appTopPanelWithFilterHeight?: string;
+        appLeftPanelWidth?: string;
+        appLeftPanelCollapsedWidth?: string;
+    }
+
+    /**
      * The recommended setup is to use document.fonts.ready here and put document.fonts.load(...) for all your added
      * fonts in the theme definition .ts file.
      */
@@ -731,6 +688,11 @@ export interface ic3ThemeOptions {
     formatter?: DeepPartial<ThemeFormatterPerLocale | ThemeFormatters>;
 
     icons?: Partial<ic3Theme['icons']>;
+
+    /**
+     * Additional icons in the icon cell renderer.
+     */
+    iconsCellRenderer?: Record<string, typeof SvgIcon>;
 
     table?: Record<TableRowHeightOptions, Partial<{
         rowHeight: number;
@@ -947,7 +909,9 @@ export interface ic3ComponentNameToClassKey {
 
     ReportAppLeftPanel: ReportAppLeftPanelClassKey;
 
-    AppMenuIcon: AppMenuIconClassKey;
+    ic3AppMenuIcon: ic3AppMenuIconClassKey;
+    Ic3AppMenuItemHeader: ic3AppMenuItemHeaderClassKey;
+    ic3AppMenuItem: ic3AppMenuItemClassKey;
 
     QueryBuilderNode: QueryBuilderNodeClassKey;
 
@@ -992,8 +956,6 @@ export interface ic3ComponentsPropsList {
     WidgetBox: WidgetBoxDivProps;
 
     GoogleMarker: GoogleMarkerVariantChartOptions;
-
-    AppMenuIconStyled: AppMenuIconProps;
 
     App: AppDivProps;
 
@@ -1108,8 +1070,14 @@ export interface ic3BaseComponents {
     WidgetBoxContentMessage?: {
         styleOverrides?: ComponentsOverrides["WidgetBoxContentMessage"];
     }
-    AppMenuIcon?: {
-        styleOverrides?: ComponentsOverrides["AppMenuIcon"];
+    ic3AppMenuIcon?: {
+        styleOverrides?: ComponentsOverrides["ic3AppMenuIcon"];
+    },
+    Ic3AppMenuItemHeader?: {
+        styleOverrides?: ComponentsOverrides["Ic3AppMenuItemHeader"];
+    },
+    ic3AppMenuItem?: {
+        styleOverrides?: ComponentsOverrides["ic3AppMenuItem"];
     }
     QueryBuilderNode?: {
         styleOverrides?: ComponentsOverrides["QueryBuilderNode"]

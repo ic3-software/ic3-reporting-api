@@ -1,4 +1,4 @@
-# amCharts 4 Widget Template
+## amCharts 4 Widget Template
 
 In this tutorial we show how to create a new AmCharts widget using a pre-defined template. The goal is to create
 a chart that shows a timeseries as dots and the 14 and 100 day moving averages. See the image below for the end

@@ -9,22 +9,55 @@ export interface IEventPayLoad {
 
 export interface IOnNewEventJsContext {
 
+    /**
+     * @see IPublicContext.isAppConsole
+     */
     isAppConsole(): boolean;
 
+    /**
+     * @see IPublicContext.isAppReportViewer
+     */
     isAppReportViewer(): boolean;
 
+    /**
+     @see IPublicContext.isAppReportAppViewer
+     */
+    isAppReportAppViewer(): boolean;
+
+    /**
+     @see IPublicContext.isAppViewer
+     */
+    isAppViewer(): boolean;
+
+    /**
+     * @see IPublicContext.isAppReportEditor
+     */
     isAppReportEditor(): boolean;
 
+    /**
+     * @see IPublicContext.isAppReportEditorPreview
+     */
     isAppReportEditorPreview(): boolean;
 
+    /**
+     * @see IPublicContext.isAppReportAppEditor
+     */
     isAppReportAppEditor(): boolean;
 
+    /**
+     * @see IPublicContext.isAppGadgetEditor
+     */
     isAppGadgetEditor(): boolean;
 
     /**
      * A context cache that persist over calls.
      */
     getCache(): Map<string, any>;
+
+    /**
+     * A dashboard level cache  (cleared each time a dashboard is loaded).
+     */
+    getDashboardCache(): Map<string, any>;
 
     /**
      * Report user name.
@@ -67,7 +100,17 @@ export interface IOnNewEventJsContext {
     getEventWidgetId(event: IEventPayLoad): string | undefined;
 
     /**
-     * Returns the widget, jQuery object
+     * Returns the event for the event name / channel.
+     */
+    getEvent(eventName: string, nsId?: string): PublicIcEvent | undefined;
+
+    /**
+     * Dispatches an event on channel eventName with value and MDX.
+     */
+    dispatchEvent(eventName: string, value: string, mdx: string): void;
+
+    /**
+     * Returns the widget, jQuery object.
      *
      * Using JQuery might conflict with React's state.
      * Use with care as you will modify the DOM directly.
@@ -75,7 +118,7 @@ export interface IOnNewEventJsContext {
     getWidget$(widgetId: string): any;
 
     /**
-     * Returns a list of widgets, jQuery object
+     * Returns a list of widgets, jQuery object.
      *
      * selector : can be a list of class names .class1.class2
      *
@@ -93,7 +136,7 @@ export interface IOnNewEventJsContext {
     getWidgetHeader$(widgetId: string): any;
 
     /**
-     * Returns the widget header jQuery object (you can user text() to modify the header's title.
+     * Returns the widget header jQuery object (you can user text() to modify the header's title).
      *
      * Using JQuery might conflit with React's state.
      * Use with care as you will modify the DOM directly.
@@ -103,6 +146,6 @@ export interface IOnNewEventJsContext {
     /**
      * Localize the tag using the content localization files.
      */
-    localize(tag: string, ...args: any[]) : string;
+    localize(tag: string, ...args: any[]): string;
 
 }

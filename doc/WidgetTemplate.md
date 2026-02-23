@@ -1,18 +1,18 @@
 ## Widget Template
 
 You can add a custom widget to the reporting with a widget template definition. It describes the widget
-using meta information and implements the actual rendering and behavior logic in Javascript/Typescript:
+using meta information and implements the actual rendering and behavior logic in JavaScript/TypeScript:
 
     export type IPublicWidgetTemplateDefinition<T extends FormFieldObject> =
         IPublicWidgetReactTemplateDefinition<T> | IPublicWidgetJsTemplateDefinition<T>;
 
 Please refer to this [file](WidgetTemplateDefinition.md) for more details about the widget template definition.
 
-### Javascript vs React Widgets
+### JavaScript vs React Widgets
 
 The icCube Dashboards is written in React. Two kinds of widget template implementations are available:
 
-- [Javascript](JavascriptTemplate.md): implementing a new widget using plain Javascript/Typescript.
+- [JavaScript](JavascriptTemplate.md): implementing a new widget using plain JavaScript/TypeScript.
 - [React](ReactTemplate.md): implementing a new widget using React.
 
 The commented source code of the following demo plugins contain working examples of several new widgets:
@@ -34,8 +34,8 @@ extending icCube widgets:
 
 ### Lazy-Loading Third Party Libraries
 
-A new widget is more likely requiring a new Javascript library. This library can be either loaded when the icCube
-Dashboards application is starting or when the widget needs to be rendered. As icCube is using Webpack as its Javascript
+A new widget is more likely requiring a new JavaScript library. This library can be either loaded when the icCube
+Dashboards application is starting or when the widget needs to be rendered. As icCube is using Webpack as its JavaScript
 bundler you can use dynamic import when implementing those new widgets and configure accordingly the `resolveDefinition`
 method:
 

@@ -7,7 +7,7 @@ import {Theme} from "@mui/material/styles";
 import {WidgetTemplateIDs} from "./PublicTemplates";
 import {FormFieldObject} from "./PublicTemplateForm";
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
-import {ILogger} from "./Logger";
+import {ILogger} from "@ic3/common-api"
 import {IUserMenuOptionManager} from "./IUserMenuOptionManager";
 import {IMigrationManager} from "./IMigrationManager";
 

@@ -6,7 +6,7 @@ import {ThemeFormatters, ThemeTextFormatter} from "./PublicTheme";
 import {ITidyColumn, ITidyNumericColumn} from "./PublicTidyColumn";
 import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {ITidyMath} from "./PublicTidyMath";
-import {ILogger} from "./Logger";
+import {ILogger} from "@ic3/common-api"
 import {AppNotification} from "./INotification";
 import {WidgetNotificationHandler} from "./IcEvent";
 import {TidyRowFilter} from "./PublicTidyTableTypes";
@@ -28,16 +28,44 @@ export interface IPublicContext {
 
     logger(): ILogger;
 
+    /**
+     * It is the reporting console.
+     */
     isAppConsole(): boolean;
 
+    /**
+     * It is the dashboard viewer.
+     */
     isAppReportViewer(): boolean;
 
+    /**
+     * Is an application in viewer mode.
+     */
+    isAppReportAppViewer(): boolean;
+
+    /**
+     * Is an application or dashboard in viewer mode.
+     */
+    isAppViewer(): boolean;
+
+    /**
+     * It is the dashboard editor.
+     */
     isAppReportEditor(): boolean;
 
+    /**
+     * It is the dashboard editor with the dashboard in preview mode.
+     */
     isAppReportEditorPreview(): boolean;
 
+    /**
+     * It is the application editor.
+     */
     isAppReportAppEditor(): boolean;
 
+    /**
+     * It is the gadget editor.
+     */
     isAppGadgetEditor(): boolean;
 
     /**
@@ -401,9 +429,21 @@ export interface IWidgetStableContext extends IPublicContext {
      *
      * disabled === true, the doExport function is not used
      */
-    onExportToExcel(doExport: undefined | ((fileName: string | undefined) => ITidyTable | undefined | null), disabled?: boolean): void;
+    onExportToExcel(doExport: undefined | (() => ITidyTable | undefined | null), disabled?: boolean): void;
 
-    exportToExcel(table: ITidyTable, asPivotForExcel: boolean, rows: number[] | undefined): void;
+    /**
+     * Export the widget data to Excel or CSV.
+     * @param table data in the widget (with transformations applied).
+     * @param asPivotForExcel If true, convert hierarchical structures to flat columns. Default = false for Excel
+     * exports and true for CSV exports.
+     * @param rows filter the table by these rows before exporting.
+     * @param event object. If `event.format = 'csv'` then this method makes a CSV export. Default is Excel.
+     * `event.value` (optional) is the file name of the export.
+     */
+    exportToExcel(table: ITidyTable, asPivotForExcel: boolean | undefined, rows: number[] | undefined, event?: {
+        format?: 'csv' | 'xlsx';
+        value?: string;
+    }): void;
 
     useUserMenuWidth(): number | undefined;
 
@@ -457,6 +497,11 @@ export interface IWidgetPublicContext extends IPublicContext {
     widgetHasHeader(): boolean;
 
     getBoxSettings(): IPublicWidgetBoxSettings;
+
+    /**
+     * True if and only if the widget is invisible, e.g., it has display none.
+     */
+    isInvisible(): boolean;
 
 }
 

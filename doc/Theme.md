@@ -175,7 +175,7 @@ project as base or inspiration. This plugin contains a theme only for the sake o
 can contain both a theme and widget definitions.
 
 Bear in mind, you are free to add new fields to your theme to use across your widget plugin. Those fields
-are pure Javascript/Typescript objects and can hold primitive types as well as functions.
+are pure JavaScript/TypeScript objects and can hold primitive types as well as functions.
 
 Looking for inspiration? You can check the following Websites:
 [Material UI Theme Builder](https://next.material-ui.com/customization/theming#theme-builder),

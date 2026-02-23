@@ -173,44 +173,48 @@ export const CharacterTidyColumnProperties = new Set<string>([
  * A copy from XLSX CellObject (we don't want the link to the library !)
  */
 export interface ITidyColumnXlsxCell {
-    /** The raw value of the cell.  Can be omitted if a formula is specified */
+    /** The raw value of the cell.  Can be omitted if a formula is specified. */
     v?: string | number | boolean | Date;
 
-    /** Formatted text (if applicable) */
-    w?: string;
+    /** Number format string associated with the cell (if requested) */
+    z?: string;
 
     /**
-     * The Excel Data Type of the cell.
-     * b Boolean, n Number, e Error, s String, d Date, z Empty
+     * Back color of the cell.
      */
-    t: 'b' | 'n' | 'e' | 's' | 'd' | 'z';
+    c?: string;
 
-    /** Cell formula (if applicable) */
-    f?: string;
+    /**
+     * Text color of the cell (`FORE_COLOR`).
+     */
+    textColor?: string;
 
-    /** Range of enclosing array if formula is array formula (if applicable) */
-    F?: string;
+    /**
+     * Text style bold
+     */
+    bold?: boolean;
 
-    /** Rich text encoding (if applicable) */
-    r?: any;
+    /**
+     * Cell contains an error. Value will be red `error`.
+     */
+    error?: TidyCellError;
 
-    /** HTML rendering of the rich text (if applicable) */
-    h?: string;
+    /**
+     * Font size in px (number)
+     */
+    fontSize?: number;
 
-    /** Number format string associated with the cell (if requested) */
-    z?: string | number;
+    /**
+     * Font family
+     */
+    fontFamily?: string;
 
-    /** Cell hyperlink object (.Target holds link, .tooltip is tooltip) */
-    l?: {
-        /** Target of the link (HREF) */
-        Target: string;
+}
 
-        /** Plaintext tooltip to display when mouse is over cell */
-        Tooltip?: string;
-    };
-
-    /** The style/theme of the cell (if applicable) */
-    s?: any;
+export interface ITidyColumnHeaderStyle {
+    fontSize?: string;
+    fontWeight?: string;
+    fontFamily?: string;
 }
 
 // Remove null and undefined from T
@@ -341,7 +345,8 @@ export interface ITidyBaseColumnReadonly<T> {
     reIndexN(index: number[]): ITidyBaseColumn<T>;
 
     /**
-     * Returns the color of this columns header.
+     * Returns the color of this columns' header.
+     * @param hierarchyIdx return the color of this hierarchy. Use if you have multiple column rows in your table.
      */
     getHeaderColor(hierarchyIdx?: number): string | undefined;
 
@@ -349,6 +354,12 @@ export interface ITidyBaseColumnReadonly<T> {
      * Returns the colors of this columns header.
      */
     getHeaderColors(): (string | undefined)[] | string | undefined;
+
+    /**
+     * Get the style of the header of this column.
+     * @param hierarchyIdx return the style of this hierarchy. Use if you have multiple column rows in your table.
+     */
+    getHeaderStyle(hierarchyIdx?: number): ITidyColumnHeaderStyle | undefined;
 
 }
 
@@ -409,8 +420,10 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * Does not return the format string.
      *
      * @param idx the position to return the value of.
+     * @param prettyHierarchy indent hierarchy columns with space-characters. This results in a nice visual hierarchy in
+     * Excel.
      */
-    getExcelCell(idx: number): ITidyColumnXlsxCell | undefined;
+    getExcelCell(idx: number, prettyHierarchy?: boolean): ITidyColumnXlsxCell | undefined;
 
     /**
      * Returns excel format, best effort
@@ -854,8 +867,14 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      *
      * E.g., if you have a table with `2018`, `2018 Q1` as columns, then the level depths are 0 and 1.
      */
-    getColumnLevelDepth() : number;
+    getColumnLevelDepth(): number;
 
+    /**
+     * Set the style of the header of this column. Used in tables, and the Excel export.
+     * @param style the styles
+     * @param hierarchyIdx only set the style of this hierarchy. Default is apply to all hierarchies.
+     */
+    setHeaderStyle(style: ITidyColumnHeaderStyle | undefined, hierarchyIdx?: number): void;
 }
 
 export interface BaseTidyColumnCellDecoration {

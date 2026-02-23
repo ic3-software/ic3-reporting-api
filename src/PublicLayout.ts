@@ -1,6 +1,7 @@
 import {PaperOrientation, PaperSizeUnits} from "./ITypes";
 import {Property} from "csstype";
-import {Breakpoint} from "@mui/material/styles";
+import {ic3Breakpoint} from "@ic3/common-api";
+
 
 type CSSProperties = any;
 
@@ -66,8 +67,10 @@ export interface IResponsiveBreakpoint {
     xs: number;
 }
 
+type GenerateStringUnion<T> = Extract<{ [Key in keyof T]: true extends T[Key] ? Key : never }[keyof T], string>;
+
 export type ResponsiveValue = {
-    [key in Breakpoint]: number
+    [key in GenerateStringUnion<ic3Breakpoint>]: number
 }
 
 /**
@@ -279,7 +282,7 @@ export interface IWidgetLayoutDefinition {
      * We advise defining it for any layout dedicated for printing (e.g., A4, Letter) to get a
      * visual rendering close to the printed one.
      */
-    applyWidgetContentPrintScaleForRendering? : true,
+    applyWidgetContentPrintScaleForRendering?: true,
 
     /**
      * Not relevant if responsiveness is being defined: always an unlimited portrait.

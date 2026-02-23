@@ -1,4 +1,4 @@
-import {FormFieldObject} from "../PublicTemplateForm";
+import {FormFieldObject, IFormEventArrayFieldDefType} from "../PublicTemplateForm";
 
 export class FilterPanelClasses {
     /**
@@ -166,9 +166,16 @@ export interface FilterPanelProps {
     filterLayoutHorizontal?: boolean;
 
     /**
-     * true if the filter panel is collapsible
+     * Available when the filter panel is used in an application.
+     * User can collapse the filter panel.
      */
     isCollapsible?: boolean;
+
+    /**
+     * Available when the filter panel is used in an application.
+     * The filter panel is on the right of the application.
+     */
+    isRightFilterPanel?: boolean;
 }
 
 export declare type FilterPanelClassesKey = keyof FilterPanelClasses;
@@ -293,6 +300,11 @@ export interface FilterPanelChartOptions extends FormFieldObject {
      * User can choose from the shortcuts in this group. Edit the groups in the theme plugin.
      */
     allowedShortcutGroup: string;
+
+    /**
+     * Add these filters to the filter panel queries.
+     */
+    eventFilters?: IFormEventArrayFieldDefType;
 }
 
 export type TextFilterType = "EQUALS"

@@ -18,7 +18,6 @@ export * from "./IWidgetDefaultsManager";
 export * from "./IWidgetVariantManager";
 export * from "./IWidgetManager";
 export * from "./LazyTreeView";
-export * from "./Logger";
 export * from "./PublicCommon";
 export * from "./PublicContext";
 export * from "./PublicI18n";
@@ -37,6 +36,7 @@ export * from "./PublicTidyHistogram";
 export * from "./RemoteContainerUtils";
 export * from "./ReportingVersion";
 export * from "./ThemeAugmentation";
+
 
 export * from "./theme/ThemeAlertDialog";
 export * from "./theme/ThemeAmCharts4";
@@ -74,6 +74,7 @@ export * from "./theme/ThemeTable";
 export * from "./theme/ThemeReportAppLeftPanel";
 export * from "./theme/ThemeWidgetBox";
 export * from "./theme/ThemeWidgetBoxContentMessage";
+export * from "./theme/ThemeWidgetFilteredBy";
 export * from "./theme/ThemeIc3TableCell";
 export * from "./theme/ThemeIc3WidgetBoxSpinner";
 export * from "./theme/ThemeHomeCard";

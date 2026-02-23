@@ -25,7 +25,7 @@ Ensure to have the corresponding `npm` packages in the `devDependencies` of your
     "style-loader": "3.3.1",
 ```
 
-Then within your plugin Typescript definition you can import CSS files as any other module
+Then within your plugin TypeScript definition you can import CSS files as any other module
 and use the CSS classes defined in this file:
 
 ```typescript
@@ -81,7 +81,7 @@ as defined in `@fontsource`:
     };
 ```
 
-#### Usage in the Theme Typescript Definition
+#### Usage in the Theme TypeScript Definition
 
 ```typescript
     import "@fontsource/lato/400.css";

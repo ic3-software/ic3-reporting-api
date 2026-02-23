@@ -127,7 +127,7 @@ export interface IFormFieldDef<DEFAULT_VALUE_TYPE> {
  */
 export interface FormFieldObject {
 
-    // We need this so extends FormFieldObject works (Typescript uses the definition of the interface not it's name).
+    // We need this so extends FormFieldObject works (TypeScript uses the definition of the interface not it's name).
     readonly '0242ac130003': '0242ac130003';
 
 }
@@ -188,6 +188,7 @@ export type FormFields<T extends FormFieldObject> = {
                                                                 | Omit<IFormLayoutFieldDef, 'fieldPath'>
                                                                 | Omit<IFormFilterPanelModelSelectorFieldDef, 'fieldPath'>
                                                                 | Omit<IFormShortcutChooserDef<string>, 'fieldPath'>
+                                                                | Omit<IFormIconFieldSingleDef, 'fieldPath'>
                                                                 :
 
                                                                 Required<T>[key] extends string[] ? Omit<IFormOptionFieldMultipleDef, 'fieldPath'>
@@ -355,7 +356,11 @@ export type FormFieldType =
     /**
      * @see IFormShortcutChooserDef
      */
-    "shortcutChooser"
+    "shortcutChooser" |
+    /**
+     * @see IFormIconFieldSingleDef
+     */
+    "icon"
     ;
 
 export type FormFieldTidyTableExprType =
@@ -992,6 +997,12 @@ export interface IFormOptionFieldSingleDef extends IFormFieldDef<string> {
 
 }
 
+export interface IFormIconFieldSingleDef extends IFormFieldDef<string> {
+
+    fieldType: "icon";
+
+}
+
 export interface IFormEmbeddedFieldDef<T extends FormFieldObject> extends IFormFieldDef<T> {
 
     fieldType: "embedded",
@@ -1293,5 +1304,6 @@ export type FormFieldDef =
     IFormLayoutFieldDef |
     IFormConditionalColorRulesFieldDef |
     IFormFilterPanelModelSelectorFieldDef |
-    IFormShortcutChooserDef<any>
+    IFormShortcutChooserDef<any> |
+    IFormIconFieldSingleDef
     ;

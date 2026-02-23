@@ -9,7 +9,7 @@ import {WidgetTemplateChartOptions, WidgetTemplateIDs} from "./PublicTemplates";
 import {ChartTemplateDataMapping, IFormFieldGranularityItem} from "./PublicTidyTableTypes";
 import {PositionModeOptions, ResizingConstraintOptions} from "./theme/ThemeWidgetBox";
 import {QueryType} from "./ITypes";
-import {ILogger} from "./Logger";
+import {ILogger} from "@ic3/common-api"
 
 export interface IRectanglePosition {
     top: number;
@@ -261,7 +261,7 @@ export interface IPublicReactChartTemplate<T extends FormFieldObject> {
 }
 
 /**
- * A widget that renders using plain Javascript/Typescript.
+ * A widget that renders using plain JavaScript/TypeScript.
  *
  * @see FormFieldObject
  */
@@ -343,7 +343,7 @@ export interface IPublicWidgetReactTemplateDefinition<OPTIONS extends FormFieldO
 }
 
 /**
- * The definition of a widget that renders using plain Javascript/Typescript.
+ * The definition of a widget that renders using plain JavaScript/TypeScript.
  *
  * @see IPublicJsChartTemplate
  * @see FormFieldObject

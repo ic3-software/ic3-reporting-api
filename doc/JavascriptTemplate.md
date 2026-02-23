@@ -1,7 +1,7 @@
-## Javascript Widget Template
+## JavaScript Widget Template
 
-A Javascript [widget template](WidgetTemplate.md) defines a new widget implemention using plain
-Javascript/Typescript. That is, it does not require React.
+A JavaScript [widget template](WidgetTemplate.md) defines a new widget implemention using plain
+JavaScript/TypeScript. That is, it does not require React.
 
 On top of the common meta definition, this kind of template is responsible to implement the `jsCode` method:
 

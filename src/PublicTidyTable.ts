@@ -16,7 +16,7 @@ import {
     ITidyBaseColumn,
     ITidyBaseColumnReadonly,
     ITidyCharacterColumn,
-    ITidyColumn,
+    ITidyColumn, ITidyLogicalColumn,
     ITidyNumericColumn,
     ITidyUnknownColumn
 } from "./PublicTidyColumn";
@@ -589,6 +589,8 @@ export interface ITidyTable {
      * @param totalRows
      */
     setTotalRows(totalRows: (rowIdx: number) => boolean): void;
+
+    setTotalRowsCol(col: ITidyLogicalColumn): void;
 
     /**
      * Get a column by its role as defined in the mdxBuilderSettings.

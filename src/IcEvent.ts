@@ -5,6 +5,7 @@ export enum IcEventType {
     TIDY_FIRE,
     TIDY_ACTION,
     API,
+    IC3_CORE,
 }
 
 /**

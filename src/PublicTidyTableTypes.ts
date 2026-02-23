@@ -627,6 +627,16 @@ export interface WidgetTidySelectionOptions {
      * Initialize selection on new query
      */
     initSelectionOnNewQuery?: boolean;
+
+    /**
+     * Add a chip in the widget header that shows what items are selected.
+     */
+    showSelectionInWidgetHeader?: boolean;
+
+    /**
+     * Normally, the widget clears the selection if it is not anymore in the data. Enable this to keep the selection.
+     */
+    keepSelectionWhenNotInData?:boolean;
 }
 
 // Array with first value always defined. Groups consist of at least one index row.

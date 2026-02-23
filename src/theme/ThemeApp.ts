@@ -1,3 +1,5 @@
+import { Theme } from "@mui/material/styles";
+
 
 export class AppClasses {
     /**
@@ -11,7 +13,7 @@ export class AppClasses {
     /**
      * Style applied to
      */
-    static readonly toolbar: string = "ic3App-toolbar";
+    static readonly leftToolbar: string = "ic3App-toolbar";
     /**
      * Style applied to
      */
@@ -29,7 +31,8 @@ export class AppClasses {
     /**
      * Style applied to
      */
-    static readonly bar: string = "ic3App-bar";
+    static readonly topBar: string = "ic3App-bar";
+    static readonly topBarInFloating: string = "ic3App-bar-floating";
     /**
      * Style applied to
      */
@@ -51,22 +54,24 @@ export class AppClasses {
 export declare type AppClassKey = keyof AppClasses;
 
 export interface AppDivProps {
+    dashboardTheme: Theme;
     topBarOptions: TopBarOptions;
     leftBarOptions: LeftBarOptions;
-    viewer: boolean;
     opacity?: string;
-    editorActive: boolean;
     drawerW: string;
 }
 
 export enum TopBarOptions {
     None,
-    Standard,
-    Filter
+    EditorMode,
+    AppViewerTopFilter,
+    AppViewerTopMenu,
+    AppViewerTopMenuFloating
 }
 
 export enum LeftBarOptions {
     None,
-    Standard,
-    Filter,
+    EditorMode,
+    AppViewerLeftFilter,
+    AppViewerRightFilter,
 }

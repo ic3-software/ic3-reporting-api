@@ -14,9 +14,9 @@ maps, tables, filters, gauges, textual information, etc. New types of widgets ca
 
 Refer to this [page](WidgetTemplate.md) for more information.
 
-### Javascript Widget Template
+### JavaScript Widget Template
 
-A widget template that is rendering the widget using plain Javascript/Typescript (i.e., does not depend on React).
+A widget template that is rendering the widget using plain JavaScript/TypeScript (i.e., does not depend on React).
 
 Refer to this [page](JavascriptTemplate.md) for more information.
 
@@ -64,7 +64,7 @@ Refer to this [page](UserMenuOptions.md) for more information about adding a new
 
 A theme is a preset package containing graphical appearance and functionality details used to customize the look of the
 dashboards. Theme entities include but not limited to are: color palette, typography font and size, default data
-formatter, default chart options, widget layouts, etc. A theme is actually a Javascript module packaged as a plugin.
+formatter, default chart options, widget layouts, etc. A theme is actually a JavaScript module packaged as a plugin.
 
 Refer to this [page](Theme.md) for more information.
 

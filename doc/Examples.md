@@ -4,12 +4,12 @@ Several working examples with their source code are available:
 
 ### [ic3-demo-plugin-js](https://github.com/ic3-software/ic3-demo-plugin-js)
 
-This example is creating new widgets and transformation using plain Javascript/Typescript code
+This example is creating new widgets and transformation using plain JavaScript/TypeScript code
 (i.e., no dependency on React).
 
 ### [ic3-demo-plugin-react](https://github.com/ic3-software/ic3-demo-plugin-react)
 
-This example is creating new widgets using React and Material-UI (Typescript).
+This example is creating new widgets using React and Material-UI (TypeScript).
 
 ### [ic3-demo-plugin-theme](https://github.com/ic3-software/ic3-demo-plugin-theme)
 

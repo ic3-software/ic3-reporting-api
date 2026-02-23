@@ -63,8 +63,8 @@ export class ApiUtils {
             return {
 
                 apiVersion: new ReportingVersion(
-                    "9.0.1",
-                    "Fri, 21 Nov 2025 08:18:22 GMT"
+                    "9.1.0",
+                    "Mon, 23 Feb 2026 14:21:52 GMT"
                 ),
 
                 ...definition,
@@ -103,7 +103,7 @@ export class ApiUtils {
         return {
 
             ...wrapped,
-            ...definition as any /* since Typescript 5.0.2 */,
+            ...definition as any /* since TypeScript 5.0.2 */,
 
             resolveDefinition: undefined,
             jsCode: wrapped.jsCode,
@@ -131,7 +131,7 @@ export class ApiUtils {
                     ...props.props /* e.g., id, groupId, etc... */,
 
                     /**
-                     * amCharts 4 widgets are loading the amCharts 4 Javascript library on the fly.
+                     * amCharts 4 widgets are loading the amCharts 4 JavaScript library on the fly.
                      *
                      * This extended widget has to use the resolveDefinition() mechanism as well to be able to re-use
                      * the lazy-loaded jsCode (widgets are implemented as IPublicWidgetJsTemplateDefinition).

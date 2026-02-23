@@ -66,6 +66,7 @@ export type IUserMenuOptions =
     'toInitialSelectionOnEditing' |
     'toInitialSelection' |
     'export_xls' |
+    'export_csv' |
     'export_png' |
     'export_svg';
 

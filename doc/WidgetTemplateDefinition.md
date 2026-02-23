@@ -53,9 +53,9 @@ The names of the `mdxAxis` are also called **roles** in this document.
 
 #### Default Mapping
 
-In Javascript code, you can retrieve the tidy table columns by **position**, by **name**, by **role** or by **alias**.
+In JavaScript code, you can retrieve the tidy table columns by **position**, by **name**, by **role** or by **alias**.
 
-Using position or name might lead to issues when changing slighty the query and/or when adding transformations.
+Using position or name might lead to issues when changing slightly the query and/or when adding transformations.
 Accessing the columns by role is fine but MDX queries only are supported. The last option is to use the columns
 aliases.
 
