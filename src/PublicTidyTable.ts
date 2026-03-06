@@ -602,7 +602,6 @@ export interface ITidyTable {
      * Pivot Table
      * @param nodeInfo
      */
-
     getLevelDepthR(nodeInfo: MdxNodeIdentifier): any;
 
     hasMdxChildren(nodeInfo: MdxNodeIdentifier): boolean;

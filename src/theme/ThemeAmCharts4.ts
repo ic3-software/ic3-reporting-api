@@ -1303,6 +1303,11 @@ export interface Am4CategoryDateAxisOptions extends FormFieldObject {
     xAxisLevelLabelsText: string;
 
     /**
+     * Show the level labels on top of the chart outside the grid.
+     */
+    xAxisLevelLabelsOutside?: boolean;
+
+    /**
      * Cell Start Location.
      *
      * Value between 0 and 1 that indicates where the category starts on the grid.
