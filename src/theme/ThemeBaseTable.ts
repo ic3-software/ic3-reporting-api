@@ -140,4 +140,11 @@ export interface BaseTableChartOptions extends FormFieldObject {
      * When exporting to excel, flag use the filtered and sorted version or the orignal table
      */
     exportOriginalTable: boolean;
+
+    /**
+     * Wrap Top Header.
+     *
+     * Display the top header content on multiple lines.
+     */
+    topHeaderWrap: boolean;
 }

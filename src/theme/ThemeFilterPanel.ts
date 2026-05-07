@@ -277,7 +277,7 @@ export interface FilterPanelChartOptions extends FormFieldObject {
     useSimpleFilterCutoff?: number;
 
     /**
-     * Per default, the filter panel allows users to filter on properties. You can disable that with this option.
+     * By default, the filter panel allows users to filter on properties. You can disable that with this option.
      */
     hidePropertyFilters?: boolean;
 

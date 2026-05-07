@@ -81,3 +81,4 @@ export * from "./theme/ThemeHomeCard";
 export * from "./theme/ThemeHomeConsole";
 export * from "./theme/ThemeFilterPanelViewsMenu";
 export * from "./theme/ThemeIc3CustomDrilldownMenu";
+export * from "./theme/ThemeListCounter";

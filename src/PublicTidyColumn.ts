@@ -2,7 +2,7 @@ import {
     AxisCoordinate,
     ConvertToTypeParseSettings,
     EntityItem,
-    GroupRowIndices,
+    GroupRowIndices, IExportToExcelOptions,
     IMdxAxisSeriesInfo,
     ITidyColumnIndex,
     ITidyColumnsSource,
@@ -16,7 +16,7 @@ import {ThemeTextFormatter} from "./PublicTheme";
 import {Property} from "csstype";
 import {AppNotification} from "./INotification";
 import {MdxNodeIdentifier} from "./PublicTidyTable";
-import {IPublicContext} from "./PublicContext";
+import {IFormatter, IPublicContext} from "./PublicContext";
 
 export interface ITidyColumnTypedValue {
 
@@ -169,47 +169,7 @@ export const CharacterTidyColumnProperties = new Set<string>([
 
 ]);
 
-/**
- * A copy from XLSX CellObject (we don't want the link to the library !)
- */
-export interface ITidyColumnXlsxCell {
-    /** The raw value of the cell.  Can be omitted if a formula is specified. */
-    v?: string | number | boolean | Date;
-
-    /** Number format string associated with the cell (if requested) */
-    z?: string;
-
-    /**
-     * Back color of the cell.
-     */
-    c?: string;
-
-    /**
-     * Text color of the cell (`FORE_COLOR`).
-     */
-    textColor?: string;
-
-    /**
-     * Text style bold
-     */
-    bold?: boolean;
-
-    /**
-     * Cell contains an error. Value will be red `error`.
-     */
-    error?: TidyCellError;
-
-    /**
-     * Font size in px (number)
-     */
-    fontSize?: number;
-
-    /**
-     * Font family
-     */
-    fontFamily?: string;
-
-}
+export type ITidyColumnXlsxCellValue = string | number | boolean | undefined | TidyCellError | any;
 
 export interface ITidyColumnHeaderStyle {
     fontSize?: string;
@@ -411,7 +371,7 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * @param context the widget context. Used to access the default formatters. Leave undefined to not use the theme
      * default formatters.
      */
-    getFormattedValueOrValue(idx: number, context?: IPublicContext): string | undefined;
+    getFormattedValueOrValue(idx: number, context?: IFormatter): string | undefined;
 
     getNumberFormatInfo(): string | undefined;
 
@@ -420,10 +380,13 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * Does not return the format string.
      *
      * @param idx the position to return the value of.
-     * @param prettyHierarchy indent hierarchy columns with space-characters. This results in a nice visual hierarchy in
-     * Excel.
      */
-    getExcelCell(idx: number, prettyHierarchy?: boolean): ITidyColumnXlsxCell | undefined;
+    getExcelCell(idx: number): ITidyColumnXlsxCellValue;
+
+    /**
+     * Get cell for exporting to CSV.
+     */
+    getCsvCell(idx: number): string | undefined | boolean | number;
 
     /**
      * Returns excel format, best effort
@@ -875,6 +838,12 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * @param hierarchyIdx only set the style of this hierarchy. Default is apply to all hierarchies.
      */
     setHeaderStyle(style: ITidyColumnHeaderStyle | undefined, hierarchyIdx?: number): void;
+
+    /**
+     * Register options for exporting to Excel. Set `undefined` to remove the options.
+     */
+    setExportToExcelOptions(options: IExportToExcelOptions | undefined): void;
+    getExportToExcelOptions(): IExportToExcelOptions | undefined;
 }
 
 export interface BaseTidyColumnCellDecoration {

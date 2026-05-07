@@ -636,7 +636,7 @@ export interface WidgetTidySelectionOptions {
     /**
      * Normally, the widget clears the selection if it is not anymore in the data. Enable this to keep the selection.
      */
-    keepSelectionWhenNotInData?:boolean;
+    keepSelectionWhenNotInData?: boolean;
 }
 
 // Array with first value always defined. Groups consist of at least one index row.
@@ -654,3 +654,8 @@ export interface TreeRowPropsTreeData {
  * Function filtering the rows of a column / table. Returns true if the row is included, false if the row is excluded.
  */
 export type TidyRowFilter = (rowIdx: number) => boolean;
+
+export interface IExportToExcelOptions {
+    headerAlign?: 'left' | 'right' | 'center';
+    cellAlign?: 'left' | 'right' | 'center';
+}

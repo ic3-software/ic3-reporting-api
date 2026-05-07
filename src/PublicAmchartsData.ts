@@ -101,7 +101,8 @@ export class PublicAmchartsData {
 
         });
 
-        return this.table.toAmcharts4Data(this.onAxis, chartValues, this.onGroup, this.onLevel, undefined, this.disableGroupRecords);
+        return this.table.toAmcharts4Data(this.onAxis, chartValues, this.onGroup, this.onLevel, undefined,
+            this.disableGroupRecords, true);
 
     }
 

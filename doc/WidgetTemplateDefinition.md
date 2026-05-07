@@ -94,7 +94,7 @@ the widget selects all the cells with the same unique value. The columns used to
 defined by the **selection granularity**. For example, when the user selects `axis` as the granularity item
 in the line chart, then it bases the selection on the axis column. Idem with the `group` column.
 
-Per default, the available options for column selection are the roles defined in the `mdxBuilderSettings`.
+By default, the available options for column selection are the roles defined in the `mdxBuilderSettings`.
 You can override these defaults by setting the `granularityItems` and the `defaultGranularityItems`. Then,
 in the template, you use `ITidyTableInteraction.getWidgetSelectionOptions()` to get an object with the granularity
 items selected by the user. You can change the selection behaviour based on the value you receive there.

@@ -407,6 +407,11 @@ interface IPublicCommonWidgetTemplateDefinition<OPTIONS extends FormFieldObject>
     id: string;
 
     /**
+     * Used for finding the right documentation (override `id`).
+     */
+    idForHelp?: string;
+
+    /**
      * Internal usage: while investigating lazy registration (setup upon registration).
      */
     debug?: string;

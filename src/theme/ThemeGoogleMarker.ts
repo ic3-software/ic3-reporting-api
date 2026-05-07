@@ -1,5 +1,6 @@
 import {TidyTableColumnSelector} from "../PublicTidyTableTypes";
 import {GoogleMapChartOptions, GoogleMapCoordinateChartOptions} from "./ThemeGoogle";
+import {IColorDef} from "../PublicTemplateForm";
 
 export interface GoogleMarkerVariantChartOptions {
 
@@ -61,29 +62,15 @@ export interface GoogleMarkerVariantChartOptions {
  * @see WidgetTemplateChartOptions
  */
 export interface GoogleMarkerChartOptions extends GoogleMapCoordinateChartOptions, GoogleMapChartOptions {
-
     /**
      * Marker's Variant.
      */
     markersVariant?: string;
 
     /**
-     * Icon Path.
-     *
-     * An SVG path for the icon of size 22x22 ([doc](https://developers.google.com/maps/documentation/javascript/markers#symbols).
-     * You can use [Material-UI] ones (https://material-ui.com/components/material-icons/) (you have to use DevTools inspect).
+     * JSON object with the Pin Element
      */
-    path: string;
-
-    /**
-     * Fill Opacity.
-     */
-    fillOpacity: number;
-
-    /**
-     * Stroke Weight
-     */
-    strokeWeight?: number;
+    markerOptions?: string;
 
     /**
      * Marker Scale.
@@ -109,18 +96,19 @@ export interface GoogleMarkerChartOptions extends GoogleMapCoordinateChartOption
     tooltip?: string;
 
     /**
-     * Anchor X
-     *
-     * (0,0) is top left.
+     * If marker variant is an HTML Element, the html content
      */
-    markerAnchorX?: number;
+    html?: string;
 
     /**
-     * Anchor Y
-     *
-     * (0,0) is top left.
+     * The anchor X
      */
-    markerAnchorY?: number;
+    markerAnchorX?: string;
+
+    /**
+     * The anchor y
+     */
+    markerAnchorY?: string;
 
     /**
      * Use Marker Clusters.
@@ -149,6 +137,16 @@ export interface GoogleMarkerChartOptions extends GoogleMapCoordinateChartOption
      * The tooltip to display when the mouse moves over a cluster marker.
      */
     clusterTitle?: string;
+
+    /**
+     * Cluster color when count is below 10 or the mean.
+     */
+    clusterMinColor?: IColorDef;
+
+    /**
+     * Cluster color when count is above 10 or the mean.
+     */
+    clusterMaxColor?: IColorDef;
 
     /**
      * Zoom On Click.

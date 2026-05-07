@@ -10,7 +10,15 @@ import {ILogger} from "@ic3/common-api"
 import {AppNotification} from "./INotification";
 import {WidgetNotificationHandler} from "./IcEvent";
 import {TidyRowFilter} from "./PublicTidyTableTypes";
-import {FormFieldTidyTableExprType} from "./PublicTemplateForm";
+import {
+    FormFieldTidyTableExprType,
+    FormFieldTidyTableNumericRowExprType,
+    FormFieldTidyTableStringExprType,
+    FormFieldTidyTableStringRowExprType,
+    IColorDef,
+    IPaletteDef,
+    PureJsFunctionExprType
+} from "./PublicTemplateForm";
 
 export enum WidgetRenderLayoutStatus {
     RENDERING = "RENDERING",
@@ -24,7 +32,26 @@ export enum WidgetWarningSeverity {
 
 export enum IContentMessageType { info, error}
 
-export interface IPublicContext {
+type Nullable<TRawValue> = Extract<TRawValue, undefined | null>;
+
+export type ExprFormFieldFunctionType<FIELD_TYPE, TRawValue> =
+    FIELD_TYPE extends PureJsFunctionExprType ? (...args: any) => any :
+        FIELD_TYPE extends FormFieldTidyTableNumericRowExprType ? (row: number) => number | Nullable<TRawValue> :
+            FIELD_TYPE extends FormFieldTidyTableStringRowExprType ? (row: number) => string | Nullable<TRawValue> :
+                FIELD_TYPE extends FormFieldTidyTableStringExprType ? () => string | Nullable<TRawValue> :
+                    FIELD_TYPE extends FormFieldTidyTableExprType ? () => number | Nullable<TRawValue> :
+                        FIELD_TYPE extends "color" ? string :
+                            TRawValue;
+
+export interface IFormatter {
+
+    formatDate(value: Date | string | undefined | null, format: ThemeTextFormatter | null | undefined, locale?: string): string;
+
+    formatNumber(value: number | string | undefined | null, format: ThemeTextFormatter | null | undefined, locale?: string): string;
+
+}
+
+export interface IPublicContext extends IFormatter {
 
     logger(): ILogger;
 
@@ -142,8 +169,8 @@ export interface IPublicContext {
      * @param selectedColumns get the row of these columns using `_rowOfSelectedColumns` or `_selectedColumns`.
      * @param isRowSelected function for usage with `totalSelectedOrTotal`. Use tableInter.isSelected(rowIdx).
      */
-    createExpression<T extends FormFieldTidyTableExprType>(fieldType: T, field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns: ITidyColumn[] | undefined, isRowSelected?: TidyRowFilter):
-        T extends "tidyTableColorRowExpr" | "tidyTableScaleRowExpr" | "tidyTableHtmlRowExpr" | "tidyTableNumericRowExpr" | "tidyTableStringRowExpr" | "tidyTableTextRowExpr" ? ((rowIdx: number) => string) | undefined : (() => string) | undefined;
+    createExpression<T extends FormFieldTidyTableExprType>(fieldType: T, field: string, table: ITidyTable, currentColumn: ITidyColumn | undefined, expression: string | undefined, selectedColumns?: ITidyColumn[], isRowSelected?: TidyRowFilter)
+        : ExprFormFieldFunctionType<T, undefined>
 
     /**
      * Not in widget public context because of transformation not applied from a widget context always.
@@ -288,6 +315,32 @@ export interface IPublicContext {
      * A shortcut for formatNumber( theme.formatter.defaultPercent )
      */
     formatPercent(value: number | string | undefined | null, locale?: string): string;
+
+    /**
+     * Get the color from a color picker option. When it finds no color, it falls back to the `default` or first color
+     * in `theme.palette.ic3.chartSingleColors`.
+     * @param fieldValue the option. If `path` is null, the function uses `path="default"`.
+     */
+    getPickerColor(fieldValue: IColorDef): string;
+
+    /**
+     * Get the color from a color picker option. When it finds no color, it returns `undefined`.
+     * @param fieldValue the option.
+     */
+    findPickerColor(fieldValue: IColorDef | undefined): string | undefined;
+
+    /**
+     * Get the palette from a palette picker option. When it finds no palette, it falls back to the `default` or first
+     * palette in `theme.palette.ic3.chartSingleColors`.
+     * @param fieldValue the option.
+     */
+    getPickerPalette(fieldValue: IPaletteDef): string[];
+
+    /**
+     * Get the palette from a palette picker option. When it finds no palette, it returns `undefined`.
+     * @param fieldValue the option.
+     */
+    findPickerPalette(fieldValue: IPaletteDef | undefined): string[] | undefined;
 
 }
 
@@ -502,7 +555,6 @@ export interface IWidgetPublicContext extends IPublicContext {
      * True if and only if the widget is invisible, e.g., it has display none.
      */
     isInvisible(): boolean;
-
 }
 
 export interface IPublicWidgetBoxSettings {

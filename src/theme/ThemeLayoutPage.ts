@@ -23,6 +23,9 @@ export class LayoutPageClasses {
      */
     static widgetPagePH = "ic3LayoutPage-widgetPagePH";
 
+    static topMenuAnnouncement = "ic3LayoutPage-topMenuAnnouncement";
+    static topMenuAnnouncementText = "ic3LayoutPage-topMenuAnnouncementText";
+
 }
 
 export declare type LayoutPageClassKey = keyof LayoutPageClasses;

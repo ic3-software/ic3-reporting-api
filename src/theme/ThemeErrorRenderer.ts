@@ -43,6 +43,10 @@ export class ErrorRendererClasses {
     /**
      * Style applied to
      */
+    static causeDetailedMessageAsCode = "ic3ErrorRenderer-causeDetailedMessageAsCode";
+    /**
+     * Style applied to
+     */
     static causeDetailedInfo = "ic3ErrorRenderer-causeDetailedInfo";
     /**
      * Style applied to

@@ -315,7 +315,7 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      * Map a function to the visible rows only. Used in tree structures with expanded or collapsed items.
      * @param column column to map the values of
      * @param mapper function
-     * @param inverse per default, all items are expanded. If inverse is true, all items are collapsed per default.
+     * @param inverse by default, all items are expanded. If inverse is true, all items are collapsed by default.
      */
     mapVisibleRows<T>(column: ITidyColumn, mapper: (index: number) => T, inverse?: boolean): T[];
 
@@ -381,6 +381,11 @@ export interface ITidyTableInteraction extends ITidyTableInteractionSelection, I
      * Returns the selection in the interaction object.
      */
     getSelectedItems(): ITidyTableSelection[];
+
+    /**
+     * If not selected add to selection
+     */
+    addToSelection(entity: EntityItem, isMultipleSelection: boolean): void;
 
     /**
      * Add an item to the interactions selection.

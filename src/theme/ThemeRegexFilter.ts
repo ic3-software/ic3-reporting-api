@@ -17,11 +17,11 @@ export class RegexFilterClasses {
 
     static readonly reachedLimitText = "ic3RegexFilter-reachedLimitText";
 
-    static readonly filterPreview = "ic3RegexFilter-filterPreview";
-
     static readonly searchContent = "ic3RegexFilter-searchContent";
 
     static readonly footer = "ic3RegexFilter-footer";
+
+    static readonly footerLeft = "ic3RegexFilter-footer-left";
 
     static readonly footerButtons = "ic3RegexFilter-footerButtons";
 

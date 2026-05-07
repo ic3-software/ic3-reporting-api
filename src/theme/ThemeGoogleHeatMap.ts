@@ -29,26 +29,23 @@ export interface GoogleHeatMapChartOptions extends GoogleMapCoordinateChartOptio
     colorGradient?: IPaletteDef;
 
     /**
-     * Add Transparent Color.
-     */
-    addTransparentColor: boolean;
-
-    /**
-     * Dissipating.
-     *
-     * Specifies whether heatmaps dissipate on zoom. When dissipating is disabled the radius of influence increases
-     * with zoom level to ensure that the color intensity is preserved at any given geographic location.
-     */
-    dissipating?: boolean;
-
-    /**
      * Max Intensity.
      *
      * The maximum intensity of the heatmap. By default, heatmap colors are dynamically scaled according to
      * the greatest concentration of points at any particular pixel on the map. This property allows you to
      * specify a fixed maximum.
      */
-    maxIntensity?: number;
+    intensity: number;
+
+    /**
+     * Ratio of the fading weight to the max weight, between `0` and `1`.
+     *
+     * For example, `0.1` affects all pixels with weight under 10% of the max.
+     *
+     * Ignored when `colorDomain` is specified.
+     * @default 0.05
+     */
+    threshold: number;
 
     /**
      * Opacity.
@@ -62,6 +59,28 @@ export interface GoogleHeatMapChartOptions extends GoogleMapCoordinateChartOptio
      *
      * The radius of influence for each data point, in pixels.
      */
-    radius?: number;
+    radius: number;
+
+    /**
+     * Defines the type of aggregation operation
+     *
+     * V valid values are 'SUM', 'MEAN'.
+     *
+     * @default 'SUM'
+     */
+    aggregation: 'SUM' | 'MEAN';
+
+    /**
+     * Specifies the size of weight texture.
+     * @default 2048
+     */
+    weightsTextureSize: number;
+
+    /**
+     * Interval in milliseconds during which changes to the viewport don't trigger aggregation.
+     *
+     * @default 500
+     */
+    debounceTimeout: number;
 
 }

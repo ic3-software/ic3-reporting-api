@@ -54,10 +54,11 @@ import {Ic3TableCellProps, ThemeIc3TableCellClassesKey} from "./theme/ThemeIc3Ta
 import {Ic3TableCellDrilldownProps, ThemeIc3TableCellDrilldownClassesKey} from "./theme/ThemeIc3TableCellDrilldown";
 import {HomeCardClassKey} from "./theme/ThemeHomeCard";
 import {HomeConsoleClassKey} from "./theme/ThemeHomeConsole";
-import {GoogleMarkerVariantChartOptions} from "./theme/ThemeGoogleMarker";
+import {GoogleMarkerChartOptions, GoogleMarkerVariantChartOptions} from "./theme/ThemeGoogleMarker";
 import {Ic3CustomDrilldownMenuClassesKey} from "./theme/ThemeIc3CustomDrilldownMenu";
 import {Ic3WidgetBoxSpinnerProps, ThemeIc3WidgetBoxSpinnerClassesKey} from "./theme/ThemeIc3WidgetBoxSpinner";
 import {ic3CorePalette, ic3CorePaletteOptions, ic3CoreTheme} from "@ic3/common-api";
+import type {Cluster, ClusterStats, Marker, MarkerClustererOptions, SuperClusterOptions} from "@googlemaps/markerclusterer";
 
 export type Ic3ChartVariants = {
     [Name in keyof WidgetTemplateChartOptions]?: Array<{
@@ -504,8 +505,35 @@ export interface ic3Theme extends ic3CoreTheme {
     }
 
     googleMap: {
+
         options?: google.maps.MapOptions;
-        markerClustererOptions?: MarkerClustererOptions;
+
+        /**
+         * Marker are using by default PinElement, @see : https://developers.google.com/maps/documentation/javascript/examples/advanced-markers-basic-style
+         */
+        defaultPinOptions?: google.maps.marker.PinElementOptions;
+
+        /**
+         * Allows to create custom markers (i.e. PinElement or a string with a svg content : '<svg xmlns="http://www.w3.org/2000/svg"....)'
+         */
+        customMarker?: (properColor: string | undefined, scale: number | undefined, inputOptions: GoogleMarkerChartOptions) => google.maps.marker.PinElementOptions | Node | undefined;
+
+        /**
+         * Options for the clustering algorithm
+         */
+        superClusterOptions?: SuperClusterOptions;
+        /**
+         * Cluster options, @see : https://github.com/googlemaps/js-markerclusterer
+         */
+        markerClustererOptions?: Pick<MarkerClustererOptions, 'algorithmOptions'>;
+        /**
+         * The color of the cluster (not used if markerClustererRenderer is defined)
+         */
+        markerClustererColor?: (cluster: Cluster, stats: ClusterStats, minColor?: string, maxColor?: string) => string;
+        /**
+         * A user defined renderer for the cluster
+         */
+        markerClustererRenderer?: (cluster: Cluster, stats: ClusterStats, map: google.maps.Map, title: string | undefined ) => Marker;
     }
 
     drilldown?: {
@@ -672,12 +700,7 @@ export interface ic3ThemeOptions {
     /**
      * For the App Viewer the height of the Application header (css style)
      */
-    appViewer?: {
-        appTopPanelHeight?: string;
-        appTopPanelWithFilterHeight?: string;
-        appLeftPanelWidth?: string;
-        appLeftPanelCollapsedWidth?: string;
-    }
+    appViewer?: ic3Theme['appViewer'];
 
     /**
      * The recommended setup is to use document.fonts.ready here and put document.fonts.load(...) for all your added
@@ -777,29 +800,7 @@ export interface ic3ThemeOptions {
     /**
      * Styling for the sparklines in the sparkline transformation and the KPI card
      */
-    sparklineSettings?: {
-        /**
-         * The width of the line in the sparkline
-         */
-        lineWidth: number;
-
-        /**
-         * The cursor when the user hovers over the sparkline
-         */
-        cursor: {
-            color: Property.Color;
-
-            /**
-             * The radius of the dot when hovering
-             */
-            radius: number;
-
-            /**
-             * The width of the stroke when hovering
-             */
-            width: number;
-        };
-    }
+    sparklineSettings?: Partial<ic3Theme['sparklineSettings']>;
 
     noSchemaRenderer?: (context: IPublicContext, options: INoSchemaRendererOptions) => ReactElement;
 

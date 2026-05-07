@@ -38,6 +38,8 @@ import {
 import {PrintButtonChartOptions} from "./theme/ThemePrintButton";
 import {AIWidgetChatBotOptions} from "./theme/ThemeAIWidgetChatBot";
 import {FilterSwitchChartOptions} from "./theme/ThemeFilterSwitch";
+import {FilterAutocompleteBarcodeChartOptions} from "./theme/ThemeFilterAutocompleteBarcode";
+
 
 interface IWidgetTemplateChartOptions {
 
@@ -74,6 +76,9 @@ interface IWidgetTemplateChartOptions {
     "ic3.RepetitionWidget": RepetitionWidgetChartOptions,
 
     "ic3.Table": TableChartOptions,
+
+    // Others
+    "ic3.FilterBarcodeAutocomplete": FilterAutocompleteBarcodeChartOptions,
 
     // amCharts 4: XY
 

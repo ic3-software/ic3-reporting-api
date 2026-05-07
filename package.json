@@ -1,6 +1,7 @@
 {
   "name": "@ic3/reporting-api",
-  "version": "9.1.1",
+  "version": "9.2.0",
+  "license": "MIT",
   "description": "icCube dashboards API",
   "homepage": "https://github.com/ic3-software/ic3-reporting-api",
   "repository": {
@@ -34,8 +35,9 @@
     "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "@ic3/common-api": "1.0.3",
-    "@types/markerclustererplus": "^2.1.33",
+    "@ic3/common-api": "1.0.5",
+    "@types/google.maps": "3.58.1",
+    "@googlemaps/markerclusterer": "2.6.2",
     "@types/node": "^22.10.2",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",

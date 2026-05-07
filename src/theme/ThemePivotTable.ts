@@ -93,13 +93,6 @@ export interface PivotTableChartOptions extends BaseTableChartOptions {
     mergeLeftHeader: boolean;
 
     /**
-     * Wrap Top Header.
-     *
-     * Display the top header content on multiple lines.
-     */
-    topHeaderWrap: boolean;
-
-    /**
      * Flatten Top Header.
      *
      * Removes drilldown and parent/child relations from top header.

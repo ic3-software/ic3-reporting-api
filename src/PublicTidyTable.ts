@@ -384,10 +384,12 @@ export interface ITidyTable {
      * follows the patters axis-label[level-label].
      * @param hideNulls column, do not include records where all rows in group evaluate to NULL.
      * @param disableGroupRecords if true, all the rows become a single object. Else all data per group becomes a single object. Default = false.
+     * @param removeDuplicateColors if true, removes duplicate colors for each group. Default = false;
      */
     toAmcharts4Data<F extends string>(category: ITidyColumn, value: Record<F, ITidyColumn | undefined>,
                                       group?: ITidyColumn | ITidyColumn[], level?: ITidyColumn,
-                                      hideNulls?: ITidyColumn, disableGroupRecords?: boolean): IAmCharts4Data[];
+                                      hideNulls?: ITidyColumn, disableGroupRecords?: boolean,
+                                      removeDuplicateColors?: boolean): IAmCharts4Data[];
 
     /**
      * Creates a data object for the Amcharts treemap

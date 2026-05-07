@@ -15,6 +15,7 @@ import {
     AutocompleteRenderOptionState
 } from "@mui/material/Autocomplete";
 import {IFormTidyTableExprFieldDef} from "./PublicTemplateExprForm";
+import { TextFieldProps } from "@mui/material";
 
 export type Hook<T, P> = {
 
@@ -271,7 +272,7 @@ export type FormFieldType =
     /**
      * @see IFormJsFieldDef
      */
-    "js" |
+    PureJsFunctionExprType |
     /**
      * @see IFormJsonFieldDef
      */
@@ -363,20 +364,61 @@ export type FormFieldType =
     "icon"
     ;
 
-export type FormFieldTidyTableExprType =
-    |
+export type FormFieldTidyTableNumericRowExprType =
+/**
+ * @see IFormTidyTableNumericRowExprFieldDef
+ */
+    "tidyTableNumericRowExpr" |
     /**
-     * @see IFormTidyTableColorRowExprFieldDef
+     * @see IFormTidyTableScaleRowExprFieldDef
      */
+    "tidyTableScaleRowExpr"
+    ;
+
+export type FormFieldTidyTableStringRowExprType =
+/**
+ * @see IFormTidyTableColorRowExprFieldDef
+ */
     "tidyTableColorRowExpr" |
-    /**
-     * @see IFormTidyTableHtmlExprFieldDef
-     */
-    "tidyTableHtmlExpr" |
     /**
      * @see IFormTidyTableHtmlRowExprFieldDef
      */
     "tidyTableHtmlRowExpr" |
+    /**
+     * @see IFormTidyTableTextRowExprFieldDef
+     */
+    "tidyTableTextRowExpr" |
+    /**
+     * @see IFormTidyTableStringRowExprFieldDef
+     */
+    "tidyTableStringRowExpr"
+    ;
+
+export type FormFieldTidyTableStringExprType =
+/**
+ * @see IFormTidyTableHtmlExprFieldDef
+ */
+    "tidyTableHtmlExpr" |
+    /**
+     * @see IFormTidyTableTextExprFieldDef
+     */
+    "tidyTableTextExpr"
+    ;
+
+export type PureJsFunctionExprType =
+/**
+ * @see IFormJsFieldDef
+ */
+    "js";
+
+export type FormFieldTidyTableExprType =
+
+    FormFieldTidyTableStringRowExprType |
+
+    FormFieldTidyTableNumericRowExprType |
+
+    FormFieldTidyTableStringExprType |
+
     /**
      * @see IFormTidyTableNumericExprFieldDef
      */
@@ -386,29 +428,9 @@ export type FormFieldTidyTableExprType =
      */
     "tidyTableNumericJSColumnExpr" |
     /**
-     * @see IFormTidyTableNumericRowExprFieldDef
-     */
-    "tidyTableNumericRowExpr" |
-    /**
      * @see IFormTidyTableNumericStringColumnExprFieldDef
      */
-    "tidyTableNumericStringColumnExpr" |
-    /**
-     * @see IFormTidyTableScaleRowExprFieldDef
-     */
-    "tidyTableScaleRowExpr" |
-    /**
-     * @see IFormTidyTableTextExprFieldDef
-     */
-    "tidyTableTextExpr" |
-    /**
-     * @see IFormTidyTableTextRowExprFieldDef
-     */
-    "tidyTableTextRowExpr" |
-    /**
-     * @see IFormTidyTableStringRowExprFieldDef
-     */
-    "tidyTableStringRowExpr"
+    "tidyTableNumericStringColumnExpr"
     ;
 
 
@@ -435,19 +457,6 @@ export function isTidyTableExprJS(type: FormFieldType): boolean {
         || type === "tidyTableNumericStringColumnExpr"
         || type === "tidyTableNumericJSColumnExpr"
         || type === "tidyTableNumericRowExpr"
-        ;
-}
-
-export function isTidyTableExprTable(type: FormFieldType) {
-    return type === "tidyTableHtmlExpr"
-        || type === "tidyTableTextExpr"
-        || type === "tidyTableNumericExpr"
-        ;
-}
-
-export function isTidyTableExprColumn(type: FormFieldType): boolean {
-    return type === "tidyTableNumericStringColumnExpr"
-        || type === "tidyTableNumericJSColumnExpr"
         ;
 }
 
@@ -517,10 +526,10 @@ export type CodeMirrorMode =
     "plain" |
     "mdx" |
     "sql" |
-    "js" |
     "json" |
     "csv" |
     "md" |
+    PureJsFunctionExprType |
     FormFieldTidyTableExprType
     ;
 
@@ -531,10 +540,15 @@ export type FormFieldDialogEditorModelType =
     FormFieldTidyTableExprType
     ;
 
-export interface IColorDef {
+export const COLOR_CUSTOM_DASHBOARD_COLOR_PREFIX = "ic3dashboard.";
+
+export type IColorDef = {
 
     /**
-     * aka. name
+     * aka. name.
+     *
+     * If it starts with `ic3dashboard.`, then it is a color in `reportDefinition.customPalette.singleColors`.
+     * Otherwise, it is a path in `dashboardTheme.palette.ic3`.
      */
     path: string;
 
@@ -597,7 +611,7 @@ export interface IFormAutocompleteFieldDef<OPTION> extends IFormFieldDef<OPTION>
         renderInput?: (params: AutocompleteRenderInputParams) => React.ReactNode;
 
         renderOption?: (
-            props: React.HTMLAttributes<HTMLLIElement>,
+            props: React.HTMLAttributes<HTMLLIElement> & { key: any; },
             option: OPTION,
             state: AutocompleteRenderOptionState,
             onClose: () => void
@@ -605,8 +619,11 @@ export interface IFormAutocompleteFieldDef<OPTION> extends IFormFieldDef<OPTION>
 
         disableClearable?: boolean;
 
-        renderTags?: AutocompleteProps<OPTION, any, any, any>['renderTags']
+        renderTags?: AutocompleteProps<OPTION, any, any, any>['renderTags'];
 
+        autocompleteProps?: Partial<AutocompleteProps<OPTION, any, any, any>>;
+
+        textFieldProps?: Partial<TextFieldProps>;
     }
 }
 
@@ -840,7 +857,9 @@ export interface IFormHookFieldDef<T> extends IFormFieldDef<Hook<T, any>> {
  */
 export interface IFormJsFieldDef extends IFormFieldDef<string> {
 
-    fieldType: "js",
+    fieldType: PureJsFunctionExprType,
+
+    jsArguments?: string;
 
     editorConf?: {
         helpMdFile: string;

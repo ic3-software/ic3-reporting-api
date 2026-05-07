@@ -1537,6 +1537,22 @@ export interface Am4LineSeriesOptions extends FormFieldObject, IStrokeStylePrope
     smoothLineTensionY: number;
 }
 
+export interface Am4RangeSeriesOptions extends Omit<Am4LineSeriesOptions, "lineValue"> {
+
+    baselineValue: TidyTableColumnSelector;
+
+    currentValue: TidyTableColumnSelector;
+
+    aboveAreaColor: IColorDef;
+
+    aboveAreaFillOpacity: number;
+
+    belowAreaColor: IColorDef;
+
+    belowAreaFillOpacity: number;
+
+}
+
 export interface Am4ComboSeriesOptions extends FormFieldObject, IStrokeStyleProperties {
 
     /**
@@ -2035,6 +2051,22 @@ export type AmCharts4RegularLineChartOptions =
     & Am4CategoryDateAxisOptions
     & Am4ValueAxisOptions
     & Am4LineSeriesOptions
+    & Am4LegendOptions
+    & Am4ValueLabelOptions
+    & Am4ChartCursorOptions
+    & Am4TrendLineOptions
+    & Am4ScrollbarOptions
+    & Am4ChartOptions
+    & Am4ValueAxisRangeOptions
+    ;
+
+/**
+ * The corresponding AmCharts 4 chart class is XYChart.
+ */
+export type AmCharts4RangeChartOptions =
+    & Am4CategoryDateAxisOptions
+    & Am4ValueAxisOptions
+    & Am4RangeSeriesOptions
     & Am4LegendOptions
     & Am4ValueLabelOptions
     & Am4ChartCursorOptions

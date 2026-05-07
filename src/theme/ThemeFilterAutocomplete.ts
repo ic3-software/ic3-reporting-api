@@ -61,6 +61,11 @@ export interface FilterAutocompleteChartOptions extends FilterTidyTableChartOpti
      */
     placeholderText?: string;
 
+    /**
+     * The label content , when empty
+     */
+    label?: string;
+
 }
 
 export type FilterAutocompleteProps =

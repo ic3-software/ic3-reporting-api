@@ -18,6 +18,7 @@ export interface TableProps {
     noHeader: boolean;
     variant?: string;
     printing: boolean;
+    topHeaderWrap: boolean;
 }
 
 

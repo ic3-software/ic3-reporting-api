@@ -76,12 +76,9 @@ export type IThemeWidgetVariant = {
  */
 export type IThemeProcessor = (theme: any, params?: any) => void;
 
-export interface IThemeManager {
+export type IThemeHook = (theme: any) => any;
 
-    /**
-     * Used by IReportDefinition.setThemeProcessorCall().
-     */
-    registerThemeProcessor(name: string, processor: IThemeProcessor): void;
+export interface IThemeManager {
 
     /**
      * The theme decorator allows to setup the Theme.components and Theme.ic3 using the theme
@@ -94,5 +91,18 @@ export interface IThemeManager {
      * themeId from a theme using this method.
      */
     registerEditorTheme(themeOptions: any, themeDecorator?: (theme: any) => Components): void;
+
+    /**
+     * The processor is called when opening a dashboard definition with the theme as specified in the dashboard.
+     *
+     * Used by IReportDefinition.setThemeProcessorCall().
+     */
+    registerThemeProcessor(name: string, processor: IThemeProcessor): void;
+
+    /**
+     * The hook executes for every registered theme. Ensure the logic is idempotent,
+     * as this hook may be re-applied to the same theme multiple times.
+     */
+    registerThemeHook(hook: IThemeHook): void;
 
 }
