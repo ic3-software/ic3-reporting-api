@@ -894,7 +894,7 @@ export interface ReactTidyColumnCellDecoration extends BaseTidyColumnCellDecorat
     /**
      * The cell renders the returned React element. Note that for the Pivot Table, Emotion CSS and JS does not work.
      */
-    renderer?: (rowIdx: number) => React.ReactElement;
+    renderer?: (rowIdx: number) => React.ReactElement<any>;
 
 }
 
@@ -924,7 +924,7 @@ export type PublicTidyColumnCellDecorationRendered = ({
     renderer: () => string;
 } | {
     stringRenderer?: false;
-    renderer?: () => React.ReactElement;
+    renderer?: () => React.ReactElement<any>;
 }) & {
     handlesCellsOnError?: boolean;
     handlesBackgroundColor?: boolean;

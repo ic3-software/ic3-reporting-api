@@ -256,7 +256,7 @@ export interface IPublicReactChartTemplate<T extends FormFieldObject> {
      * @param options the options (possibly edited and/or from the theme) of this widget
      * @param header aka. widget title
      */
-    reactElement: (data: IWidgetTemplateTidyData, options: T, header: string) => ReactElement;
+    reactElement: (data: IWidgetTemplateTidyData, options: T, header: string) => ReactElement<any>;
 
 }
 

@@ -360,7 +360,7 @@ export interface IWidgetStableContext extends IPublicContext {
 
     renderLazyTreeView<T>(props: LazyTreeViewProps): T;
 
-    wrapWithTooltip(tooltip: string | undefined, wrappedElement: React.ReactElement): React.ReactElement;
+    wrapWithTooltip(tooltip: string | undefined, wrappedElement: React.ReactElement<any>): React.ReactElement<any>;
 
     onWidgetRenderStatusChange(status: WidgetRenderLayoutStatus): void;
 

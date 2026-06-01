@@ -1,6 +1,6 @@
 {
   "name": "@ic3/reporting-api",
-  "version": "9.2.1",
+  "version": "9.3.0",
   "license": "MIT",
   "description": "icCube dashboards API",
   "homepage": "https://github.com/ic3-software/ic3-reporting-api",
@@ -28,19 +28,19 @@
   "peerDependencies": {
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
-    "@mui/material": "7.3.6",
-    "@mui/system": "7.3.6",
-    "@mui/icons-material": "7.3.6",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "@mui/material": "7.3.10",
+    "@mui/system": "7.3.10",
+    "@mui/icons-material": "7.3.10",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
   },
   "devDependencies": {
     "@ic3/common-api": "1.0.5",
     "@types/google.maps": "3.58.1",
     "@googlemaps/markerclusterer": "2.6.2",
-    "@types/node": "^22.10.2",
-    "@types/react": "^18.3.23",
-    "@types/react-dom": "^18.3.7",
+    "@types/node": "25.6.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "^4.7.0",
     "rimraf": "^6.1.3",
     "typescript": "^5.9.3",

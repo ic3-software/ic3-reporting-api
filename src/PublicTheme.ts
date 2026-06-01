@@ -4,7 +4,7 @@ import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {IWidgetLayoutDefinition} from "./PublicLayout";
 import {IThemeWidgetDefaults} from "./IThemeManager";
 import * as React from "react";
-import {ReactElement} from "react";
+import { ReactElement, type JSX } from "react";
 import {Property} from "csstype";
 import {IPublicContext} from "./PublicContext";
 import {
@@ -437,17 +437,17 @@ export interface ic3Theme extends ic3CoreTheme {
      * Icons used in tables and trees
      */
     icons: {
-        none: (className: string) => ReactElement | string;
+        none: (className: string) => ReactElement<any> | string;
 
         // MDX tree icons
-        expanded: (className: string) => ReactElement | string;
-        collapse: (className: string) => ReactElement | string;
-        loading: (className: string) => ReactElement | string;
+        expanded: (className: string) => ReactElement<any> | string;
+        collapse: (className: string) => ReactElement<any> | string;
+        loading: (className: string) => ReactElement<any> | string;
 
         // sorting icons
-        sort: (className: string) => ReactElement | string;
-        sortAsc: (className: string) => ReactElement | string;
-        sortDesc: (className: string) => ReactElement | string;
+        sort: (className: string) => ReactElement<any> | string;
+        sortAsc: (className: string) => ReactElement<any> | string;
+        sortDesc: (className: string) => ReactElement<any> | string;
 
         // Datepicker calender icons
         datePickerIcon?: React.ElementType;
@@ -502,6 +502,39 @@ export interface ic3Theme extends ic3CoreTheme {
 
     treeFilter: {
         itemHeight: number;
+    }
+
+    /**
+     * Additional settings for the filter panel and the single filter panel.
+     */
+    filterPanel: {
+
+        /**
+         * Settings for the item-chooser popup.
+         *
+         * This cannot be done using CSS, because the list is virtualized and
+         * requires a fixed height setting.
+         */
+        valueSelector: {
+
+            itemHeight: number;  // Default 30px
+            height: number;  // Default 400px
+
+        }
+
+        /**
+         * Settings for the preview that shows in a.o. the contains operator.
+         *
+         * This cannot be done using CSS, because the list is virtualized and
+         * requires a fixed height setting.
+         */
+        valuePreview: {
+
+            itemHeight: number;  // Default 30px
+            height: number;  // Default 250px
+
+        }
+
     }
 
     googleMap: {
@@ -644,7 +677,7 @@ export interface ic3Theme extends ic3CoreTheme {
         }
     }
 
-    noSchemaRenderer?: (context: IPublicContext, options: INoSchemaRendererOptions) => ReactElement;
+    noSchemaRenderer?: (context: IPublicContext, options: INoSchemaRendererOptions) => ReactElement<any>;
 
     /**
      * Options for date/range pickers. Filter panel / date picker filter.
@@ -730,6 +763,8 @@ export interface ic3ThemeOptions {
         itemHeight?: number;
     }
 
+    filterPanel?: Partial<ic3Theme['filterPanel']>;
+
     googleMap?: {
         options?: google.maps.MapOptions;
     }
@@ -802,7 +837,7 @@ export interface ic3ThemeOptions {
      */
     sparklineSettings?: Partial<ic3Theme['sparklineSettings']>;
 
-    noSchemaRenderer?: (context: IPublicContext, options: INoSchemaRendererOptions) => ReactElement;
+    noSchemaRenderer?: (context: IPublicContext, options: INoSchemaRendererOptions) => ReactElement<any>;
 
     /**
      * Theme settings for the editor (application & report).

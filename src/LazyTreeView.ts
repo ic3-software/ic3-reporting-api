@@ -142,7 +142,7 @@ export interface LazyTreeViewProps {
      * @param rowIndex the index of the data object (e.g. column, tidy table)
      * @param label current label. Use this label as text because the filtering is highlighted.
      */
-    getTreeItemLabel?: (rowIndex: number, label: string | ReactElement) => string | ReactElement;
+    getTreeItemLabel?: (rowIndex: number, label: string | ReactElement<any>) => string | ReactElement<any>;
 
     /**
      * If undefined, width and height are calculated automatically.
