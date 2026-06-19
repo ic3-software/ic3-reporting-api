@@ -110,6 +110,11 @@ export interface IOnNewEventJsContext {
     dispatchEvent(eventName: string, value: string, mdx: string): void;
 
     /**
+     * Set the widget visibility to true/false
+     */
+    setWidgetVisibility(widgetId: string, visible: boolean, nsId?: string): void;
+
+    /**
      * Returns the widget, jQuery object.
      *
      * Using JQuery might conflict with React's state.
