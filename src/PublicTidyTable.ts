@@ -634,6 +634,11 @@ export interface ITidyTable {
     reachedMaxTidyRowCount(): boolean;
 
     /**
+     * Returns true if and only if the drillthrough table is truncated by the server (too many rows otherwise).
+     */
+    reachedMaxDrillthroughRowCount(): boolean;
+
+    /**
      * Some MDX queries return headers that have a hierarchy. This function returns the number of header rows.
      * For example, the table below has two headers.
      *

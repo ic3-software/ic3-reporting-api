@@ -23,7 +23,7 @@ import {FilterCheckboxProps, FilterCheckboxRadioClassKey} from "./theme/ThemeFil
 import {FilterButtonsClassKey, FilterButtonsProps} from "./theme/ThemeFilterButtons";
 import {LazyTreeClassesClassKey, LazyTreeProps} from "./theme/ThemeLazyTreeClasses";
 import {FilterPanelClassesKey, FilterPanelProps} from "./theme/ThemeFilterPanel";
-import {FilterPanelViewsMenuClassesKey} from "./theme/ThemeFilterPanelViewsMenu";
+import {FilterPanelViewsMenuClassesKey, FilterPanelViewsMenuProps} from "./theme/ThemeFilterPanelViewsMenu";
 import {RegexFilterClassesKey, RegexFilterProps} from "./theme/ThemeRegexFilter";
 import {FilterSliderClassKey, FilterSliderProps} from "./theme/ThemeFilterSlider";
 import {ListCounterClassKey, ListCounterProps} from "./theme/ThemeListCounter";
@@ -964,6 +964,8 @@ export interface ic3ComponentNameToClassKey {
 
     HomeCard: HomeCardClassKey;
     HomeConsole: HomeConsoleClassKey;
+
+    Ic3FilterPanelViewsMenu: FilterPanelViewsMenuClassesKey;
 }
 
 export interface ic3ComponentsPropsList {
@@ -1001,6 +1003,8 @@ export interface ic3ComponentsPropsList {
     Ic3TableCell: Ic3TableCellProps;
     Ic3TableCellDrilldown: Ic3TableCellDrilldownProps;
     Ic3TableCellError: Ic3TableCellProps;
+
+    Ic3FilterPanelViewsMenu: FilterPanelViewsMenuProps;
 
     Ic3WidgetBoxSpinner: Ic3WidgetBoxSpinnerProps;
 }
@@ -1198,5 +1202,8 @@ export interface ic3BaseComponents {
     },
     HomeConsole?: {
         styleOverrides?: ComponentsOverrides["HomeConsole"]
+    },
+    Ic3FilterPanelViewsMenu?: {
+        styleOverrides?: ComponentsOverrides["Ic3FilterPanelViewsMenu"]
     }
 }

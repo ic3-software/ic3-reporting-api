@@ -13,3 +13,7 @@ export class FilterPanelViewsMenuClasses {
 }
 
 export declare type FilterPanelViewsMenuClassesKey = keyof FilterPanelViewsMenuClasses;
+
+export interface FilterPanelViewsMenuProps {
+
+}
