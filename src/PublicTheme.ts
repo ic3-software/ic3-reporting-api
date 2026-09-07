@@ -504,6 +504,14 @@ export interface ic3Theme extends ic3CoreTheme {
         itemHeight: number;
     }
 
+    dropdownFilter: {
+        itemHeight: number;
+        listboxPadding: number;
+
+        // Height of a group indicator (px)
+        groupItemHeight: number;
+    }
+
     /**
      * Additional settings for the filter panel and the single filter panel.
      */
@@ -757,10 +765,24 @@ export interface ic3ThemeOptions {
 
     treeFilter?: {
         /**
-         * Define the height for an item in the tree. This cannot be done using css, because the tree is virtualized and
+         * Define the height for an item in the tree. This cannot be done using CSS, because the tree is virtualized and
          * requires a fixed height setting.
          */
         itemHeight?: number;
+    }
+
+    dropdownFilter?: {
+        /**
+         * Define the height for an item in the tree. This cannot be done using CSS, because the tree is virtualized and
+         * requires a fixed height setting.
+         */
+        itemHeight?: number;
+
+        // Padding around items (px)
+        listboxPadding?: number;
+
+        // Height of a group indicator (px)
+        groupItemHeight?: number;
     }
 
     filterPanel?: Partial<ic3Theme['filterPanel']>;
