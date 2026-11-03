@@ -4,7 +4,7 @@ import {IPublicWidgetTemplateDefinition} from "./PublicTemplate";
 import {IWidgetLayoutDefinition} from "./PublicLayout";
 import {IThemeWidgetDefaults} from "./IThemeManager";
 import * as React from "react";
-import { ReactElement, type JSX } from "react";
+import {type JSX, ReactElement} from "react";
 import {Property} from "csstype";
 import {IPublicContext} from "./PublicContext";
 import {
@@ -15,7 +15,6 @@ import {
 } from "./theme/ThemeDatePicker";
 import {WidgetTemplateChartOptions} from "./PublicTemplates";
 import {IUserMenuOptions, IWidgetBoxIconsDefinition} from "./ITypes";
-import {AIWidgetChatBotClassKey, AIWidgetChatBotStyleProps} from "./theme/ThemeAIWidgetChatBot";
 import {AlertDialogClassKey} from "./theme/ThemeAlertDialog";
 import {AppClassKey, AppDivProps} from "./theme/ThemeApp";
 import {ErrorRendererClassKey} from "./theme/ThemeErrorRenderer";
@@ -58,7 +57,14 @@ import {GoogleMarkerChartOptions, GoogleMarkerVariantChartOptions} from "./theme
 import {Ic3CustomDrilldownMenuClassesKey} from "./theme/ThemeIc3CustomDrilldownMenu";
 import {Ic3WidgetBoxSpinnerProps, ThemeIc3WidgetBoxSpinnerClassesKey} from "./theme/ThemeIc3WidgetBoxSpinner";
 import {ic3CorePalette, ic3CorePaletteOptions, ic3CoreTheme} from "@ic3/common-api";
-import type {Cluster, ClusterStats, Marker, MarkerClustererOptions, SuperClusterOptions} from "@googlemaps/markerclusterer";
+import type {
+    Cluster,
+    ClusterStats,
+    Marker,
+    MarkerClustererOptions,
+    SuperClusterOptions
+} from "@googlemaps/markerclusterer";
+import {ChatbotWidgetProps, Ic3ChatbotWidgetClassesKey} from "./theme/ThemeChatbotWidgetOptions";
 
 export type Ic3ChartVariants = {
     [Name in keyof WidgetTemplateChartOptions]?: Array<{
@@ -929,7 +935,6 @@ interface IWidgetIcons extends IWidgetBoxIconsDefinition, Record<string, any> {
 }
 
 export interface ic3ComponentNameToClassKey {
-    AIWidgetChatBot: AIWidgetChatBotClassKey;
 
     AlertDialog: AlertDialogClassKey;
     App: AppClassKey;
@@ -988,11 +993,11 @@ export interface ic3ComponentNameToClassKey {
     HomeConsole: HomeConsoleClassKey;
 
     Ic3FilterPanelViewsMenu: FilterPanelViewsMenuClassesKey;
+
+    Ic3ChatbotWidget: Ic3ChatbotWidgetClassesKey;
 }
 
 export interface ic3ComponentsPropsList {
-
-    AIWidgetChatBot: AIWidgetChatBotStyleProps;
 
     FilterCheckbox: FilterCheckboxProps;
     FilterButtons: FilterButtonsProps;
@@ -1029,14 +1034,12 @@ export interface ic3ComponentsPropsList {
     Ic3FilterPanelViewsMenu: FilterPanelViewsMenuProps;
 
     Ic3WidgetBoxSpinner: Ic3WidgetBoxSpinnerProps;
+    Ic3ChatbotWidget: ChatbotWidgetProps;
+
 }
 
 export interface ic3BaseComponents {
 
-    AIWidgetChatBot?: {
-        styleOverrides?: ComponentsOverrides["AIWidgetChatBot"];
-        variants?: ComponentsVariants["AIWidgetChatBot"];
-    }
     AlertDialog?: {
         styleOverrides?: ComponentsOverrides["AlertDialog"];
     }
@@ -1227,5 +1230,9 @@ export interface ic3BaseComponents {
     },
     Ic3FilterPanelViewsMenu?: {
         styleOverrides?: ComponentsOverrides["Ic3FilterPanelViewsMenu"]
+    },
+    Ic3ChatbotWidget?: {
+        styleOverrides?: ComponentsOverrides["Ic3ChatbotWidget"];
+        variants?: ComponentsVariants["Ic3ChatbotWidget"];
     }
 }

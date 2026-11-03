@@ -248,10 +248,11 @@ export interface ITidyBaseColumnReadonly<T> {
     getDisplayName(): string;
 
     /**
-     * Returns the caption of the column. The caption is used for displaying localised
+     * Returns the caption of the column. The caption is used for displaying localized
      * or custom captions for the axis, header, etc.
+     * @param hierarchyIdx return the caption of this hierarchy. Use if you have multiple column rows in your table.
      */
-    getCaption(): string;
+    getCaption(hierarchyIdx?: number): string;
 
     /**
      * Returns the formatter of the column.
@@ -566,8 +567,9 @@ export interface ITidyBaseColumn<T> extends ITidyBaseColumnReadonly<T> {
      * Set the caption of the column. The caption is used for displaying localised
      * or custom captions for the axis, header, etc.
      * @param caption set this as the caption of the column.
+     * @param hierarchyIdx only set the caption of this hierarchy. Use if you have multiple column rows in your table.
      */
-    setCaption(caption: string): void;
+    setCaption(caption: string, hierarchyIdx?: number): void;
 
     /**
      * Returns true if and only if the column has a caption different from the default. The default caption is the

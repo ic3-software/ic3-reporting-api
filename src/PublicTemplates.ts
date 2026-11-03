@@ -5,11 +5,11 @@ import {KpiBoxChartOptions} from "./theme/ThemeKpiBox";
 import {KpiCartChartOptions} from "./theme/ThemeKpiCard";
 import {EmbeddedReportChartOptions} from "./theme/ThemeEmbeddedReport";
 import {MarkdownTextChartOptions} from "./theme/ThemeMarkdownText";
+import {InputChartOptions} from "./theme/ThemeInput";
 import {FilterPanelChartOptions} from "./theme/ThemeFilterPanel";
 import {RepetitionWidgetChartOptions} from "./theme/ThemeRepetitionWidget";
 import {GoogleHeatMapChartOptions} from "./theme/ThemeGoogleHeatMap";
 import {GoogleMarkerChartOptions} from "./theme/ThemeGoogleMarker";
-import {GoogleKmlLayerChartOptions} from "./theme/ThemeGoogleKmlLayer";
 import {TableChartOptions} from "./theme/ThemeTable";
 import {FormFieldObject} from "./PublicTemplateForm";
 import {FilterButtonsChartOptions} from "./theme/ThemeFilterButtons";
@@ -19,8 +19,10 @@ import {FilterAutocompleteChartOptions} from "./theme/ThemeFilterAutocomplete";
 import {FilterTreeChartOptions} from "./theme/ThemeFilterTree";
 import {
     AmCharts4BubbleChartOptions,
-    AmCharts4ComboChartOptions, AmCharts4DivergentBarChartOptions,
-    AmCharts4DonutChartOptions, AmCharts4GanttChartOptions,
+    AmCharts4ComboChartOptions,
+    AmCharts4DivergentBarChartOptions,
+    AmCharts4DonutChartOptions,
+    AmCharts4GanttChartOptions,
     AmCharts4GaugeChartOptions,
     AmCharts4HistogramOptions,
     AmCharts4RegularAreaChartOptions,
@@ -36,14 +38,12 @@ import {
     GeoMapChartOptions
 } from "./theme/ThemeAmCharts4";
 import {PrintButtonChartOptions} from "./theme/ThemePrintButton";
-import {AIWidgetChatBotOptions} from "./theme/ThemeAIWidgetChatBot";
 import {FilterSwitchChartOptions} from "./theme/ThemeFilterSwitch";
 import {FilterAutocompleteBarcodeChartOptions} from "./theme/ThemeFilterAutocompleteBarcode";
+import {ChatbotWidgetOptions} from "./theme/ThemeChatbotWidgetOptions";
 
 
 interface IWidgetTemplateChartOptions {
-
-    "ic3.AIChatBox": AIWidgetChatBotOptions,
 
     "ic3.DatePicker": DatePickerChartOptions,
 
@@ -59,10 +59,11 @@ interface IWidgetTemplateChartOptions {
     "ic3.FilterSwitch": FilterSwitchChartOptions,
 
     "ic3.GoogleHeatMap": GoogleHeatMapChartOptions,
-    "ic3.GoogleKmlLayer": GoogleKmlLayerChartOptions,
     "ic3.GoogleMarker": GoogleMarkerChartOptions,
 
     "ic3.Image": ImageChartOptions,
+
+    "ic3.Input": InputChartOptions,
 
     "ic3.KpiBox": KpiBoxChartOptions,
     "ic3.KpiCard": KpiCartChartOptions,
@@ -79,6 +80,7 @@ interface IWidgetTemplateChartOptions {
 
     // Others
     "ic3.FilterBarcodeAutocomplete": FilterAutocompleteBarcodeChartOptions,
+    "ic3.ChatbotWidget": ChatbotWidgetOptions,
 
     // amCharts 4: XY
 

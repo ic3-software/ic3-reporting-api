@@ -63,8 +63,8 @@ export class ApiUtils {
             return {
 
                 apiVersion: new ReportingVersion(
-                    "9.4.3",
-                    "Thu, 24 Sep 2026 05:06:27 GMT"
+                    "10.0.0",
+                    "Tue, 03 Nov 2026 05:27:09 GMT"
                 ),
 
                 ...definition,

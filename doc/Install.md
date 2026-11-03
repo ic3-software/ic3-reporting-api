@@ -7,6 +7,25 @@ the table:
 
 ### Configuration
 
+Edit the configuration file as defined in your `icCube.xml` configuration:
+```xml
+<reportingComponentConfiguration>
+
+    <!--
+        (Optional) The type of the app-local configuration file.
+
+                JSON5 :  app-local/ic3report-config.json5   (Content-Security-Policy compliant)
+                JS    :  app-local/ic3report-config.js      (default)
+    -->
+    <configurationType>JSON5</configurationType>
+    
+    <!-- ... -->
+    
+</reportingComponentConfiguration>
+```
+
+`ic3report-config.js`
+
 The file `ic3report-config.js` in the `/ic3-reporting/app-local` directory allows for configuring the Dashboards
 application and amongst others for listing the plugins to load. The context object allows for accessing extra
 information (e.g., the name and the role of the user) to perform ad-hoc configuration.
@@ -26,10 +45,32 @@ const ic3config = function (mode, options, context) {
             url: "plugins/amcharts4/remoteEntry.js",
             scope: "amCharts4",
             module: "./PluginDefinition",
+        }, {
+            url: "plugins/MyPlugin/remoteEntry.js",
+            scope: "MyPlugin",
+            module: "./PluginDefinition",
         });
 
     }
 
+}
+```
+
+`ic3report-config.json5`
+```json5
+{
+  plugins: [
+    {
+      url: "plugins/amcharts4/remoteEntry.js",
+      scope: "amCharts4",
+      module: "./PluginDefinition",
+    },
+    {
+      url: "plugins/MyPlugin/remoteEntry.js",
+      scope: "MyPlugin",
+      module: "./PluginDefinition",
+    }
+  ]
 }
 ```
 

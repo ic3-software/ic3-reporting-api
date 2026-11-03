@@ -15,7 +15,7 @@ import {
     AutocompleteRenderOptionState
 } from "@mui/material/Autocomplete";
 import {IFormTidyTableExprFieldDef} from "./PublicTemplateExprForm";
-import { TextFieldProps } from "@mui/material";
+import {TextFieldProps} from "@mui/material";
 
 export type Hook<T, P> = {
 
@@ -432,6 +432,19 @@ export type FormFieldTidyTableExprType =
      */
     "tidyTableNumericStringColumnExpr"
     ;
+
+
+export function isMultiLineString(type: FormFieldType) {
+    const multiLineStrings = [
+        "plain",
+        "mdx",
+        "sql",
+        "json",
+        "csv",
+        "md"
+    ];
+    return multiLineStrings.includes(type) || isTidyTableExpr(type)
+}
 
 
 export function isTidyTableExpr(type: FormFieldType): type is FormFieldTidyTableExprType {

@@ -113,10 +113,9 @@ export class PublicAmchartsData {
      * @param firstGroupOnly only call the first group.
      */
     updateSeries<T>(itemControl: Map<string, T>, seriesControl: IAmchartsSeriesControl<T>, firstGroupOnly?: boolean): void {
-        const group = this.onGroup;
         const updated = new Set<string>();
 
-        const forEachSeries = (groupKey: string, groupIdx: GroupRowIndices) => {
+        this.forEachGroup(firstGroupOnly, (groupKey, groupIdx) => {
             this.onValues.forEach((onValue, idx) => {
 
                 if (seriesControl.typeFilter != null && !seriesControl.typeFilter(onValue.type)) {
@@ -137,7 +136,23 @@ export class PublicAmchartsData {
                 updated.add(seriesKey);
 
             });
-        };
+        });
+
+        itemControl.forEach((item, key) => {
+            if (!updated.has(key)) {
+                itemControl.delete(key);
+                seriesControl.remove(item);
+            }
+        });
+    }
+
+    /**
+     * Call a function on each group (or once with the NULL key if there is no group column).
+     * @param firstGroupOnly only call the first group.
+     * @param callback called with the group key and the row indices of the group.
+     */
+    private forEachGroup(firstGroupOnly: boolean | undefined, callback: (groupKey: string, groupIdx: GroupRowIndices) => void): void {
+        const group = this.onGroup;
 
         if (group != null && !this.disableGroupRecords) {
             const index = group.groupBy(true);
@@ -146,25 +161,17 @@ export class PublicAmchartsData {
                 if (!groupIdx.done) {
                     const firstIndex = groupIdx.value[0];
                     const groupKey = group.getAmcharts4GroupKey(firstIndex);
-                    forEachSeries(groupKey, groupIdx.value);
+                    callback(groupKey, groupIdx.value);
                 }
             } else {
                 index.forEach(groupIdx => {
                     const groupKey = group.getAmcharts4GroupKey(groupIdx[0]);
-                    forEachSeries(groupKey, groupIdx);
+                    callback(groupKey, groupIdx);
                 });
             }
         } else {
-            const groupKey = IAmcharts4DataKey.NULL;
-            forEachSeries(groupKey, [0]);
+            callback(IAmcharts4DataKey.NULL, [0]);
         }
-
-        itemControl.forEach((item, key) => {
-            if (!updated.has(key)) {
-                itemControl.delete(key);
-                seriesControl.remove(item);
-            }
-        });
     }
 
     getAxis(): ITidyColumn {
@@ -192,23 +199,27 @@ export class PublicAmchartsData {
     }
 
     /**
-     * Call a function on each series, and its column
+     * Call a function on each (non-trend) series of the first group, and its column. Read-only: series missing
+     * from itemControl are skipped and itemControl is never modified.
      * @param itemControl map keeping track of current series in the chart.
      */
     forEachSeries<T>(itemControl: Map<string, T>, callback: (col: ITidyNumericColumn, seriesId: string, series: T) => void): void {
 
-        this.updateSeries(itemControl, {
-            create: () => {
-                throw Error("SNBH series cannot be created");
-            },
-            update: (seriesId, _groupKey, series, sValue, _groupRows) => {
-                callback(sValue.values, seriesId, series);
-            },
-            remove: () => {
-                throw Error("SNBH series cannot be removed");
-            },
-            typeFilter: type => type !== ISeriesValuesType.TREND
-        }, true);
+        this.forEachGroup(true, groupKey => {
+            this.onValues.forEach((onValue, idx) => {
+
+                if (onValue.type === ISeriesValuesType.TREND) {
+                    return;
+                }
+
+                const seriesId = PublicAmchartsData.getSeriesId(groupKey, idx);
+                const series = itemControl.get(seriesId);
+                if (series != null) {
+                    callback(onValue.values, seriesId, series);
+                }
+
+            });
+        });
     }
 
     /**
